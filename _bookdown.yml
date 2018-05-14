@@ -1,0 +1,8 @@
+book_filename: "_BioC2018"
+pagetitle: "Bioconductor Workshops"
+output_dir: "docs"
+new_session: yes
+language:
+  ui:
+    chapter_name: "Workshop "
+delete_merged_files: true

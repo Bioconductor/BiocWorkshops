@@ -1,0 +1,52 @@
+# Introduction
+
+Author:
+    Martin Morgan^[Roswell Park Comprehensive Cancer Center, Buffalo, NY].
+    <br/>
+Last modified: 14 May, 2018.
+
+## For Everyone
+
+This book contains workshops used in _R_ / _Bioconductor_
+training. The workshops are divided into 3 sections:
+
+- **Learn** (100-series chapters) contains material for beginning
+  users of _R_ and _Bioconductor_. The _Bioconductor_-related material
+  is relevant even for experienced _R_ users who are new to
+  _Bioconductor_.
+  
+- **Use** (200-series chapters) contains workshops emphasizing use of
+  _Bioconductor_ for common tasks, e.g., bulk RNA-seq differential
+  expression, ChIP-seq, single-cell analysis, gene set enrichment, and
+  annotation.
+
+- **Develop** (500-series chapters) contains workshops to help expert
+  users hone their skills and contribute their domain-specific
+  knowledge to the _Bioconductor_ community.
+  
+## For Workshop Authors
+
+To contribute a new workshop, open a [BiocWorkshops issue][] asking to
+be added as a collaborator. Commit **only** the .Rmd file associated
+with your workshop.
+
+Write your workshop as a stand-alone markdown document, using the
+[_template.Rmd][] file as a starting point. Follow the numbering
+scheme for classifying your workshop. 
+
+See [bookdown][] instructions for authoring documents; we are using
+the 'knit-then-merge' strategy. You'll need to install the
+[bookdown package][] package from CRAN, as well as [pandoc][]. Render
+your chapter with the `preview=` option to `render_book()`, e.g.,
+
+```
+Rscript -e "bookdown::render_book(                             \
+    'xxx_Your_Workshop.Rmd', 'bookdown::gitbook', preview=TRUE \
+)"
+```
+
+[BiocWorkshops issue]: https://github.com/Bioconductor/BiocWorkshops/issues
+[_template.Rmd]: https://github.com/Bioconductor/BiocWorkshops/_template.Rmd
+[bookdown]: https://bookdown.org/yihui/bookdown/
+[bookdown package]: https://cran.r-project.org/package=bookdown
+[pandoc]: http://pandoc.org/
