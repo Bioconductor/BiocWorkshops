@@ -46,7 +46,7 @@ Rscript -e "bookdown::render_book(                             \
 ```
 
 [BiocWorkshops issue]: https://github.com/Bioconductor/BiocWorkshops/issues
-[_template.Rmd]: https://github.com/Bioconductor/BiocWorkshops/_template.Rmd
+[_template.Rmd]: https://github.com/Bioconductor/BiocWorkshops/blob/master/_template.Rmd
 [bookdown]: https://bookdown.org/yihui/bookdown/
 [bookdown package]: https://cran.r-project.org/package=bookdown
 [pandoc]: http://pandoc.org/
