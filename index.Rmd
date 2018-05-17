@@ -3,7 +3,7 @@
 Author:
     Martin Morgan^[Roswell Park Comprehensive Cancer Center, Buffalo, NY].
     <br/>
-Last modified: 14 May, 2018.
+Last modified: 17 May, 2018.
 
 ## For Everyone
 
@@ -46,7 +46,7 @@ Rscript -e "bookdown::render_book(                             \
 
 Push **only** your .Rmd file to the repository; the book will be
 rebuilt manually or automatically. Eventually the output will be
-availble for end-users at https://bioconductor.github.io/BiocWorkshops
+available for end-users at https://bioconductor.github.io/BiocWorkshops
 
 [BiocWorkshops issue]: https://github.com/Bioconductor/BiocWorkshops/issues
 [_template.Rmd]: https://github.com/Bioconductor/BiocWorkshops/blob/master/_template.Rmd
