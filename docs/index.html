@@ -110,8 +110,7 @@ knowledge to the <em>Bioconductor</em> community.</p></li>
 <div id="for-workshop-authors" class="section level2">
 <h2><span class="header-section-number">1.2</span> For Workshop Authors</h2>
 <p>To contribute a new workshop, open a <a href="https://github.com/Bioconductor/BiocWorkshops/issues">BiocWorkshops issue</a> asking to
-be added as a collaborator. Commit <strong>only</strong> the .Rmd file associated
-with your workshop.</p>
+be added as a collaborator.</p>
 <p>Write your workshop as a stand-alone markdown document, using the
 <a href="https://github.com/Bioconductor/BiocWorkshops/blob/master/_template.Rmd">_template.Rmd</a> file as a starting point. Follow the numbering
 scheme for classifying your workshop.</p>
@@ -122,6 +121,9 @@ your chapter with the <code>preview=</code> option to <code>render_book()</code>
 <pre><code>Rscript -e &quot;bookdown::render_book(                             \
     &#39;xxx_Your_Workshop.Rmd&#39;, &#39;bookdown::gitbook&#39;, preview=TRUE \
 )&quot;</code></pre>
+<p>Push <strong>only</strong> your .Rmd file to the repository; the book will be
+rebuilt manually or automatically. Eventually the output will be
+availble for end-users at <a href="https://bioconductor.github.io/BiocWorkshops" class="uri">https://bioconductor.github.io/BiocWorkshops</a></p>
 
 </div>
 </div>

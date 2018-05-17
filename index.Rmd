@@ -27,8 +27,7 @@ training. The workshops are divided into 3 sections:
 ## For Workshop Authors
 
 To contribute a new workshop, open a [BiocWorkshops issue][] asking to
-be added as a collaborator. Commit **only** the .Rmd file associated
-with your workshop.
+be added as a collaborator.
 
 Write your workshop as a stand-alone markdown document, using the
 [_template.Rmd][] file as a starting point. Follow the numbering
@@ -44,6 +43,10 @@ Rscript -e "bookdown::render_book(                             \
     'xxx_Your_Workshop.Rmd', 'bookdown::gitbook', preview=TRUE \
 )"
 ```
+
+Push **only** your .Rmd file to the repository; the book will be
+rebuilt manually or automatically. Eventually the output will be
+availble for end-users at https://bioconductor.github.io/BiocWorkshops
 
 [BiocWorkshops issue]: https://github.com/Bioconductor/BiocWorkshops/issues
 [_template.Rmd]: https://github.com/Bioconductor/BiocWorkshops/blob/master/_template.Rmd
