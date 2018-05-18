@@ -5,4 +5,4 @@ new_session: yes
 language:
   ui:
     chapter_name: "Workshop "
-delete_merged_files: true
+delete_merged_file: true
