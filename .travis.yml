@@ -1,0 +1,11 @@
+language: r
+r: bioc-devel
+
+cache:
+  packages: true
+  directories:
+  - _book
+
+script:
+  - Rscript -e 'bookdown::render_book("index.rmd")'
+
