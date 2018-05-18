@@ -4,3 +4,4 @@ Title: Bioconductor 2018 Conference Workshops Repository
 Version: 3.8.0
 Imports:
     SummarizedExperiment
+Remotes: rstudio/bookdown
