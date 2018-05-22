@@ -1,6 +1,9 @@
 language: r
 r: bioc-devel
 
+r_github_packages:
+  - rstudio/bookdown
+
 bioc_packages:
   - SummarizedExperiment
 
