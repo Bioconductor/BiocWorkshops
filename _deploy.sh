@@ -8,12 +8,10 @@ set -e
 git config --global user.email "marcel.ramos@roswellpark.org"
 git config --global user.name "LiNK-NY"
 
-git clone -b gh-pages https://${GITHUB_PAT}@github.com/${TRAVIS_REPO_SLUG}.git docs
+git clone -b gh-pages \
+    https://${GITHUB_PAT}@github.com/${TRAVIS_REPO_SLUG}.git \
+    docs
 cd docs
-
-if [ ! -f .nojekyll ]; then
-    touch .nojekyll
-fi
 
 cp -r ../docs/* ./
 git add --all *
