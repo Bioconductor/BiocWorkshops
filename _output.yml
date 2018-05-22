@@ -1,11 +1,17 @@
 bookdown::gitbook:
   config:
     toc:
+      collapse: section
       before: |
         <li><a href="./">Bioconductor 2018 Workshops</a></li>
       after: |
         <li><a href="https://bioc2018.bioconductor.org/" target="blank">Bioconductor Conference</a></li>
     download: ["pdf", "epub"]
-  css: BiocStyle.css
-
+    sharing:
+      github: yes
+      facebook: no
+      twitter: yes
+#  css: BiocStyle.css
+bookdown::pdf_book:
+  latex_engine: "pdflatex"
 bookdown::epub_book: default

@@ -1,5 +1,15 @@
 .Rhistory
 .Rdata
 .Rproj.user
-docs/*.md
 _BioC2018.rds
+*_cache
+*_files
+docs
+*.md
+*.html
+search_index.json
+libs
+*.rds
+bookdown*
+tmp-pdfcrop-*
+figures

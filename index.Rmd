@@ -1,3 +1,12 @@
+---
+knit: "bookdown::render_book"
+title: "The Bioconductor 2018 Workshop Compilation"
+description: "This book is a central repository for all the workshops submitted to the Bioconductor 2018 Conference"
+site: bookdown::bookdown_site
+github-repo: Bioconductor/BiocWorkshops
+documentclass: book
+---
+
 # Introduction
 
 Author:
