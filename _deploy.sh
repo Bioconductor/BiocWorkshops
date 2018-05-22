@@ -10,8 +10,10 @@ git config --global user.name "LiNK-NY"
 
 git clone -b gh-pages \
     https://${GITHUB_PAT}@github.com/${TRAVIS_REPO_SLUG}.git \
-    docs
-cd docs
+    book-output
+cd book-output
+
+git rm -rf *
 
 cp -r ../docs/* ./
 git add --all *
