@@ -1,0 +1,105 @@
+p.caption, caption {
+  color: inherit;
+  font-size: 8pt;
+}
+
+p.caption {
+  padding-left: 130px;
+  padding-right: 85px;
+  margin-bottom: 20px;
+}
+
+caption {
+  padding: 0;
+  margin-bottom: 10px;
+  min-width: 583;
+}
+
+.caption-title {
+  color: #12698C;
+  font-weight: bold;
+}
+
+.caption-label {
+  font-weight: bold;
+}
+
+pre {
+  margin: 0 150px 0.5em 0;
+  padding: 0 0 0 65px;
+  border: 0 none;
+/* code chunk bg color */
+  background-color: #f0f0f0;
+  white-space: pre;
+  overflow-x: auto;
+  font-size: 90%;
+}
+
+pre code {
+  background-color: inherit;
+  display: block;
+  padding: 10px 10px 10px 0;
+  overflow-x: inherit;
+  font-size: 100%;
+}
+
+tt, code, pre {
+   font-family: 'DejaVu Sans Mono', 'Droid Sans Mono', 'Lucida Console', Consolas, Monaco, monospace;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: Helvetica, Arial, sans-serif;
+  margin: 1.2em 150px 0.6em 0;
+}
+
+h1.title {
+  color: #5B8347;
+  line-height: 1.1em;
+  margin-top: 25px;
+  border-bottom: 0;
+}
+
+h1, h2, h3 {
+  color: #6E9358;
+}
+
+h1 {
+  font-size: 18.0pt;
+  line-height: 1.4em;
+  border-bottom: 3px #CAA132 solid;
+}
+
+h2 {
+  font-size: 14.5pt;
+}
+
+h3, h4 {
+  font-size: 12pt;
+}
+
+.header-section-number {
+  float: left;
+  width: 65px;
+}
+
+/* document header */
+
+.author {
+  font-size: 14.5pt;
+  color: #caa132;
+  font-weight: bold;
+}
+
+.author-name {
+  font-size: 14.5pt;
+  font-weight: bold;
+  font-style: italic;
+  text-align: left;
+}
+
+/* formatting of inline code */
+code {
+  background-color: #f0f0f0;
+  color: #404040;
+  font-size: 90%;
+}

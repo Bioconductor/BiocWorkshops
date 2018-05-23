@@ -1,0 +1,91 @@
+
+---
+knit: "bookdown::render_book"
+title: "The Bioconductor 2018 Workshop Compilation"
+description: "This book is a central repository for all the workshops submitted to the Bioconductor 2018 Conference"
+site: bookdown::bookdown_site
+github-repo: Bioconductor/BiocWorkshops
+documentclass: book
+---
+
+# Introduction
+
+Author:
+    Martin Morgan^[Roswell Park Comprehensive Cancer Center, Buffalo, NY].
+    <br/>
+Last modified: 22 May, 2018.
+
+## For Everyone
+
+This book contains workshops used in _R_ / _Bioconductor_
+training. The workshops are divided into 3 sections:
+
+- **Learn** (100-series chapters) contains material for beginning
+  users of _R_ and _Bioconductor_. The _Bioconductor_-related material
+  is relevant even for experienced _R_ users who are new to
+  _Bioconductor_.
+
+- **Use** (200-series chapters) contains workshops emphasizing use of
+  _Bioconductor_ for common tasks, e.g., bulk RNA-seq differential
+  expression, ChIP-seq, single-cell analysis, gene set enrichment, and
+  annotation.
+
+- **Develop** (500-series chapters) contains workshops to help expert
+  users hone their skills and contribute their domain-specific
+  knowledge to the _Bioconductor_ community.
+
+## For Workshop Authors
+
+To contribute a new workshop, open a [BiocWorkshops issue][] asking to
+be added as a collaborator.
+
+Write your workshop as a stand-alone markdown document, using the
+[_template.Rmd][] file as a starting point. Follow the numbering
+scheme for classifying your workshop.
+
+See [bookdown][] instructions for authoring documents; we are using
+the 'knit-then-merge' strategy. You'll need to install the
+[bookdown package][] package from CRAN, as well as [pandoc][]. Render
+your chapter with the `preview=` option to `render_book()`, e.g.,
+
+```
+Rscript -e "bookdown::render_book(                             \
+    'xxx_Your_Workshop.Rmd', 'bookdown::gitbook', preview=TRUE \
+)"
+```
+
+As this is a shared space for all workshop contributors, in order to
+use the above command in the BiocWorkshops directory, the index has to
+be built at least once, which can be time consuming depending on how many
+workshops have already been submitted.
+
+```
+Rscript -e "bookdown::render_book(                             \
+    'index.Rmd', 'bookdown::gitbook')"
+```
+
+To avoid having to build all workshops but still be able to preview
+your individual workshop we recommend creating a soft link to your .Rmd file.
+We recommend having the file in the `BiocWorkshop/` and the soft link in
+any other directory on your system. By default, this will generate an
+html file in `_book/` wherever this command is run.
+
+```
+mkdir tmp
+cd tmp/
+ln -s ../xxx_Your_Workshop.Rmd
+Rscript -e "bookdown::render_book(                             \
+    'xxx_Your_Workshop.Rmd', 'bookdown::gitbook', preview=TRUE \
+)"
+```
+
+
+Push **only** your .Rmd file to the BiocWorkshop repository; the book will be
+rebuilt manually or automatically. Eventually the output will be
+available for end-users at https://bioconductor.github.io/BiocWorkshops
+
+[BiocWorkshops issue]: https://github.com/Bioconductor/BiocWorkshops/issues
+[_template.Rmd]: https://github.com/Bioconductor/BiocWorkshops/blob/master/_template.Rmd
+[bookdown]: https://bookdown.org/yihui/bookdown/
+[bookdown package]: https://cran.r-project.org/package=bookdown
+[pandoc]: http://pandoc.org/
