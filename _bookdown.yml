@@ -1,4 +1,4 @@
-book_filename: "_BioC2018"
+book_filename: "BioC2018"
 pagetitle: "Bioconductor Workshops"
 output_dir: "docs"
 new_session: yes
