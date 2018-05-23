@@ -88,7 +88,6 @@ work on the code idependently -- do not be too ambitious in the
 material that you present.
 
 ```{r testcode}
-library(BiocFileCache)
 vec <- 1:20
 plot(1:20, col="red")
 ```
