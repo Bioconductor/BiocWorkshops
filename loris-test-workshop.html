@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
+<link rel="prev" href="index.html">
 
-<link rel="next" href="loris-test-workshop.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -165,74 +165,133 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="header">
-<h1 class="title">The Bioconductor 2018 Workshop Compilation</h1>
-</div>
-<div id="introduction" class="section level1">
-<h1><span class="header-section-number">1</span> Introduction</h1>
-<p>Author:
-Martin Morgan<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>.
+<div id="loris-test-workshop" class="section level1">
+<h1><span class="header-section-number">2</span> Lori’s Test Workshop</h1>
+<p>Authors:
+Lori Shepherd<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>.
 <br/>
 Last modified: 22 May, 2018.</p>
-<div id="for-everyone" class="section level2">
-<h2><span class="header-section-number">1.1</span> For Everyone</h2>
-<p>This book contains workshops used in <em>R</em> / <em>Bioconductor</em>
-training. The workshops are divided into 3 sections:</p>
+<div id="overview" class="section level2">
+<h2><span class="header-section-number">2.1</span> Overview</h2>
+<div id="description" class="section level3">
+<h3><span class="header-section-number">2.1.1</span> Description</h3>
+<p>Along with the topic of your workshop, include how students can expect
+to spend their time. For the description may also include information
+about what type of workshop it is (e.g. instructor-led live demo, lab,
+lecture + lab, etc.). Instructors are strongly recommended to provide
+completely worked examples for lab sessions, and a set of stand-alone
+notes that can be read and understood outside of the workshop.</p>
+</div>
+<div id="pre-requisites" class="section level3">
+<h3><span class="header-section-number">2.1.2</span> Pre-requisites</h3>
+<p>List any workshop prerequisites, for example:</p>
 <ul>
-<li><p><strong>Learn</strong> (100-series chapters) contains material for beginning
-users of <em>R</em> and <em>Bioconductor</em>. The <em>Bioconductor</em>-related material
-is relevant even for experienced <em>R</em> users who are new to
-<em>Bioconductor</em>.</p></li>
-<li><p><strong>Use</strong> (200-series chapters) contains workshops emphasizing use of
-<em>Bioconductor</em> for common tasks, e.g., bulk RNA-seq differential
-expression, ChIP-seq, single-cell analysis, gene set enrichment, and
-annotation.</p></li>
-<li><p><strong>Develop</strong> (500-series chapters) contains workshops to help expert
-users hone their skills and contribute their domain-specific
-knowledge to the <em>Bioconductor</em> community.</p></li>
+<li>Basic knowledge of R syntax</li>
+<li>Familiarity with the GenomicRanges class</li>
+<li>Familiarity with xyz vignette (provide link)</li>
+</ul>
+<p>List relevant background reading for the workshop, including any
+theoretical background you expect students to have.</p>
+<ul>
+<li>List any textbooks, papers, or other reading that students should be
+familiar with. Include direct links where possible.</li>
 </ul>
 </div>
-<div id="for-workshop-authors" class="section level2">
-<h2><span class="header-section-number">1.2</span> For Workshop Authors</h2>
-<p>To contribute a new workshop, open a <a href="https://github.com/Bioconductor/BiocWorkshops/issues">BiocWorkshops issue</a> asking to
-be added as a collaborator.</p>
-<p>Write your workshop as a stand-alone markdown document, using the
-<a href="https://github.com/Bioconductor/BiocWorkshops/blob/master/_template.Rmd">_template.Rmd</a> file as a starting point. Follow the numbering
-scheme for classifying your workshop.</p>
-<p>See <a href="https://bookdown.org/yihui/bookdown/">bookdown</a> instructions for authoring documents; we are using
-the ‘knit-then-merge’ strategy. You’ll need to install the
-<a href="https://cran.r-project.org/package=bookdown">bookdown package</a> package from CRAN, as well as <a href="http://pandoc.org/">pandoc</a>. Render
-your chapter with the <code>preview=</code> option to <code>render_book()</code>, e.g.,</p>
-<pre><code>Rscript -e &quot;bookdown::render_book(                             \
-    &#39;xxx_Your_Workshop.Rmd&#39;, &#39;bookdown::gitbook&#39;, preview=TRUE \
-)&quot;</code></pre>
-<p>As this is a shared space for all workshop contributors, in order to
-use the above command in the BiocWorkshops directory, the index has to
-be built at least once, which can be time consuming depending on how many
-workshops have already been submitted.</p>
-<pre><code>Rscript -e &quot;bookdown::render_book(                             \
-    &#39;index.Rmd&#39;, &#39;bookdown::gitbook&#39;)&quot;</code></pre>
-<p>To avoid having to build all workshops but still be able to preview
-your individual workshop we recommend creating a soft link to your .Rmd file.
-We recommend having the file in the <code>BiocWorkshop/</code> and the soft link in
-any other directory on your system. By default, this will generate an
-html file in <code>_book/</code> wherever this command is run.</p>
-<pre><code>mkdir tmp
-cd tmp/
-ln -s ../xxx_Your_Workshop.Rmd
-Rscript -e &quot;bookdown::render_book(                             \
-    &#39;xxx_Your_Workshop.Rmd&#39;, &#39;bookdown::gitbook&#39;, preview=TRUE \
-)&quot;</code></pre>
-<p>Push <strong>only</strong> your .Rmd file to the BiocWorkshop repository; the book will be
-rebuilt manually or automatically. Eventually the output will be
-available for end-users at <a href="https://bioconductor.github.io/BiocWorkshops" class="uri">https://bioconductor.github.io/BiocWorkshops</a></p>
+<div id="participation" class="section level3">
+<h3><span class="header-section-number">2.1.3</span> Participation</h3>
+<p>Describe how students will be expected to participate in the workshop.</p>
+</div>
+<div id="r-bioconductor-packages-used" class="section level3">
+<h3><span class="header-section-number">2.1.4</span> <em>R</em> / <em>Bioconductor</em> packages used</h3>
+<p>List any <em>R</em> / <em>Bioconductor</em> packages that will be explicitly covered.</p>
+</div>
+<div id="time-outline" class="section level3">
+<h3><span class="header-section-number">2.1.5</span> Time outline</h3>
+<p>An example for a 45-minute workshop:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Activity</th>
+<th>Time</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Packages</td>
+<td>15m</td>
+</tr>
+<tr class="even">
+<td>Package Development</td>
+<td>15m</td>
+</tr>
+<tr class="odd">
+<td>Contributing to Bioconductor</td>
+<td>5m</td>
+</tr>
+<tr class="even">
+<td>Best Practices</td>
+<td>10m</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="workshop-goals-and-objectives" class="section level3">
+<h3><span class="header-section-number">2.1.6</span> Workshop goals and objectives</h3>
+<p>List “big picture” student-centered workshop goals and learning
+objectives. Learning goals and objectives are related, but not the
+same thing. These goals and objectives will help some people to decide
+whether to attend the conference for training purposes, so please make
+these as precise and accurate as possible.</p>
+<p><em>Learning goals</em> are high-level descriptions of what
+participants will learn and be able to do after the workshop is
+over. <em>Learning objectives</em>, on the other hand, describe in very
+specific and measurable terms specific skills or knowledge
+attained. The <a href="#bloom">Bloom’s Taxonomy</a> may be a useful framework
+for defining and describing your goals and objectives, although there
+are others.</p>
+</div>
+<div id="learning-goals" class="section level3">
+<h3><span class="header-section-number">2.1.7</span> Learning goals</h3>
+<p>Some examples:</p>
+<ul>
+<li>describe how to…</li>
+<li>identify methods for…</li>
+<li>understand the difference between…</li>
+</ul>
+</div>
+<div id="learning-objectives" class="section level3">
+<h3><span class="header-section-number">2.1.8</span> Learning objectives</h3>
+<ul>
+<li>analyze xyz data to produce…</li>
+<li>create xyz plots</li>
+<li>evaluate xyz data for artifacts</li>
+</ul>
+</div>
+</div>
+<div id="workshop" class="section level2">
+<h2><span class="header-section-number">2.2</span> Workshop</h2>
+<p>Divide the workshop into sections (<code>## A Section</code>). Include
+fully-evaluated <em>R</em> code chunks. Develop exercises and solutions, and
+anticipate that your audience will walk through the code with you, or
+work on the code idependently – do not be too ambitious in the
+material that you present.</p>
+<pre class="sourceCode r"><code class="sourceCode r">vec &lt;-<span class="st"> </span><span class="dv">1</span><span class="op">:</span><span class="dv">20</span>
+<span class="kw">plot</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">20</span>, <span class="dt">col=</span><span class="st">&quot;red&quot;</span>)</code></pre>
+<p><img src="LoriTest_files/figure-html/testcode-1.png" width="672" /></p>
 
 </div>
 </div>
+
+
+
+
+
+
+
 <div class="footnotes">
 <hr />
-<ol start="1">
-<li id="fn1"><p>Roswell Park Comprehensive Cancer Center, Buffalo, NY<a href="index.html#fnref1" class="footnote-back">↩</a></p></li>
+<ol start="2">
+<li id="fn2"><p>Roswell Park Comprehensive Cancer Center, Buffalo, NY<a href="loris-test-workshop.html#fnref2" class="footnote-back">↩</a></p></li>
 </ol>
 </div>
             </section>
@@ -240,8 +299,8 @@ available for end-users at <a href="https://bioconductor.github.io/BiocWorkshops
           </div>
         </div>
       </div>
+<a href="index.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
 
-<a href="loris-test-workshop.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
