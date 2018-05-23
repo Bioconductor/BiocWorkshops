@@ -94,4 +94,4 @@ vec <- 1:20
 plot(1:20, col="red")
 ```
 
-<img src="LoriTest_files/figure-html/testcode-1.png" width="672" />
+![](LoriTest_files/figure-epub3/testcode-1.png)<!-- -->
