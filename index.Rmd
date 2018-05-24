@@ -40,7 +40,11 @@ be added as a collaborator.
 
 Write your workshop as a stand-alone markdown document, using the
 [_template.Rmd][] file as a starting point. Follow the numbering
-scheme for classifying your workshop.
+scheme for classifying your workshop. 
+
+Also update the DESCRIPTION file adding packages utilized in your workshop to
+the Imports field. Please be kind and don't remove anyone elses packages from
+the DESCRIPTION as this is a shared file for all workshops. 
 
 See [bookdown][] instructions for authoring documents; we are using
 the 'knit-then-merge' strategy. You'll need to install the
