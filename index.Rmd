@@ -85,10 +85,13 @@ Rscript -e "bookdown::render_book(                             \
 
 Push **only** your .Rmd file to the BiocWorkshop repository; the book will be
 rebuilt manually or automatically. Eventually the output will be
-available for end-users at https://bioconductor.github.io/BiocWorkshops
+available for end-users at https://bioconductor.github.io/BiocWorkshops .The
+master branch will not contain the built version of the book. Switching to the
+[gh-pages branch][] will show built output.  
 
 [BiocWorkshops issue]: https://github.com/Bioconductor/BiocWorkshops/issues
 [_template.Rmd]: https://github.com/Bioconductor/BiocWorkshops/blob/master/_template.Rmd
 [bookdown]: https://bookdown.org/yihui/bookdown/
 [bookdown package]: https://cran.r-project.org/package=bookdown
 [pandoc]: http://pandoc.org/
+[gh-pages branch]: https://github.com/Bioconductor/BiocWorkshops/tree/gh-pages
