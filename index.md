@@ -90,9 +90,22 @@ available for end-users at https://bioconductor.github.io/BiocWorkshops .The
 master branch will not contain the built version of the book. Switching to the
 [gh-pages branch][] will show built output.  
 
+## Deadlines for Bioc2018
+
+Please be aware of the following deadlines for the [Bioconductor 2018 Conference][] in Toronto
+
+- **Fri June 29:** draft workshop materials submitted to this Bioconductor GitHub bookdown site
+
+- **Fri July 6:** feedback period completes
+
+- **Weds July 18:** workshops must pass checks without errors or warnings (All materials will be checked by Continuous Integration)
+
+- **Thurs / Fri July 26-27:** Bioc2018
+
 [BiocWorkshops issue]: https://github.com/Bioconductor/BiocWorkshops/issues
 [_template.Rmd]: https://github.com/Bioconductor/BiocWorkshops/blob/master/_template.Rmd
 [bookdown]: https://bookdown.org/yihui/bookdown/
 [bookdown package]: https://cran.r-project.org/package=bookdown
 [pandoc]: http://pandoc.org/
 [gh-pages branch]: https://github.com/Bioconductor/BiocWorkshops/tree/gh-pages
+[Bioconductor 2018 Conference]: https://bioc2018.bioconductor.org/
