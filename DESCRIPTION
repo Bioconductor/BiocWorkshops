@@ -5,6 +5,7 @@ Version: 3.8.0
 Depends: R (>= 3.5.0)
 Imports:
   bookdown,
-  SummarizedExperiment
+  SummarizedExperiment,
+  memuse
 Remotes:
   rstudio/bookdown
