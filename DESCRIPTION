@@ -20,5 +20,6 @@ Imports:
   scone,
   gam,
   RColorBrewer
+  memuse
 Remotes:
   rstudio/bookdown
