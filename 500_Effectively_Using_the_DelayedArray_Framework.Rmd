@@ -30,8 +30,7 @@ Last modified: 12 June, 2018.
 
 This workshop will teach the fundamental concepts underlying the DelayedArray framework and related infrastructure. 
 It is intended for package developers who want to learn how to use the DelayedArray framework to support the analysis of large datasets, particularly through the use of on-disk data storage.
-The first part of the workshop will provide an overview of the DelayedArray 
-infrastructure and introduce computing on DelayedArray objects using delayed operations and block-processing.
+The first part of the workshop will provide an overview of the DelayedArray infrastructure and introduce computing on DelayedArray objects using delayed operations and block-processing.
 The second part of the workshop will present strategies for adding support for DelayedArray to an existing package and extending the DelayedArray framework.
 Students can expect a mixture of lecture and question-and-answer session to teach the fundamental concepts.
 There will be plenty of examples to illustrate common design patterns for writing performant code, although we will not be writing much code during the workshop.
@@ -71,7 +70,7 @@ Students will be expected to be able to follow and reason about example R code.
 
 ### Learning goals
 
-* Identify when it is useful to use a DelayedArray instead of an ordinary array or other array-like data structure.
+* Identify when it is useful to use a *DelayedArray* instead of an ordinary array or other array-like data structure.
 * Become familiar with the fundamental concepts of delayed operations, block-processing, and realization.
 * Learn of existing functions and packages for constructing and computing on DelayedArray objects, avoiding the need to re-invent the wheel.
 * Learn common design patterns for writing performant code that operates on a DelayedArray.
@@ -80,30 +79,28 @@ Students will be expected to be able to follow and reason about example R code.
 
 ### Learning objectives
 
-* Understand the differences between a DelayedArray instance and an instance of a subclass (e.g., HDF5Array, RleArray).
-* Know what types of operations 'degrade' an instance of a DelayedArray subclass to a DelayedArray, as well as when and why this matters.
-* Construct a DelayedArray:
+* Understand the differences between a *DelayedArray* instance and an instance of a subclass (e.g., *HDF5Array*, *RleArray*).
+* Know what types of operations 'degrade' an instance of a *DelayedArray* subclass to a *DelayedArray*, as well as when and why this matters.
+* Construct a *DelayedArray*:
   * From an in-memory array-like object.
   * From an on-disk data store (e.g., HDF5).
-  * From scratch by writing data to a RealizationSink.
+  * From scratch by writing data to a *RealizationSink*.
 * Take a function that operates on rows or columns of a matrix and apply it to a DelayedMatrix.
-* Use block-processing on a DelayedArray to compute:
+* Use block-processing on a *DelayedArray* to compute:
   * A univariate (scalar) summary statistic (e.g., `max()`).
   * A multivariate (vector) summary statistic (e.g., `colSum()` or `rowMean()`).
   * A multivariate (array-like) summary statistic (e.g., `rowRanks()`).
 * Design an algorithm that imports data into a DelayedArray.
 
-## Introductory slides
+## Introductory material
 
 Data from a high-throughput biological assay, such as single-cell RNA-sequencing (scRNA-seq), will often be summarised as a matrix of counts, where rows correspond to features and columns to samples^[Higher-dimensional arrays may be appropriate for some types of assays.].
-Within **Bioconductor**, the *SummarizedExperiment* class is the recommended 
-container for such data, offering a rich interface that tightly links assay measurements to data on the features and the samples.
+Within **Bioconductor**, the *SummarizedExperiment* class is the recommended container for such data, offering a rich interface that tightly links assay measurements to data on the features and the samples.
 
 ![The _SummarizedExperiment_ class is used to store rectangular arrays of experimental results (_assays_). Although each _assay_ is here drawn as a matrix, higher-dimensional arrays are also supported.](https://docs.google.com/feeds/download/drawings/Export?id=1kiC8Qlo1mhSnLDqkGiRNPSo6GWn3C2duBszCFbJCB-g&exportFormat=svg)
 
-The assay data are typically stored **in-memory** as ordinary _matrix_ or _array_ objects. 
-The requirement that the data be stored in-memory becomes a real pain with the ever-growing size of 'omics datasets; it is now not uncommon to collect $10,000-100,000,000$ measurements on $100 - 1,000,000$ samples, which 
-would occupy $10-1,000$ gigabytes (GB) if stored in-memory as ordinary R arrays!
+The assay data are typically stored **in-memory** as ordinary *matrix* or *array* objects. 
+The requirement that the data be stored in-memory becomes a real pain with the ever-growing size of 'omics datasets; it is now not uncommon to collect $10,000-100,000,000$ measurements on $100 - 1,000,000$ samples, which would occupy $10-1,000$ gigabytes (GB) if stored in-memory as ordinary R arrays!
 **TABLE** (**TODO**: Link to table) gives some examples of contemporary experiments and the memory requirements if these data are to be stored in-memory as ordinary R arrays.
 
 ```{r, echo = FALSE}
@@ -130,33 +127,247 @@ x <- data.frame(
 knitr::kable(x[2:1, ], row.names = FALSE)
 ```
 
+### Discussion
+
+**TODO:** Make these 'discussions/challenges' into a boxes that visually break out
+
+Talk with your neighbour about the sorts of 'big data' you are analysing, the challenges you've faced, and strategies you're using to tackle this.
+
 There are various strategies for handling such data in R. 
 For example,
 
-- Sparse data
-- Rle-like data
-- Storing data on disk
+1. Sparse matrices for single-cell 'omics data
+2. Run length encoded vectors for ATAC-seq coverage profiles
+3. Storing data on disk for whole genome methylation data and only bringing into memory as required^[This strategy can also be effectively applied to sparse and repetitive data by using on-disk compression of the data.]
 
-- One option that is generally applicable is to keep the data on disk and not bring into memory until required. 
-- This workshop will introduce you to the _DelayedArray_ framework.
+This workshop will introduce you to the **DelayedArray** framework, with a focus on using the on-disk Hierarchical Data Format (**HDF5**) as the backend.
 
-### Motivation
+### When it is useful to use a *DelayedArray*?
 
-- 'Omics data commonly represented as a matrix or higher-dimensional array
-    - Tidy but not "tidy"
-- In BioC, we use and love the _SummarizedExperiment_ container, where rows are features and columns are samples
-- 'Omics data are forever getting larger
-    - scRNA-seq on 10,000-1,000,000 cells
-    - WGBS on 10-100s of samples
-    - WGS on 10,000-1,000,000 of samples
-- Want something array-like that scales to these large datasets
-- Enter **DelayedArray**
+**TODO**
+
+#### Learning goal
+
+* Identify when it is useful to use a *DelayedArray* instead of an ordinary array or other array-like data structure.
 
 ## Overview of DelayedArray framework
 
+The high-level goals of the DelayedArray framework are:
+
+1. Provide a common R interface to array-like data, where the data may be in-memory or on-disk.
+2. Support delayed operations, which avoid doing any computation until the result is required.
+3. Support block-processing of the data, which enables bounded-memory and parallel computations.
+
+From the **DelayedArray** `DESCRIPTION`:
+
+**TODO:** Use **desc** to extract Description field?
+
+> Wrapping an array-like object (typically an on-disk object) in a DelayedArray object allows one to perform common array operations on it without loading the object in memory. In order to reduce memory usage and optimize performance, operations on the object are either delayed or executed using a block processing mechanism. Note that this also works on in-memory array-like objects like DataFrame objects (typically with Rle columns), Matrix objects, and ordinary arrays and data frames. (https://bioconductor.org/packages/release/bioc/html/DelayedArray.html)
+
+**TODO:** Make an the comment about dplyr an 'aside'.
+
+These goals are similar to that of **tibble** and **dplyr**:
+
+> A tibble, or `tbl_df`, is a modern reimagining of the data.frame, keeping what time has proven to be effective, and throwing out what is not. Tibbles are data.frames that are lazy and surly (http://tibble.tidyverse.org/#overview)
+
+> dplyr is designed to abstract over how the data is stored. That means as well as working with local data frames, you can also work with remote database tables, using exactly the same R code. (https://dplyr.tidyverse.org/#overview)
+
+### The **DelayedArray** package
+
+The core of DelayedArray framework is implemented in the **DelayedArray** Bioconductor package
+The reverse dependencies of **DelayedArray** are shown below:
+
+```{r}
+# TODO: This is a GitHub only package, 
+#       `BiocManager::install("seandavi/BiocPkgTools")`
+library(BiocPkgTools)
+library(tidygraph)
+library(ggraph)
+
+`%>%` <- dplyr::`%>%`
+
+# TODO: Re-write so as to avoid library() calls that clobbers the NAMESPACE
+# NOTE: From http://lazappi.id.au/2018/06/exploring-the-sce-verse/
+get_bioc_deps <- function(bpi, pkg, reverse) {
+    deps <- bpi %>%
+        dplyr::filter(Package == pkg)
+    
+    if (reverse) {
+        deps <- deps %>%
+            dplyr::select(depends = dependsOnMe, imports = importsMe,
+                          suggests = suggestsMe)
+    } else {
+        deps <- deps %>%
+            dplyr::select(depends = Depends, imports = Imports,
+                          suggests = Suggests)
+    }
+    
+    deps <- deps %>%
+        tidyr::gather(key = "type", value = "package") %>%
+        tidyr::separate_rows() %>%
+        dplyr::filter(!is.na(package))
+    
+    if (reverse) {
+        deps <- deps %>%
+            dplyr::mutate(package2 = pkg) %>%
+            dplyr::rename(package1 = package)
+    } else {
+        deps <- deps %>%
+            dplyr::mutate(package1 = pkg) %>%
+            dplyr::rename(package2 = package)
+    }
+    
+    deps <- deps %>% dplyr::select(package1, uses = type, package2)
+}
+# NOTE: From http://lazappi.id.au/2018/06/exploring-the-sce-verse/
+get_cran_deps <- function(pkg, db, reverse) {
+    
+    types <- c("Depends", "Imports", "Suggests")
+    
+    deps <- sapply(types, function(type) {
+        deps <- tools::package_dependencies(pkg, db, which = type,
+                                            reverse = reverse)
+        c(type = type, package = paste(deps[[1]], collapse = ", "))
+    })
+    
+    deps <- deps %>%
+        t() %>%
+        dplyr::as_data_frame() %>%
+        dplyr::mutate(type = tolower(type)) %>%
+        dplyr::filter(package != "") %>%
+        tidyr::separate_rows(package)
+    
+    if (nrow(deps) == 0) {
+        return(dplyr::tibble(package1 = character(), uses = character(),
+                             package2 = character()))
+    }
+    
+    if (reverse) {
+        deps <- deps %>%
+            dplyr::mutate(package2 = pkg) %>%
+            dplyr::rename(package1 = package)
+    } else {
+        deps <- deps %>%
+            dplyr::mutate(package1 = pkg) %>%
+            dplyr::rename(package2 = package)
+    }
+    
+    deps <- deps %>% dplyr::select(package1, uses = type, package2)
+}
+
+bpi <- getBiocPkgList()
+db <- available.packages(repos = "http://cran.r-project.org")
+
+bioc_revdeps <- get_bioc_deps(bpi, "DelayedArray", reverse = TRUE)
+cran_revdeps <- get_cran_deps("DelayedArray", db, reverse = TRUE)
+
+nodes <- bioc_revdeps %>%
+    dplyr::bind_rows(cran_revdeps) %>%
+    dplyr::select(-uses) %>%
+    tidyr::gather(key = id, value = package) %>%
+    dplyr::select(-id) %>%
+    dplyr::distinct() %>%
+    dplyr::mutate(
+        repo = dplyr::if_else(package %in% bpi$Package, "Bioconductor", "CRAN"))
+
+edges <- bioc_revdeps %>%
+    dplyr::bind_rows(cran_revdeps) %>%
+    dplyr::rename(from = package1, to = package2)
+
+graph <- tbl_graph(nodes = nodes, edges = edges)
+
+ggraph(graph, layout = "fr") +
+    geom_edge_fan(aes(colour = uses),
+                  arrow = arrow(length = unit(4, 'mm')), 
+                  end_cap = circle(3, 'mm')) +
+    geom_node_point(aes(colour = repo)) +
+    geom_node_text(aes(label = package, colour = repo), repel = TRUE) +
+    scale_color_brewer(palette = "Set1") +
+    scale_edge_color_brewer(palette = "Dark2") +
+    theme_graph()
+```
+
+The above figures includes packages that extend the DelayedArray framework in various ways, as well as those that simply use the DelayedArray framework to analyse specific types of 'omics data. We briefly discuss some of these:
+
+#### Packages that extend **DelayedArray**
+
+There are two ways a package may extend the DelayedArray framework. 
+The first kind of package adds support for a new _realization backend_ (**TODO** Define?). Examples of this are:
+
+- The **HDF5Array** package adds the *HDF5Array* realization backend for accessing and creating data stored on-disk in an HDF5 file. This is typically used for on-disk representation of multidimensional (numeric) arrays.
+- The **GDSArray** package adds the *GDSArray* backend_ for accessing and creating data stored on-disk in a GDS file. This is typically used for on-disk representation of genotyping or sequence data.
+- The **rhdf5client** and **restfulSE** packages add the *H5S_Array* realization backend for accessing and creating data stored on a HDF Server, a Python-based web service that can be used to send and receive HDF5 data using an HTTP-based REST interface. This is typically used for on-disk representation of multidimensional (numeric) arrays that need to be shared with multiple users from a central location.
+
+The second kind of package adds methods for computing on _DelayedArray_ instances. Examples of this are:
+
+- The **DelayedMatrixStats** package provides methods for computing commonly used row- and column-wise summaries of a 2-dimensional _DelayedArray_.
+- The **beachmat** package provides a consistent C++ class interface for a variety of commonly used matrix types, including ordinary R arrays, sparse matrices, and _DelayedArray_ with various backends.
+- Packages for performing matrix factorizations, (generalized) linear regression, etc. (work in progress)
+
+#### Packages that use **DelayedArray**
+
+- The **bsseq** package uses the DelayedArray framework to support the analysis of large whole-genome bisulfite methylation sequencing experiments.
+
+### The **DelayedArray** class
+
+The **DelayedArray** package defines the key classes, generics, and methods^[The **DelayedArray** package, like all core Bioconductor packages, uses the [S4 object oriented programming system](http://adv-r.had.co.nz/OO-essentials.html#s4)], as well as miscellaneous helper functions, that implement the DelayedArray framework.
+Key to this, is the _DelayedArray_ class. 
+
+```{r}
+# TODO: Graphical representation of this network?
+# NOTE: Illustrate How classes depend on one another
+#       a. with DelayedArray as the root
+#       b. With DelayedArray as the leaf
+showClass(getClass("DelayedArray", where = "DelayedArray"))
+showClass(getClass("HDF5Array", where = "HDF5Array"))
+```
+
+**TODO:** (later in course) How packages depend on one another, with HDF5Array as the root (i.e. explain the HDF5 stack)
+
+### Fundamental concepts
+
+#### Learning goals 
+
+* Become familiar with the fundamental concepts of delayed operations, block-processing, and realization.
+
+#### Learning objective
+
+* Know what types of operations 'degrade' an instance of a *DelayedArray* subclass to a *DelayedArray*, as well as when and why this matters.
+* Construct a *DelayedArray*:
+  * From an in-memory array-like object.
+  * From an on-disk data store (e.g., HDF5).
+  * From scratch by writing data to a *RealizationSink*.
+
+### What's out there already?
+
+#### Learning goal
+
+* Learn of existing functions and packages for constructing and computing on DelayedArray objects, avoiding the need to re-invent the wheel.
+
 ## Incoporating DelayedArray into a package
+
+### Writing algorithms to process *DelayedArray* instances
+
+#### Learning goals
+
+* Learn common design patterns for writing performant code that operates on a DelayedArray.
+* Evaluate whether an existing function that operates on an ordinary array can be readily adapted to work on a DelayedArray.
+* Reason about potential bottlenecks in algorithms operating on DelayedArray objects.
+
+#### Learning objectives
+
+* Take a function that operates on rows or columns of a matrix and apply it to a DelayedMatrix.
+* Use block-processing on a *DelayedArray* to compute:
+  * A univariate (scalar) summary statistic (e.g., `max()`).
+  * A multivariate (vector) summary statistic (e.g., `colSum()` or `rowMean()`).
+  * A multivariate (array-like) summary statistic (e.g., `rowRanks()`).
+* Design an algorithm that imports data into a DelayedArray.
 
 ## Questions and discussion
 
 This section will be updated to address questions and to summarise the discussion from the presentation of this workshop at BioC2018. 
 
+
+# TODOs
+
+- Use **BiocStyle**?
