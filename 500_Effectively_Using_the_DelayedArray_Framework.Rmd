@@ -302,7 +302,7 @@ The second kind of package adds methods for computing on _DelayedArray_ instance
 
 - The **DelayedMatrixStats** package provides methods for computing commonly used row- and column-wise summaries of a 2-dimensional _DelayedArray_.
 - The **beachmat** package provides a consistent C++ class interface for a variety of commonly used matrix types, including ordinary R arrays, sparse matrices, and _DelayedArray_ with various backends.
-- Packages for performing matrix factorizations, (generalized) linear regression, etc. (work in progress)
+- Packages for performing matrix factorizations, (generalized) linear regression, k-nearest neighbours, etc. (work in progress)
 
 #### Packages that use **DelayedArray**
 
@@ -310,7 +310,7 @@ The second kind of package adds methods for computing on _DelayedArray_ instance
 
 ### The **DelayedArray** class
 
-The **DelayedArray** package defines the key classes, generics, and methods^[The **DelayedArray** package, like all core Bioconductor packages, uses the [S4 object oriented programming system](http://adv-r.had.co.nz/OO-essentials.html#s4)], as well as miscellaneous helper functions, that implement the DelayedArray framework.
+The **DelayedArray** package defines the key classes, generics, and methods^[The **DelayedArray** package, like all core Bioconductor packages, uses the [S4 object oriented programming system.](http://adv-r.had.co.nz/OO-essentials.html#s4)], as well as miscellaneous helper functions, that implement the DelayedArray framework.
 Key to this, is the _DelayedArray_ class. 
 
 ```{r}
@@ -322,7 +322,118 @@ showClass(getClass("DelayedArray", where = "DelayedArray"))
 showClass(getClass("HDF5Array", where = "HDF5Array"))
 ```
 
-**TODO:** (later in course) How packages depend on one another, with HDF5Array as the root (i.e. explain the HDF5 stack)
+As seen above, the *DelayedArray* class has a single slot called the *seed*. 
+This name is evocative, it is the core of the object.
+We'll explore four types of seeds: "simple" and "formal" in-memory seeds, on-disk seeds, and *DelayedOp* seeds^[The terms "simple" and "formal" aren't formally part of the DelayedArray framework, but I'll use them to illustrate some ideas in this workshop. On-disk seeds and *DelayedOp* seeds are always "formal".].
+A "formal" seed defines an S4 class and methods that that conforms to the "seed contract", a minimal set of operations the seed must support.
+
+The seed contract is fairly minimal^[See `vignette("02-Implementing_a_backend", "DelayedArray")` for details.]:
+
+- `dim(x)`: Return the dimensions of the seed.
+- `dimnames(x)`: Return the (possibly `NULL`) dimension names of the seed.
+- `extract_array(x, index)`: Return a slice, specified by `index`, of the seed as an ordinary R *array*.
+
+#### "Simple" seeds
+
+A "simple" seed is an instance of an existing "array-like" object. 
+This object could be fundamental R structure, such as an *array*, or an existing S3 or S4 class.
+These "just work" when passed to the `DelayedArray()` constructor[^This is because the **DelayedArray** package implements the seed contract for these existing classes without requiring yet another class].
+
+To begin, we'll consider a *DelayedArray* instance with the simplest *seed*, an in-memory array:
+
+```{r}
+library(DelayedArray)
+
+# An example using a fundamental R structure as the seed.
+mat <- matrix(rep(1:20, 1:20), ncol = 2)
+da_mat <- DelayedArray(seed = mat) 
+da_mat
+str(da_mat)
+```
+
+We can use other, more complex, array-like objects as the *seed*:
+
+```{r}
+# An example using another fundamental R structure as the seed.
+df <- as.data.frame(mat)
+da_df <- DelayedArray(seed = df)
+# NOTE: This inherits the (default) column names of the data.frame.
+da_df
+str(da_df)
+
+# An example using an S3 instance as the seed.
+library(tibble)
+tbl <- as_tibble(mat)
+da_tbl <- DelayedArray(seed = tbl)
+str(da_tbl)
+
+# An example using an S4 instance as the seed.
+library(Matrix)
+Mat <- Matrix(mat)
+da_Mat <- DelayedArray(seed = Mat)
+# NOTE: The type is 'double' because of how the Matrix package stores the data.
+da_Mat
+str(da_Mat)
+```
+
+#### "Formal" seeds
+
+The rest of the seeds that we'll look at are "formal" seeds that explicitly implement the seed contract in a new class and methods.
+
+##### In-memory seeds
+
+The **DelayedArray** package defines the *RleArray* class, a *DelayedArray* subclass containing run-length encoded data.
+The *seed* of an *RleArray* is a *RleArraySeed* (either an instance of a *SolidRleArraySeed* or a *ChunkedRleArraySeed*).
+
+
+```{r}
+# NOTE: The DelayedArray package does not expose the RleArraySeed() constructor.
+#       Instead, we directly call the RleArray() constructor.
+da_Rle <- RleArray(rle = Rle(mat), dim = dim(mat))
+da_Rle
+str(da_Rle)
+```
+
+##### On-disk seeds
+
+The **HDF5Array** package defines the *HDF5Array* class, a *DelayedArray* subclass for data stored on disk in a HDF5 file.
+The *seed* of an *HDF5Array* is a *HDF5ArraySeed*.
+It is important to note that creating a *HDF5Array* does not read the data into memory!
+The data remain on disk until explicitly requested (we'll see how to do this later on in the workshop).
+
+```{r}
+library(HDF5Array)
+
+# TODO: What path to use?
+hdf5_file <- "hdf5_mat.h5"
+# NOTE: We can use rhdf5::h5ls() to take a look what is in the HDF5 file.
+rhdf5::h5ls(hdf5_file)
+# NOTE: We first demonstrate how to create the HDF5Array explicitly by 
+#       creating a HDF5ArraySeed and then creating the HDF5Array.
+# 1. Create the HDF5ArraySeed.
+hdf5_seed <- HDF5ArraySeed(filepath = hdf5_file, name = "hdf5_mat")
+# 2. Create the HDF5Array
+da_hdf5 <- DelayedArray(seed = hdf5_seed)
+da_hdf5
+# NOTE: Alternatively, we can create this in one go using the HDF5Array()       
+#       constructor.    
+da_hdf5 <- HDF5Array(hdf5_file, "hdf5_mat")
+da_hdf5
+str(da_hdf5)
+```
+
+##### *DelayedOps*
+
+**TODO:** (UP TO HERE) Minimal introduction to *DelayedOps*; the details aren't so important and we'll talk more about the practical side of the *DelayedOps* subclasses when describing delayed operations.
+
+#### So what seed should I use?
+
+Notably, `da_mat`, `da_Mat`, `da_tbl`, `da_df`, `da_Rle`, and `da_hdf5` now all "look" much the same, and we'll soon see that they "feel" much the same, too.
+The *DelayedArray* is a very light wrapper around the *seed* that formalises this consistent "look" and "feel".
+
+**Key idea**: A *DelayedArray* is a lightweight wrapper around  
+
+**TODO**: Provide guidance on how you should choose the *seed* of a *DelayedArray, e.g., memory-footprint, performance considerations, etc. Should this go here?
 
 ### Fundamental concepts
 
@@ -371,3 +482,4 @@ This section will be updated to address questions and to summarise the discussio
 # TODOs
 
 - Use **BiocStyle**?
+-  Show packages depend on one another, with HDF5Array as the root (i.e. explain the HDF5 stack)
