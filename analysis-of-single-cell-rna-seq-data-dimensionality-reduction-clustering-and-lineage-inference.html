@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-
-<link rel="next" href="variant-functional-annotation-using-statepaintr-funcivar-motifbreakr.html">
+<link rel="prev" href="working-with-genomic-data-in-r-with-the-decipher-package.html">
+<link rel="next" href="functional-enrichment-analysis-of-high-throughput-omics-data.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -335,98 +335,113 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="header">
-<h1 class="title">The Bioconductor 2018 Workshop Compilation</h1>
-</div>
-<div id="introduction" class="section level1">
-<h1><span class="header-section-number">1</span> Introduction</h1>
-<p>Author:
-Martin Morgan<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>.
-<br/>
-Last modified: 22 May, 2018.</p>
-<div id="for-everyone" class="section level2">
-<h2><span class="header-section-number">1.1</span> For Everyone</h2>
-<p>This book contains workshops used in <em>R</em> / <em>Bioconductor</em>
-training. The workshops are divided into 3 sections:</p>
+<div id="analysis-of-single-cell-rna-seq-data-dimensionality-reduction-clustering-and-lineage-inference" class="section level1">
+<h1><span class="header-section-number">4</span> Analysis of single-cell RNA-seq data: Dimensionality reduction, clustering, and lineage inference</h1>
+<div id="instructors-names-and-contact-information" class="section level2">
+<h2><span class="header-section-number">4.1</span> Instructor(s) name(s) and contact information</h2>
 <ul>
-<li><p><strong>Learn</strong> (100-series chapters) contains material for beginning
-users of <em>R</em> and <em>Bioconductor</em>. The <em>Bioconductor</em>-related material
-is relevant even for experienced <em>R</em> users who are new to
-<em>Bioconductor</em>.</p></li>
-<li><p><strong>Use</strong> (200-series chapters) contains workshops emphasizing use of
-<em>Bioconductor</em> for common tasks, e.g., bulk RNA-seq differential
-expression, ChIP-seq, single-cell analysis, gene set enrichment, and
-annotation.</p></li>
-<li><p><strong>Develop</strong> (500-series chapters) contains workshops to help expert
-users hone their skills and contribute their domain-specific
-knowledge to the <em>Bioconductor</em> community.</p></li>
+<li>Diya Das (<span class="citation">@diyadas</span>, <a href="mailto:diyadas@berkeley.edu">diyadas@berkeley.edu</a>)</li>
+<li>Davide Risso (<span class="citation">@drisso</span>)</li>
+<li>Kelly Street (<span class="citation">@kstreet13</span>)</li>
 </ul>
 </div>
-<div id="for-workshop-authors" class="section level2">
-<h2><span class="header-section-number">1.2</span> For Workshop Authors</h2>
-<p>To contribute a new workshop, open a <a href="https://github.com/Bioconductor/BiocWorkshops/issues">BiocWorkshops issue</a> asking to
-be added as a collaborator.</p>
-<p>Write your workshop as a stand-alone markdown document, using the
-<a href="https://github.com/Bioconductor/BiocWorkshops/blob/master/_template.Rmd">_template.Rmd</a> file as a starting point. Follow the numbering
-scheme for classifying your workshop.</p>
-<p>Also update the DESCRIPTION file adding packages utilized in your workshop to
-the Imports field. Please be kind and don’t remove anyone elses packages from
-the DESCRIPTION as this is a shared file for all workshops.</p>
-<p>See <a href="https://bookdown.org/yihui/bookdown/">bookdown</a> instructions for authoring documents; we are using
-the ‘knit-then-merge’ strategy. You’ll need to install the
-<a href="https://cran.r-project.org/package=bookdown">bookdown package</a> package from CRAN, as well as <a href="http://pandoc.org/">pandoc</a>. Render
-your chapter with the <code>preview=</code> option to <code>render_book()</code>, e.g.,</p>
-<pre><code>Rscript -e &quot;bookdown::render_book(                             \
-    &#39;xxx_Your_Workshop.Rmd&#39;, &#39;bookdown::gitbook&#39;, preview=TRUE \
-)&quot;</code></pre>
-<p>As this is a shared space for all workshop contributors, in order to
-use the above command in the BiocWorkshops directory, the index has to
-be built at least once, which can be time consuming depending on how many
-workshops have already been submitted.</p>
-<pre><code>Rscript -e &quot;bookdown::render_book(                             \
-    &#39;index.Rmd&#39;, &#39;bookdown::gitbook&#39;)&quot;</code></pre>
-<p>To avoid having to build all workshops but still be able to preview
-your individual workshop we recommend creating a soft link to your .Rmd file.
-We recommend having the file in the <code>BiocWorkshop/</code> and the soft link in
-any other directory on your system. By default, this will generate an
-html file in <code>_book/</code> wherever this command is run.</p>
-<pre><code>mkdir tmp
-cd tmp/
-ln -s ../xxx_Your_Workshop.Rmd
-Rscript -e &quot;bookdown::render_book(                             \
-    &#39;xxx_Your_Workshop.Rmd&#39;, &#39;bookdown::gitbook&#39;, preview=TRUE \
-)&quot;</code></pre>
-<p>Push <strong>only</strong> your .Rmd file to the BiocWorkshop repository; the book will be
-rebuilt manually or automatically. Eventually the output will be
-available for end-users at <a href="https://bioconductor.github.io/BiocWorkshops" class="uri">https://bioconductor.github.io/BiocWorkshops</a> .The
-master branch will not contain the built version of the book. Switching to the
-<a href="https://github.com/Bioconductor/BiocWorkshops/tree/gh-pages">gh-pages branch</a> will show built output.</p>
+<div id="workshop-description-2" class="section level2">
+<h2><span class="header-section-number">4.2</span> Workshop Description</h2>
+<p>This workshop will be presented as a lab session (brief introduction followed by hands-on coding)
+that instructs participants in a Bioconductor workflow for the analysis of single-cell RNA-sequencing data, in three parts:
+1. dimensionality reduction that accounts for zero inflation, over-dispersion, and batch effects
+2. cell clustering that employs a resampling-based approach resulting in robust and stable clusters
+3. lineage trajectory analysis that uncovers continuous, branching developmental processes</p>
+<p>We will provide worked examples for lab sessions, and a set of stand-alone notes in this repository.</p>
+<p>Note to organizers: A previous version of this workshop was well-attended at BioC 2017,
+but the tools presented have been significantly updated for
+interoperability (most notably, through the use of the <code>SingleCellExperiment</code> class), and we have been receiving many requests to provide an
+updated workflow. We plan to incorporate feedback from this workshop into a revised version of our F1000 Workflow.</p>
+<div id="pre-requisites-1" class="section level3">
+<h3><span class="header-section-number">4.2.1</span> Pre-requisites</h3>
+<p>We expect basic knowledge of R syntax. Some familiarity with S4 objects may be helpful, but not required.
+More importantly, participants should be familiar with the concept and design of RNA-sequencing experiments. Direct experience with single-cell RNA-seq is not required, and the main challenges of single-cell RNA-seq compared to bulk RNA-seq will be illustrated.</p>
 </div>
-<div id="deadlines-for-bioc2018" class="section level2">
-<h2><span class="header-section-number">1.3</span> Deadlines for Bioc2018</h2>
-<p>Please be aware of the following deadlines for the <a href="https://bioc2018.bioconductor.org/">Bioconductor 2018 Conference</a> in Toronto</p>
+<div id="workshop-participation-2" class="section level3">
+<h3><span class="header-section-number">4.2.2</span> Workshop Participation</h3>
+<p>This will be a hands-on workshop, in which each student, using their laptop, will analyze a provided example datasets. The workshop will be a mix of example code that the instructors will show to the students (available through this repository) and short exercises.</p>
+</div>
+<div id="r-bioconductor-packages-used-2" class="section level3">
+<h3><span class="header-section-number">4.2.3</span> <em>R</em> / <em>Bioconductor</em> packages used</h3>
+<ol style="list-style-type: decimal">
+<li><em>zinbwave</em> : <a href="https://bioconductor.org/packages/zinbwave" class="uri">https://bioconductor.org/packages/zinbwave</a></li>
+<li><em>clusterExperiment</em>: <a href="https://bioconductor.org/packages/clusterExperiment" class="uri">https://bioconductor.org/packages/clusterExperiment</a></li>
+<li><em>slingshot</em>: <a href="https://github.com/kstreet13/slingshot" class="uri">https://github.com/kstreet13/slingshot</a> (will be submitted to Bioconductor shortly)</li>
+</ol>
+</div>
+<div id="time-outline-2" class="section level3">
+<h3><span class="header-section-number">4.2.4</span> Time outline</h3>
+<p>2 hr workshop:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Activity</th>
+<th>Time</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Intro to single-cell RNA-seq analysis</td>
+<td>15m</td>
+</tr>
+<tr class="even">
+<td>zinbwave (dimensionality reduction)</td>
+<td>30m</td>
+</tr>
+<tr class="odd">
+<td>clusterExperiment (clustering)</td>
+<td>30m</td>
+</tr>
+<tr class="even">
+<td>slingshot (lineage trajectory analysis)</td>
+<td>30m</td>
+</tr>
+<tr class="odd">
+<td>Questions / extensions</td>
+<td>15m</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="workshop-goals-and-objectives-2" class="section level2">
+<h2><span class="header-section-number">4.3</span> Workshop goals and objectives</h2>
+<div id="learning-goals-1" class="section level3">
+<h3><span class="header-section-number">4.3.1</span> Learning goals</h3>
 <ul>
-<li><p><strong>Fri June 29:</strong> draft workshop materials submitted to this Bioconductor GitHub bookdown site</p></li>
-<li><p><strong>Fri July 6:</strong> feedback period completes</p></li>
-<li><p><strong>Weds July 18:</strong> workshops must pass checks without errors or warnings (All materials will be checked by Continuous Integration)</p></li>
-<li><p><strong>Thurs / Fri July 26-27:</strong> Bioc2018</p></li>
+<li>describe the goals of single-cell RNA-seq analysis</li>
+<li>identify the main steps of a typical single-cell RNA-seq analysis</li>
+<li>evaluate the results of each step in terms of model fit</li>
+<li>synthesize results of successive steps to interpret biological significance and develop biological models</li>
+<li>apply this workflow to carry out a complete analysis of other single-cell RNA-seq datasets</li>
+</ul>
+</div>
+<div id="learning-objectives-2" class="section level3">
+<h3><span class="header-section-number">4.3.2</span> Learning objectives</h3>
+<ul>
+<li>compute and interpret low-dimensional representations of single-cell data</li>
+<li>identify and remove sources of technical variation from the data</li>
+<li>identify sub-populations of cells (clusters) and evaluate their robustness</li>
+<li>infer lineage trajectories corresponding to differentiating cells</li>
+<li>order cells by developmental “pseudotime”</li>
+<li>identify genes that play an important role in cell differentiation</li>
 </ul>
 
 </div>
 </div>
-<div class="footnotes">
-<hr />
-<ol start="1">
-<li id="fn1"><p>Roswell Park Comprehensive Cancer Center, Buffalo, NY<a href="index.html#fnref1" class="footnote-back">↩</a></p></li>
-</ol>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-
-<a href="variant-functional-annotation-using-statepaintr-funcivar-motifbreakr.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="working-with-genomic-data-in-r-with-the-decipher-package.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="functional-enrichment-analysis-of-high-throughput-omics-data.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

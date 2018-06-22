@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-
-<link rel="next" href="variant-functional-annotation-using-statepaintr-funcivar-motifbreakr.html">
+<link rel="prev" href="index.html">
+<link rel="next" href="working-with-genomic-data-in-r-with-the-decipher-package.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -335,98 +335,128 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="header">
-<h1 class="title">The Bioconductor 2018 Workshop Compilation</h1>
-</div>
-<div id="introduction" class="section level1">
-<h1><span class="header-section-number">1</span> Introduction</h1>
-<p>Author:
-Martin Morgan<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>.
-<br/>
-Last modified: 22 May, 2018.</p>
-<div id="for-everyone" class="section level2">
-<h2><span class="header-section-number">1.1</span> For Everyone</h2>
-<p>This book contains workshops used in <em>R</em> / <em>Bioconductor</em>
-training. The workshops are divided into 3 sections:</p>
+<div id="variant-functional-annotation-using-statepaintr-funcivar-motifbreakr" class="section level1">
+<h1><span class="header-section-number">2</span> Variant Functional Annotation using StatePaintR, FunciVar &amp; MotifBreakR</h1>
+<div id="authors" class="section level2">
+<h2><span class="header-section-number">2.1</span> Authors:</h2>
 <ul>
-<li><p><strong>Learn</strong> (100-series chapters) contains material for beginning
-users of <em>R</em> and <em>Bioconductor</em>. The <em>Bioconductor</em>-related material
-is relevant even for experienced <em>R</em> users who are new to
-<em>Bioconductor</em>.</p></li>
-<li><p><strong>Use</strong> (200-series chapters) contains workshops emphasizing use of
-<em>Bioconductor</em> for common tasks, e.g., bulk RNA-seq differential
-expression, ChIP-seq, single-cell analysis, gene set enrichment, and
-annotation.</p></li>
-<li><p><strong>Develop</strong> (500-series chapters) contains workshops to help expert
-users hone their skills and contribute their domain-specific
-knowledge to the <em>Bioconductor</em> community.</p></li>
+<li>Simon G. Coetzee (<a href="mailto:scoetzee@gmail.com">scoetzee@gmail.com</a>)</li>
+<li>Dennis J. Hazelett (<a href="mailto:dennis.hazelett@csmc.edu">dennis.hazelett@csmc.edu</a>)</li>
+</ul>
+<hr />
+</div>
+<div id="workshop-description" class="section level2">
+<h2><span class="header-section-number">2.2</span> Workshop Description</h2>
+<p>This workshop will entail lecture and live demo of StateHub/
+StatePaintR and funciVar bioconductor packages.
+### Pre-requisites
+It is recommended that workshop participants have:
+* Basic concepts in epigenomics and GWAS
+* Intermediate R skills, familiarity with GRanges</p>
+<p>Relevant background reading for the workshop.</p>
+<ul>
+<li><a href="https://f1000research.com/articles/7-214/v1">StateHub/StatePaintR</a></li>
+<li><a href="https://www.simoncoetzee.com/bioc2017.html">BioC2017 Workshop</a></li>
+<li><a href="https://bioconductor.org/packages/release/bioc/html/motifbreakR.html">MotifBreakR</a></li>
+</ul>
+<div id="workshop-participation" class="section level3">
+<h3><span class="header-section-number">2.2.1</span> Workshop Participation</h3>
+<p>Describe how students will be expected to participate in the workshop.</p>
+</div>
+<div id="r-bioconductor-packages-used" class="section level3">
+<h3><span class="header-section-number">2.2.2</span> <em>R</em> / <em>Bioconductor</em> packages used</h3>
+<p>StatePaintR
+FunciVar
+MotifBreakR</p>
+</div>
+<div id="time-outline" class="section level3">
+<h3><span class="header-section-number">2.2.3</span> Time outline</h3>
+<p>1 hour Workshop:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Activity</th>
+<th>Time</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>StatePaintR</strong></td>
+<td>30m</td>
+</tr>
+<tr class="even">
+<td>* intro and theory</td>
+<td>(10m)</td>
+</tr>
+<tr class="odd">
+<td>* Generate Decision Matrix</td>
+<td>(10m)</td>
+</tr>
+<tr class="even">
+<td>* live demo</td>
+<td>(10m)</td>
+</tr>
+<tr class="odd">
+<td><strong>FunciVar</strong></td>
+<td>15m</td>
+</tr>
+<tr class="even">
+<td>* intro</td>
+<td>(10m)</td>
+</tr>
+<tr class="odd">
+<td>* live demo</td>
+<td>(5m)</td>
+</tr>
+<tr class="even">
+<td><strong>MotifBreakR</strong></td>
+<td>15m</td>
+</tr>
+<tr class="odd">
+<td>* intro &amp; demo</td>
+<td>(10m)</td>
+</tr>
+<tr class="even">
+<td>* Shiny webapp demo</td>
+<td>(5m)</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="workshop-goals-and-objectives" class="section level2">
+<h2><span class="header-section-number">2.3</span> Workshop goals and objectives</h2>
+<p>This workshop focuses on bioconductor based tools for non-coding
+variant annotation. I will present a high level overview of these concepts and the bioconductor tools our group uses to address them <em>in silico</em>. These tools can be used for germline or somatic variants, but as we will see, can also be used for any other type of feature represented as GRanges objects.</p>
+<div id="key-concepts" class="section level3">
+<h3><span class="header-section-number">2.3.1</span> Key Concepts</h3>
+<p>I will provide brief overview with examples of:</p>
+<ul>
+<li>Genome segmentation and Chromatin State</li>
+<li>Feature enrichment analysis</li>
+<li>Transcription factors and Motif Disruption</li>
 </ul>
 </div>
-<div id="for-workshop-authors" class="section level2">
-<h2><span class="header-section-number">1.2</span> For Workshop Authors</h2>
-<p>To contribute a new workshop, open a <a href="https://github.com/Bioconductor/BiocWorkshops/issues">BiocWorkshops issue</a> asking to
-be added as a collaborator.</p>
-<p>Write your workshop as a stand-alone markdown document, using the
-<a href="https://github.com/Bioconductor/BiocWorkshops/blob/master/_template.Rmd">_template.Rmd</a> file as a starting point. Follow the numbering
-scheme for classifying your workshop.</p>
-<p>Also update the DESCRIPTION file adding packages utilized in your workshop to
-the Imports field. Please be kind and don’t remove anyone elses packages from
-the DESCRIPTION as this is a shared file for all workshops.</p>
-<p>See <a href="https://bookdown.org/yihui/bookdown/">bookdown</a> instructions for authoring documents; we are using
-the ‘knit-then-merge’ strategy. You’ll need to install the
-<a href="https://cran.r-project.org/package=bookdown">bookdown package</a> package from CRAN, as well as <a href="http://pandoc.org/">pandoc</a>. Render
-your chapter with the <code>preview=</code> option to <code>render_book()</code>, e.g.,</p>
-<pre><code>Rscript -e &quot;bookdown::render_book(                             \
-    &#39;xxx_Your_Workshop.Rmd&#39;, &#39;bookdown::gitbook&#39;, preview=TRUE \
-)&quot;</code></pre>
-<p>As this is a shared space for all workshop contributors, in order to
-use the above command in the BiocWorkshops directory, the index has to
-be built at least once, which can be time consuming depending on how many
-workshops have already been submitted.</p>
-<pre><code>Rscript -e &quot;bookdown::render_book(                             \
-    &#39;index.Rmd&#39;, &#39;bookdown::gitbook&#39;)&quot;</code></pre>
-<p>To avoid having to build all workshops but still be able to preview
-your individual workshop we recommend creating a soft link to your .Rmd file.
-We recommend having the file in the <code>BiocWorkshop/</code> and the soft link in
-any other directory on your system. By default, this will generate an
-html file in <code>_book/</code> wherever this command is run.</p>
-<pre><code>mkdir tmp
-cd tmp/
-ln -s ../xxx_Your_Workshop.Rmd
-Rscript -e &quot;bookdown::render_book(                             \
-    &#39;xxx_Your_Workshop.Rmd&#39;, &#39;bookdown::gitbook&#39;, preview=TRUE \
-)&quot;</code></pre>
-<p>Push <strong>only</strong> your .Rmd file to the BiocWorkshop repository; the book will be
-rebuilt manually or automatically. Eventually the output will be
-available for end-users at <a href="https://bioconductor.github.io/BiocWorkshops" class="uri">https://bioconductor.github.io/BiocWorkshops</a> .The
-master branch will not contain the built version of the book. Switching to the
-<a href="https://github.com/Bioconductor/BiocWorkshops/tree/gh-pages">gh-pages branch</a> will show built output.</p>
-</div>
-<div id="deadlines-for-bioc2018" class="section level2">
-<h2><span class="header-section-number">1.3</span> Deadlines for Bioc2018</h2>
-<p>Please be aware of the following deadlines for the <a href="https://bioc2018.bioconductor.org/">Bioconductor 2018 Conference</a> in Toronto</p>
+<div id="learning-objectives" class="section level3">
+<h3><span class="header-section-number">2.3.2</span> Learning objectives</h3>
+<p>At the end of this workshop students will understand the basic inputs and outputs of all these analyses, as well as an intuitive understanding of the tools and where to find them:</p>
 <ul>
-<li><p><strong>Fri June 29:</strong> draft workshop materials submitted to this Bioconductor GitHub bookdown site</p></li>
-<li><p><strong>Fri July 6:</strong> feedback period completes</p></li>
-<li><p><strong>Weds July 18:</strong> workshops must pass checks without errors or warnings (All materials will be checked by Continuous Integration)</p></li>
-<li><p><strong>Thurs / Fri July 26-27:</strong> Bioc2018</p></li>
+<li><a href="http://statehub.org">The StateHub website</a></li>
+<li>StatePaintR genome segmentation software <a href="https://github.com/Simon-Coetzee/StatePaintR/blob/master/vignettes/StatePaintR_Analysis.Rmd">Bioconductor</a></li>
+<li>FunciVar for variant annotation and enrichment</li>
+<li>MotifBreakR Transcription Factor motif disruption <a href="https://www.bioconductor.org/packages/devel/bioc/vignettes/motifbreakR/inst/doc/motifbreakR-vignette.html">Bioconductor</a></li>
 </ul>
 
 </div>
 </div>
-<div class="footnotes">
-<hr />
-<ol start="1">
-<li id="fn1"><p>Roswell Park Comprehensive Cancer Center, Buffalo, NY<a href="index.html#fnref1" class="footnote-back">↩</a></p></li>
-</ol>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-
-<a href="variant-functional-annotation-using-statepaintr-funcivar-motifbreakr.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="working-with-genomic-data-in-r-with-the-decipher-package.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

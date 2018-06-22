@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
+<link rel="prev" href="maintaining-your-bioconductor-package.html">
 
-<link rel="next" href="variant-functional-annotation-using-statepaintr-funcivar-motifbreakr.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -335,98 +335,136 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="header">
-<h1 class="title">The Bioconductor 2018 Workshop Compilation</h1>
-</div>
-<div id="introduction" class="section level1">
-<h1><span class="header-section-number">1</span> Introduction</h1>
-<p>Author:
-Martin Morgan<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>.
-<br/>
-Last modified: 22 May, 2018.</p>
-<div id="for-everyone" class="section level2">
-<h2><span class="header-section-number">1.1</span> For Everyone</h2>
-<p>This book contains workshops used in <em>R</em> / <em>Bioconductor</em>
-training. The workshops are divided into 3 sections:</p>
+<div id="public-data-resources-and-bioconductor" class="section level1">
+<h1><span class="header-section-number">16</span> Public Data Resources and Bioconductor</h1>
+<div id="instructors-2" class="section level2">
+<h2><span class="header-section-number">16.1</span> Instructors</h2>
 <ul>
-<li><p><strong>Learn</strong> (100-series chapters) contains material for beginning
-users of <em>R</em> and <em>Bioconductor</em>. The <em>Bioconductor</em>-related material
-is relevant even for experienced <em>R</em> users who are new to
-<em>Bioconductor</em>.</p></li>
-<li><p><strong>Use</strong> (200-series chapters) contains workshops emphasizing use of
-<em>Bioconductor</em> for common tasks, e.g., bulk RNA-seq differential
-expression, ChIP-seq, single-cell analysis, gene set enrichment, and
-annotation.</p></li>
-<li><p><strong>Develop</strong> (500-series chapters) contains workshops to help expert
-users hone their skills and contribute their domain-specific
-knowledge to the <em>Bioconductor</em> community.</p></li>
+<li>Levi Waldron, City University of New York, New York, NY, USA</li>
+<li>Benjamin Haibe-Kain, Princess Margaret Cancer Center, Toronto, Canada</li>
+<li>Sean Davis, Center for Cancer Research, National Cancer Institute, National Institutes of Health, Bethesda, MD, USA</li>
 </ul>
 </div>
-<div id="for-workshop-authors" class="section level2">
-<h2><span class="header-section-number">1.2</span> For Workshop Authors</h2>
-<p>To contribute a new workshop, open a <a href="https://github.com/Bioconductor/BiocWorkshops/issues">BiocWorkshops issue</a> asking to
-be added as a collaborator.</p>
-<p>Write your workshop as a stand-alone markdown document, using the
-<a href="https://github.com/Bioconductor/BiocWorkshops/blob/master/_template.Rmd">_template.Rmd</a> file as a starting point. Follow the numbering
-scheme for classifying your workshop.</p>
-<p>Also update the DESCRIPTION file adding packages utilized in your workshop to
-the Imports field. Please be kind and don’t remove anyone elses packages from
-the DESCRIPTION as this is a shared file for all workshops.</p>
-<p>See <a href="https://bookdown.org/yihui/bookdown/">bookdown</a> instructions for authoring documents; we are using
-the ‘knit-then-merge’ strategy. You’ll need to install the
-<a href="https://cran.r-project.org/package=bookdown">bookdown package</a> package from CRAN, as well as <a href="http://pandoc.org/">pandoc</a>. Render
-your chapter with the <code>preview=</code> option to <code>render_book()</code>, e.g.,</p>
-<pre><code>Rscript -e &quot;bookdown::render_book(                             \
-    &#39;xxx_Your_Workshop.Rmd&#39;, &#39;bookdown::gitbook&#39;, preview=TRUE \
-)&quot;</code></pre>
-<p>As this is a shared space for all workshop contributors, in order to
-use the above command in the BiocWorkshops directory, the index has to
-be built at least once, which can be time consuming depending on how many
-workshops have already been submitted.</p>
-<pre><code>Rscript -e &quot;bookdown::render_book(                             \
-    &#39;index.Rmd&#39;, &#39;bookdown::gitbook&#39;)&quot;</code></pre>
-<p>To avoid having to build all workshops but still be able to preview
-your individual workshop we recommend creating a soft link to your .Rmd file.
-We recommend having the file in the <code>BiocWorkshop/</code> and the soft link in
-any other directory on your system. By default, this will generate an
-html file in <code>_book/</code> wherever this command is run.</p>
-<pre><code>mkdir tmp
-cd tmp/
-ln -s ../xxx_Your_Workshop.Rmd
-Rscript -e &quot;bookdown::render_book(                             \
-    &#39;xxx_Your_Workshop.Rmd&#39;, &#39;bookdown::gitbook&#39;, preview=TRUE \
-)&quot;</code></pre>
-<p>Push <strong>only</strong> your .Rmd file to the BiocWorkshop repository; the book will be
-rebuilt manually or automatically. Eventually the output will be
-available for end-users at <a href="https://bioconductor.github.io/BiocWorkshops" class="uri">https://bioconductor.github.io/BiocWorkshops</a> .The
-master branch will not contain the built version of the book. Switching to the
-<a href="https://github.com/Bioconductor/BiocWorkshops/tree/gh-pages">gh-pages branch</a> will show built output.</p>
-</div>
-<div id="deadlines-for-bioc2018" class="section level2">
-<h2><span class="header-section-number">1.3</span> Deadlines for Bioc2018</h2>
-<p>Please be aware of the following deadlines for the <a href="https://bioc2018.bioconductor.org/">Bioconductor 2018 Conference</a> in Toronto</p>
+<div id="workshop-description-14" class="section level2">
+<h2><span class="header-section-number">16.2</span> Workshop Description</h2>
+<p>The goal of this workshop is to introduce Bioconductor packages for finding,
+accessing, and using large-scale public data resources including the
+Gene Expression Omnibus <a href="https://www.ncbi.nlm.nih.gov/geo">GEO</a>, Sequence
+Read Archive <a href="https://www.ncbi.nlm.nih.gov/sra">SRA</a>, the Genomic Data
+Commons <a href="https://portal.gdc.cancer.gov/">GDC</a>, and Bioconductor-hosted
+curated data resources for metagenomics, pharmacogenomics, and The Cancer
+Genome Atlas.</p>
+<div id="pre-requisites-12" class="section level3">
+<h3><span class="header-section-number">16.2.1</span> Pre-requisites</h3>
 <ul>
-<li><p><strong>Fri June 29:</strong> draft workshop materials submitted to this Bioconductor GitHub bookdown site</p></li>
-<li><p><strong>Fri July 6:</strong> feedback period completes</p></li>
-<li><p><strong>Weds July 18:</strong> workshops must pass checks without errors or warnings (All materials will be checked by Continuous Integration)</p></li>
-<li><p><strong>Thurs / Fri July 26-27:</strong> Bioc2018</p></li>
+<li>Basic knowledge of R syntax</li>
+<li>Familiarity with the ExpressionSet and SummarizedExperiment classes</li>
+<li>Basic familiarity with ’omics technologies such as microarray and NGS sequencing</li>
+</ul>
+<p>Interested students can prepare by reviewing vignettes of the packages listed in “R/Bioconductor packages used” to gain background on aspects of interest to them.</p>
+<p>Some more general background on these resources is published in:</p>
+<p>Kannan L, Ramos M, Re A, El-Hachem N, Safikhani Z, Gendoo DMA, Davis S, Gomez-Cabrero D, Castelo R, Hansen KD, Carey VJ, Morgan M, Culhane AC, Haibe-Kains B, Waldron L: <strong>Public data and open source tools for multi-assay genomic investigation of disease.</strong> <em>Brief. Bioinform.</em> 2016, 17:603–615. <a href="http://dx.doi.org/10.1093/bib/bbv080">(link)</a></p>
+</div>
+<div id="workshop-participation-13" class="section level3">
+<h3><span class="header-section-number">16.2.2</span> Workshop Participation</h3>
+<p>Each component will include runnable examples of typical usage that students are encouraged to run during demonstration of that component.</p>
+</div>
+<div id="rbioconductor-packages-used-1" class="section level3">
+<h3><span class="header-section-number">16.2.3</span> R/Bioconductor packages used</h3>
+<ul>
+<li><a href="http://bioconductor.org/packages/GEOquery/">GEOquery</a>: Access to the NCBI Gene Expression Omnibus (GEO), a public repository of gene expression (primarily microarray) data.</li>
+<li><a href="http://bioconductor.org/packages/GenomicDataCommons/">GenomicDataCommons</a>: Access to the NIH / NCI Genomic Data Commons RESTful service.</li>
+<li><a href="http://bioconductor.org/packages/SRAdb/">SRAdb</a>: A compilation of metadata from the NCBI Sequence Read Archive, the largest public repository of sequencing data from the next generation of sequencing platforms, and tools</li>
+<li><a href="http://bioconductor.org/packages/curatedTCGAData/">curatedTCGAData</a>: Curated data from The Cancer Genome Atlas (TCGA) as MultiAssayExperiment Objects</li>
+<li><a href="http://bioconductor.org/packages/curatedMetagenomicData/">curatedMetagenomicData</a>: Curated metagenomic data of the human microbiome</li>
+<li><a href="http://bioconductor.org/packages/HMP16SData/">HMP16SData</a>: Curated metagenomic data of the human microbiome</li>
+<li><a href="https://bioconductor.org/packages/PharmacoGx/">PharmacoGx</a>: Analysis of large-scale pharmacogenomic data</li>
+</ul>
+</div>
+<div id="time-outline-12" class="section level3">
+<h3><span class="header-section-number">16.2.4</span> Time outline</h3>
+<p>This is a 1h45m workshop.</p>
+<table>
+<thead>
+<tr class="header">
+<th>Activity</th>
+<th>Time</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Overview</td>
+<td>10m</td>
+</tr>
+<tr class="even">
+<td>GEOquery</td>
+<td>15m</td>
+</tr>
+<tr class="odd">
+<td>GenomicDataCommons</td>
+<td>20m</td>
+</tr>
+<tr class="even">
+<td>Sequence Read Archive</td>
+<td>20m</td>
+</tr>
+<tr class="odd">
+<td>curatedTCGAData</td>
+<td>10m</td>
+</tr>
+<tr class="even">
+<td>curatedMetagenomicData and HMP16SData</td>
+<td>15m</td>
+</tr>
+<tr class="odd">
+<td>PharmacoGx</td>
+<td>20m</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="workshop-goals-and-objectives-13" class="section level2">
+<h2><span class="header-section-number">16.3</span> workshop goals and objectives</h2>
+<p>Bioconductor provides access to significant amounts of publicly available
+experimental data. This workshop introduces students to Bioconductor
+interfaces to the NCBI’s Gene Expression Omnibus, Genomic Data Commons,
+Sequence Read Archive and PharmacoDB. It additionally introduces curated resources
+providing The Cancer Genome Atlas, the Human Microbiome Project and other
+microbiome studies, and major pharmacogenomic studies, as native Bioconductor
+objects ready for analysis and comparison to in-house datasets.</p>
+<div id="learning-goals-10" class="section level3">
+<h3><span class="header-section-number">16.3.1</span> Learning goals</h3>
+<ul>
+<li>search NCBI resources for publicly available ’omics data</li>
+<li>quickly use data from the TCGA and the Human Microbiome Project</li>
+</ul>
+</div>
+<div id="learning-objectives-11" class="section level3">
+<h3><span class="header-section-number">16.3.2</span> Learning objectives</h3>
+<ul>
+<li>find and download processed microarray and RNA-seq datasets from the Gene Expression Omnibus</li>
+<li>find and download ’omics data from the Genomic Data Commons and Sequence Read Archive</li>
+<li>download and manipulate data from The Cancer Genome Atlas and Human Microbiome Project</li>
+<li>download and explore pharmacogenomics data</li>
 </ul>
 
 </div>
 </div>
-<div class="footnotes">
-<hr />
-<ol start="1">
-<li id="fn1"><p>Roswell Park Comprehensive Cancer Center, Buffalo, NY<a href="index.html#fnref1" class="footnote-back">↩</a></p></li>
-</ol>
 </div>
+
+
+
+
+
+
             </section>
 
           </div>
         </div>
       </div>
+<a href="maintaining-your-bioconductor-package.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
 
-<a href="variant-functional-annotation-using-statepaintr-funcivar-motifbreakr.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

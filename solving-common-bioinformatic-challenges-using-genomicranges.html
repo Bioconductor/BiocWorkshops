@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-
-<link rel="next" href="variant-functional-annotation-using-statepaintr-funcivar-motifbreakr.html">
+<link rel="prev" href="rna-seq-analysis-is-easy-as-1-2-3-with-limma-glimma-and-edger.html">
+<link rel="next" href="fluent-genomic-data-analysis-with-plyranges.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -335,98 +335,109 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="header">
-<h1 class="title">The Bioconductor 2018 Workshop Compilation</h1>
-</div>
-<div id="introduction" class="section level1">
-<h1><span class="header-section-number">1</span> Introduction</h1>
-<p>Author:
-Martin Morgan<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>.
-<br/>
-Last modified: 22 May, 2018.</p>
-<div id="for-everyone" class="section level2">
-<h2><span class="header-section-number">1.1</span> For Everyone</h2>
-<p>This book contains workshops used in <em>R</em> / <em>Bioconductor</em>
-training. The workshops are divided into 3 sections:</p>
+<div id="solving-common-bioinformatic-challenges-using-genomicranges" class="section level1">
+<h1><span class="header-section-number">9</span> Solving common bioinformatic challenges using GenomicRanges</h1>
+<div id="instructors-names-and-contact-information-4" class="section level2">
+<h2><span class="header-section-number">9.1</span> Instructor(s) name(s) and contact information</h2>
 <ul>
-<li><p><strong>Learn</strong> (100-series chapters) contains material for beginning
-users of <em>R</em> and <em>Bioconductor</em>. The <em>Bioconductor</em>-related material
-is relevant even for experienced <em>R</em> users who are new to
-<em>Bioconductor</em>.</p></li>
-<li><p><strong>Use</strong> (200-series chapters) contains workshops emphasizing use of
-<em>Bioconductor</em> for common tasks, e.g., bulk RNA-seq differential
-expression, ChIP-seq, single-cell analysis, gene set enrichment, and
-annotation.</p></li>
-<li><p><strong>Develop</strong> (500-series chapters) contains workshops to help expert
-users hone their skills and contribute their domain-specific
-knowledge to the <em>Bioconductor</em> community.</p></li>
+<li>Michael Lawrence (<a href="mailto:michafla@gene.com">michafla@gene.com</a>)</li>
 </ul>
 </div>
-<div id="for-workshop-authors" class="section level2">
-<h2><span class="header-section-number">1.2</span> For Workshop Authors</h2>
-<p>To contribute a new workshop, open a <a href="https://github.com/Bioconductor/BiocWorkshops/issues">BiocWorkshops issue</a> asking to
-be added as a collaborator.</p>
-<p>Write your workshop as a stand-alone markdown document, using the
-<a href="https://github.com/Bioconductor/BiocWorkshops/blob/master/_template.Rmd">_template.Rmd</a> file as a starting point. Follow the numbering
-scheme for classifying your workshop.</p>
-<p>Also update the DESCRIPTION file adding packages utilized in your workshop to
-the Imports field. Please be kind and don’t remove anyone elses packages from
-the DESCRIPTION as this is a shared file for all workshops.</p>
-<p>See <a href="https://bookdown.org/yihui/bookdown/">bookdown</a> instructions for authoring documents; we are using
-the ‘knit-then-merge’ strategy. You’ll need to install the
-<a href="https://cran.r-project.org/package=bookdown">bookdown package</a> package from CRAN, as well as <a href="http://pandoc.org/">pandoc</a>. Render
-your chapter with the <code>preview=</code> option to <code>render_book()</code>, e.g.,</p>
-<pre><code>Rscript -e &quot;bookdown::render_book(                             \
-    &#39;xxx_Your_Workshop.Rmd&#39;, &#39;bookdown::gitbook&#39;, preview=TRUE \
-)&quot;</code></pre>
-<p>As this is a shared space for all workshop contributors, in order to
-use the above command in the BiocWorkshops directory, the index has to
-be built at least once, which can be time consuming depending on how many
-workshops have already been submitted.</p>
-<pre><code>Rscript -e &quot;bookdown::render_book(                             \
-    &#39;index.Rmd&#39;, &#39;bookdown::gitbook&#39;)&quot;</code></pre>
-<p>To avoid having to build all workshops but still be able to preview
-your individual workshop we recommend creating a soft link to your .Rmd file.
-We recommend having the file in the <code>BiocWorkshop/</code> and the soft link in
-any other directory on your system. By default, this will generate an
-html file in <code>_book/</code> wherever this command is run.</p>
-<pre><code>mkdir tmp
-cd tmp/
-ln -s ../xxx_Your_Workshop.Rmd
-Rscript -e &quot;bookdown::render_book(                             \
-    &#39;xxx_Your_Workshop.Rmd&#39;, &#39;bookdown::gitbook&#39;, preview=TRUE \
-)&quot;</code></pre>
-<p>Push <strong>only</strong> your .Rmd file to the BiocWorkshop repository; the book will be
-rebuilt manually or automatically. Eventually the output will be
-available for end-users at <a href="https://bioconductor.github.io/BiocWorkshops" class="uri">https://bioconductor.github.io/BiocWorkshops</a> .The
-master branch will not contain the built version of the book. Switching to the
-<a href="https://github.com/Bioconductor/BiocWorkshops/tree/gh-pages">gh-pages branch</a> will show built output.</p>
-</div>
-<div id="deadlines-for-bioc2018" class="section level2">
-<h2><span class="header-section-number">1.3</span> Deadlines for Bioc2018</h2>
-<p>Please be aware of the following deadlines for the <a href="https://bioc2018.bioconductor.org/">Bioconductor 2018 Conference</a> in Toronto</p>
+<div id="workshop-description-7" class="section level2">
+<h2><span class="header-section-number">9.2</span> Workshop Description</h2>
+<p>We will introduce the fundamental concepts underlying the
+GenomicRanges package and related infrastructure. After a structured
+introduction, we will follow a realistic workflow, along the way
+exploring the central data structures, including GRanges and
+SummarizedExperiment, and useful operations in the ranges
+algebra. Topics will include data import/export, computing and
+summarizing data on genomic features, overlap detection, integration
+with reference annotations, scaling strategies, and
+visualization. Students can follow along, and there will be plenty of
+time for students to ask questions about how to apply the
+infrastructure to their particular use case. Michael Lawrence
+(Genentech).</p>
+<div id="pre-requisites-6" class="section level3">
+<h3><span class="header-section-number">9.2.1</span> Pre-requisites</h3>
 <ul>
-<li><p><strong>Fri June 29:</strong> draft workshop materials submitted to this Bioconductor GitHub bookdown site</p></li>
-<li><p><strong>Fri July 6:</strong> feedback period completes</p></li>
-<li><p><strong>Weds July 18:</strong> workshops must pass checks without errors or warnings (All materials will be checked by Continuous Integration)</p></li>
-<li><p><strong>Thurs / Fri July 26-27:</strong> Bioc2018</p></li>
+<li>Solid understanding of R</li>
+<li>Basic familiarity with GRanges objects</li>
+<li>Basic familiarity with packages like S4Vectors, IRanges,
+GenomicRanges, rtracklayer, etc.</li>
+</ul>
+</div>
+<div id="workshop-participation-7" class="section level3">
+<h3><span class="header-section-number">9.2.2</span> Workshop Participation</h3>
+<p>Describe how students will be expected to participate in the workshop.</p>
+</div>
+<div id="r-bioconductor-packages-used-7" class="section level3">
+<h3><span class="header-section-number">9.2.3</span> <em>R</em> / <em>Bioconductor</em> packages used</h3>
+<ul>
+<li>S4Vectors</li>
+<li>IRanges</li>
+<li>GenomicRanges</li>
+<li>rtracklayer</li>
+<li>GenomicFeatures</li>
+<li>SummarizedExperiment</li>
+<li>VariantAnnotation</li>
+<li>GenomicAlignments</li>
+</ul>
+</div>
+<div id="time-outline-7" class="section level3">
+<h3><span class="header-section-number">9.2.4</span> Time outline</h3>
+<table>
+<thead>
+<tr class="header">
+<th>Activity</th>
+<th>Time</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Intro slides</td>
+<td>30m</td>
+</tr>
+<tr class="even">
+<td>Workflow(s)</td>
+<td>1hr</td>
+</tr>
+<tr class="odd">
+<td>Remaining questions</td>
+<td>30m</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="workshop-goals-and-objectives-6" class="section level2">
+<h2><span class="header-section-number">9.3</span> Workshop goals and objectives</h2>
+<div id="learning-goals-5" class="section level3">
+<h3><span class="header-section-number">9.3.1</span> Learning goals</h3>
+<ul>
+<li>Understand how to apply the *Ranges infrastructure to real-world
+problems</li>
+<li>Gain insight into the design principles of the infrastructure and
+how it was meant to be used</li>
+</ul>
+</div>
+<div id="learning-objectives-6" class="section level3">
+<h3><span class="header-section-number">9.3.2</span> Learning objectives</h3>
+<ul>
+<li>Manipulate GRanges and related objects</li>
+<li>Use the ranges algebra to analyze genomic ranges</li>
+<li>Implement efficient workflows based on the *Ranges infrastructure</li>
 </ul>
 
 </div>
 </div>
-<div class="footnotes">
-<hr />
-<ol start="1">
-<li id="fn1"><p>Roswell Park Comprehensive Cancer Center, Buffalo, NY<a href="index.html#fnref1" class="footnote-back">↩</a></p></li>
-</ol>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-
-<a href="variant-functional-annotation-using-statepaintr-funcivar-motifbreakr.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="rna-seq-analysis-is-easy-as-1-2-3-with-limma-glimma-and-edger.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="fluent-genomic-data-analysis-with-plyranges.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-
-<link rel="next" href="variant-functional-annotation-using-statepaintr-funcivar-motifbreakr.html">
+<link rel="prev" href="fluent-genomic-data-analysis-with-plyranges.html">
+<link rel="next" href="introduction-to-bioconductor-annotation-resources.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -335,98 +335,122 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="header">
-<h1 class="title">The Bioconductor 2018 Workshop Compilation</h1>
-</div>
-<div id="introduction" class="section level1">
-<h1><span class="header-section-number">1</span> Introduction</h1>
-<p>Author:
-Martin Morgan<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>.
-<br/>
-Last modified: 22 May, 2018.</p>
-<div id="for-everyone" class="section level2">
-<h2><span class="header-section-number">1.1</span> For Everyone</h2>
-<p>This book contains workshops used in <em>R</em> / <em>Bioconductor</em>
-training. The workshops are divided into 3 sections:</p>
+<div id="rna-seq-data-analysis-with-deseq2" class="section level1">
+<h1><span class="header-section-number">11</span> RNA-seq data analysis with DESeq2</h1>
+<div id="instructors-names-and-contact-information-6" class="section level2">
+<h2><span class="header-section-number">11.1</span> Instructor(s) name(s) and contact information</h2>
 <ul>
-<li><p><strong>Learn</strong> (100-series chapters) contains material for beginning
-users of <em>R</em> and <em>Bioconductor</em>. The <em>Bioconductor</em>-related material
-is relevant even for experienced <em>R</em> users who are new to
-<em>Bioconductor</em>.</p></li>
-<li><p><strong>Use</strong> (200-series chapters) contains workshops emphasizing use of
-<em>Bioconductor</em> for common tasks, e.g., bulk RNA-seq differential
-expression, ChIP-seq, single-cell analysis, gene set enrichment, and
-annotation.</p></li>
-<li><p><strong>Develop</strong> (500-series chapters) contains workshops to help expert
-users hone their skills and contribute their domain-specific
-knowledge to the <em>Bioconductor</em> community.</p></li>
+<li>Michael Love (<a href="mailto:michaelisaiahlove@gmail.com">michaelisaiahlove@gmail.com</a>)</li>
 </ul>
 </div>
-<div id="for-workshop-authors" class="section level2">
-<h2><span class="header-section-number">1.2</span> For Workshop Authors</h2>
-<p>To contribute a new workshop, open a <a href="https://github.com/Bioconductor/BiocWorkshops/issues">BiocWorkshops issue</a> asking to
-be added as a collaborator.</p>
-<p>Write your workshop as a stand-alone markdown document, using the
-<a href="https://github.com/Bioconductor/BiocWorkshops/blob/master/_template.Rmd">_template.Rmd</a> file as a starting point. Follow the numbering
-scheme for classifying your workshop.</p>
-<p>Also update the DESCRIPTION file adding packages utilized in your workshop to
-the Imports field. Please be kind and don’t remove anyone elses packages from
-the DESCRIPTION as this is a shared file for all workshops.</p>
-<p>See <a href="https://bookdown.org/yihui/bookdown/">bookdown</a> instructions for authoring documents; we are using
-the ‘knit-then-merge’ strategy. You’ll need to install the
-<a href="https://cran.r-project.org/package=bookdown">bookdown package</a> package from CRAN, as well as <a href="http://pandoc.org/">pandoc</a>. Render
-your chapter with the <code>preview=</code> option to <code>render_book()</code>, e.g.,</p>
-<pre><code>Rscript -e &quot;bookdown::render_book(                             \
-    &#39;xxx_Your_Workshop.Rmd&#39;, &#39;bookdown::gitbook&#39;, preview=TRUE \
-)&quot;</code></pre>
-<p>As this is a shared space for all workshop contributors, in order to
-use the above command in the BiocWorkshops directory, the index has to
-be built at least once, which can be time consuming depending on how many
-workshops have already been submitted.</p>
-<pre><code>Rscript -e &quot;bookdown::render_book(                             \
-    &#39;index.Rmd&#39;, &#39;bookdown::gitbook&#39;)&quot;</code></pre>
-<p>To avoid having to build all workshops but still be able to preview
-your individual workshop we recommend creating a soft link to your .Rmd file.
-We recommend having the file in the <code>BiocWorkshop/</code> and the soft link in
-any other directory on your system. By default, this will generate an
-html file in <code>_book/</code> wherever this command is run.</p>
-<pre><code>mkdir tmp
-cd tmp/
-ln -s ../xxx_Your_Workshop.Rmd
-Rscript -e &quot;bookdown::render_book(                             \
-    &#39;xxx_Your_Workshop.Rmd&#39;, &#39;bookdown::gitbook&#39;, preview=TRUE \
-)&quot;</code></pre>
-<p>Push <strong>only</strong> your .Rmd file to the BiocWorkshop repository; the book will be
-rebuilt manually or automatically. Eventually the output will be
-available for end-users at <a href="https://bioconductor.github.io/BiocWorkshops" class="uri">https://bioconductor.github.io/BiocWorkshops</a> .The
-master branch will not contain the built version of the book. Switching to the
-<a href="https://github.com/Bioconductor/BiocWorkshops/tree/gh-pages">gh-pages branch</a> will show built output.</p>
-</div>
-<div id="deadlines-for-bioc2018" class="section level2">
-<h2><span class="header-section-number">1.3</span> Deadlines for Bioc2018</h2>
-<p>Please be aware of the following deadlines for the <a href="https://bioc2018.bioconductor.org/">Bioconductor 2018 Conference</a> in Toronto</p>
+<div id="workshop-description-9" class="section level2">
+<h2><span class="header-section-number">11.2</span> Workshop Description</h2>
+<p>In this workshop, we will give a quick overview of the most useful
+functions in the DESeq2 package, and a basic RNA-seq analysis. We will
+cover: how to quantify transcript expression from FASTQ files using
+Salmon, import quantification from Salmon with tximport and tximeta,
+generate plots for quality control and exploratory data analysis EDA
+(also using MultiQC), perform differential expression (DE) (also using
+apeglm), overlap with other experimental data (using AnnotationHub),
+and build reports (using ReportingTools and Glimma). We will give a
+short example of integration of DESeq2 with the zinbwave package for
+single-cell RNA-seq differential expression. The workshop is designed
+to be a lab with plenty of time for questions throughout the lab.</p>
+<div id="pre-requisites-8" class="section level3">
+<h3><span class="header-section-number">11.2.1</span> Pre-requisites</h3>
 <ul>
-<li><p><strong>Fri June 29:</strong> draft workshop materials submitted to this Bioconductor GitHub bookdown site</p></li>
-<li><p><strong>Fri July 6:</strong> feedback period completes</p></li>
-<li><p><strong>Weds July 18:</strong> workshops must pass checks without errors or warnings (All materials will be checked by Continuous Integration)</p></li>
-<li><p><strong>Thurs / Fri July 26-27:</strong> Bioc2018</p></li>
+<li>Basic knowledge of R syntax</li>
+</ul>
+<p>Non-essential background reading:</p>
+<ul>
+<li>DESeq2 paper: <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4302049/" class="uri">https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4302049/</a></li>
+<li>tximport paper: <a href="https://f1000research.com/articles/4-1521/v2" class="uri">https://f1000research.com/articles/4-1521/v2</a></li>
+<li>apeglm paper: <a href="https://www.biorxiv.org/content/early/2018/04/17/303255" class="uri">https://www.biorxiv.org/content/early/2018/04/17/303255</a></li>
+</ul>
+</div>
+<div id="workshop-participation-9" class="section level3">
+<h3><span class="header-section-number">11.2.2</span> Workshop Participation</h3>
+<p>Students will participate by following along an Rmarkdown document,
+and asking questions throughout the workshop.</p>
+</div>
+<div id="r-bioconductor-packages-used-9" class="section level3">
+<h3><span class="header-section-number">11.2.3</span> <em>R</em> / <em>Bioconductor</em> packages used</h3>
+<ul>
+<li>DESeq2</li>
+<li>tximport</li>
+<li>apeglm</li>
+<li>AnnotationHub</li>
+<li>ReportingTools</li>
+<li>Glimma</li>
+<li>zinbwave</li>
+</ul>
+</div>
+<div id="time-outline-9" class="section level3">
+<h3><span class="header-section-number">11.2.4</span> Time outline</h3>
+<table>
+<thead>
+<tr class="header">
+<th>Activity</th>
+<th>Time</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Overview of packages</td>
+<td>20m</td>
+</tr>
+<tr class="even">
+<td>Quantification and import</td>
+<td>20m</td>
+</tr>
+<tr class="odd">
+<td>EDA and DE</td>
+<td>20m</td>
+</tr>
+<tr class="even">
+<td>Downstream analysis &amp; reports</td>
+<td>20m</td>
+</tr>
+<tr class="odd">
+<td>ZINB-WaVE integration</td>
+<td>20m</td>
+</tr>
+<tr class="even">
+<td>Additional questions</td>
+<td>20m</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="workshop-goals-and-objectives-8" class="section level2">
+<h2><span class="header-section-number">11.3</span> Workshop goals and objectives</h2>
+<p>Learning goals</p>
+<ul>
+<li>Visually assess quality of RNA-seq data</li>
+<li>Perform basic differential analysis of RNA-seq data</li>
+<li>Compare RNA-seq results with other experimental data</li>
+</ul>
+<p>Learning objectives</p>
+<ul>
+<li>Quantify transcript expression from FASTQ files</li>
+<li>Import quantification into R/Bioconductor</li>
+<li>Perform quality control and exploratory data analysis</li>
+<li>Perform differential expression</li>
+<li>Overlap with other experimental data</li>
+<li>Build dynamic reports</li>
+<li>Integrate DESeq2 and zinbwave for single-cell RNA-seq data</li>
 </ul>
 
 </div>
-</div>
-<div class="footnotes">
-<hr />
-<ol start="1">
-<li id="fn1"><p>Roswell Park Comprehensive Cancer Center, Buffalo, NY<a href="index.html#fnref1" class="footnote-back">↩</a></p></li>
-</ol>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-
-<a href="variant-functional-annotation-using-statepaintr-funcivar-motifbreakr.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="fluent-genomic-data-analysis-with-plyranges.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="introduction-to-bioconductor-annotation-resources.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

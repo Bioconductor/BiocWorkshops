@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-
-<link rel="next" href="variant-functional-annotation-using-statepaintr-funcivar-motifbreakr.html">
+<link rel="prev" href="functional-enrichment-analysis-of-high-throughput-omics-data.html">
+<link rel="next" href="cytoscape-automation-in-r-using-rcy3.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -335,98 +335,123 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="header">
-<h1 class="title">The Bioconductor 2018 Workshop Compilation</h1>
-</div>
-<div id="introduction" class="section level1">
-<h1><span class="header-section-number">1</span> Introduction</h1>
-<p>Author:
-Martin Morgan<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>.
-<br/>
-Last modified: 22 May, 2018.</p>
-<div id="for-everyone" class="section level2">
-<h2><span class="header-section-number">1.1</span> For Everyone</h2>
-<p>This book contains workshops used in <em>R</em> / <em>Bioconductor</em>
-training. The workshops are divided into 3 sections:</p>
+<div id="effectively-using-the-delayedarray-framework-to-support-the-analysis-of-large-datasets" class="section level1">
+<h1><span class="header-section-number">6</span> Effectively using the DelayedArray framework to support the analysis of large datasets</h1>
+<div id="instructors-names-and-contact-information-2" class="section level2">
+<h2><span class="header-section-number">6.1</span> Instructor(s) name(s) and contact information</h2>
 <ul>
-<li><p><strong>Learn</strong> (100-series chapters) contains material for beginning
-users of <em>R</em> and <em>Bioconductor</em>. The <em>Bioconductor</em>-related material
-is relevant even for experienced <em>R</em> users who are new to
-<em>Bioconductor</em>.</p></li>
-<li><p><strong>Use</strong> (200-series chapters) contains workshops emphasizing use of
-<em>Bioconductor</em> for common tasks, e.g., bulk RNA-seq differential
-expression, ChIP-seq, single-cell analysis, gene set enrichment, and
-annotation.</p></li>
-<li><p><strong>Develop</strong> (500-series chapters) contains workshops to help expert
-users hone their skills and contribute their domain-specific
-knowledge to the <em>Bioconductor</em> community.</p></li>
+<li>Peter Hickey (GitHub/Twitter: <span class="citation">@PeteHaitch</span>, email: <a href="mailto:peter.hickey@gmail.com">peter.hickey@gmail.com</a>)</li>
 </ul>
 </div>
-<div id="for-workshop-authors" class="section level2">
-<h2><span class="header-section-number">1.2</span> For Workshop Authors</h2>
-<p>To contribute a new workshop, open a <a href="https://github.com/Bioconductor/BiocWorkshops/issues">BiocWorkshops issue</a> asking to
-be added as a collaborator.</p>
-<p>Write your workshop as a stand-alone markdown document, using the
-<a href="https://github.com/Bioconductor/BiocWorkshops/blob/master/_template.Rmd">_template.Rmd</a> file as a starting point. Follow the numbering
-scheme for classifying your workshop.</p>
-<p>Also update the DESCRIPTION file adding packages utilized in your workshop to
-the Imports field. Please be kind and don’t remove anyone elses packages from
-the DESCRIPTION as this is a shared file for all workshops.</p>
-<p>See <a href="https://bookdown.org/yihui/bookdown/">bookdown</a> instructions for authoring documents; we are using
-the ‘knit-then-merge’ strategy. You’ll need to install the
-<a href="https://cran.r-project.org/package=bookdown">bookdown package</a> package from CRAN, as well as <a href="http://pandoc.org/">pandoc</a>. Render
-your chapter with the <code>preview=</code> option to <code>render_book()</code>, e.g.,</p>
-<pre><code>Rscript -e &quot;bookdown::render_book(                             \
-    &#39;xxx_Your_Workshop.Rmd&#39;, &#39;bookdown::gitbook&#39;, preview=TRUE \
-)&quot;</code></pre>
-<p>As this is a shared space for all workshop contributors, in order to
-use the above command in the BiocWorkshops directory, the index has to
-be built at least once, which can be time consuming depending on how many
-workshops have already been submitted.</p>
-<pre><code>Rscript -e &quot;bookdown::render_book(                             \
-    &#39;index.Rmd&#39;, &#39;bookdown::gitbook&#39;)&quot;</code></pre>
-<p>To avoid having to build all workshops but still be able to preview
-your individual workshop we recommend creating a soft link to your .Rmd file.
-We recommend having the file in the <code>BiocWorkshop/</code> and the soft link in
-any other directory on your system. By default, this will generate an
-html file in <code>_book/</code> wherever this command is run.</p>
-<pre><code>mkdir tmp
-cd tmp/
-ln -s ../xxx_Your_Workshop.Rmd
-Rscript -e &quot;bookdown::render_book(                             \
-    &#39;xxx_Your_Workshop.Rmd&#39;, &#39;bookdown::gitbook&#39;, preview=TRUE \
-)&quot;</code></pre>
-<p>Push <strong>only</strong> your .Rmd file to the BiocWorkshop repository; the book will be
-rebuilt manually or automatically. Eventually the output will be
-available for end-users at <a href="https://bioconductor.github.io/BiocWorkshops" class="uri">https://bioconductor.github.io/BiocWorkshops</a> .The
-master branch will not contain the built version of the book. Switching to the
-<a href="https://github.com/Bioconductor/BiocWorkshops/tree/gh-pages">gh-pages branch</a> will show built output.</p>
-</div>
-<div id="deadlines-for-bioc2018" class="section level2">
-<h2><span class="header-section-number">1.3</span> Deadlines for Bioc2018</h2>
-<p>Please be aware of the following deadlines for the <a href="https://bioc2018.bioconductor.org/">Bioconductor 2018 Conference</a> in Toronto</p>
+<div id="workshop-description-4" class="section level2">
+<h2><span class="header-section-number">6.2</span> Workshop Description</h2>
+<p>This workshop will teach the fundamental concepts underlying the DelayedArray framework and related infrastructure.
+It is intended for package developers who want to learn how to use the DelayedArray framework to support the analysis of large datasets, particularly through the use of on-disk data storage.
+The first part of the workshop will provide an overview of the DelayedArray
+infrastructure and introduce computing on DelayedArray objects using delayed operations and block-processing.
+The second part of the workshop will present strategies for adding support for DelayedArray to an existing package and extending the DelayedArray framework.
+Students can expect a mixture of lecture and question-and-answer session to teach the fundamental concepts.
+There will be plenty of examples to illustrate common design patterns for writing performant code, although we will not be writing much code during the workshop.</p>
+<div id="pre-requisites-3" class="section level3">
+<h3><span class="header-section-number">6.2.1</span> Pre-requisites</h3>
 <ul>
-<li><p><strong>Fri June 29:</strong> draft workshop materials submitted to this Bioconductor GitHub bookdown site</p></li>
-<li><p><strong>Fri July 6:</strong> feedback period completes</p></li>
-<li><p><strong>Weds July 18:</strong> workshops must pass checks without errors or warnings (All materials will be checked by Continuous Integration)</p></li>
-<li><p><strong>Thurs / Fri July 26-27:</strong> Bioc2018</p></li>
+<li>Solid understanding of R</li>
+<li>Familiarity with common operations on arrays (e.g., <code>colSums()</code> and those available in the matrixStats package)</li>
+<li>Familiarity with object oriented programming, particularly S4, will be useful but is not essential</li>
+<li>No familiarity required of technical details of particular data storage backends (e.g., HDF5, sparse matrices)</li>
+<li>No familiarity required of particular biological techniques (e.g., single-cell RNA-seq)</li>
+</ul>
+</div>
+<div id="workshop-participation-4" class="section level3">
+<h3><span class="header-section-number">6.2.2</span> Workshop Participation</h3>
+<p>Questions and discussion are encouraged!
+This will be especially important to guide the second half of the worshop which focuses on integrating DelayedArray into an existing or new Bioconductor package.
+Students will be expected to be able to follow and reason about example R code.</p>
+</div>
+<div id="r-bioconductor-packages-used-4" class="section level3">
+<h3><span class="header-section-number">6.2.3</span> <em>R</em> / <em>Bioconductor</em> packages used</h3>
+<ul>
+<li>DelayedArray</li>
+<li>HDF5Array</li>
+<li>SummarizedExperiment</li>
+<li>DelayedMatrixStats</li>
+<li>beachmat</li>
+</ul>
+</div>
+<div id="time-outline-4" class="section level3">
+<h3><span class="header-section-number">6.2.4</span> Time outline</h3>
+<table>
+<thead>
+<tr class="header">
+<th>Activity</th>
+<th>Time</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Introductory slides</td>
+<td>15m</td>
+</tr>
+<tr class="even">
+<td>Part 1: Overview of DelayedArray framework</td>
+<td>45m</td>
+</tr>
+<tr class="odd">
+<td>Part 2: Incoporating DelayedArray into a package</td>
+<td>45m</td>
+</tr>
+<tr class="even">
+<td>Questions and discussion</td>
+<td>15m</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="workshop-goals-and-objectives-3" class="section level2">
+<h2><span class="header-section-number">6.3</span> Workshop goals and objectives</h2>
+<div id="learning-goals-2" class="section level3">
+<h3><span class="header-section-number">6.3.1</span> Learning goals</h3>
+<ul>
+<li>Identify when it is useful to use a DelayedArray instead of an ordinary array or other array-like data structure.</li>
+<li>Become familiar with the fundamental concepts of delayed operations, block-processing, and realization.</li>
+<li>Learn of existing functions and packages for constructing and computing on DelayedArray objects, avoiding the need to re-invent the wheel.</li>
+<li>Learn common design patterns for writing performant code that operates on a DelayedArray.</li>
+<li>Evaluate whether an existing function that operates on an ordinary array can be readily adapted to work on a DelayedArray.</li>
+<li>Reason about potential bottlenecks in algorithms operating on DelayedArray objects.</li>
+</ul>
+</div>
+<div id="learning-objectives-3" class="section level3">
+<h3><span class="header-section-number">6.3.2</span> Learning objectives</h3>
+<ul>
+<li>Understand the differences between a DelayedArray instance and an instance of a subclass (e.g., HDF5Array, RleArray).</li>
+<li>Know what types of operations ‘degrade’ an instance of a DelayedArray subclass to a DelayedArray, as well as when and why this matters.</li>
+<li>Construct a DelayedArray:
+<ul>
+<li>From an in-memory array-like object.</li>
+<li>From an on-disk data store (e.g., HDF5).</li>
+<li>From scratch by writing data to a RealizationSink.</li>
+</ul></li>
+<li>Take a function that operates on rows or columns of a matrix and apply it to a DelayedMatrix.</li>
+<li>Use block-processing on a DelayedArray to compute:
+<ul>
+<li>A univariate (scalar) summary statistic (e.g., <code>max()</code>).</li>
+<li>A multivariate (vector) summary statistic (e.g., <code>colSum()</code> or <code>rowMean()</code>).</li>
+<li>A multivariate (array-like) summary statistic (e.g., <code>rowRanks()</code>).</li>
+</ul></li>
+<li>Design an algorithm that imports data into a DelayedArray.</li>
 </ul>
 
 </div>
 </div>
-<div class="footnotes">
-<hr />
-<ol start="1">
-<li id="fn1"><p>Roswell Park Comprehensive Cancer Center, Buffalo, NY<a href="index.html#fnref1" class="footnote-back">↩</a></p></li>
-</ol>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-
-<a href="variant-functional-annotation-using-statepaintr-funcivar-motifbreakr.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="functional-enrichment-analysis-of-high-throughput-omics-data.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="cytoscape-automation-in-r-using-rcy3.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
