@@ -4,7 +4,13 @@ Title: Bioconductor 2018 Conference Workshops Repository
 Version: 3.8.0
 Depends: R (>= 3.5.0)
 Imports:
+  airway,
   bookdown,
+  hgu95av2.db,
+  regioneR,  
+  ALL,
+  BSgenome.Hsapiens.UCSC.hg19.masked,
+  EnrichmentBrowser,
   SummarizedExperiment
 Remotes:
   rstudio/bookdown
