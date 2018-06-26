@@ -357,9 +357,15 @@ The second kind of package adds methods for computing on _DelayedArray_ instance
 - The **bsseq** package uses the DelayedArray framework to support the analysis of large whole-genome bisulfite methylation sequencing experiments.
 - **TODO**: minfi, scater, scran, others
 
-### The **DelayedArray** class
+### The *DelayedArray* class
 
-The _DelayedArray_ class is the key object that users of the DelayedArray framework will interact with.
+The *DelayedArray* class is the key data structure that end users of the DelayedArray framework will interact with.
+A *DelayedMatrix* is the same thing as a two-dimensional *DelayedArray*, just as a *matrix* is the same thing as a two-dimensional *array*.
+
+The *DelayedArray* class has a single slot called the *seed*.
+This name is evocative, it is the core of the object.
+
+A package developer may create a subclass of *DelayedArray*; we will make extensive use of the *HDF5Array* class, for example.
 
 ```{r}
 # TODO: Graphical representation of this network?
@@ -370,78 +376,185 @@ showClass(getClass("DelayedArray", where = "DelayedArray"))
 showClass(getClass("HDF5Array", where = "HDF5Array"))
 ```
 
-As seen above, the *DelayedArray* class has a single slot called the *seed*. 
-This name is evocative, it is the core of the object.
-We'll explore four types of seeds: "simple" and "formal" in-memory seeds, on-disk seeds, and *DelayedOp* seeds^[The terms "simple" and "formal" aren't formally part of the DelayedArray framework, but I'll use them to illustrate some ideas in this workshop. On-disk seeds and *DelayedOp* seeds are always "formal".].
-A "formal" seed defines an S4 class and methods that that conforms to the "seed contract", a minimal set of operations the seed must support.
+#### Learning objectives
 
-The seed contract is the following^[See `vignette("02-Implementing_a_backend", "DelayedArray")` for details.]:
+In this section, we'll learn how an end user can construct a *DelayedArray* from:
+
+* An in-memory array-like object.
+* A local, on-disk data store, such as an HDF5 file.
+* A remote data store, such as from a HDF Server.
+
+We'll also learn:
+
+* What defines the "seed contract"
+* What types of operations 'degrade' an instance of a *DelayedArray* subclass to a *DelayedArray*, as well as when and why this matters (**TODO** Save the when and why it matters to later?).
+
+#### The seed of a *DelayedArray*
+
+From an end user's perspective, there are a two broad categories of seed:
+
+1. In-memory seeds
+2. Out-of-memory seeds
+    a. Local, on-disk seeds
+    b. Remote (in-memory or on-disk) seeds
+
+**TODO:** Box this out as an aside
+
+> For a developer's perspective, there's a third category of seed that is defined by the *DelayedOp* class. 
+Instances of the *DelayedOp* class are not intended to be manipulated directly by the end user, but they are central to the concept of delayed operations, which we will learn about later (**TODO:** Link to section).
+    
+A seed must implement the "seed contract"^[For further details, see the vignette in the **DelayedArray** package (available via `vignette("02-Implementing_a_backend", "DelayedArray")`)]:
 
 - `dim(x)`: Return the dimensions of the seed.
 - `dimnames(x)`: Return the (possibly `NULL`) dimension names of the seed.
-- `extract_array(x, index)`: Return a slice, specified by `index`, of the seed as an ordinary R *array*. Sometimes, this will "just work" with minimal developer effort.
+- `extract_array(x, index)`: Return a slice, specified by `index`, of the seed as an ordinary R *array*. 
 
-#### "Simple" seeds
-
-A "simple" seed is an instance of an existing "array-like" object. 
-This object could be fundamental R structure, such as an *array*, or an existing S3 or S4 class.
-These "just work" when passed to the `DelayedArray()` constructor^[This is because the **DelayedArray** package implements the seed contract for these existing classes without requiring yet another class].
+#### In-memory seeds
 
 To begin, we'll consider a *DelayedArray* instance with the simplest *seed*, an in-memory array:
 
 ```{r}
 library(DelayedArray)
 
-# An example using a fundamental R structure as the seed.
 mat <- matrix(rep(1:20, 1:20), ncol = 2)
 da_mat <- DelayedArray(seed = mat) 
 da_mat
 str(da_mat)
 ```
 
-We can use other, more complex, array-like objects as the *seed*:
+We can use other, more complex, array-like objects as the *seed*, such as *Matrix* objects from the **Matrix** package:
 
 ```{r}
-# An example using another fundamental R structure as the seed.
+library(Matrix)
+Mat <- Matrix(mat)
+da_Mat <- DelayedArray(seed = Mat)
+# NOTE: The type is "double" because of how the Matrix package stores the data.
+da_Mat
+str(da_Mat)
+```
+
+We can even use data frames as the *seed* of a two-dimensional *DelayedArray*.
+
+```{r}
 df <- as.data.frame(mat)
 da_df <- DelayedArray(seed = df)
 # NOTE: This inherits the (default) column names of the data.frame.
 da_df
 str(da_df)
 
-# An example using an S3 instance as the seed.
 library(tibble)
 tbl <- as_tibble(mat)
 da_tbl <- DelayedArray(seed = tbl)
+# NOTE: This inherits the (default) column names of the tibble.
+da_tbl
 str(da_tbl)
 
-# An example using an S4 instance as the seed.
-library(Matrix)
-Mat <- Matrix(mat)
-da_Mat <- DelayedArray(seed = Mat)
-# NOTE: The type is 'double' because of how the Matrix package stores the data.
-da_Mat
-str(da_Mat)
+DF <- as(mat, "DataFrame")
+da_DF <- DelayedArray(seed = DF)
+# NOTE: This inherits the (default) column names of the DataFrame.
+da_DF
+str(da_DF)
 ```
 
-#### "Formal" seeds
-
-The rest of the seeds that we'll look at are "formal" seeds that explicitly implement the seed contract in a new class and methods.
-
-##### In-memory seeds
-
-The **DelayedArray** package defines the *RleArray* class, a *DelayedArray* subclass containing run-length encoded data.
-The *seed* of an *RleArray* is a *RleArraySeed* (either an instance of a *SolidRleArraySeed* or a *ChunkedRleArraySeed*).
+A package developer can also implement a novel in-memory seed.
+For example, the **DelayedArray** package defines the *RleArraySeed* class^[In fact, the *RleArraySeed* class is a virtual class, with concrete subclasses *SolidRleArraySeed* and *ChunkedRleArraySeed*]. 
+This can be used as the seed of an *RleArray*, a *DelayedArray* subclass for storing run-length encoded data.
 
 ```{r}
 # NOTE: The DelayedArray package does not expose the RleArraySeed() constructor.
-#       Instead, we directly call the RleArray() constructor.
+#       Instead, we directly call the RleArray() constructor on the run-length 
+#       encoded data.
 da_Rle <- RleArray(rle = Rle(mat), dim = dim(mat))
 da_Rle
 str(da_Rle)
 ```
 
-##### On-disk seeds
+The *RleArray* examples illustrates some important concepts in the DelayedArray class hierarchy that warrants reiteration and expansion.
+
+#### Degrading DelayedArray subclasses
+
+The `da_Rle` object is an *RleMatrix*, a direct subclass of *RleArray* and a direct subclass of *DelayedMatrix*. 
+Both *RleArray* and *DelayedMatrix* are direct subclasses of a *DelayedArray*.
+As such, in accordance with properties of S4 class inheritance, **an *RleMatrix* is a *DelayedArray***.
+
+```{r}
+da_Rle
+is(da_Rle, "DelayedArray")
+showClass(getClass("RleMatrix", where = "DelayedArray"))
+```
+
+However, if we do (almost) anything to the *RleMatrix*, the result is 'degraded' to a *DelayedMatrix*.
+This 'degradation' isn't an issue in and of itself, but it can be surprising and can complicate writing functions that expect a certain type of input (e.g., S4 methods).
+
+```{r}
+# NOTE: Adding one to each element will 'degrade' the result.
+da_Rle + 1
+is(da_Rle + 1, "RleMatrix")
+
+# NOTE: Subsetting will 'degrade' the result.
+da_Rle[1:10, ]
+is(da_Rle[1:10, ], "RleMatrix")
+
+# NOTE: Changing the dimnames will 'degrade' the result.
+da_Rle_with_dimnames <- da_Rle
+colnames(da_Rle_with_dimnames) <- c("A", "B")
+da_Rle_with_dimnames
+is(da_Rle_with_dimnames, "RleMatrix")
+
+# NOTE: Transposing will 'degrade' the result.
+t(da_Rle)
+is(t(da_Rle), "RleMatrix")
+
+# NOTE: Even adding zero (conceptually a no-op) will 'degrade' the result.
+da_Rle + 0L
+```
+
+There are some exceptions to this rule, when the DelayedArray framework can recognise/guarantee that the operation is a no-op that will leave the object in its current state:
+
+```{r}
+# NOTE: Subsetting to select the entire object does not 'degrade' the result.
+da_Rle[seq_len(nrow(da_Rle)), seq_len(ncol(da_Rle))]
+is(da_Rle[seq_len(nrow(da_Rle)), seq_len(ncol(da_Rle))], "RleMatrix")
+# NOTE: Transposing and transposing back does not 'degrade' the result.
+t(t(da_Rle))
+is(t(t(da_Rle)), "RleMatrix")
+```
+
+A particularly important example of this 'degrading' to be aware of is when accessing the assays of a *SummarizedExperiment* via the `assay()` and `assays()` getters.
+Each of these getters has an argument `withDimnames` with a default value of `TRUE`; this copies the dimnames of the *SummarizedExperiment* to the returned assay. Consequently, this may 'degrade' the object(s) returned by `assay()` and `assays()` to *DelayedArray*.
+To avoid this, use `withDimnames = FALSE` in the call to `assay()` and `assays()`.
+
+```{r}
+library(SummarizedExperiment)
+# Construct a SummarizedExperiment with column names 'A' and 'B' and da_Rle as 
+# the assay data.
+se <- SummarizedExperiment(da_Rle, colData = DataFrame(row.names = c("A", "B")))
+se
+
+# NOTE: dimnames are copied, so the result is 'degraded'.
+assay(se)
+is(assay(se), "RleMatrix")
+
+# NOTE: dimnames are not copied, so the result is not 'degraded'.
+assay(se, withDimnames = FALSE)
+is(assay(se, withDimnames = FALSE), "RleMatrix")
+```
+
+As noted up front, the degradation isn't in and of itself a problem.
+However, if you are passing an object to a function that expects an *RleMatrix*, for example, some care needs to be taken to ensure that the object isn't accidentally 'degraded' along the way to a *DelayedArray*.
+
+To summarise, the lessons here are:
+
+- Modifying an instance of a *DelayedArray* subclass will almost always 'degrade' it to a *DelayedArray*.
+- It is very easy to accidentally trigger this 'degradation'.
+- This degradation can complicate method dispatch.
+
+#### Out-of-memory seeds
+
+The DelayedArray framework really shines when working with out-of-memory seeds. 
+It can give the user the "feel" of interacting with an ordinary R array but allows for the data to be stored on a local disk or even on a remote server, thus reducing (local) memory usage.
+
+##### Local, on-disk seeds
 
 The **HDF5Array** package defines the *HDF5Array* class, a *DelayedArray* subclass for data stored on disk in a HDF5 file.
 The *seed* of an *HDF5Array* is a *HDF5ArraySeed*.
@@ -469,7 +582,54 @@ da_hdf5
 str(da_hdf5)
 ```
 
-##### *DelayedOp*
+**TODO**: Make these types stand/boxed out
+
+**TIP**
+We can use tools from the **rhdf5** package to help us construct an *HDF5Array* from an existing HDF5 file.
+Here, we use `rhdf5::h5ls()` to list the contents of an HDF5 file and wrap one of the datasets in a *DelayedArray*.
+
+```{r}
+library(rhdf5)
+library(h5vcData)
+
+tally_file <- system.file("extdata", "example.tally.hfs5", package = "h5vcData")
+rhdf5::h5ls(tally_file)
+HDF5Array(filepath = tally_file, name = "/ExampleStudy/16/Counts")
+```
+
+##### Remote seeds
+
+**TODO**
+
+#### So what seed should I use?
+
+Not suprisingly, working with in-memory seeds will typically be faster; you are trading off increased memory-usage for faster performance.
+
+Notably, `da_mat`, `da_Mat`, `da_tbl`, `da_df`, `da_Rle`, and `da_hdf5` all "look" and "feel" much the same.
+The *DelayedArray* is a very light wrapper around the *seed* that formalises this consistent "look" and "feel".
+
+**Key idea**: A *DelayedArray* is a lightweight wrapper around 
+
+**TODO**: Provide guidance on how you should choose the *seed* of a *DelayedArray, e.g., memory-footprint, performance considerations, etc. Should this go here?
+
+### Fundamental concepts
+
+- delayed ops
+- realization
+- block-processing
+    - array grid
+    - viewport
+
+#### Learning goals 
+
+* Become familiar with the fundamental concepts of delayed operations, block-processing, and realization.
+
+* Construct a *DelayedArray*:
+  * From scratch by writing data to a *RealizationSink*.
+  
+#### Delayed operations
+
+##### The *DelayedOp* class
 
 The final type of seed is a *DelayedOp*, used to 'record' delayed operations.
 *DelayedOp* objects are not intended to be manipulated directly by the user but are used inside *DelayedArray* objects.
@@ -507,31 +667,6 @@ Each node in the tree is represented by a *DelayedOp* object, of which there are
 
 We'll discuss delayed operations more, shortly.
 
-#### So what seed should I use?
-
-Notably, `da_mat`, `da_Mat`, `da_tbl`, `da_df`, `da_Rle`, and `da_hdf5` all "look" and "feel" much the same.
-The *DelayedArray* is a very light wrapper around the *seed* that formalises this consistent "look" and "feel".
-
-**Key idea**: A *DelayedArray* is a lightweight wrapper around 
-
-**TODO**: Provide guidance on how you should choose the *seed* of a *DelayedArray, e.g., memory-footprint, performance considerations, etc. Should this go here?
-
-### Fundamental concepts
-
-**TODO (UP TO HERE)**
-
-#### Learning goals 
-
-* Become familiar with the fundamental concepts of delayed operations, block-processing, and realization.
-
-#### Learning objective
-
-* Know what types of operations 'degrade' an instance of a *DelayedArray* subclass to a *DelayedArray*, as well as when and why this matters.
-* Construct a *DelayedArray*:
-  * From an in-memory array-like object.
-  * From an on-disk data store (e.g., HDF5).
-  * From scratch by writing data to a *RealizationSink*.
-
 ### What's out there already?
 
 #### Learning goal
@@ -567,3 +702,4 @@ This section will be updated to address questions and to summarise the discussio
 - Use **BiocStyle**?
 -  Show packages depend on one another, with HDF5Array as the root (i.e. explain the HDF5 stack)
 - Use `suppressPackageStartupMessages()` or equivalent.
+- Note that we'll be focusing on numerical array-like data, i.e. no real discussion of **GDSArray**.
