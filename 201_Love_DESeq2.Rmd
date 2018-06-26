@@ -1,7 +1,7 @@
 # RNA-seq data analysis with DESeq2
 
 Authors:
-    Michael Love^[UNC-Chapel Hill, NC, US],
+    Michael I. Love^[UNC-Chapel Hill, NC, US],
     Simon Anders^[ZMBH Heidelberg, Germany],
     Wolfgang Huber^[EMBL Heidelberg, Germany]
 Last modified: 25 June, 2018.
@@ -50,7 +50,7 @@ and asking questions throughout the workshop.
 ### Time outline
 
 | Activity                      | Time |
-|-------------------------------|------|
+|:------------------------------|:-----|
 | Overview of packages          | 20m  |
 | Quantification and import     | 20m  |
 | EDA and DE                    | 20m  |
@@ -76,13 +76,250 @@ Learning objectives
 * Build dynamic reports
 * Integrate DESeq2 and zinbwave for single-cell RNA-seq data
 
-## Workshop
+## Preparing data for *DESeq2*
 
-Divide the workshop into sections (`## A Section`). Include
-fully-evaluated _R_ code chunks. Develop exercises and solutions, and
-anticipate that your audience will walk through the code with you, or
-work on the code idependently -- do not be too ambitious in the
-material that you present.
+### Experimental data
 
-TODO write the workshop...
+The data used in this workflow is stored in the *airway* package that
+summarizes an RNA-seq experiment wherein airway smooth muscle cells
+were treated with dexamethasone, a synthetic glucocorticoid steroid
+with anti-inflammatory effects [@Himes2014RNASeq]. Glucocorticoids
+are used, for example, by people with asthma to reduce inflammation of
+the airways. In the experiment, four primary human airway smooth
+muscle cell lines were treated with 1 micromolar dexamethasone for 18
+hours. For each of the four cell lines, we have a treated and an
+untreated sample. For more description of the experiment see the
+[PubMed entry 24926665](http://www.ncbi.nlm.nih.gov/pubmed/24926665)
+and for raw data see the
+[GEO entry GSE52778](http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE52778).
 
+We will show how to import RNA-seq quantification data using an
+alternative dataset (the *tximportData* package which is used in the
+*tximport* vignette). Afterward we will load counts for the *airway*
+dataset, which were counted using *summarizeOverlaps* from the
+*GenomicAlignments* package. As described below, we recommend the
+*tximport* pipeline for producing count matrices, but we do not yet
+have a Bioconductor package containing the necessary quantification
+files for the *airway* dataset.
+
+### Preparing count matrices
+
+As input, the count-based statistical methods, such as *DESeq2*
+[@Love2014Moderated], *edgeR* [@Robinson2009EdgeR], *limma* with the
+voom method [@Law2014Voom], *DSS* [@Wu2013New], *EBSeq*
+[@Leng2013EBSeq] and *baySeq* [@Hardcastle2010BaySeq], expect input
+data as obtained, e.g., from RNA-seq or another high-throughput
+sequencing experiment, in the form of a matrix of counts.  The value
+in the *i*-th row and the *j*-th column of the matrix tells how many
+reads (or fragments, for paired-end RNA-seq) have been assigned to
+gene *i* in sample *j*. Analogously, for other types of assays, the
+rows of the matrix might correspond e.g., to binding regions (with
+ChIP-Seq), species of bacteria (with metagenomic datasets), or peptide
+sequences (with quantitative mass spectrometry).
+
+The values in the matrix should be counts of sequencing
+reads/fragments. This is important for the statistical models used by
+*DESeq2* and *edgeR* to hold, as only counts allow assessing the
+measurement precision correctly. It is important to not provide counts
+that were pre-normalized for sequencing depth/library size, as the
+statistical model is most powerful when applied to un-normalized
+counts and is designed to account for library size differences
+internally.
+
+### Transcript abundances and the *tximport* pipeline
+
+In this workflow, we will show how to use transcript abundances as
+quantified by the [Salmon](https://combine-lab.github.io/salmon/)
+[@Patro2017Salmon] software package. *Salmon* and other methods, such
+as [Sailfish](http://www.cs.cmu.edu/~ckingsf/software/sailfish/)
+[@Patro2014Sailfish],
+[kallisto](https://pachterlab.github.io/kallisto/) [@Bray2016Near],
+or [RSEM](http://deweylab.github.io/RSEM/) [@Li2011RSEM], estimate the
+relative abundances of all (known, annotated) transcripts without
+aligning reads. Because estimating the abundance of the transcripts
+involves an inference step, the counts are *estimated*. Most methods
+either use a statistical framework called Estimation-Maximization or
+Bayesian techniques to estimate the abundances and counts.  Following
+quantification, we will use the *tximport* [@Soneson2015Differential]
+package for assembling estimated count and offset matrices for use
+with Bioconductor differential gene expression packages.
+
+The advantages of using the transcript abundance quantifiers in
+conjunction with *tximport* to produce gene-level count matrices and
+normalizing offsets, are: this approach corrects for any potential
+changes in gene length across samples (e.g. from differential isoform
+usage) [@Trapnell2013Differential]; some of these methods are
+substantially faster and require less memory and disk usage compared
+to alignment-based methods; and it is possible to avoid discarding
+those fragments that can align to multiple genes with homologous
+sequence [@Robert2015Errors]. Note that transcript abundance
+quantifiers skip the generation of large files which store read
+alignments (SAM or BAM files), instead producing smaller files which
+store estimated abundances, counts and effective lengths per
+transcript. For more details, see the manuscript describing this approach
+[@Soneson2015Differential] and the *tximport* package
+vignette for software details.
+
+A full tutorial on how to use the *Salmon* software for quantifying
+transcript abundance can be
+found [here](https://combine-lab.github.io/salmon/getting_started/).
+
+### *Salmon* quantification
+
+We begin by providing *Salmon* with the sequence of all of the
+reference transcripts, which we will call the *reference
+transcriptome*. We recommend to use the GENCODE human
+transcripts, which can be downloaded from the
+[GENCODE website](https://www.gencodegenes.org/). 
+On the command line, creating the transcriptome index looks like:
+
+```
+salmon index -i gencode.v99_salmon_0.10.0 -t gencode.v99.transcripts.fa.gz
+```
+
+The `0.10.0` refers to the version of *Salmon* that was used, and is
+useful to put into the index name.
+
+To quantify an individual sample, `sample_01`, the following command
+can be used:
+
+```
+salmon quant -i gencode.v99_salmon_0.10.0 -p 6 --libType A \
+  --gcBias --biasSpeedSamp 5 \
+  -1 sample_01_1.fastq.gz -2 sample_01_2.fastq.gz \
+  -o sample_01
+```
+
+In simple English, this command says to "quantify a sample using this
+transcriptome index, with 6 threads, using automatic 
+[library type](http://salmon.readthedocs.io/en/latest/library_type.html) detection,
+using GC bias correction (the bias speed part is now longer
+needed with current versions of *Salmon*), here are the first and second
+read, and use this output directory." The output directory will be
+created if it doesn't exist, though if earlier parts of the path do
+not exist, it will give an error. A single sample of human RNA-seq
+usually takes ~5 minutes with the GC bias correction.
+
+Rather than writing the above command on the command line multiple
+times for each sample, it is possible to loop over files using a
+bash loop, or more advanced workflow management
+systems such as Snakemake [@Koster2012Snakemake] or Nextflow
+[@Di2017Nextflow].
+
+## Importing into R with *tximport*
+
+Following quantification, we can use *tximport* to import the data
+into R and perform statistical analysis using Bioconductor packages.
+Normally, we would simply point *tximport* to the `quant.sf` files on
+our machine. However, because we are distributing these files as part
+of an R package, we have to do some extra steps, to figure out where
+the R package, and so the files, are located on *your* machine.
+
+We will show how to import *Salmon* quantification files using the
+data in the *tximportData* package. The quantified samples are six
+samples from the [GEUVADIS Project](http://www.geuvadis.org/web/geuvadis) [@Lappalainen].
+The output directories from the above *Salmon* quantification calls has been
+stored in the `extdata` directory of the *tximportData* package.
+The R function *system.file* can be used to find out where on your
+computer the files from a package have been installed. Here we ask for
+the full path to the `extdata` directory, where R packages store
+external data, that is part of the *tximportData* package.
+
+```{r}
+library("tximportData")
+dir <- system.file("extdata", package="tximportData")
+list.files(dir)
+```
+
+The *Salmon* quantification directories are in the `salmon` directory. 
+
+```{r}
+list.files(file.path(dir,"salmon"))
+```
+
+The identifiers used here are the *ERR* identifiers from the 
+[European Nucleotide Archive](https://www.ebi.ac.uk/ena). 
+We need to create a named vector pointing to the quantification
+files. We will create a vector of filenames first by reading in a
+table that contains the sample IDs, and then combining this with `dir`
+and `"quant.sf.gz"`. (We gzipped the quantification files to make the
+data package smaller, this is not a problem for R functions that we
+use to import the files.)
+
+```{r}
+samples <- read.table(file.path(dir,"samples.txt"), header=TRUE)
+samples
+files <- file.path(dir, "salmon", samples$run, "quant.sf.gz")
+names(files) <- paste0("sample",1:6)
+all(file.exists(files))
+```
+
+Transcripts need to be associated with gene IDs for gene-level
+summarization. We therefore will construct a *data.frame* called
+`tx2gene` with two columns: 1) transcript ID and 2) gene ID. The
+column names do not matter but this column order must be used. The
+transcript ID must be the same one used in the abundance files. This
+can most easily be accomplished by downloading the GTF file at the
+same time that the transcriptome FASTA is downloaded, and generating
+`tx2gene` from the GTF file using Bioconductor's *TxDb*
+infrastructure.
+
+Generating a *TxDb* from a GTF file can be easily accomplished with
+the *makeTxDbFromGFF* function. This step requires a few minutes of
+waiting, and a large file. We therefore skip this step, but show the
+code that is used to create the `tx2gene` table, assuming the correct
+*TxDb* object has been created.
+
+Creating the `tx2gene` *data.frame* can be accomplished by calling the
+*select* function from the *AnnotationDbi* package on a *TxDb* object.
+The following code could be used to construct such a table:
+
+```{r}
+library("TxDb.Hsapiens.UCSC.hg38.knownGene")
+txdb <- TxDb.Hsapiens.UCSC.hg38.knownGene
+k <- keys(txdb, keytype="TXNAME")
+tx2gene <- select(txdb, k, "GENEID", "TXNAME")
+```
+
+In this case, we've used the Gencode v27 CHR transcripts to build our
+*Salmon* index, and we used `makeTxDbFromGFF` and code similar to the chunk
+above to build the `tx2gene` table. We then read in a pre-constructed
+`tx2gene` table:
+
+```{r}
+library(readr)
+tx2gene <- read_csv(file.path(dir, "tx2gene.gencode.v27.csv"))
+head(tx2gene)
+```
+
+Finally the following line of code imports *Salmon* transcript
+quantifications into R, collapsing to the gene level using the
+information in `tx2gene`.
+
+```{r}
+library("tximport")
+library("jsonlite")
+library("readr")
+txi <- tximport(files, type="salmon", tx2gene=tx2gene)
+```
+
+The `txi` object is simply a list of matrices (and one character
+vector):
+
+```{r}
+names(txi)
+txi$counts[1:3,1:3]
+txi$length[1:3,1:3]
+txi$abundance[1:3,1:3]
+txi$countsFromAbundance
+```
+
+## Exploratory data analysis
+
+## Differential expression analysis
+
+## *AnnotationHub*
+
+## Building reports
+
+## Integration with *ZINB-WaVE*
