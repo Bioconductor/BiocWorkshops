@@ -5,7 +5,6 @@
 * Stuart Lee (lee.s@wehi.edu.au)
 * Michael Lawrence (lawremi@gmail.com)
 
-
 ## Workshop Description
 
 In this workshop, we will give an overview of how to perform low-level
@@ -53,13 +52,10 @@ Students will work through an Rmarkdown document while the instructors respond t
 
 ## Workshop goals and objectives
 
-
 ### Learning goals
-
 
 * Understand that GRanges follows tidy data principles
 * Apply the plyranges grammar to genomic data analysis
-
 
 ### Learning objectives
 
@@ -67,3 +63,70 @@ Students will work through an Rmarkdown document while the instructors respond t
 * Read files into R as GRanges objects
 * Perform coverage analysis 
 * Build data pipelines for analysis based on GRanges
+
+# Workshop
+
+## Introduction 
+
+### What is plyranges?
+
+The plyranges package is a domain specific language (DSL) built on top of the 
+IRanges and GenomicRanges packages. It is designed to quickly and coherently 
+analyse genomic data in the form of GRanges objects (more on those later!) and 
+from a wide variety of genomic data file types. For users who are familiar with 
+the tidyverse, the grammar that plyranges implements will look familiar but with
+a few modifications for genomic specific tasks.
+
+### Why use plyranges?
+
+The grammar that plyranges develops is helpful for reasoning
+about genomics data analysis, and provides a way of developing 
+short readable analysis pipelines. We have tried to emphasise consistency 
+and code readability.
+
+One of the goals of plyranges is to provide an alternative entry point 
+to analysing genomics data with Bioconductor, especially for R beginners and 
+R users who are more familiar with the tidyverse approach to data analysis. 
+As a result, we have deemphasised the use of more complicated data structures 
+provided by core Bioconductor packages that are useful for programming with.
+
+### Who is this workshop for?
+
+This workshop is intended for new users of Bioconductor, users who are
+interested to learn about grammar based approaches for data analysis,
+and users who are interested in learning how to use R to perform analyses
+like those available in the command line packages BEDTools and deeptools.
+
+If that's you, let's begin!
+
+## What are GRanges objects?
+
+
+- modify figure and explanation from paper
+- emphasise their tidyness
+- why tidy is a useful cognitive tool
+
+## The Grammar
+
+Brief overview of the grammar (maybe include reference to table here at the bottom
+of the document) including theory behind the join operations
+
+### Worked example: exploring BigWig files from AnnotationHub
+
+- this is a modified example from the paper, where we explore data from Human Epigenomics
+Roadmap consortium, we take more time here to go through the core parts of the grammar
+
+### Exercises 
+
+Lead the workshop participant through computing the first example in 
+(does not have to use the same data necessarily but is a good use case imo)
+http://deeptools.readthedocs.io/en/latest/content/example_gallery.html#normalized-chip-seq-signals-and-peak-regions
+
+
+## Data import and creating pipelines
+
+Modified version of BAM example in paper (maybe using alpineData package)
+
+
+### Exercises
+

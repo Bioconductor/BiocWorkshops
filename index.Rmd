@@ -7,12 +7,16 @@ github-repo: Bioconductor/BiocWorkshops
 documentclass: book
 ---
 
+[![Travis Build Status](https://travis-ci.org/Bioconductor/BiocWorkshops.svg?branch=master)](https://travis-ci.org/Bioconductor/BiocWorkshops)
+
 # Introduction
 
 Author:
     Martin Morgan^[Roswell Park Comprehensive Cancer Center, Buffalo, NY].
     <br/>
 Last modified: 22 May, 2018.
+
+The most recently compiled version of the book is available at https://bioconductor.github.io/BiocWorkshops/.
 
 ## For Everyone
 
@@ -38,18 +42,31 @@ training. The workshops are divided into 3 sections:
 To contribute a new workshop, open a [BiocWorkshops issue][] asking to
 be added as a collaborator.
 
-Write your workshop as a stand-alone markdown document, using the
-[_template.Rmd][] file as a starting point. Follow the numbering
-scheme for classifying your workshop. 
+### DESCRIPTION
 
-Also update the DESCRIPTION file adding packages utilized in your workshop to
-the Imports field. Please be kind and don't remove anyone elses packages from
-the DESCRIPTION as this is a shared file for all workshops. 
+Update the DESCRIPTION file adding packages utilized in your workshop to
+the **Imports** field. Please be kind and don't remove anyone elses packages from
+the DESCRIPTION as this is a shared file for all workshops. Also don't add your packages
+to the **Depends** field.
 
-See [bookdown][] instructions for authoring documents; we are using
-the 'knit-then-merge' strategy. You'll need to install the
-[bookdown package][] package from CRAN, as well as [pandoc][]. Render
-your chapter with the `preview=` option to `render_book()`, e.g.,
+### Classifying your workshop
+
+Follow the numbering scheme above to classify your workshop by preceding your title with 
+"Bioconductor 1xx:", "Bioconductor 2xx:", or "Bioconductor 5xx:". Final workshop numbers will be 
+determined by an editor.
+
+### Bookdown
+
+Write your workshop as a stand-alone markdown document, using your workshop 
+syllabus already posted here as a starting point.  We are using [bookdown][] 
+('knit-then-merge' strategy) to compile the workshops and produce a book that will be 
+available through Continuous Integration at https://bioconductor.github.io/BiocWorkshops/.
+
+You do not need to build the complete book yourself, it is sufficient to ensure that your own
+workshop compiles successfully. You can 1) compile draft versions using a standard "knit" 
+procedure to compile your chapter, and 2) follow these bookdown procedures to see how your 
+chapter will look in the finished product. Install the [bookdown package][] package from CRAN, 
+as well as [pandoc][]. Render your chapter with the `preview=` option to `render_book()`, e.g.,
 
 ```
 Rscript -e "bookdown::render_book(                             \
@@ -102,7 +119,6 @@ Please be aware of the following deadlines for the [Bioconductor 2018 Conference
 - **Thurs / Fri July 26-27:** Bioc2018
 
 [BiocWorkshops issue]: https://github.com/Bioconductor/BiocWorkshops/issues
-[_template.Rmd]: https://github.com/Bioconductor/BiocWorkshops/blob/master/_template.Rmd
 [bookdown]: https://bookdown.org/yihui/bookdown/
 [bookdown package]: https://cran.r-project.org/package=bookdown
 [pandoc]: http://pandoc.org/
