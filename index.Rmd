@@ -52,7 +52,8 @@ to the **Depends** field.
 ### Classifying your workshop
 
 Follow the numbering scheme above to classify your workshop by preceding your title with 
-"Bioconductor 1xx:", "Bioconductor 2xx:", or "Bioconductor 5xx:". 
+"Bioconductor 1xx:", "Bioconductor 2xx:", or "Bioconductor 5xx:". Final workshop numbers will be 
+determined by an editor.
 
 ### Bookdown
 
