@@ -102,7 +102,7 @@ dataset, which were counted using *summarizeOverlaps* from the
 have a Bioconductor package containing the necessary quantification
 files for the *airway* dataset.
 
-### Preparing count matrices
+### Modeling count data
 
 As input, the count-based statistical methods, such as *DESeq2*
 [@Love2014Moderated], *edgeR* [@Robinson2009EdgeR], *limma* with the
@@ -121,12 +121,12 @@ The values in the matrix should be counts of sequencing
 reads/fragments. This is important for the statistical models used by
 *DESeq2* and *edgeR* to hold, as only counts allow assessing the
 measurement precision correctly. It is important to not provide counts
-that were pre-normalized for sequencing depth/library size, as the
-statistical model is most powerful when applied to un-normalized
-counts and is designed to account for library size differences
-internally.
+that were pre-normalized for sequencing depth (also called library
+size), as the statistical model is most powerful when applied to
+un-normalized counts and is designed to account for library size
+differences internally.
 
-### Transcript abundances and the *tximport* pipeline
+### Transcript abundances
 
 In this workflow, we will show how to use transcript abundances as
 quantified by the [Salmon](https://combine-lab.github.io/salmon/)
@@ -146,19 +146,22 @@ with Bioconductor differential gene expression packages.
 
 The advantages of using the transcript abundance quantifiers in
 conjunction with *tximport* to produce gene-level count matrices and
-normalizing offsets, are: this approach corrects for any potential
-changes in gene length across samples (e.g. from differential isoform
-usage) [@Trapnell2013Differential]; some of these methods are
-substantially faster and require less memory and disk usage compared
-to alignment-based methods; and it is possible to avoid discarding
-those fragments that can align to multiple genes with homologous
-sequence [@Robert2015Errors]. Note that transcript abundance
-quantifiers skip the generation of large files which store read
-alignments (SAM or BAM files), instead producing smaller files which
-store estimated abundances, counts and effective lengths per
-transcript. For more details, see the manuscript describing this approach
-[@Soneson2015Differential] and the *tximport* package
-vignette for software details.
+normalizing offsets, are: 
+
+1. this approach corrects for any potential changes in gene length
+across samples (e.g. from differential isoform usage)
+[@Trapnell2013Differential] 
+2. some of these methods are substantially faster and require less
+memory and less disk usage compared to alignment-based methods 
+3. it is possible to avoid discarding those fragments that can align
+to multiple genes with homologous sequence [@Robert2015Errors]. 
+
+Note that transcript abundance quantifiers skip the generation of
+large files which store read alignments (SAM or BAM files), instead
+producing smaller files which store estimated abundances, counts and
+effective lengths per transcript. For more details, see the manuscript
+describing this approach [@Soneson2015Differential] and the *tximport*
+package vignette for software details.
 
 A full tutorial on how to use the *Salmon* software for quantifying
 transcript abundance can be
@@ -314,9 +317,171 @@ txi$abundance[1:3,1:3]
 txi$countsFromAbundance
 ```
 
+If we were continuing with the GEUVADIS samples, we would then create
+a *DESeqDataSet* with the following line of code. Because there are no
+differences among the samples (same population and same sequencing
+batch), we specify a *design formula* of ~1, meaning we can only fit
+an intercept term -- so we cannot perform differential expression
+analysis with these samples.
+
+```{r}
+library("DESeq2")
+dds <- DESeqDataSetFromTximport(txi, samples, ~1)
+dds$center
+dds$pop
+```
+
 ## Exploratory data analysis
 
+We will now switch over to the *airway* experiment, counts of which
+are already prepared in a *SummarizedExperiment* object. In this case,
+the object that we load is the output of the *summarizeOverlaps*
+function in the *GenomicAlignments* package, and the exact code used
+to produce this object can be seen by typing `vignette("airway")` into
+the R session, to pull up the *airway* software vignette. There are
+multiple ways to produce a count table and import it into *DESeq2*,
+and these are summarized in this section of the
+[RNA-seq workflow](https://bioconductor.org/packages/release/workflows/vignettes/rnaseqGene/inst/doc/rnaseqGene.html#deseq2-import-functions).
+
+```{r}
+library("airway")
+data("airway")
+```
+
+We want to specify that `untrt` is the reference level for the dex
+variable: 
+
+```{r}
+airway$dex <- relevel(airway$dex, "untrt")
+airway$dex
+```
+
+We can quickly check the millions of fragments that uniquely aligned
+to the genes (the second argument of *round* tells how many decimal
+points to keep).
+
+```{r}
+round( colSums(assay(airway)) / 1e6, 1 )
+```
+
+We can inspect the information about the samples, by pulling out the
+`colData` slot of the *SummarizedExperiment*:
+
+```{r}
+colData(airway)
+table(airway$cell)
+table(airway$dex)
+```
+
+If we had not already loaded *DESeq2*, we would do this, and then
+create a *DESeqDataSet*. We want to control for the cell line, while
+testing for differences across dexamethasone treatment, so we use a
+design of `~ cell + dex`:
+
+```{r}
+library("DESeq2")
+dds <- DESeqDataSet(airway, design = ~ cell + dex)
+```
+
+We will perform a minimal filtering to reduce the size of the
+dataset. We do not need to retain genes if they do not have a count of
+5 or more for 4 or more samples as these genes will have no
+statistical power to detect differences, and no information to compute
+distances between samples.
+
+```{r}
+keep <- rowSums(counts(dds) >= 5) >= 4
+table(keep)
+dds <- dds[keep,]
+```
+
+TODO do EDA here...
+
 ## Differential expression analysis
+
+### Standard DE steps
+
+Differential expression analysis in *DESeq2* is performed by calling
+the following two functions:
+
+```{r}
+dds <- DESeq(dds)
+res <- results(dds)
+```
+
+The results table `res` contains the results for each gene (in the
+same order as in the *DESeqDataSet*). If we want to see the top genes,
+we can order it like so:
+
+```{r}
+head(res[order(res$pvalue),])
+```
+
+We can plot the counts for the top gene using `plotCounts`:
+
+```{r}
+plotCounts(dds, which.min(res$pvalue), "dex")
+```
+
+We can examine all the log2 fold changes (LFC) due to dexamethasone
+treatment over the mean of counts using `plotMA`:
+
+```{r}
+plotMA(res, ylim=c(-5,5))
+```
+
+Note that there are many large LFC which are not significant (grey
+points) on the left side of the MA-plot above. These obtain a large
+LFC because of the imprecision of log counts. For more informative
+visualization and more accurate ranking of genes by effect size (the
+log fold change may sometimes be referred to as an *effect size*), we
+recommend to use *DESeq2*'s functionality for shrinking LFCs. Our most
+recent methodological development is the *apeglm* shrinkage estimator,
+which is available in *DESeq2*'s *lfcShrink* function:
+
+```{r}
+library("apeglm")
+resultsNames(dds)
+res2 <- lfcShrink(dds, coef="dex_trt_vs_untrt", type="apeglm")
+```
+
+```{r}
+par(mfrow=c(1,2))
+plotMA(res, ylim=c(-3,3), main="No shrinkage")
+plotMA(res2, ylim=c(-3,3), main="apeglm")
+```
+
+### Minimum effect size
+
+If we don't want to report as significant genes with small LFC, we can
+specify a minimum *biologically meaningful* effect size, by choosing
+an LFC and testing against this. We can either perform such a
+threshold test using the unshrunken LFCs or the LFCs provided by
+*lfcShrink* using the *apeglm* method:
+
+```{r}
+res.lfc <- results(dds, lfcThreshold=1)
+res.lfc2 <- lfcShrink(dds, coef="dex_trt_vs_untrt", type="apeglm",
+                      lfcThreshold=1)
+```
+
+Note that *testing* against an LFC threshold is not equivalent to
+testing against a null hypothesis of 0 and then filtering on LFC
+values. We prefer the former, as discussed in @Love2014Moderated and
+@Zhu2018. 
+
+The *apeglm* method provides s-values [@Stephens2016] when
+`svalue=TRUE` or when we supply a minimum effect size as above. These
+are analogous to q-values or adjusted p-values, in that the genes with
+s-values less than $\alpha$ should have an aggregate rate of false
+sign or being smaller in absolute value than our given LFC threshold,
+which is bounded by $\alpha$.
+
+```{r}
+par(mfrow=c(1,2))
+plotMA(res.lfc, ylim=c(-5,5), main="No shrinkage, LFC test")
+plotMA(res.lfc2, ylim=c(-5,5), main="apeglm, LFC test", alpha=0.01)
+```
 
 ## *AnnotationHub*
 
