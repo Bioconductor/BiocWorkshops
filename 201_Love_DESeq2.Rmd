@@ -6,6 +6,10 @@ Authors:
     Wolfgang Huber^[EMBL Heidelberg, Germany]
 Last modified: 25 June, 2018.
 
+<!-- 
+  bookdown::render_book("201_Love_DESeq2.Rmd", "bookdown::gitbook") 
+-->
+
 ## Overview
 
 ### Description
@@ -341,7 +345,7 @@ to produce this object can be seen by typing `vignette("airway")` into
 the R session, to pull up the *airway* software vignette. There are
 multiple ways to produce a count table and import it into *DESeq2*,
 and these are summarized in this section of the
-[RNA-seq workflow](https://bioconductor.org/packages/release/workflows/vignettes/rnaseqGene/inst/doc/rnaseqGene.html#deseq2-import-functions).
+[RNA-seq gene-level workflow](https://bioconductor.org/packages/release/workflows/vignettes/rnaseqGene/inst/doc/rnaseqGene.html#deseq2-import-functions).
 
 ```{r}
 library("airway")
@@ -395,7 +399,79 @@ table(keep)
 dds <- dds[keep,]
 ```
 
-TODO do EDA here...
+Some very basic exploratory analysis is to examine a boxplot of the
+counts for each sample. We will take the logarithm so that large
+counts do not dominate the boxplot:
+
+```{r}
+boxplot(log10(counts(dds)+1))
+```
+
+The main function in *DESeq2* involves computation of *size factors*
+which normalize for differences in sequencing depth among samples. We
+can also compute these size factors manually, so that the *normalized
+counts* are available for plotting:
+
+```{r}
+dds <- estimateSizeFactors(dds)
+boxplot(log10(counts(dds,normalized=TRUE)+1))
+```
+
+Taking the logarithm of counts plus a pseudocount of 1 is a common
+transformation, but it tends to inflate the sampling variance of low
+counts such that it is even larger than biological variation across
+groups of samples. In *DESeq2* we therefore provide transformations
+which produce log-scale data such that the systematic trends have been
+removed. Our recommended transformation is the variance-stabilizing
+transformation, or VST, and it can be called with the *vst* function:
+
+```{r}
+vsd <- vst(dds)
+class(vsd)
+```
+
+This function does not return a *DESeqDataSet*, because it does not
+return counts, but instead continuous values (on the log2 scale).
+We can access the transformed data with *assay*:
+
+```{r}
+assay(vsd)[1:3,1:3]
+```
+
+The VST data is appropriate for calculating distances between samples
+or for performing PCA. More information about PCA and distance
+calculation can be found in the
+[RNA-seq gene-level workflow](https://bioconductor.org/packages/release/workflows/vignettes/rnaseqGene/inst/doc/rnaseqGene.html#deseq2-import-functions).
+In short, PCA plots allow us to visualize the most dominant axes of
+variation in our data, which is useful for both quality control, and
+to get a sense of how large the inter-sample differences are across
+and within conditions. Here we see that PC1 (the primary axis of
+variation in the data) separates the treated and untreated samples:
+
+```{r}
+plotPCA(vsd, "dex")
+```
+
+With some additional *ggplot2* code, we can also indicate which
+samples belong to which cell line:
+
+```{r}
+library("ggplot2")
+pcaData <- plotPCA(vsd, intgroup = c( "dex", "cell"), returnData = TRUE)
+percentVar <- round(100 * attr(pcaData, "percentVar"))
+ggplot(pcaData, aes(x = PC1, y = PC2, color = dex, shape = cell)) +
+  geom_point(size =3) +
+  xlab(paste0("PC1: ", percentVar[1], "% variance")) +
+  ylab(paste0("PC2: ", percentVar[2], "% variance")) +
+  coord_fixed()
+```
+
+Note that we do not recommend working with the transformed data for
+the primary differential expression analysis. Instead we will use the
+original counts and a *generalized linear model* (GLM) which takes
+into account the expected variance from either low or high counts.
+For statistical details, please refer to the *DESeq2* methods paper
+[@Love2014Moderated].
 
 ## Differential expression analysis
 
@@ -485,6 +561,69 @@ plotMA(res.lfc2, ylim=c(-5,5), main="apeglm, LFC test", alpha=0.01)
 
 ## *AnnotationHub*
 
+We will use the *AnnotationHub* package to attach additional
+information to the results table. *AnnotationHub* provides an
+easy-to-use interface to more than 40,000 annotation records. A
+record may be peaks from a ChIP-seq experiment from ENCODE, the
+sequence of the human genome, a *TxDb* containing information about
+transcripts and genes, or an *OrgDb* containing general information
+about biological identifiers for a particular organism.
+
+```{r}
+library("AnnotationHub")
+ah <- AnnotationHub()
+```
+
+The following code chunk, un-evaluated here, launches a browser for
+navigating all the records available through *AnnotationHub*.
+
+```{r eval=FALSE}
+display(ah)
+```
+
+We can also query using keywords with the *query* function:
+
+```{r}
+query(ah, c("OrgDb","Homo sapiens"))
+```
+
+To pull down a particular record we use double brackets and the *name*
+of the record:
+
+```{r}
+hs <- ah[["AH61777"]]
+hs
+```
+
+The *rownames* of the results table are Ensembl IDs, and most of these
+are entries in *OrgDb* (although thousands are not).
+
+```{r}
+columns(hs)
+table(rownames(res) %in% keys(hs, "ENSEMBL"))
+```
+
+We can use the *mapIds* function to add gene symbols, using `ENSEMBL`
+as the keytype, and requesting the column `SYMBOL`. 
+
+```{r}
+res$symbol <- mapIds(hs, rownames(res), column="SYMBOL", keytype="ENSEMBL")
+head(res)
+```
+
 ## Building reports
 
+```{r}
+library(ReportingTools)
+tmp <- tempdir()
+rep <- HTMLReport(shortName="airway", title="Airway DGE", basePath=tmp, reportDirectory="report")
+publish(res, rep, dds, n=20, make.plots=TRUE, factor=dds$dex)
+finish(rep)
+browseURL(file.path(tmp,"report","airway.html"))
+```
+
+TODO: glimma
+
 ## Integration with *ZINB-WaVE*
+
+TODO
