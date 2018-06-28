@@ -11,6 +11,14 @@ Imports:
   ALL,
   BSgenome.Hsapiens.UCSC.hg19.masked,
   EnrichmentBrowser,
-  SummarizedExperiment
+  SummarizedExperiment,
+  SingleCellExperiment,
+  BiocParallel,
+  clusterExperiment,
+  slingshot,
+  zinbwave,
+  scone,
+  gam,
+  RColorBrewer
 Remotes:
   rstudio/bookdown
