@@ -232,11 +232,6 @@ computer the files from a package have been installed. Here we ask for
 the full path to the `extdata` directory, where R packages store
 external data, that is part of the *tximportData* package.
 
-```{r style, echo=FALSE}
-library(knitr)
-opts_chunk$set(cache=TRUE)
-```
-
 ```{r}
 library("tximportData")
 dir <- system.file("extdata", package="tximportData")
@@ -618,5 +613,17 @@ head(res)
 
 ## Building reports
 
+```{r}
+library(ReportingTools)
+tmp <- tempdir()
+rep <- HTMLReport(shortName="airway", title="Airway DGE", basePath=tmp, reportDirectory="report")
+publish(res, rep, dds, n=20, make.plots=TRUE, factor=dds$dex)
+finish(rep)
+browseURL(file.path(tmp,"report","airway.html"))
+```
+
+TODO: glimma
+
 ## Integration with *ZINB-WaVE*
 
+TODO
