@@ -88,6 +88,11 @@ In this workshop, we describe a sequence of steps to recover the lineages found 
 
 The following packages are needed.
 
+```{r options, echo=FALSE, results="hide",message=FALSE, error=FALSE, include=FALSE, autodep=TRUE}
+knitr::opts_chunk$set(cache=FALSE, error=FALSE, message=FALSE, warning=FALSE)
+```
+
+
 ```{r packages}
 # Bioconductor
 library(BiocParallel)
