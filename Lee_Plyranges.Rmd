@@ -182,6 +182,9 @@ dplyr.
 
 ## The Grammar
 
+Here we provide a quick overview of the functions avaialble in plyranges
+and illustrate their use with some toy examples. In the final section 
+
 ### Core verbs
 
 The plyranges grammar is simply a set of verbs that define actions to 
@@ -283,30 +286,280 @@ gr2 %>%
   select(1:2)
 ```
 
-
 ### Verbs specific to GRanges
 
 We have seen how you can perform restriction and aggregation on GRanges,
 but what about specific actions for genomics data analysis, like arithmetic,
 nearest neighbours or finding overlaps?
 
-Arithmetic operations transform range coordinates, as defined by their
-_start_, _end_ and _width_. The three dimensions are mutually
-dependent and partially redundant, so direct manipulation of them is
-problematic. For example, changing the _width_ column needs to change
-either the _start_, _end_ or both to preserve integrity of the
-object. We introduce the _anchor_ modifier to disambiguate these
-adjustments. Supported anchor points include the start, end and
-midpoint, as well as the 3' and 5' ends for strand-directed
-ranges. For example, if we anchor the start, then setting the width
-will adjust the end while leaving the start stationary.
+#### Arithmetic
 
+Arithmetic operations transform range coordinates, as defined by their
+_start_, _end_ and _width_  columns. These three variables are mutually
+dependent so we have to take care when modifying them. 
+For example, changing the _width_ column needs to change
+either the _start_, _end_ or both to preserve integrity of the
+GRanges:
+
+```{r}
+# by default setting width will fix the starting coordinate
+gr %>%
+  mutate(width = width + 1)
+```
+
+We introduce the `anchor_direction()` operator to clarify these 
+modifications. Supported anchor points include the start `anchor_start()`, 
+end `anchor_end()` and midpoint `anchor_center()`:
+
+```{r}
+gr %>%
+  anchor_end() %>%
+  mutate(width = width*2)
+
+gr %>%
+  anchor_center() %>%
+  mutate(width = width * 2)
+```
+
+Note that the anchoring modifier introduces an important departure from the 
+IRanges and GenomicRanges packages: by default we ignore the strandedness of 
+a GRanges object, and instead we provide verbs that make stranded actions 
+explicit. In this case of anchoring we provide the `anchor_3p()` and 
+`anchor_5p()` to perform anchoring on the 3' and 5' ends of a range.
+
+The table in the appendix provides a complete list of arithmetic options
+available in plyranges.
+
+#### Genomic aggregation
+
+There are two verbs that can be used to aggregate over nearest neighbours:
+`reduce_ranges()` and `disjoin_ranges()`.
+The reduce verb merges overlapping and neighbouring ranges:
+```{r}
+gr %>% reduce_ranges()
+```
+We could find out which genes are overlapping each other by aggregating
+over the gene_id column and storing the result in a List column:
+```{r}
+gr %>% 
+  reduce_ranges(gene_id = List(gene_id))
+```
+
+The disjoin verb takes the union of end points over all ranges, and results
+in an expanded range
+
+```{r}
+gr %>% 
+  disjoin_ranges(gene_id = List(gene_id))
+```
+
+You may have noticed that the resulting range 
+
+#### Overlaps  
+
+Another important class of operations for genomics data analysis is finding
+overlaps or nearest neighbours. Here's where we will 
+introduce the `plyranges` join operators and the overlap aggregation 
+operators.
+
+Now let's now suppose we have some additional measurements that we have 
+obtained from a new experiment on yeast. These measurements are for three different
+replicates and represent single nucleotide or insertion deletion intensities 
+from an array. Our
+collaborator has given us three different data.frames with the data but they
+all have names inconsistent with the GRanges data structure. Our goal is to 
+unify these into a single GRanges object with column for each measurement
+and column for the sample identifier.
+
+Here's our data:
+
+```{r}
+set.seed(66+105+111+99+49+56)
+
+pos <- sample(1:10000, size = 100)
+size <- sample(1:3, size = 100, replace = TRUE)
+rep1 <- data.frame(chr = "VI", 
+                  pos = pos,
+                  size = size,
+                  X = rnorm(100, mean = 2),
+                  Y = rnorm(100, mean = 1))
+
+rep2 <- data.frame(chrom = "VI", 
+                  st = pos,
+                  width = size,
+                  X = rnorm(100, mean = 0.5, sd = 3),
+                  Y = rnorm(100, sd = 2))
+
+rep3 <- data.frame(chromosome = "VI", 
+                  start = pos,
+                  width = size,
+                  X = rnorm(100, mean = 2, sd = 3),
+                  Y = rnorm(100, mean = 4, sd = 0.5))
+```
+
+For each replicate we want to construct a GRanges object:
+
+```{r}
+# we can tell as_granges which columns in the data.frame
+# are the seqnames, and range coordinates
+rep1 <- as_granges(rep1, seqnames = chr, start = pos, width = size)
+rep2 <- as_granges(rep2, seqnames = chrom, start = st)
+rep3 <- as_granges(rep3, seqnames = chromosome)
+```
+
+And to construct our final GRanges object we can bind all our replicates 
+together:
+
+```{r}
+intensities <- bind_ranges(rep1, rep2, rep3, .id = "replicate")
+# sort by the starting coordinate
+arrange(intensities, start)
+```
+
+Now we would like to filter our positions if they overlap one of the genes
+we have, one way we could achieve this is with the `filter_by_overlaps()`
+operator:
+
+```{r}
+olap <- filter_by_overlaps(intensities, gr)
+olap
+```
+
+Another option would be to perform a join operation. A join
+acts on two GRanges objects, a query and a subject. The join operator
+retains the metadata from the query and subject
+ranges. All join operators generate a set of hits based on overlap or 
+proximity of ranges and use those hits to merge the two datasets in different
+ways (figure \ref{fig:olaps-fig}, provides an overview of the overlap joins). 
+We can further restrict the matching by whether the query is completely _within_
+the subject, and adding the _directed_ suffix ensures that 
+matching ranges have the same direction (strand).
+
+```{r olaps-fig, echo = FALSE, out.width="\\textwidth", fig.cap="Illustration of the three overlap join operators. Each join takes query and subject range as input (black and light gray rectangles, respectively). An index for the join is computed, returning a Hits object, which contains the indices of where the subject overlaps the query range. This index is used to expand the query ranges by where it was 'hit' by the subject ranges. The join semantics alter what is returned: for an \\textbf{inner} join the query range is returned for each match, for an \\textbf{intersect} the intersection is taken between overlapping ranges, and for a \\textbf{left} join all query ranges are returned even if the subject range does not overlap them. This principle is gnerally applied through the `plyranges` DSL for both overlaps and nearest neighbour operations."}
+knitr::include_graphics("./Lee_Plyranges/olap.png")
+```
+
+Going back to our example, the overlap inner join will return all intensities
+that overlap a gene and propagate which gene_id a given intensity belongs to:
+```{r}
+olap <- join_overlap_inner(intensities, gr)
+```
+
+If we wanted to return all intensities regardless of overlap we could use
+the left join, and  a missing value will be propagated to the gene_id
+column if there isn't any overlap.
+
+```{r}
+join_overlap_left(intensities, gr)
+```
+
+If we are interested in finding how much overlap there is we could use 
+an intersect join. For example we could compute the fraction of overlap 
+of the genes with themselves:
+
+```{r}
+gr %>%
+  mutate(gene_length = width) %>% 
+  join_overlap_intersect(gr, suffix = c(".query", ".subject")) %>% 
+  filter(gene_id.query != gene_id.subject) %>%
+  mutate(folap = width / gene_length)
+```
+### Exercises
+
+There are of course many more functions available in plyranges but hopefully
+the previous examples are sufficient to give you an idea of how to incorporate
+plyranges into your genomic workflows.
+
+Here's a few exercises to help you familiar with the verbs:
+
+1. Find the average intensity of the X and Y measurements for each each replicate
+over all positions in the intensities object
+1. Add a new column to the intensities object that is the distance from
+each position to its closest gene (hint IRanges::distance)
+1. Find flanking regions downstream of the genes in gr that have width of 8bp
+(hint: type: flank_ and see what comes up!)
+1. Are any of the intensities positions within the flanking region? (use an
+overlap join to find out!)
+
+## Data import and creating pipelines
 
 
 ### Worked example: exploring BigWig files from AnnotationHub
 
+In the workflow of ChIP-seq data analysis, we are interested in finding peaks 
+from islands of coverage over chromosome. Here we will use plyranges
+to call peaks from islands of coverage above 8 then plot the region
+surrounding the tallest peak.
+
+Using `plyranges` and the the Bioconductor package `AnnotationHub` \cite{R-ahub}
+we can download and read BigWig files from ChIP-Seq experiments from 
+the Human Epigenome Roadmap project \cite{Roadmap-Epigenomics-Consortium2015-pr}. 
+Here we analyse a BigWig file corresponding to H3 lysine 27 trimethylation 
+(H3K27Me3) of primary T CD8+ memory cells from peripheral blood, focussing
+on coverage islands over chromosome 10. 
+
+First, we extract the genome information from the BigWig file and filter
+to get the range for chromosome 10. This range will be used as a filter when 
+reading the file.
+
+```{r load-bw}
+chr10_ranges <- bw_file %>% 
+  get_genome_info() %>%
+  filter(seqnames == "chr10")
+```
+
+Then we read the BigWig file only extracting scores if they overlap chromosome
+10. We also add the genome build information to the resulting ranges. This
+book-keeping is good practice as it ensures the integrity of any 
+downstream operations such as finding overlaps.
+
+```{r}
+chr10_scores <- bw_file %>%
+  read_bigwig(overlap_ranges = chr10_ranges) %>%
+  set_genome_info(genome = "hg19")
+```
+
+After filtering for regions with a coverage score greater than 8, we can
+reduce individual runs to ranges representing the islands of coverage by
+using the `reduce_ranges()` function. This function allows a summary
+to be computer over each island: in this case we take the maximum of 
+the scores to find the coverage peaks over chromosome 10.
+
+```{r}
+all_peaks <- chr10_scores %>% 
+  filter(score > 8) %>% 
+  reduce_ranges(score = max(score))
+```
+
+Returning to the GRanges object containing normalised coverage scores, 
+we filter to find the coordinates of the peak containing the maximum coverage 
+score. We can then find a 5000 nt region centered around the maximum position 
+by anchoring and modifying the width. 
+
+```{r max-score-region}
+chr10_max_score_region <- chr10_scores %>%
+  filter(score == max(score)) %>% 
+  anchor_center() %>%
+  mutate(width = 5000)
+```
+
+Finally, the overlap inner join is used to restrict the chromosome 10
+coverage islands, to the islands that are contained in the 5000nt region that 
+surrounds the max peak.
+
+```{r peak_region}
+peak_region <- chr10_scores %>%
+  join_overlap_inner(chr10_max_score_region)
+```
+
+
 - this is a modified example from the paper, where we explore data from Human Epigenomics
 Roadmap consortium, we take more time here to go through the core parts of the grammar
+
+
+### Worked example: reading BAM files
+
+Modified version of BAM example in paper (maybe using alpineData package)
 
 ### Exercises 
 
@@ -315,16 +568,7 @@ Lead the workshop participant through computing the first example in
 http://deeptools.readthedocs.io/en/latest/content/example_gallery.html#normalized-chip-seq-signals-and-peak-regions
 
 
-## Data import and creating pipelines
-
-Modified version of BAM example in paper (maybe using alpineData package)
-
-
-### Exercises
-
-
-
-# Appendix
+# Appendix 
 
 \begin{table}[!htbp]
 \centering
