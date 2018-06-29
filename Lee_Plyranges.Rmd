@@ -31,7 +31,8 @@ This workshop is mostly self-contained however familiarity with the following wo
  
 ### Workshop Participation
 
-Students will work through an Rmarkdown document while the instructors respond to any questions they have.
+Students will work through an Rmarkdown document while the instructors respond 
+to any questions they have.
 
 ### _R_ / _Bioconductor_ packages used
 
@@ -66,6 +67,16 @@ Students will work through an Rmarkdown document while the instructors respond t
 
 # Workshop
 
+```{r setup}
+knitr::opts_chunk$set(message = FALSE, 
+                      warning = FALSE, 
+                      fig.width = 5, 
+                      fig.height = 3, 
+                      fig.align = "center",
+                      fig.path = "./Lee_Plyranges/")
+
+```    
+
 ## Introduction 
 
 ### What is plyranges?
@@ -99,17 +110,198 @@ like those available in the command line packages BEDTools and deeptools.
 
 If that's you, let's begin!
 
+## Setup
+
+To participate in this workshop you'll need to have R >= 3.5 and install
+the plyranges and AnnotationHub Bioconductor 3.7 packages. You can achieve this
+by installing the BiocManager package from CRAN, loading it then running the
+install command:
+```{r, eval = FALSE}
+install.packages("BiocManager")
+library(BiocManager)
+install(c("plyranges", "AnnotationHub"))
+```
 ## What are GRanges objects?
 
 
-- modify figure and explanation from paper
-- emphasise their tidyness
-- why tidy is a useful cognitive tool
+(ref:GRanges): An illustration of a GRanges data object for a single
+sample from an RNA-seq experiment. The core components of the object
+include a seqname column (representing the chromosome), a ranges column
+which consists of start and end coordinates for a genomic region, and a
+strand identifier (either positive, negative, or unstranded). Metadata
+are included as columns to the right of the dotted line as annotations
+(gene\_id) or range level covariates (score).
+
+```{r GRanges, fig.cap="(ref:GRanges)", out.width="\\textwidth"}
+knitr::include_graphics("./Lee_Plyranges/GRanges.pdf")
+```
+
+
+The plyranges package is built on the core Bioconductor data structure
+GRanges. It is very similar to the base R data.frame but with appropriate
+semantics for a genomics experiment: it has fixed columns
+for the chromosome, start and end coordinates, and the strand, along
+with an arbitrary set of additional columns, consisting of
+measurements or metadata specific to the data type or experiment
+(figure \@ref(GRanges)).  
+
+GRanges balances flexibility with formal
+constraints, so that it is applicable to virtually any genomic
+workflow, while also being semantically rich enough to support
+high-level operations on genomic ranges. As a core data structure,
+GRanges enables interoperability between `plyranges` and the rest of
+Bioconductor.
+
+Since a GRanges object is similar to a data.frame, we can use plyranges
+to construct a GRanges object from a data.frame. We'll start by supposing we 
+have a data.frame of genes from the yeast genome:
+
+```{r}
+library(plyranges, quietly = TRUE)
+genes <- data.frame(seqnames = "VI", 
+                    start = c(3322, 3030, 1437,  5066, 6426, 836),
+                    end = c(3846, 3338, 2615, 5521, 7565, 1363),
+                    strand = c("-", "-", "-", "+", "+", "+"),
+                    gene_id=c("YFL064C", "YFL065C", "YFL066C", 
+                              "YFL063W", "YFL062W", "YFL067W"),
+                    stringsAsFactors = FALSE)
+gr <- as_granges(genes)
+gr
+```
+The `as_granges` method takes a data.frame and allows you to quickly convert
+it to a GRanges object (and can you can also specify which columns in the 
+data.frame correspond to the columns in the GRanges).
+
+GRanges follows the tidy data principles: it is a rectangular
+table corresponding to a single biological context. Each row contains
+a single observation and each column is a variable describing the
+observations. In the example above, each row corresponds to a single gene, and
+each column contains information about those genes. As GRanges are tidy,
+we have constructed plyranges to follow and extend the grammar in the R package
+dplyr.
 
 ## The Grammar
 
-Brief overview of the grammar (maybe include reference to table here at the bottom
-of the document) including theory behind the join operations
+### Core verbs
+
+The plyranges grammar is simply a set of verbs that define actions to 
+be performed on a GRanges (for a complete list see the appendix). 
+Verbs can be composed together using the pipe 
+operator, `%>%`, which can be read as 'then'. Here's a simple pipeline: first
+we will add two columns, one corresponding to the gene_type and another with
+the GC content (which we make up by drawing from a uniform distribution). 
+Second we will remove genes if they have a width less than 400bp.
+
+```{r}
+set.seed(2018-07-28)
+gr2 <- gr %>%
+  mutate(gene_type = "ORF",
+         gc_content = runif(n())) %>%
+  filter(width > 400)
+gr2
+```
+
+The `mutate()` function is used to add columns, here we've added one column
+called gene_type where all values are set to "ORF" (standing for open reading
+frame) and another called gc_content with random uniform values. The `n()`
+operator returns the number of ranges in GRanges object, but can only
+be evaluated inside of one of the plyranges verbs. 
+
+The `filter()` operation returns ranges if the expression evaluates to TRUE. 
+Multiple expressions can be composed together and will be evaluated as `&`
+
+```{r}
+gr2 %>%
+  filter(strand == "+", gc_content > 0.5)
+# is the same as using `&`
+gr2 %>% 
+  filter(strand == "+" & gc_content > 0.5)
+# but different from using or '|'
+gr2 %>%
+  filter(strand == "+" | gc_content > 0.5)
+```
+
+Now that we have some measurements over our genes, we are most likely
+interested in performing the favourite tasks of a biological data scientist:
+taking averages and counting. This is achieved with the `summarise()` verb
+which will return a DataFrame object (Why is this the case?).
+
+```{r}
+gr2 %>%
+  summarise(avg_gc = mean(gc_content), 
+            n = n())
+```
+
+which isn't very exciting when performed without `summarise()`'s best
+friend the `group_by()` operator:
+
+```{r}
+gr2 %>%
+  group_by(strand) %>%
+  summarise(avg_gc = mean(gc_content),
+            n = n())
+
+```
+
+The `group_by()` operator causes `plyranges` verbs to behave differently.
+Instead of acting on all the ranges in a GRanges object, the verbs act within
+each group of ranges defined by the values in the grouping column(s).
+The `group_by()` operator does not change the appearance the of a GRanges object
+(well for the most part):
+
+```{r}
+by_strand <- gr2 %>%
+  group_by(strand)
+by_strand
+```
+
+Now any verb we apply to our grouped GRanges, acts on each partition:
+
+```{r}
+by_strand %>%
+  filter(n() > 2)
+by_strand %>%
+  mutate(avg_gc_strand = mean(gc_content))
+```
+
+To remove grouping use the `ungroup()` verb:
+```{r}
+by_strand %>%
+  ungroup()
+```
+
+Finally, metadata columns can be selected using the `select()` verb:
+
+```{r}
+gr2 %>%
+  select(gene_id, gene_type)
+# is the same as not selecting gc_content
+gr2 %>%
+  select(-gc_content)
+# you can also select by metadata column index
+gr2 %>%
+  select(1:2)
+```
+
+
+### Verbs specific to GRanges
+
+We have seen how you can perform restriction and aggregation on GRanges,
+but what about specific actions for genomics data analysis, like arithmetic,
+nearest neighbours or finding overlaps?
+
+Arithmetic operations transform range coordinates, as defined by their
+_start_, _end_ and _width_. The three dimensions are mutually
+dependent and partially redundant, so direct manipulation of them is
+problematic. For example, changing the _width_ column needs to change
+either the _start_, _end_ or both to preserve integrity of the
+object. We introduce the _anchor_ modifier to disambiguate these
+adjustments. Supported anchor points include the start, end and
+midpoint, as well as the 3' and 5' ends for strand-directed
+ranges. For example, if we anchor the start, then setting the width
+will adjust the end while leaving the start stationary.
+
+
 
 ### Worked example: exploring BigWig files from AnnotationHub
 
@@ -130,3 +322,53 @@ Modified version of BAM example in paper (maybe using alpineData package)
 
 ### Exercises
 
+
+
+# Appendix
+
+\begin{table}[!htbp]
+\centering
+\begin{tabular}{|l|l|p{6cm}|}
+  \hline
+  & Verb &  Description \\ 
+  \hline
+   & \textbf{\emph{summarise()}} & aggregate over column(s) \\ 
+   Aggregation & \emph{disjoin\_ranges()} & aggregate column(s) over the union of end coordinates \\
+   &  \emph{reduce\_ranges()} & aggregate column(s) by merging overlapping and neighbouring ranges \\
+   \hline
+   &  \textbf{\emph{mutate()}} & modifies any column \\
+   & \textbf{\emph{select()}} & select columns \\
+  Arithmetic (Unary) & \textbf{\emph{arrange()}} & sort by columns \\
+   & \emph{stretch()} & extend range by fixed amount \\
+   &  \emph{shift\_(direction)} & shift coordinates \\
+   & \emph{flank\_(direction)} & generate flanking regions \\
+   & \emph{\%intersection\% } & row-wise intersection \\
+   & \emph{\%union\%} & row-wise union \\
+   & \emph{compute\_coverage} & coverage over all ranges \\
+  Arithmetic (Binary) &  \emph{\%setdiff\%} & row-wise set difference \\
+   & \emph{between()} & row-wise gap range \\
+   & \emph{span()} & row-wise spanning range \\
+   \hline
+    & \emph{join\_overlap\_*()} & merge by overlapping ranges \\
+    & \emph{join\_nearest} & merge by nearest neighbour ranges \\
+    & \emph{join\_follow} & merge by following ranges \\
+    Merging & \emph{join\_precedes} & merge by preceding ranges \\
+    & \emph{union\_ranges} & range-wise union \\
+    & \emph{intersect\_ranges} & range-wise intersect \\
+    & \emph{setdiff\_ranges} & range-wise set difference \\
+    & \emph{complement\_ranges} & range-wise union \\
+  \hline
+   & \emph{anchor\_direction()} & fix coordinates at direction \\
+  Modifier & \textbf{\emph{group\_by()}} & partition by column(s)  \\ 
+   & \emph{group\_by\_overlaps()} & partition by overlaps \\
+   \hline
+   & \textbf{\emph{filter()}} & subset rows \\
+  Restriction & \emph{filter\_by\_overlaps()} & subset by overlap \\
+    & \emph{filter\_by\_non\_overlaps()} & subset by no overlap \\
+   \hline
+\end{tabular}
+\caption{Overview of the \texttt{plyranges} grammar. The core verbs are
+briefly described and categorised into one of: aggregation, unary or binary
+arithmetic, merging, modifier, or restriction. A verb is given bold text if
+its origin is from the \texttt{dplyr} grammar.}\label{tab:grammar}
+\end{table}
