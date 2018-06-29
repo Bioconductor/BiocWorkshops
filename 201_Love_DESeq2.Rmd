@@ -49,6 +49,7 @@ and asking questions throughout the workshop.
 * AnnotationHub
 * ReportingTools
 * Glimma
+* splatter
 * zinbwave
 
 ### Time outline
@@ -215,6 +216,8 @@ systems such as Snakemake [@Koster2012Snakemake] or Nextflow
 
 ## Importing into R with *tximport*
 
+### Specifying file locations
+
 Following quantification, we can use *tximport* to import the data
 into R and perform statistical analysis using Bioconductor packages.
 Normally, we would simply point *tximport* to the `quant.sf` files on
@@ -261,6 +264,8 @@ names(files) <- paste0("sample",1:6)
 all(file.exists(files))
 ```
 
+### Mapping transcripts to genes
+
 Transcripts need to be associated with gene IDs for gene-level
 summarization. We therefore will construct a *data.frame* called
 `tx2gene` with two columns: 1) transcript ID and 2) gene ID. The
@@ -294,10 +299,12 @@ above to build the `tx2gene` table. We then read in a pre-constructed
 `tx2gene` table:
 
 ```{r}
-library(readr)
+library("readr")
 tx2gene <- read_csv(file.path(dir, "tx2gene.gencode.v27.csv"))
 head(tx2gene)
 ```
+
+### *tximport* command
 
 Finally the following line of code imports *Salmon* transcript
 quantifications into R, collapsing to the gene level using the
@@ -336,6 +343,8 @@ dds$pop
 ```
 
 ## Exploratory data analysis
+
+### Simple EDA
 
 We will now switch over to the *airway* experiment, counts of which
 are already prepared in a *SummarizedExperiment* object. In this case,
@@ -417,6 +426,8 @@ dds <- estimateSizeFactors(dds)
 boxplot(log10(counts(dds,normalized=TRUE)+1))
 ```
 
+### Data transformation for EDA
+
 Taking the logarithm of counts plus a pseudocount of 1 is a common
 transformation, but it tends to inflate the sampling variance of low
 counts such that it is even larger than biological variation across
@@ -437,6 +448,8 @@ We can access the transformed data with *assay*:
 ```{r}
 assay(vsd)[1:3,1:3]
 ```
+
+### Principal components plot
 
 The VST data is appropriate for calculating distances between samples
 or for performing PCA. More information about PCA and distance
@@ -561,6 +574,8 @@ plotMA(res.lfc2, ylim=c(-5,5), main="apeglm, LFC test", alpha=0.01)
 
 ## *AnnotationHub*
 
+### Querying *AnnotationHub*
+
 We will use the *AnnotationHub* package to attach additional
 information to the results table. *AnnotationHub* provides an
 easy-to-use interface to more than 40,000 annotation records. A
@@ -595,6 +610,8 @@ hs <- ah[["AH61777"]]
 hs
 ```
 
+### Mapping IDs
+
 The *rownames* of the results table are Ensembl IDs, and most of these
 are entries in *OrgDb* (although thousands are not).
 
@@ -613,17 +630,225 @@ head(res)
 
 ## Building reports
 
+### *ReportingTools*
+
+There are many packages for building interactive reports from
+Bioconductor. Two of these are *ReportingTools* and *Glimma*, which
+both provide HTML reports that allow for collaborators to examine the
+top genes (or whatever features of interest) from a genomic analysis.
+
+The code for compiling a *ReportingTools* report is:
+
 ```{r}
-library(ReportingTools)
-tmp <- tempdir()
-rep <- HTMLReport(shortName="airway", title="Airway DGE", basePath=tmp, reportDirectory="report")
+library("ReportingTools")
+tmp <- tempdir() # you would instead use a meaningful path here
+rep <- HTMLReport(shortName="airway", title="Airway DGE",
+                  basePath=tmp, reportDirectory="report")
 publish(res, rep, dds, n=20, make.plots=TRUE, factor=dds$dex)
 finish(rep)
+```
+
+This last line, un-evaluated would launch the report in a web browser:
+
+```{r eval=FALSE}
 browseURL(file.path(tmp,"report","airway.html"))
 ```
 
-TODO: glimma
+### *Glimma*
+
+Another package which can generate interactive reports is
+*Glimma*. The *glMDPlot* constructs an interactive MA-plot where
+hovering over a gene in the MA-plot on the left side will display the
+counts for the samples on the right hand side. Clicking will bring up
+the gene's information in a tooltip and in a list at the bottom of the
+screen. Hovering on a sample on the right hand side will give the
+sample ID in a tooltip.
+
+```{r}
+library("Glimma")
+status <- as.numeric(res$padj < .1)
+anno <- data.frame(GeneID=rownames(res), symbol=res$symbol)
+glMDPlot(res2, status=status, counts=counts(dds,normalized=TRUE),
+         groups=dds$dex, transform=FALSE,
+         samples=colnames(dds), anno=anno,
+         path=tmp, folder="glimma", launch=FALSE)
+```
+
+This last line would launch the report in a web browser:
+
+```{r eval=FALSE}
+browseURL(file.path(tmp,"glimma","MD-Plot.html"))
+```
 
 ## Integration with *ZINB-WaVE*
 
-TODO
+### Simulate with *splatter*
+
+Here we use the *splatter* package to simulate single-cell RNA-seq
+data.
+
+TODO put these as citations
+
+* Zappia, Phipson, and Oshlack "Splatter: simulation of single-cell RNA
+sequencing data" *Genome Biology* (2017)
+[doi: 10.1186/s13059-017-1305-0](https://doi.org/10.1186/s13059-017-1305-0)
+
+We then use the methods defined in the following paper to combine
+*zinbwave* observation weights with *DESeq2* modeling of negative
+binomial counts.
+
+* Van den Berge & Perraudeau *et al* "Observation weights unlock bulk
+RNA-seq tools for zero inflation and single-cell applications" *Genome Biology* (2018)
+[doi: 10.1186/s13059-018-1406-4](https://doi.org/10.1186/s13059-018-1406-4)
+
+> It is important to note that while methods such as ZINB-WaVE and
+> ZINGER can successfully identify excess zeros, they cannot, however,
+> readily discriminate between their underlying causes, i.e., between
+> technical (e.g., dropout) and biological (e.g., bursting) zeros. 
+
+The above note implies that the zero-inflation weighting approach
+outlined below can be used when the interesting signal is not in the
+zero component. That is, if you wanted to find biological differences
+in transcriptional bursting across groups of cells, the below approach
+would not help you find these differences. It instead helps to uncover
+differences in counts besides the zero component (whether those zeros
+be biological or technical). 
+
+### Simulate single-cell count data with *splatter*
+
+```{r}
+library("splatter")
+params <- newSplatParams()
+params <- setParam(params, "de.facLoc", 1) 
+params <- setParam(params, "de.facScale", .25)
+params <- setParam(params, "dropout.type", "experiment")
+params <- setParam(params, "dropout.mid", 3)
+```
+
+```{r}
+set.seed(1)
+sim <- splatSimulate(params, group.prob=c(.5,.5), method="groups")
+```
+
+```{r}
+plot(log10(rowMeans(assays(sim)[["TrueCounts"]])),
+     rowMeans(assays(sim)[["Dropout"]]))
+```
+
+```{r}
+rowData(sim)$log2FC <- with(rowData(sim), log2(DEFacGroup2/DEFacGroup1))
+```
+
+```{r}
+rowData(sim)$trueDisp <- rowMeans(assays(sim)[["BCV"]])^2
+gridlines <- c(1e-2,1e-1,1); cols <- c("blue","red","darkgreen")
+with(rowData(sim)[rowData(sim)$GeneMean> 1,],
+     plot(GeneMean, trueDisp, log="xy", xlim=c(1,300), ylim=c(.01,5)))
+abline(h=gridlines, col=cols)
+text(300, gridlines, labels=gridlines, col=cols, pos=3)
+```
+
+### Model zeros with *zinbwave*
+
+```{r}
+library(zinbwave)
+keep <- rowSums(counts(sim) >= 5) >= 25
+table(keep)
+zinb <- sim[keep,]
+zinb$condition <- factor(zinb$Group)
+nms <- c("counts", setdiff(assayNames(zinb), "counts"))
+assays(zinb) <- assays(zinb)[nms]
+system.time({
+  zinb <- zinbwave(zinb, K=0, BPPARAM=SerialParam(), epsilon=1e12)
+})
+```
+
+### Model non-zeros with *DESeq2*
+
+Van De Berge and Perraudeau and others have shown the LRT may perform
+better for null hypothesis testing, so we use the LRT. In order to use
+the Wald test, it is recommended to set `useT=TRUE`.
+
+```{r}
+zdds <- DESeqDataSet(zinb, design=~condition)
+system.time({
+  zdds <- DESeq(zdds, test="LRT", reduced=~1,
+                sfType="poscounts", minmu=1e-6, minRep=Inf)
+})
+```
+
+### Plot dispersion estimates
+
+It is recommended to plot the dispersion estimates for *DESeq2* on
+single-cell data. As discussed in the *DESeq2* paper, it becomes
+difficult to accurately estimate the dispersion when the counts are
+very small, because the Poisson component of the variance is
+dominant. Therefore we see some very low dispersion estimates here,
+although the trend is still accurately capturing the upper proportion.
+So here everything looks good.
+
+```{r}
+plotDispEsts(zdds)
+```
+
+If the parametric trend fails to fit (there would be a warning in this
+case), one should check the dispersion plot as above. If it looks like
+the dispersion fit is being thrown off by the low count genes with low
+dispersion estimates at the bottom of the plot, there is a relatively
+easy solution: one can filter out more of the low count genes only for
+the dispersion estimation step, so that the trend still captures the upper
+portion. This is pretty easy to do in *DESeq2*, to filter genes solely
+for the dispersion trend estimation, but to use a larger set for the
+rest of the analysis. An example of how this can be done:
+
+```{r}
+keepForDispTrend <- rowSums(counts(zdds) >= 10) >= 25
+zdds2 <- estimateDispersionsFit(zdds[keepForDispTrend,])
+plotDispEsts(zdds2)
+```
+
+One would then assign the dispersion function to the original dataset,
+re-estimate final dispersions, check `plotDispEsts`, and then either
+re-run the Wald or LRT function:
+
+```{r}
+dispersionFunction(zdds) <- dispersionFunction(zdds2)
+zdds <- estimateDispersionsMAP(zdds)
+zdds <- nbinomLRT(zdds, reduced=~1, minmu=1e-6)
+```
+
+### Evaluation against truth
+
+Compare dispersion on the non-zero-component counts to the true value
+used for simulation. 
+
+```{r}
+with(mcols(zdds), plot(trueDisp, dispMAP, log="xy"))
+abline(0,1,col="red")
+```
+
+Extract results table.
+
+```{r}
+zres <- results(zdds, independentFiltering=FALSE)
+plot(mcols(zdds)$log2FC, zres$log2FoldChange, ylim=c(-4,4)); abline(0,1,col="red")
+```
+
+Below we show that the "simple" LFC does not work - it over-estimates
+the true DE LFC because of the dropout zeros in the group with the
+smaller mean. It also has a lot of noise for the null genes.
+
+```{r trueLFCVsSimple}
+ncts <- counts(zdds, normalized=TRUE)
+simple.lfc <- log2(rowMeans(ncts[,zdds$condition == "Group2"])/
+                   rowMeans(ncts[,zdds$condition == "Group1"]))
+plot(mcols(zdds)$log2FC, simple.lfc, ylim=c(-4,4)); abline(0,1,col="red")
+```
+
+How well do we do in null hypothesis testing:
+
+```{r}
+tab <- table(sig=zres$padj < .05, DE.status=mcols(zdds)$log2FC != 0)
+tab
+round(prop.table(tab, 1), 3)
+```
