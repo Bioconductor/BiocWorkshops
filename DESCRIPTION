@@ -5,20 +5,28 @@ Version: 3.8.0
 Depends: R (>= 3.5.0)
 Imports:
   airway,
-  bookdown,
-  hgu95av2.db,
-  regioneR,  
   ALL,
-  BSgenome.Hsapiens.UCSC.hg19.masked,
-  EnrichmentBrowser,
-  SummarizedExperiment,
-  SingleCellExperiment,
+  AnnotationHub,
+  apeglm,
   BiocParallel,
+  BSgenome.Hsapiens.UCSC.hg19.masked,
   clusterExperiment,
-  slingshot,
-  zinbwave,
-  scone,
+  curatedTCGAData,
+  DESeq2,
+  EnrichmentBrowser,
   gam,
-  RColorBrewer
+  Glimma,
+  hgu95av2.db,
+  MultiAssayExperiment
+  regioneR,
+  RaggedExperiment,
+  RColorBrewer,
+  ReportingTools,
+  scone,
+  SingleCellExperiment,
+  slingshot,
+  SummarizedExperiment,
+  tximport,
+  zinbwave
 Remotes:
   rstudio/bookdown
