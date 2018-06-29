@@ -27,6 +27,7 @@ Imports:
   slingshot,
   SummarizedExperiment,
   tximport,
+  tximportData,
   zinbwave
 Remotes:
   rstudio/bookdown
