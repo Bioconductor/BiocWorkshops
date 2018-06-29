@@ -9,6 +9,7 @@ bioc_packages:
 
 install:
   - R -e "0" --args --bootsrap-packrat
+  - R -e "packrat::restore(restart = FALSE)"
 
 cache:
   directories:
