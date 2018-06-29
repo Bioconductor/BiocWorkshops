@@ -33,5 +33,3 @@ Imports:
   tximport,
   tximportData,
   zinbwave
-Remotes:
-  rstudio/bookdown

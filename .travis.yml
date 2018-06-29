@@ -3,9 +3,7 @@ r: bioc-devel
 
 r_github_packages:
   - rstudio/bookdown
-
-bioc_packages:
-  - SummarizedExperiment
+  - rstudio/packrat
 
 install:
   - R -e "0" --args --bootsrap-packrat
