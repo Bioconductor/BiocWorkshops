@@ -13,3 +13,4 @@ libs
 bookdown*
 tmp-pdfcrop-*
 figures
+packrat/lib*/
