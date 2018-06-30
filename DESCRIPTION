@@ -23,6 +23,7 @@ Imports:
   hgu95av2.db,
   memuse,
   MultiAssayExperiment,
+  plyranges,
   regioneR,
   RaggedExperiment,
   RColorBrewer,
