@@ -21,6 +21,7 @@ Imports:
   Glimma,
   HDF5Array,
   hgu95av2.db,
+  magrittr,
   memuse,
   MultiAssayExperiment,
   plyranges,
