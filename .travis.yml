@@ -10,6 +10,7 @@ addons:
       - libgsl-dev
 
 install:
+  - R -e "if (!require('packrat')) install.packages('packrat')"
   - R -e "0" --args --bootsrap-packrat
   - R -e "packrat::restore(restart = FALSE)"
 
