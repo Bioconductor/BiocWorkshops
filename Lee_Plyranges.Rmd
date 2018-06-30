@@ -113,13 +113,13 @@ If that's you, let's begin!
 ## Setup
 
 To participate in this workshop you'll need to have R >= 3.5 and install
-the plyranges and AnnotationHub Bioconductor 3.7 packages. You can achieve this
+the plyranges, AnnotationHub, and airway Bioconductor 3.7 packages. You can achieve this
 by installing the BiocManager package from CRAN, loading it then running the
 install command:
 ```{r, eval = FALSE}
 install.packages("BiocManager")
 library(BiocManager)
-install(c("plyranges", "AnnotationHub"))
+install(c("plyranges", "AnnotationHub", "airway"))
 ```
 ## What are GRanges objects?
 
@@ -483,20 +483,75 @@ overlap join to find out!)
 
 ## Data import and creating pipelines
 
+Here we provide some realistic examples of using plyranges to import genomic
+data and perform exploratory analyses.
 
 ### Worked example: exploring BigWig files from AnnotationHub
 
-In the workflow of ChIP-seq data analysis, we are interested in finding peaks 
-from islands of coverage over chromosome. Here we will use plyranges
-to call peaks from islands of coverage above 8 then plot the region
+In the workflow of ChIP-seq data analysis, we are often interested in 
+finding peaks from islands of coverage over a chromosome. Here we will use plyranges
+to explore data from the Human Epigenome Roadmap project.
+
+This data is available on Bioconductor's AnnotationHub. First we construct
+an AnnotationHub, and then query for all bigWigFiles related to 
+the project that correspond to the following conditions:
+
+1. are from methylation marks (H3K4ME in the title)
+2. correspond to primary T CD8+ memory cells from peripheral blood
+3. correspond to unimputed log10 P-values 
+
+First we construct a hub that contains all references to the EpigenomeRoadMap
+data and extract the metadata as a data.frame:
+
+```{r}
+library(AnnotationHub)
+library(magrittr)
+ah <- AnnotationHub()
+roadmap_hub <- ah %>% 
+  query("EpigenomeRoadMap") 
+
+metadata <- ah %>% 
+  query("Metadata") %>% 
+  extract2(names(.))
+
+head(metadata)
+```
+
+To find out the name of the sample corresponding to 
+primary memory T-cells we can filter the data.frame:
+```{r}
+primary_tcells <-  metadata %>% 
+  filter(ANATOMY == "BLOOD") %>% 
+  filter(TYPE == "PrimaryCell") %>% 
+  filter(EDACC_NAME == "CD8_Memory_Primary_Cells") %>% 
+  extract2("EID") %>% 
+  as.character()
+primrary_tcells
+```
+
+Now we can take our roadmap hub and query it based on our other conditions:
+
+```{r}
+methylation_files <- roadmap_hub %>% 
+  query("BigWig") %>% 
+  query(primary_tcells) %>% 
+  query("H3K4ME[1-3]") %>% 
+  query("pval.signal")
+
+methylation_files
+```
+
+So we'll take the first two entries and download them as BigWigFiles
+
+```{r}
+bw_files <- lapply(c("AH33454", "AH33455"), function(id) ah[[id]]) 
+```
+
+
+
+call peaks from islands of coverage above 8 then plot the region
 surrounding the tallest peak.
 
-Using `plyranges` and the the Bioconductor package `AnnotationHub` \cite{R-ahub}
-we can download and read BigWig files from ChIP-Seq experiments from 
-the Human Epigenome Roadmap project \cite{Roadmap-Epigenomics-Consortium2015-pr}. 
-Here we analyse a BigWig file corresponding to H3 lysine 27 trimethylation 
-(H3K27Me3) of primary T CD8+ memory cells from peripheral blood, focussing
-on coverage islands over chromosome 10. 
 
 First, we extract the genome information from the BigWig file and filter
 to get the range for chromosome 10. This range will be used as a filter when 
@@ -559,7 +614,9 @@ Roadmap consortium, we take more time here to go through the core parts of the g
 
 ### Worked example: reading BAM files
 
-Modified version of BAM example in paper (maybe using alpineData package)
+Modified version of BAM example in paper (maybe using airway package)
+
+
 
 ### Exercises 
 
