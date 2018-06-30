@@ -8,12 +8,12 @@
 
 ## Workshop Description
 
-This workshop demonstrates data management and analyses of multiple 
-assays associated with a single set of biological specimens, 
-using the `MultiAssayExperiment` data class and methods. It introduces 
-the `RaggedExperiment` data class, which provides efficient and powerful 
-operations for representation of copy number and mutation and variant 
-data that are represented by different genomic ranges for each specimen. 
+This workshop demonstrates data management and analyses of multiple
+assays associated with a single set of biological specimens,
+using the `MultiAssayExperiment` data class and methods. It introduces
+the `RaggedExperiment` data class, which provides efficient and powerful
+operations for representation of copy number and mutation and variant
+data that are represented by different genomic ranges for each specimen.
 
 ### Pre-requisites
 
@@ -25,16 +25,16 @@ List any workshop prerequisites, for example:
 
 ### workshop Participation
 
-Students will have a chance to build a `MultiAssayExperiment` object 
+Students will have a chance to build a `MultiAssayExperiment` object
 from scratch, and will also work with more complex objects provided
 by the `curatedTCGAData` package.
 
 ### R/Bioconductor packages used
 
-* [MultiAssayExperiment]
-* [RaggedExperiment]
-* [curatedTCGAData]
-* [SummarizedExperiment]
+* [MultiAssayExperiment](https://bioconductor.org/packages/MultiAssayExperiment)
+* [RaggedExperiment](https://bioconductor.org/packages/RaggedExperiment)
+* [curatedTCGAData](https://bioconductor.org/packages/curatedTCGAData)
+* [SummarizedExperiment](https://bioconductor.org/packages/SummarizedExperiment)
 
 ### Time outline
 
@@ -62,7 +62,7 @@ by the `curatedTCGAData` package.
 * use curatedTCGAData to create custom TCGA MultiAssayExperiment objects
 * create a MultiAssayExperiment for TCGA or other multi'omics data
 * perform subsetting, reshaping, growing, and extraction of a MultiAssayExperiment
-* link MultiAssayExperiment data with packages for differential expression, 
+* link MultiAssayExperiment data with packages for differential expression,
 machine learning, and plotting
 
 # Workshop
@@ -72,6 +72,11 @@ machine learning, and plotting
 ### `SummarizedExperiment` / `RaggedExperiment`
 
 ![SummarizedExperiment_Schematic](Ramos_MultiAssayExperiment/SummarizedExperiment.svg)
+
+_The_ standard Bioconductor class convenient for storing experimental results
+produced by sequencing and microarry experiments. Each object can store
+multiple experiments with associated metadata such as features and samples, as
+well as phenotype/clinical data. Supersedes the use of `ExpressionSet`.
 
 ### `MultiAssayExperiment`
 
@@ -88,6 +93,135 @@ ragged array schema for genomic location data.
 ![RaggedExperiment_Schematic](Ramos_MultiAssayExperiment/RaggedExperiment.png)
 
 ## Working with RaggedExperiment
+
+### Constructing a `RaggedExperiment` object
+
+We start with a couple of `GRanges` objects, each representing an individual
+sample:
+
+```{r}
+sample1 <- GRanges(
+    c(A = "chr1:1-10:-", B = "chr1:8-14:+", C = "chr2:15-18:+"),
+    score = 3:5)
+sample2 <- GRanges(
+    c(D = "chr1:1-10:-", E = "chr2:11-18:+"),
+    score = 1:2)
+```
+
+Include column data `colData` to describe the samples:
+
+```{r}
+colDat <- DataFrame(id = 1:2)
+```
+
+### Using `GRanges` objects
+
+```{r}
+library(RaggedExperiment)
+
+ragexp <- RaggedExperiment(
+    sample1 = sample1,
+    sample2 = sample2,
+    colData = colDat)
+
+ragexp
+```
+
+It can also be constructed from a `GRangesList`:
+
+```{r}
+library(GenomicRanges)
+example(GRangesList)
+rgx <- RaggedExperiment(grl)
+```
+
+### *Assay functions
+
+#### sparseAssay
+
+The most straightforward matrix representation of a `RaggedExperiment` will
+return a matrix of dimensions equal to the product of the number of ranges and
+samples.
+
+```{r}
+dim(ragexp)
+Reduce(`*`, dim(ragexp))
+sparseAssay(ragexp)
+length(sparseAssay(ragexp))
+```
+
+#### compactAssay
+
+Samples with identical ranges are placed in the same row. Non-disjoint ranges
+are **not** collapsed.
+
+```{r}
+compactAssay(ragexp)
+```
+
+#### disjoinAssay
+
+This function returns a matrix of disjoint ranges across all samples. Elements
+of the matrix are summarized by applying the `simplifyDisjoin` functional
+argument to assay values of overlapping ranges.
+
+```{r}
+disjoinAssay(ragexp, simplifyDisjoin = mean)
+```
+
+## qreduceAssay
+
+The `qreduceAssay` function works with a `query` parameter that highlights
+a window of ranges for the resulting matrix. The returned matrix will have
+dimensions `length(query)` by `ncol(x)`. Elements contain assay values for the
+_i_ th query range and the _j_ th sample, summarized according to the
+`simplifyReduce` functional argument.
+
+For demonstration purposes, we can have a look at the original `GRangesList`
+and the associated scores from which the current `ragexp` object is derived:
+
+```{r}
+unlist(grl, use.names = FALSE)
+```
+
+This data is represented as `rowRanges` and `assays` in `RaggedExperiment`:
+
+```{r}
+rowRanges(ragexp)
+assay(ragexp, "score")
+```
+
+Here we provide the "query" region of interest:
+
+```{r}
+(query <- GRanges(c("chr1:1-14:-", "chr2:11-18:+")))
+```
+
+ The `simplifyReduce` argument in `qreduceAssay` allows the user to summarize
+overlapping regions with a custom method for the given "query" region of
+interest. We provide one for calculating a weighted average score per
+query range, where the weight is proportional to the overlap widths between
+overlapping ranges and a query range.
+
+_Note_ that there are three arguments to this function. See the documentation
+for additional details.
+
+```{r}
+weightedmean <- function(scores, ranges, qranges)
+{
+    isects <- pintersect(ranges, qranges)
+    sum(scores * width(isects)) / sum(width(isects))
+}
+```
+
+A call to `qreduceAssay` involves the `RaggedExperiment`, the `GRanges` query
+and the `simplifyReduce` functional argument.
+
+```{r}
+qreduceAssay(ragexp, query, simplifyReduce = weightedmean)
+```
+
+**Note**: Coercion is possible to `SummarizedExperiment`.
 
 ## Working with MultiAssayExperiment
 
@@ -305,7 +439,7 @@ rownames(accmatched2)
 
 The `assay` and `assays` methods follow `SummarizedExperiment` convention.
 The `assay` (singular) method will extract the first element of the
-`ExperimentList` and will return a `matrix`. 
+`ExperimentList` and will return a `matrix`.
 
 ```{r}
 class(assay(miniACC))
@@ -359,7 +493,7 @@ etc), and following these are the *vital_status* and *days_to_death* colData
 columns that have been added:
 
 ```{r}
-longFormat(miniACC[c("TP53", "CTNNB1"), , ], 
+longFormat(miniACC[c("TP53", "CTNNB1"), , ],
            colDataCols = c("vital_status", "days_to_death"))
 ```
 
@@ -370,7 +504,7 @@ one row per primary identifier (patient). Here, each variable becomes a new
 column:
 
 ```{r}
-wideFormat(miniACC[c("TP53", "CTNNB1"), , ], 
+wideFormat(miniACC[c("TP53", "CTNNB1"), , ],
            colDataCols = c("vital_status", "days_to_death"))
 ```
 
@@ -433,8 +567,9 @@ the curatedTCGAData package. This represents a lot of harmonization!
 ```{r}
 library(curatedTCGAData)
 curatedTCGAData("ACC")
-acc <- curatedTCGAData("ACC", 
-                assays=c("miRNASeqGene", "RPPAArray", "Mutation", "RNASeq2GeneNorm"), dry.run=FALSE)
+acc <- curatedTCGAData("ACC",
+    assays=c("miRNASeqGene", "RPPAArray", "Mutation", "RNASeq2GeneNorm"),
+    dry.run=FALSE)
 acc
 ```
 
@@ -495,7 +630,7 @@ ggsurvplot(fit, data = colData(miniACCsurv), risk.table = TRUE)
 Choose the *EZH2* gene for demonstration. This subsetting will drop assays with
 no row named EZH2:
 ```{r}
-wideacc = wideFormat(miniACC["EZH2", , ], 
+wideacc = wideFormat(miniACC["EZH2", , ],
     colDataCols=c("vital_status", "days_to_death", "pathology_N_stage"))
 wideacc$y = Surv(wideacc$days_to_death, wideacc$vital_status)
 head(wideacc)
@@ -505,7 +640,7 @@ Perform a multivariate Cox regression with *EZH2* copy number (gistict),
 log2-transformed *EZH2* expression (RNASeq2GeneNorm), and nodal status
 (pathology_N_stage) as predictors:
 ```{r}
-coxph(Surv(days_to_death, vital_status) ~ gistict_EZH2 + log2(RNASeq2GeneNorm_EZH2) + pathology_N_stage, 
+coxph(Surv(days_to_death, vital_status) ~ gistict_EZH2 + log2(RNASeq2GeneNorm_EZH2) + pathology_N_stage,
       data=wideacc)
 ```
 
@@ -592,7 +727,7 @@ head(df)
 ```
 
 ```{r}
-boxplot(RNASeq2GeneNorm_EIF4E ~ gistict_EIF4E, 
+boxplot(RNASeq2GeneNorm_EIF4E ~ gistict_EIF4E,
         data=df, varwidth=TRUE,
         xlab="GISTIC Relative Copy Number Call",
         ylab="RNA-seq counts")
@@ -615,7 +750,7 @@ getLoadings <- function(x, ncomp=10, dolog=FALSE, center=TRUE, scale.=TRUE){
   if(dolog){
     x <- log2(x + 1)
   }
-  pc = prcomp(x, center=center, scale.=scale.) 
+  pc = prcomp(x, center=center, scale.=scale.)
   return(t(pc$rotation[, 1:10]))
 }
 ```
