@@ -38,3 +38,6 @@ Imports:
   tximport,
   tximportData,
   zinbwave
+Remotes:
+  rstudio/bookdown,
+  jmacdon/Bioc2018Anno
