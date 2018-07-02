@@ -37,7 +37,9 @@ Imports:
   SummarizedExperiment,
   tximport,
   tximportData,
-  zinbwave
+  zinbwave,
+  Rtsne
 Remotes:
   rstudio/bookdown,
-  jmacdon/Bioc2018Anno
+  jmacdon/Bioc2018Anno,
+  drisso/fletcher2017data
