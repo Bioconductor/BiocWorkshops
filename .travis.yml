@@ -12,13 +12,13 @@ addons:
 
 install:
   - R -e "0" --args --bootsrap-packrat
-  - R -e "packrat::restore(restart = FALSE)"
 
 cache:
   directories:
   - $TRAVIS_BUILD_DIR/docs
   - $TRAVIS_BUILD_DIR/_bookdown_files
-  - $TRAVIS_BUILD_DIR/packrat/
+  - $TRAVIS_BUILD_DIR/packrat/src
+  - $TRAVIS_BUILD_DIR/packrat/lib
   packages: true
 
 before_script:
