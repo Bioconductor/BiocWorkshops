@@ -10,6 +10,7 @@ Imports:
   apeglm,
   beachmat,
   BiocParallel,
+  bookdown,
   BSgenome.Hsapiens.UCSC.hg19.masked,
   clusterExperiment,
   curatedTCGAData,
