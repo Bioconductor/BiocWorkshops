@@ -490,7 +490,10 @@ data and perform exploratory analyses.
 
 In the workflow of ChIP-seq data analysis, we are often interested in 
 finding peaks from islands of coverage over a chromosome. Here we will use plyranges
-to explore data from the Human Epigenome Roadmap project.
+to explore ChiP-seq data from the Human Epigenome Roadmap project.
+
+
+#### Extracting data from AnnotationHub
 
 This data is available on Bioconductor's AnnotationHub. First we construct
 an AnnotationHub, and then query for all bigWigFiles related to 
@@ -510,6 +513,7 @@ ah <- AnnotationHub()
 roadmap_hub <- ah %>% 
   query("EpigenomeRoadMap") 
 
+# extract2 is just a call to `[[` 
 metadata <- ah %>% 
   query("Metadata") %>% 
   extract2(names(.))
@@ -518,7 +522,9 @@ head(metadata)
 ```
 
 To find out the name of the sample corresponding to 
-primary memory T-cells we can filter the data.frame:
+primary memory T-cells we can filter the data.frame. We extract the 
+sample ID corresponding to our filter.
+
 ```{r}
 primary_tcells <-  metadata %>% 
   filter(ANATOMY == "BLOOD") %>% 
@@ -541,24 +547,27 @@ methylation_files <- roadmap_hub %>%
 methylation_files
 ```
 
-So we'll take the first two entries and download them as BigWigFiles
+So we'll take the first two entries and download them as BigWigFiles:
 
 ```{r}
 bw_files <- lapply(c("AH33454", "AH33455"), function(id) ah[[id]]) 
+names(bw_files) <- c("HK34ME1", "HK34ME3")
 ```
 
+We have our desired BigWig files so now we can we can start analysing them.
 
+#### Reading BigWig files
 
-call peaks from islands of coverage above 8 then plot the region
-surrounding the tallest peak.
+For this analysis, we will call peaks from islands of coverage scores
+over chromosome 10.
 
-
-First, we extract the genome information from the BigWig file and filter
+First, we extract the genome information from the first BigWig file and filter
 to get the range for chromosome 10. This range will be used as a filter when 
 reading the file.
 
 ```{r load-bw}
-chr10_ranges <- bw_file %>% 
+chr10_ranges <- bw_files %>% 
+  extract2(1L) %>% 
   get_genome_info() %>%
   filter(seqnames == "chr10")
 ```
@@ -569,31 +578,34 @@ book-keeping is good practice as it ensures the integrity of any
 downstream operations such as finding overlaps.
 
 ```{r}
-chr10_scores <- bw_file %>%
-  read_bigwig(overlap_ranges = chr10_ranges) %>%
-  set_genome_info(genome = "hg19")
+# a function to read our bigwig files
+read_chr10_scores <- function(file) {
+  read_bigwig(file, overlap_ranges = chr10_ranges) %>% 
+    set_genome_info(genome = "hg19")
+}
+# apply the function to each file
+chr10_scores <- lapply(bw_files, read_chr10_scores) 
+# bind the ranges to a single GRAnges object
+# and add a column to identify the ranges by signal type
+chr10_scores <- bind_ranges(chr10_scores, .id = "signal_type")
+chr10_scores
 ```
-
-After filtering for regions with a coverage score greater than 8, we can
-reduce individual runs to ranges representing the islands of coverage by
-using the `reduce_ranges()` function. This function allows a summary
-to be computer over each island: in this case we take the maximum of 
-the scores to find the coverage peaks over chromosome 10.
+Since we want to call peaks over each signal type, we will create a grouped
+ranges object:
 
 ```{r}
-all_peaks <- chr10_scores %>% 
-  filter(score > 8) %>% 
-  reduce_ranges(score = max(score))
+chr10_scores_by_signal <- chr10_scores %>% group_by(signal_type)
 ```
 
-Returning to the GRanges object containing normalised coverage scores, 
-we filter to find the coordinates of the peak containing the maximum coverage 
-score. We can then find a 5000 nt region centered around the maximum position 
+We can then filter to find the coordinates of the peak containing the maximum
+score for each signal.
+We can then find a 5000 nt region centered around the maximum position 
 by anchoring and modifying the width. 
 
 ```{r max-score-region}
-chr10_max_score_region <- chr10_scores %>%
+chr10_max_score_region <- chr10_scores_by_signal %>%
   filter(score == max(score)) %>% 
+  ungroup() %>% 
   anchor_center() %>%
   mutate(width = 5000)
 ```
@@ -603,19 +615,20 @@ coverage islands, to the islands that are contained in the 5000nt region that
 surrounds the max peak.
 
 ```{r peak_region}
-peak_region <- chr10_scores %>%
+peak_region <- chr10_scores_by_signal %>%
   join_overlap_inner(chr10_max_score_region)
 ```
 
+#### Exercises
 
-- this is a modified example from the paper, where we explore data from Human Epigenomics
-Roadmap consortium, we take more time here to go through the core parts of the grammar
-
+1. Use the `reduce_ranges()` function to find all peaks for each signal type.
+2. How could you annotate the scores to find out which genes overlap
+each peak found in 1.?
+3. Plot the maximum scores for each signal type using the `ggbio` package.
 
 ### Worked example: reading BAM files
 
 Modified version of BAM example in paper (maybe using airway package)
-
 
 
 ### Exercises 
