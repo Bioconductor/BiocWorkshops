@@ -562,7 +562,7 @@ https://support.bioconductor.org/ or create an issue on the [MultiAssayExperimen
 ## The Cancer Genome Atlas (TCGA) as MultiAssayExperiments
 
 Most unrestricted TCGA data are available as MultiAssayExperiment objects from
-the curatedTCGAData package. This represents a lot of harmonization!
+the `curatedTCGAData` package. This represents a lot of harmonization!
 
 ```{r}
 library(curatedTCGAData)
@@ -597,6 +597,44 @@ upsetSamples(miniACC)
 In this dataset only 43 samples have all 5 assays, 32 are missing reverse-phase
 protein (RPPAArray), 2 are missing Mutations, 1 is missing gistict, 12 have only
 mutations and gistict, etc.
+
+## `TCGAutils` package
+
+Aside from the available reshaping functions already included in the
+`MultiAssayExperiment` package, the `TCGAutils` package provides a suite
+of helper functions for working with TCGA data. 
+
+### What types of samples are in the data?
+
+**Solution**
+
+The `sampleTables` function gives you an overview of samples in each assay:
+
+```{r}
+library(TCGAutils)
+sampleTables(acc)
+
+head(sampleTypes)
+```
+
+### Is there subtype data available in the `MultiAssayExperiment` obtained from
+`curatedTCGAData`?
+
+**Solution**
+
+The `getSubtypeMap` function will show actual variable names found in `colData`
+that contain subtype information. This can only be obtained from
+`MultiAssayExperiment` objects provided by `curatedTCGAData`. 
+
+```{r}
+getSubtypeMap(acc)
+head(colData(acc)$Histology)
+```
+
+A number of other utility functions are available in `TCGAutils` including
+TCGA identifier translation from TCGA barcodes to UUIDs and vice versa and
+helper functions to create Bioconductor objects from TCGA exon files
+(legacy archive), copy number and GISTIC objects from `RTCGAToolbox`.
 
 ### Kaplan-meier plot stratified by pathology_N_stage
 
@@ -692,7 +730,9 @@ Transpose both, so genes are in columns:
 subacc.list <- lapply(subacc.list, t)
 ```
 
-Calculate the correlation between columns in the first matrix and columns in the second matrix:
+Calculate the correlation between columns in the first matrix and columns in the
+second matrix:
+
 ```{r}
 corres <- cor(subacc.list[[1]], subacc.list[[2]])
 ```

@@ -11,7 +11,7 @@ addons:
       - libgsl-dev
 
 install:
-  - R -e "0" --args --bootsrap-packrat
+  - R -e "0" --args --boostrap-packrat
 
 cache:
   directories:
