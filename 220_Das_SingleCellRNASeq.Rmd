@@ -1,7 +1,9 @@
 ---
-output: html_document
-editor_options: 
+editor_options:
   chunk_output_type: console
+output:
+  html_document: default
+  pdf_document: default
 ---
 # Analysis of single-cell RNA-seq data: Dimensionality reduction, clustering, and lineage inference
 
@@ -275,7 +277,7 @@ clustered <- RSEC(clustered, k0s = 4:15, alphas = c(0.1),
                   verbose=TRUE,
                   consensusProportion = 0.7,
                   mergeMethod = "none", random.seed=424242,
-                  consensusMinSize = 10)))
+                  consensusMinSize = 10)
 ```
 
 Again, the previously loaded `clustered` object already contains the results of the `RSEC` run above, so we do not evaluate the above chunk here.
