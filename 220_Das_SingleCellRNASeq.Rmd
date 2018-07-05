@@ -362,7 +362,7 @@ plotReducedDims(clustered,whichCluster="primary",reducedDim="zinbwave",pch=20,
 
 We now demonstrate how to use the Bioconductor package `slingshot` to infer branching cell lineages and order cells by developmental progression along each lineage. The method, proposed in [@Street2017], comprises two main steps: (1) The inference of the global lineage structure (i.e., the number of lineages and where they branch) using a minimum spanning tree (MST) on the clusters identified above by `RSEC` and (2) the inference of cell pseudotime variables along each lineage using a novel method of simultaneous principal curves. The approach in (1) allows the identification of any number of novel lineages, while also accommodating the use of domain-specific knowledge to supervise parts of the tree (e.g., known terminal states); the approach in (2) yields robust pseudotimes for smooth, branching lineages. 
 
-The two steps of the Slingshot algorithm are implemented in the functions `getLineages` and `getCurves`, respectively. The first takes as input a low-dimensional representation of the cells and a vector of cluster labels. It fits an MST to the clusters and identifies lineages as paths through this tree. The output of `getLineages` is an object of class `SlingshotDataSet` containing all the information used to fit the tree and identify lineages. The function `getCurves` then takes this object as input and fits simultaneous principal curves to the identified lineages. These functions can be run separately, as below, or jointly by the wrapper function `slingshot`, which can be run directly on a `SingleCellExperiment` object.
+This analysis is performed out by the `slingshot` function and the results are stored in a `SlingshotDataSet` object. The minimal input to this function is a low-dimensional representation of the cells and a set of cluster labels; these can be separate objects (ie. a matrix and a vector) or, as below, components of a `SingleCellExperiment` object. When a `SingleCellExperiment` object is provided as input, the ouput will be an updated object containing a `SlingshotDataSet` as an element of the `int_metadata` list, which can be accessed through the `SlingshotDataSet` function. For more low-level control of the lineage inference procedure, the two steps may be run separately via the functions `getLineages` and `getCurves`.
 
 From the original published work, we know that the starting cluster should correspond to HBCs and the end clusters to MV, mOSN, and mSUS cells. Additionally, we know that GBCs should be at a junction before the differentiation between MV and mOSN cells (Figure \@ref(fig:stemcelldiff)). The correspondance between the clusters we found here and the original clusters is as follows.
 
@@ -380,26 +380,25 @@ c5 | Immature Neuron | purple | original 10, 14
 c6 | MV | brown | original 15
 c7 | mOSN | light blue | original 9
 
-To infer lineages and pseudotimes, we apply Slingshot to the 4-dimensional MDS of the low-dimensional matrix `W`. We found that the Slingshot results were robust to the number of dimensions _k_ for the MDS (we tried _k_ from 2 to 5). Here, we use the unsupervised version of Slingshot, where we only provide the identity of the start cluster but not of the end clusters.
+To infer lineages and pseudotimes, we will apply Slingshot to the 4-dimensional MDS of the low-dimensional matrix `W`. We found that the Slingshot results were robust to the number of dimensions _k_ for the MDS (we tried _k_ from 2 to 5). Here, we use a semi-supervised version of Slingshot, where we only provide the identity of the start cluster but not of the end clusters.
 
 ```{r}
 pseudoCe <- clustered[,!primaryClusterNamed(clustered) %in% c("-1")]
 X <- reducedDim(pseudoCe,type="zinbwave")
 mds <- cmdscale(dist(X), eig = TRUE, k = 4)
+lineages <- slingshot(mds$points, clusterLabels = primaryClusterNamed(pseudoCe), start.clus = "c1")
 ```
 
-Before fitting the simultaneous principal curves, we examine the global structure of the lineages by plotting the MST on the clusters. This shows that our implementation has recovered the lineages found in the published work (Figure \@ref(fig:tree)). The `slingshot` package also includes functionality for 3-dimensional visualization as in Figure \@ref(fig:stemcelldiff), using the `plot3d` function from the package `rgl`.
+Before discussing the simultaneous principal curves, we examine the global structure of the lineages by plotting the MST on the clusters. This shows that our implementation has recovered the lineages found in the published work (Figure \@ref(fig:tree)). The `slingshot` package also includes functionality for 3-dimensional visualization as in Figure \@ref(fig:stemcelldiff), using the `plot3d` function from the package `rgl`.
 
 ```{r tree, fig.cap="Slingshot: Cells color-coded by cluster in a 4-dimensional MDS space, with connecting lines between cluster centers representing the inferred global lineage structure."}
 colorCl<-convertClusterLegend(pseudoCe,whichCluster="primary",output="matrixColors")[,1]
-lineages <- getLineages(mds$points, clusterLabels = primaryClusterNamed(pseudoCe), start.clus = "c1")
 pairs(lineages, type="lineages", col = colorCl)
 ```
 
-Having found the global lineage structure, we now construct a set of smooth, branching curves in order to infer the pseudotime variables. Simultaneous principal curves are constructed from the individual cells along each lineage, rather than the cell clusters. This makes them more stable and better suited for assigning cells to lineages. The final curves are shown in Figure \@ref(fig:curves).
+Having found the global lineage structure, `slingshot` then constructed a set of smooth, branching curves in order to infer the corresponding pseudotime variables. Simultaneous principal curves are constructed from the individual cells along each lineage, rather than the cell clusters. During this iterative process, a cell may even be reassigned to a different lineage if it is significantly closer to the corresopnding curve. This makes `slingshot` less reliant on the original clustering and generally more stable. The final curves are shown in Figure \@ref(fig:curves).
 
 ```{r curves, fig.cap="Slingshot: Cells color-coded by cluster in a 4-dimensional MDS space, with smooth curves representing each inferred lineage."}
-lineages <- getCurves(lineages)
 pairs(lineages, type="curves", col = colorCl)
 ```
 
@@ -407,7 +406,7 @@ pairs(lineages, type="curves", col = colorCl)
 lineages
 ```
 
-As an alternative, we can directly apply the `slingshot` function to the `clustered` object to perform both steps.
+As an alternative, we could have incorporated the MDS results into the `clustered` object and applied `slingshot` directly to it. Here, we need to specify that we want to use the MDS results, because `slingshot` would otherwise use the first element of the `reducedDims` list (in this case, the 10-dimensional `W` matrix from `zinbwave`).
 
 ```{r sling_sce}
 reducedDim(pseudoCe, "MDS") <- mds$points
@@ -416,10 +415,9 @@ pseudoCe
 colData(pseudoCe)
 ```
 
-The result of `slingshot` applied to a `ClusterExperiment` object is still of class `ClusterExperiment`. Note that we need to specify a `reducedDim` slot and that we use the default `primaryCluster` for cluster labels.
+The result of `slingshot` applied to a `ClusterExperiment` object is still of class `ClusterExperiment`. Note that we did not specify a set of cluster labels, implying that `slingshot` should use the default `primaryClusterNamed` vector.
 
-In the workflow, we recover a reasonable ordering of the clusters using the unsupervised version of slingshot. However, in some other cases, we have noticed that we need to give more guidance to the algorithm to find the correct ordering. `getLineages` has the option for the user to provide known end cluster(s). Here is the code to use `slingshot` in a supervised setting, where we know that clusters `c3`, `c6` and `c2` represent terminal cell fates.
-
+In the workflow, we recover a reasonable ordering of the clusters using the largely unsupervised version of `slingshot`. However, in some other cases, we have noticed that we need to give more guidance to the algorithm to find the correct ordering. `getLineages` has the option for the user to provide known end cluster(s), which represents a constraint on the MST requiring those clusters to be leaf nodes. Here is the code to use `slingshot` in a supervised setting, where we know that clusters `c3`, `c6` and `c2` represent terminal cell fates.
 
 ```{r slingshotsupervised, eval=FALSE}
 pseudoCeSup <- slingshot(pseudoCe, reducedDim = "MDS", start.clus = "c1",
