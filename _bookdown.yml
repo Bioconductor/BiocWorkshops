@@ -21,5 +21,8 @@ rmd_files: [
   "Lawrence_GenomicRanges.Rmd", # inc
 #  "Lee_Plyranges.Rmd", # error use dplyr::filter
   "MacDonald_Annotation.Rmd",
-  "Ramos_MultiAssayExperiment.Rmd"
+  "Ramos_MultiAssayExperiment.Rmd",
+  "Safikhani_Pharmacogenomics.Rmd", #inc
+  "Turaga_MaintainBioc.Rmd", #inc
+  "Waldron_PublicData.Rmd" #inc
 ]
