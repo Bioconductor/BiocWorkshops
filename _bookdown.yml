@@ -15,7 +15,7 @@ rmd_files: [
 #  "500_Effectively_Using_the_DelayedArray_Framework.Rmd", # ERROR: can't open file @line 559
   "Coetzee_StatePaintR.Rmd", # inc
   "Cooley_DECIPHER.Rmd", # inc
-#  "DECIPHERWorkshop.Rmd", # duplicate file & FindHomology pkg not found
+#  "DECIPHERWorkshop.Rmd", # duplicate file, inc, error cannot open the conex to file
 #  "Geistlinger_Omics.Rmd", #aroma.light installation issue
 #  "Isserlin_RCy3.Rmd", # inc
   "Law_RNAseq123.Rmd", # inc
