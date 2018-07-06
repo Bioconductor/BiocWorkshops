@@ -7,7 +7,7 @@ github-repo: Bioconductor/BiocWorkshops
 documentclass: book
 ---
 
-[![Travis Build Status](https://travis-ci.org/Bioconductor/BiocWorkshops.svg?branch=master)](https://travis-ci.org/Bioconductor/BiocWorkshops)
+[![Travis Build Status](https://travis-ci.org/Bioconductor/BiocWorkshops.png?branch=master)](https://travis-ci.org/Bioconductor/BiocWorkshops)
 
 # Introduction
 

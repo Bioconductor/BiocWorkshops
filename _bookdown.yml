@@ -9,6 +9,17 @@ before_chapter_script: "_common.R"
 
 rmd_files: [
   "index.Rmd",
-  "201_Love_DESeq2.Rmd"
-
+  "201_Love_DESeq2.Rmd",
+#  "220_Das_SingleCellRNASeq.Rmd",
+#  "230_Isserlin_RCy3_intro.Rmd",
+#  "500_Effectively_Using_the_DelayedArray_Framework.Rmd",
+  "Coetzee_StatePaintR.Rmd", # inc
+  "Cooley_DECIPHER.Rmd", # inc
+#  "Geistlinger_Omics.Rmd",
+#  "Isserlin_RCy3.Rmd",
+  "Law_RNAseq123.Rmd", # inc
+  "Lawrence_GenomicRanges.Rmd", # inc
+#  "Lee_Plyranges.Rmd", # error use dplyr::filter
+  "MacDonald_Annotation.Rmd",
+  "Ramos_MultiAssayExperiment.Rmd"
 ]
