@@ -11,13 +11,11 @@ rmd_files: [
   "index.Rmd",
   "201_Love_DESeq2.Rmd",
 #  "220_Das_SingleCellRNASeq.Rmd", #aroma.light installation issue
-#  "230_Isserlin_RCy3_intro.Rmd", #ERROR: cytoscapeVersionInfo not found DUPLICATE
+#  "230_Isserlin_RCy3_intro.Rmd", #ERROR: cytoscapeVersionInfo not found 
 #  "500_Effectively_Using_the_DelayedArray_Framework.Rmd", # ERROR: can't open file @line 559
   "Coetzee_StatePaintR.Rmd", # inc
   "Cooley_DECIPHER.Rmd", # inc
-#  "DECIPHERWorkshop.Rmd", # duplicate file, inc, error cannot open the conex to file
 #  "Geistlinger_Omics.Rmd", #aroma.light installation issue
-#  "Isserlin_RCy3.Rmd", # inc
   "Law_RNAseq123.Rmd", # inc
   "Lawrence_GenomicRanges.Rmd", # inc
 #  "Lee_Plyranges.Rmd", # error use dplyr::filter
