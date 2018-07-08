@@ -52,11 +52,24 @@ Imports:
   tximportData,
   units,
   UpSetR,
-  zinbwave
+  zinbwave,
+  PharamacoGx,
+  ggplot2,
+  reshape2,
+  xtable,
+  mRMRe,
+  Biobase,
+  Hmisc,
+  glmnet,
+  caret,
+  randomForest,
+  devtools
 Remotes:
   rstudio/bookdown,
   jmacdon/Bioc2018Anno,
   seandavi/BiocPkgTools,
   npcooley/FindHomology,
   drisso/fletcher2017data
-  dynverse/princurve
+  dynverse/princurve,
+  bhklab/mci,
+  bhklab/PharmacoGx-ML
