@@ -69,7 +69,7 @@ Remotes:
   jmacdon/Bioc2018Anno,
   seandavi/BiocPkgTools,
   npcooley/FindHomology,
-  drisso/fletcher2017data
+  drisso/fletcher2017data,
   dynverse/princurve,
-  bhklab/mci,
-  bhklab/PharmacoGx-ML
+  bhklab/mCI,
+  bhklab/bhklab/PharmacoGxML
