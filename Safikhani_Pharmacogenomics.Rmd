@@ -1,3 +1,8 @@
+---
+output:
+  pdf_document: default
+  html_document: default
+---
 # Biomarker discovery from large pharmacogenomics datasets
 
 ## Instructors:
@@ -94,7 +99,7 @@ source('http://bioconductor.org/biocLite.R')
 biocLite('PharmacoGx')
 
 library(devtools)
-devtools::install_github("bhklab/mci", ref="light")
+devtools::install_github("bhklab/mci")
 devtools::install_github("bhklab/PharmacoGx-ML")
 ```
 
@@ -288,7 +293,7 @@ where $Y$ denotes the drug sensitivity variable, $G_i$, $T$ and $B$ denote the e
 
 As an example of the reproducibility of biomarker discovery across pharmacogenomic studies, we can model the significance of the association between two drugs and their known biomarkers in CCLE and GDSC. We examine the association between drug *17-AAG* and gene *NQO1*, as well as drug *PD-0325901* and gene *BRAF*:
 
-``` {r biomarker_discovery, results='asis'} 
+``` {r biomarker_discovery, results='hide'} 
   features <- PharmacoGx::fNames(CCLE, "rna")[
     which(featureInfo(CCLE,
                       "rna")$Symbol == "NQO1")]
@@ -358,11 +363,11 @@ boxplot(GDSC.aac["PD-0325901", GDSC_cells]~ GDSC_mut[GDSC_cells, "BRAF"], col="g
 
 ```
 
-\subsection{Machne Learning and Biomarker Discovery}
+\subsection{Machine Learning and Biomarker Discovery}
 Some of the widely used multivariate machine learning methods such as elastic net, Random Forest (RF) and Support Vector Machine (SVM) have been already implemented in the MLWorkshop. It optimizes hyperparameters of these methods in the training phase. To assess the performance of the predictive models, it implements *m* number of sampling with *n-fold* cross validations (CV). The performance will then be assessed by multiple metrics including pearson correlation coefficient, concordance index and modified concordance index. 
 
 
-```{r machine_learning, results='asis'} 
+```{r machine_learning, results='hide'} 
 library(mRMRe, verbose=FALSE)
 library(Biobase, verbose=FALSE)
 library(Hmisc, verbose=FALSE)
@@ -383,7 +388,7 @@ actual_labels <- summarizeSensitivityProfiles(CCLE, sensitivity.measure="auc_rec
 
 
 for(method in c("ridge", "lasso", "random_forest", "svm")){
-  par(mfrow=c(2, 1))
+  par(mfrow=c(1, 2))
   res <- optimization(train=df[, -ncol(df), drop=F],
                       labels=t(df[, ncol(df), drop=F]),
                       method=method,
@@ -393,7 +398,7 @@ for(method in c("ridge", "lasso", "random_forest", "svm")){
                       feature.selection="mRMR",
                       assessment=c("corr", "mCI"))
   
-  validation_labels <- prediction(model=res$model$lapatinib,
+  validation_labels <- validation(model=res$model$lapatinib,
                                   validation.set=t(exprs(validation_expr)),
                                   validation.labels=actual_labels,
                                   method=method,
