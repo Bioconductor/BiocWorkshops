@@ -62,8 +62,7 @@ Imports:
   Hmisc,
   glmnet,
   caret,
-  randomForest,
-  devtools
+  randomForest
 Remotes:
   rstudio/bookdown,
   jmacdon/Bioc2018Anno,
