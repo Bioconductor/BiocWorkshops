@@ -92,16 +92,6 @@ data at the level of genes, drugs and cell lines. This provides a more
 intuitive interface and, in combination with unified curation, simplifies
 analyses between multiple datasets.
 
-\subsection{Installation and Settings}
-*PharmacoGx* requires that several packages are installed. However, all dependencies are available from CRAN or Bioconductor.
-```{r install_packages, eval=FALSE}
-source('http://bioconductor.org/biocLite.R')
-biocLite('PharmacoGx')
-
-library(devtools)
-devtools::install_github("bhklab/mci")
-devtools::install_github("bhklab/PharmacoGx-ML")
-```
 
 Load *PharamacoGx* into your current workspace:
 ```{r loadlib, eval=TRUE, results='hide'}
@@ -165,8 +155,8 @@ drugDoseResponseCurve(drug="lapatinib", cellline=cells[3],
 In pharmacogenomic studies Cells were also tested for their response to increasing concentrations of various compounds, and form this the IC50 and AUC were computed. These pharmacological profiles are available for all the psets in *PharmacoGx*.
 
 ```{r ccle_auc, fig.cap="Cells response to drugs in CCLE"}
-library(ggplot2)
-library(reshape2)
+library(ggplot2, verbose=FALSE)
+library(reshape2, verbose=FALSE)
 melted_data <- melt(CCLE.auc)
 NA_rows <- unique(which(is.na(melted_data), arr.ind=T)[,1])
 melted_data <- melted_data[-NA_rows,]
@@ -336,7 +326,7 @@ As an example of the reproducibility of biomarker discovery across pharmacogenom
                               "CCLE effect size"=ccle.sig[,1], 
                               "CCLE pvalue"=ccle.sig[,6])
     rownames(known.biomarkers) <- c("17-AAG + NQO1","PD-0325901 + BRAF")
-    library(xtable)
+    library(xtable, verbose=FALSE)
     xtable(known.biomarkers, digits=c(0, 2, -1, 2, -1), caption='Concordance of biomarkers across stuudies')
     par(mfrow=c(2, 2))
     CCLE_expr <- t(exprs(summarizeMolecularProfiles(CCLE, mDataType="rna", fill.missing=FALSE)))
