@@ -730,7 +730,7 @@ files.
 1. For each sample plot total breadth of coverage against the number of bases
 covered faceted by each sample name.
 
-# What's next?
+## What's next?
 
 The grammar based approach for analysing data provides a consistent approach
 for analysing genomics experiments with Bioconductor. We have explored
@@ -744,9 +744,8 @@ community are also more than welcome!
 
 # Appendix {#appendix}
 
-\centering
-                        Verb                            Description
-  --------------------- ------------------------------- --------------------------------------------------------------------
+Category               Verb                            Description
+--------------------- ------------------------------- --------------------------------------------------------------------
                         ***summarise()***               aggregate over column(s)
   Aggregation           *disjoin\_ranges()*             aggregate column(s) over the union of end coordinates
                         *reduce\_ranges()*              aggregate column(s) by merging overlapping and neighbouring ranges
@@ -781,3 +780,5 @@ community are also more than welcome!
   described and categorised into one of: aggregation, unary or binary
   arithmetic, merging, modifier, or restriction. A verb is given bold
   text if its origin is from the dplyr grammar.
+
+# References
