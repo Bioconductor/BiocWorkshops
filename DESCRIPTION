@@ -53,7 +53,7 @@ Imports:
   units,
   UpSetR,
   zinbwave,
-  PharamacoGx,
+  PharmacoGx,
   ggplot2,
   reshape2,
   xtable,
