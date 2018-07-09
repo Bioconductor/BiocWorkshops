@@ -64,7 +64,7 @@ Describe how students will be expected to participate in the workshop.
 * Use the ranges algebra to analyze genomic ranges
 * Implement efficient workflows based on the *Ranges infrastructure
 
-# *GRanges*: Genomic Ranges
+## *GRanges*: Genomic Ranges
 
 The *GRanges* class represents a collection of genomic ranges
 that each have a single start and end location on the genome. It can be
@@ -345,7 +345,7 @@ methods(class="GRanges")
 
 
 
-# *GRangesList*: Groups of Genomic Ranges
+## *GRangesList*: Groups of Genomic Ranges
 
 Some important genomic features, such as spliced transcripts that are
 are comprised of exons, are inherently compound structures. Such a

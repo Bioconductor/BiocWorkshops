@@ -1,6 +1,7 @@
 ---
 bibliography: Lee_Plyranges/plyranges.bib
 ---
+
 # Fluent genomic data analysis with plyranges
 
 ## Instructor(s) name(s) and contact information
@@ -68,7 +69,7 @@ to any questions they have.
 * Perform coverage analysis 
 * Build data pipelines for analysis based on GRanges
 
-# Workshop
+## Workshop
 
 ```{r setup, echo=FALSE}
 knitr::opts_chunk$set(message = FALSE, 
@@ -742,7 +743,7 @@ it or think things could be easier or clearer please file an issue on
 community are also more than welcome!
 
 
-# Appendix {#appendix}
+## Appendix {#appendix}
 
 Category               Verb                            Description
 --------------------- ------------------------------- --------------------------------------------------------------------
@@ -781,4 +782,4 @@ Category               Verb                            Description
   arithmetic, merging, modifier, or restriction. A verb is given bold
   text if its origin is from the dplyr grammar.
 
-# References
+## References

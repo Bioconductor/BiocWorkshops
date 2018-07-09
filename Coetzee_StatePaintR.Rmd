@@ -1,13 +1,13 @@
 # Variant Functional Annotation using StatePaintR, FunciVar & MotifBreakR
 
-## Authors: 
+## Instructor(s) name(s) and contact information
 * Simon G. Coetzee (scoetzee@gmail.com)
 * Dennis J. Hazelett (dennis.hazelett@csmc.edu)
 
------
 ## Workshop Description
 This workshop will entail lecture and live demo of StateHub/
 StatePaintR and funciVar bioconductor packages.
+
 ### Pre-requisites
 It is recommended that workshop participants have:
 * Basic concepts in epigenomics and GWAS
@@ -23,9 +23,10 @@ Relevant background reading for the workshop.
 Describe how students will be expected to participate in the workshop.
 
 ### _R_ / _Bioconductor_ packages used
-StatePaintR
-FunciVar
-MotifBreakR
+
+* StatePaintR
+* FunciVar
+* MotifBreakR
 
 ### Time outline
 1 hour Workshop:

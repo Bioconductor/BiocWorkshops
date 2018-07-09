@@ -75,7 +75,7 @@ Practice:
 * Network-based enrichment analysis
 * Genomic region enrichment analysis
 
-# Workshop
+## Workshop
 
 ## Where does it all come from?
 
@@ -721,7 +721,7 @@ gsRanking(comb.res)
 
 *Exercise:* Carry out `SPIA` and `GGEA` for the `airSE` and combine the results. How many gene sets are rendered significant by both methods? 
 
-# Genomic region enrichment analysis
+## Genomic region enrichment analysis
 
 Microarrays and next-generation sequencing are also widely applied for
 large-scale detection of variable and regulatory genomic regions, e.g. single
