@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>The Bioconductor 2018 Workshop Compilation</title>
+  <meta name="description" content="This book is a central repository for all the workshops submitted to the Bioconductor 2018 Conference">
+  <meta name="generator" content="bookdown 0.7.13 and GitBook 2.6.7">
+
+  <meta property="og:title" content="The Bioconductor 2018 Workshop Compilation" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="This book is a central repository for all the workshops submitted to the Bioconductor 2018 Conference" />
+  <meta name="github-repo" content="Bioconductor/BiocWorkshops" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="The Bioconductor 2018 Workshop Compilation" />
+  
+  <meta name="twitter:description" content="This book is a central repository for all the workshops submitted to the Bioconductor 2018 Conference" />
+  
+
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="appendix.html">
+<link rel="next" href="introduction-to-bioconductor-annotation-resources.html">
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Bioconductor 2018 Workshops</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#for-everyone"><i class="fa fa-check"></i><b>1.1</b> For Everyone</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#for-workshop-authors"><i class="fa fa-check"></i><b>1.2</b> For Workshop Authors</a><ul>
+<li class="chapter" data-level="1.2.1" data-path="index.html"><a href="index.html#description"><i class="fa fa-check"></i><b>1.2.1</b> DESCRIPTION</a></li>
+<li class="chapter" data-level="1.2.2" data-path="index.html"><a href="index.html#classifying-your-workshop"><i class="fa fa-check"></i><b>1.2.2</b> Classifying your workshop</a></li>
+<li class="chapter" data-level="1.2.3" data-path="index.html"><a href="index.html#bookdown"><i class="fa fa-check"></i><b>1.2.3</b> Bookdown</a></li>
+</ul></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#deadlines-for-bioc2018"><i class="fa fa-check"></i><b>1.3</b> Deadlines for Bioc2018</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="rna-seq-data-analysis-with-deseq2.html"><a href="rna-seq-data-analysis-with-deseq2.html"><i class="fa fa-check"></i><b>2</b> RNA-seq data analysis with DESeq2</a><ul>
+<li class="chapter" data-level="2.1" data-path="rna-seq-data-analysis-with-deseq2.html"><a href="rna-seq-data-analysis-with-deseq2.html#overview"><i class="fa fa-check"></i><b>2.1</b> Overview</a><ul>
+<li class="chapter" data-level="2.1.1" data-path="rna-seq-data-analysis-with-deseq2.html"><a href="rna-seq-data-analysis-with-deseq2.html#description-1"><i class="fa fa-check"></i><b>2.1.1</b> Description</a></li>
+<li class="chapter" data-level="2.1.2" data-path="rna-seq-data-analysis-with-deseq2.html"><a href="rna-seq-data-analysis-with-deseq2.html#pre-requisites"><i class="fa fa-check"></i><b>2.1.2</b> Pre-requisites</a></li>
+<li class="chapter" data-level="2.1.3" data-path="rna-seq-data-analysis-with-deseq2.html"><a href="rna-seq-data-analysis-with-deseq2.html#participation"><i class="fa fa-check"></i><b>2.1.3</b> Participation</a></li>
+<li class="chapter" data-level="2.1.4" data-path="rna-seq-data-analysis-with-deseq2.html"><a href="rna-seq-data-analysis-with-deseq2.html#r-bioconductor-packages-used"><i class="fa fa-check"></i><b>2.1.4</b> <em>R</em> / <em>Bioconductor</em> packages used</a></li>
+<li class="chapter" data-level="2.1.5" data-path="rna-seq-data-analysis-with-deseq2.html"><a href="rna-seq-data-analysis-with-deseq2.html#time-outline"><i class="fa fa-check"></i><b>2.1.5</b> Time outline</a></li>
+<li class="chapter" data-level="2.1.6" data-path="rna-seq-data-analysis-with-deseq2.html"><a href="rna-seq-data-analysis-with-deseq2.html#workshop-goals-and-objectives"><i class="fa fa-check"></i><b>2.1.6</b> Workshop goals and objectives</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="rna-seq-data-analysis-with-deseq2.html"><a href="rna-seq-data-analysis-with-deseq2.html#preparing-data-for-deseq2"><i class="fa fa-check"></i><b>2.2</b> Preparing data for <em>DESeq2</em></a><ul>
+<li class="chapter" data-level="2.2.1" data-path="rna-seq-data-analysis-with-deseq2.html"><a href="rna-seq-data-analysis-with-deseq2.html#experimental-data"><i class="fa fa-check"></i><b>2.2.1</b> Experimental data</a></li>
+<li class="chapter" data-level="2.2.2" data-path="rna-seq-data-analysis-with-deseq2.html"><a href="rna-seq-data-analysis-with-deseq2.html#modeling-count-data"><i class="fa fa-check"></i><b>2.2.2</b> Modeling count data</a></li>
+<li class="chapter" data-level="2.2.3" data-path="rna-seq-data-analysis-with-deseq2.html"><a href="rna-seq-data-analysis-with-deseq2.html#transcript-abundances"><i class="fa fa-check"></i><b>2.2.3</b> Transcript abundances</a></li>
+<li class="chapter" data-level="2.2.4" data-path="rna-seq-data-analysis-with-deseq2.html"><a href="rna-seq-data-analysis-with-deseq2.html#salmon-quantification"><i class="fa fa-check"></i><b>2.2.4</b> <em>Salmon</em> quantification</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="rna-seq-data-analysis-with-deseq2.html"><a href="rna-seq-data-analysis-with-deseq2.html#importing-into-r-with-tximport"><i class="fa fa-check"></i><b>2.3</b> Importing into R with <em>tximport</em></a><ul>
+<li class="chapter" data-level="2.3.1" data-path="rna-seq-data-analysis-with-deseq2.html"><a href="rna-seq-data-analysis-with-deseq2.html#specifying-file-locations"><i class="fa fa-check"></i><b>2.3.1</b> Specifying file locations</a></li>
+<li class="chapter" data-level="2.3.2" data-path="rna-seq-data-analysis-with-deseq2.html"><a href="rna-seq-data-analysis-with-deseq2.html#mapping-transcripts-to-genes"><i class="fa fa-check"></i><b>2.3.2</b> Mapping transcripts to genes</a></li>
+<li class="chapter" data-level="2.3.3" data-path="rna-seq-data-analysis-with-deseq2.html"><a href="rna-seq-data-analysis-with-deseq2.html#tximport-command"><i class="fa fa-check"></i><b>2.3.3</b> <em>tximport</em> command</a></li>
+</ul></li>
+<li class="chapter" data-level="2.4" data-path="rna-seq-data-analysis-with-deseq2.html"><a href="rna-seq-data-analysis-with-deseq2.html#exploratory-data-analysis"><i class="fa fa-check"></i><b>2.4</b> Exploratory data analysis</a><ul>
+<li class="chapter" data-level="2.4.1" data-path="rna-seq-data-analysis-with-deseq2.html"><a href="rna-seq-data-analysis-with-deseq2.html#simple-eda"><i class="fa fa-check"></i><b>2.4.1</b> Simple EDA</a></li>
+<li class="chapter" data-level="2.4.2" data-path="rna-seq-data-analysis-with-deseq2.html"><a href="rna-seq-data-analysis-with-deseq2.html#data-transformation-for-eda"><i class="fa fa-check"></i><b>2.4.2</b> Data transformation for EDA</a></li>
+<li class="chapter" data-level="2.4.3" data-path="rna-seq-data-analysis-with-deseq2.html"><a href="rna-seq-data-analysis-with-deseq2.html#principal-components-plot"><i class="fa fa-check"></i><b>2.4.3</b> Principal components plot</a></li>
+</ul></li>
+<li class="chapter" data-level="2.5" data-path="rna-seq-data-analysis-with-deseq2.html"><a href="rna-seq-data-analysis-with-deseq2.html#differential-expression-analysis"><i class="fa fa-check"></i><b>2.5</b> Differential expression analysis</a><ul>
+<li class="chapter" data-level="2.5.1" data-path="rna-seq-data-analysis-with-deseq2.html"><a href="rna-seq-data-analysis-with-deseq2.html#standard-de-steps"><i class="fa fa-check"></i><b>2.5.1</b> Standard DE steps</a></li>
+<li class="chapter" data-level="2.5.2" data-path="rna-seq-data-analysis-with-deseq2.html"><a href="rna-seq-data-analysis-with-deseq2.html#minimum-effect-size"><i class="fa fa-check"></i><b>2.5.2</b> Minimum effect size</a></li>
+</ul></li>
+<li class="chapter" data-level="2.6" data-path="rna-seq-data-analysis-with-deseq2.html"><a href="rna-seq-data-analysis-with-deseq2.html#annotationhub"><i class="fa fa-check"></i><b>2.6</b> <em>AnnotationHub</em></a><ul>
+<li class="chapter" data-level="2.6.1" data-path="rna-seq-data-analysis-with-deseq2.html"><a href="rna-seq-data-analysis-with-deseq2.html#querying-annotationhub"><i class="fa fa-check"></i><b>2.6.1</b> Querying <em>AnnotationHub</em></a></li>
+<li class="chapter" data-level="2.6.2" data-path="rna-seq-data-analysis-with-deseq2.html"><a href="rna-seq-data-analysis-with-deseq2.html#mapping-ids"><i class="fa fa-check"></i><b>2.6.2</b> Mapping IDs</a></li>
+</ul></li>
+<li class="chapter" data-level="2.7" data-path="rna-seq-data-analysis-with-deseq2.html"><a href="rna-seq-data-analysis-with-deseq2.html#building-reports"><i class="fa fa-check"></i><b>2.7</b> Building reports</a><ul>
+<li class="chapter" data-level="2.7.1" data-path="rna-seq-data-analysis-with-deseq2.html"><a href="rna-seq-data-analysis-with-deseq2.html#reportingtools"><i class="fa fa-check"></i><b>2.7.1</b> <em>ReportingTools</em></a></li>
+<li class="chapter" data-level="2.7.2" data-path="rna-seq-data-analysis-with-deseq2.html"><a href="rna-seq-data-analysis-with-deseq2.html#glimma"><i class="fa fa-check"></i><b>2.7.2</b> <em>Glimma</em></a></li>
+</ul></li>
+<li class="chapter" data-level="2.8" data-path="rna-seq-data-analysis-with-deseq2.html"><a href="rna-seq-data-analysis-with-deseq2.html#integration-with-zinb-wave"><i class="fa fa-check"></i><b>2.8</b> Integration with <em>ZINB-WaVE</em></a><ul>
+<li class="chapter" data-level="2.8.1" data-path="rna-seq-data-analysis-with-deseq2.html"><a href="rna-seq-data-analysis-with-deseq2.html#simulate-with-splatter"><i class="fa fa-check"></i><b>2.8.1</b> Simulate with <em>splatter</em></a></li>
+<li class="chapter" data-level="2.8.2" data-path="rna-seq-data-analysis-with-deseq2.html"><a href="rna-seq-data-analysis-with-deseq2.html#simulate-single-cell-count-data-with-splatter"><i class="fa fa-check"></i><b>2.8.2</b> Simulate single-cell count data with <em>splatter</em></a></li>
+<li class="chapter" data-level="2.8.3" data-path="rna-seq-data-analysis-with-deseq2.html"><a href="rna-seq-data-analysis-with-deseq2.html#model-zeros-with-zinbwave"><i class="fa fa-check"></i><b>2.8.3</b> Model zeros with <em>zinbwave</em></a></li>
+<li class="chapter" data-level="2.8.4" data-path="rna-seq-data-analysis-with-deseq2.html"><a href="rna-seq-data-analysis-with-deseq2.html#model-non-zeros-with-deseq2"><i class="fa fa-check"></i><b>2.8.4</b> Model non-zeros with <em>DESeq2</em></a></li>
+<li class="chapter" data-level="2.8.5" data-path="rna-seq-data-analysis-with-deseq2.html"><a href="rna-seq-data-analysis-with-deseq2.html#plot-dispersion-estimates"><i class="fa fa-check"></i><b>2.8.5</b> Plot dispersion estimates</a></li>
+<li class="chapter" data-level="2.8.6" data-path="rna-seq-data-analysis-with-deseq2.html"><a href="rna-seq-data-analysis-with-deseq2.html#evaluation-against-truth"><i class="fa fa-check"></i><b>2.8.6</b> Evaluation against truth</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="analysis-of-single-cell-rna-seq-data-dimensionality-reduction-clustering-and-lineage-inference.html"><a href="analysis-of-single-cell-rna-seq-data-dimensionality-reduction-clustering-and-lineage-inference.html"><i class="fa fa-check"></i><b>3</b> Analysis of single-cell RNA-seq data: Dimensionality reduction, clustering, and lineage inference</a><ul>
+<li class="chapter" data-level="3.1" data-path="analysis-of-single-cell-rna-seq-data-dimensionality-reduction-clustering-and-lineage-inference.html"><a href="analysis-of-single-cell-rna-seq-data-dimensionality-reduction-clustering-and-lineage-inference.html#overview-1"><i class="fa fa-check"></i><b>3.1</b> Overview</a><ul>
+<li class="chapter" data-level="3.1.1" data-path="analysis-of-single-cell-rna-seq-data-dimensionality-reduction-clustering-and-lineage-inference.html"><a href="analysis-of-single-cell-rna-seq-data-dimensionality-reduction-clustering-and-lineage-inference.html#description-2"><i class="fa fa-check"></i><b>3.1.1</b> Description</a></li>
+<li class="chapter" data-level="3.1.2" data-path="analysis-of-single-cell-rna-seq-data-dimensionality-reduction-clustering-and-lineage-inference.html"><a href="analysis-of-single-cell-rna-seq-data-dimensionality-reduction-clustering-and-lineage-inference.html#pre-requisites-1"><i class="fa fa-check"></i><b>3.1.2</b> Pre-requisites</a></li>
+<li class="chapter" data-level="3.1.3" data-path="analysis-of-single-cell-rna-seq-data-dimensionality-reduction-clustering-and-lineage-inference.html"><a href="analysis-of-single-cell-rna-seq-data-dimensionality-reduction-clustering-and-lineage-inference.html#participation-1"><i class="fa fa-check"></i><b>3.1.3</b> Participation</a></li>
+<li class="chapter" data-level="3.1.4" data-path="analysis-of-single-cell-rna-seq-data-dimensionality-reduction-clustering-and-lineage-inference.html"><a href="analysis-of-single-cell-rna-seq-data-dimensionality-reduction-clustering-and-lineage-inference.html#r-bioconductor-packages-used-1"><i class="fa fa-check"></i><b>3.1.4</b> <em>R</em> / <em>Bioconductor</em> packages used</a></li>
+<li class="chapter" data-level="3.1.5" data-path="analysis-of-single-cell-rna-seq-data-dimensionality-reduction-clustering-and-lineage-inference.html"><a href="analysis-of-single-cell-rna-seq-data-dimensionality-reduction-clustering-and-lineage-inference.html#time-outline-1"><i class="fa fa-check"></i><b>3.1.5</b> Time outline</a></li>
+<li class="chapter" data-level="3.1.6" data-path="analysis-of-single-cell-rna-seq-data-dimensionality-reduction-clustering-and-lineage-inference.html"><a href="analysis-of-single-cell-rna-seq-data-dimensionality-reduction-clustering-and-lineage-inference.html#workshop-goals-and-objectives-1"><i class="fa fa-check"></i><b>3.1.6</b> Workshop goals and objectives</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="analysis-of-single-cell-rna-seq-data-dimensionality-reduction-clustering-and-lineage-inference.html"><a href="analysis-of-single-cell-rna-seq-data-dimensionality-reduction-clustering-and-lineage-inference.html#getting-started"><i class="fa fa-check"></i><b>3.2</b> Getting started</a><ul>
+<li class="chapter" data-level="3.2.1" data-path="analysis-of-single-cell-rna-seq-data-dimensionality-reduction-clustering-and-lineage-inference.html"><a href="analysis-of-single-cell-rna-seq-data-dimensionality-reduction-clustering-and-lineage-inference.html#the-data"><i class="fa fa-check"></i><b>3.2.1</b> The data</a></li>
+<li class="chapter" data-level="3.2.2" data-path="analysis-of-single-cell-rna-seq-data-dimensionality-reduction-clustering-and-lineage-inference.html"><a href="analysis-of-single-cell-rna-seq-data-dimensionality-reduction-clustering-and-lineage-inference.html#parallel-computing"><i class="fa fa-check"></i><b>3.2.2</b> Parallel computing</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="analysis-of-single-cell-rna-seq-data-dimensionality-reduction-clustering-and-lineage-inference.html"><a href="analysis-of-single-cell-rna-seq-data-dimensionality-reduction-clustering-and-lineage-inference.html#the-singlecellexperiment-class"><i class="fa fa-check"></i><b>3.3</b> The <code>SingleCellExperiment</code> class</a></li>
+<li class="chapter" data-level="3.4" data-path="analysis-of-single-cell-rna-seq-data-dimensionality-reduction-clustering-and-lineage-inference.html"><a href="analysis-of-single-cell-rna-seq-data-dimensionality-reduction-clustering-and-lineage-inference.html#pre-processing"><i class="fa fa-check"></i><b>3.4</b> Pre-processing</a><ul>
+<li class="chapter" data-level="3.4.1" data-path="analysis-of-single-cell-rna-seq-data-dimensionality-reduction-clustering-and-lineage-inference.html"><a href="analysis-of-single-cell-rna-seq-data-dimensionality-reduction-clustering-and-lineage-inference.html#sample-filtering"><i class="fa fa-check"></i><b>3.4.1</b> Sample filtering</a></li>
+</ul></li>
+<li class="chapter" data-level="3.5" data-path="analysis-of-single-cell-rna-seq-data-dimensionality-reduction-clustering-and-lineage-inference.html"><a href="analysis-of-single-cell-rna-seq-data-dimensionality-reduction-clustering-and-lineage-inference.html#normalization-and-dimensionality-reduction-zinb-wave"><i class="fa fa-check"></i><b>3.5</b> Normalization and dimensionality reduction: ZINB-WaVE</a><ul>
+<li class="chapter" data-level="3.5.1" data-path="analysis-of-single-cell-rna-seq-data-dimensionality-reduction-clustering-and-lineage-inference.html"><a href="analysis-of-single-cell-rna-seq-data-dimensionality-reduction-clustering-and-lineage-inference.html#normalization"><i class="fa fa-check"></i><b>3.5.1</b> Normalization</a></li>
+<li class="chapter" data-level="3.5.2" data-path="analysis-of-single-cell-rna-seq-data-dimensionality-reduction-clustering-and-lineage-inference.html"><a href="analysis-of-single-cell-rna-seq-data-dimensionality-reduction-clustering-and-lineage-inference.html#dimensionality-reduction"><i class="fa fa-check"></i><b>3.5.2</b> Dimensionality reduction</a></li>
+</ul></li>
+<li class="chapter" data-level="3.6" data-path="analysis-of-single-cell-rna-seq-data-dimensionality-reduction-clustering-and-lineage-inference.html"><a href="analysis-of-single-cell-rna-seq-data-dimensionality-reduction-clustering-and-lineage-inference.html#cell-clustering-rsec"><i class="fa fa-check"></i><b>3.6</b> Cell clustering: RSEC</a></li>
+<li class="chapter" data-level="3.7" data-path="analysis-of-single-cell-rna-seq-data-dimensionality-reduction-clustering-and-lineage-inference.html"><a href="analysis-of-single-cell-rna-seq-data-dimensionality-reduction-clustering-and-lineage-inference.html#cell-lineage-and-pseudotime-inference-slingshot"><i class="fa fa-check"></i><b>3.7</b> Cell lineage and pseudotime inference: Slingshot</a></li>
+<li class="chapter" data-level="3.8" data-path="analysis-of-single-cell-rna-seq-data-dimensionality-reduction-clustering-and-lineage-inference.html"><a href="analysis-of-single-cell-rna-seq-data-dimensionality-reduction-clustering-and-lineage-inference.html#differential-expression-analysis-along-lineages"><i class="fa fa-check"></i><b>3.8</b> Differential expression analysis along lineages</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="variant-functional-annotation-using-statepaintr-funcivar-motifbreakr.html"><a href="variant-functional-annotation-using-statepaintr-funcivar-motifbreakr.html"><i class="fa fa-check"></i><b>4</b> Variant Functional Annotation using StatePaintR, FunciVar &amp; MotifBreakR</a><ul>
+<li class="chapter" data-level="4.1" data-path="variant-functional-annotation-using-statepaintr-funcivar-motifbreakr.html"><a href="variant-functional-annotation-using-statepaintr-funcivar-motifbreakr.html#authors"><i class="fa fa-check"></i><b>4.1</b> Authors:</a></li>
+<li class="chapter" data-level="4.2" data-path="variant-functional-annotation-using-statepaintr-funcivar-motifbreakr.html"><a href="variant-functional-annotation-using-statepaintr-funcivar-motifbreakr.html#bibliography-lee_plyrangesplyranges.bib"><i class="fa fa-check"></i><b>4.2</b> bibliography: Lee_Plyranges/plyranges.bib</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="fluent-genomic-data-analysis-with-plyranges.html"><a href="fluent-genomic-data-analysis-with-plyranges.html"><i class="fa fa-check"></i><b>5</b> Fluent genomic data analysis with plyranges</a><ul>
+<li class="chapter" data-level="5.1" data-path="fluent-genomic-data-analysis-with-plyranges.html"><a href="fluent-genomic-data-analysis-with-plyranges.html#instructors-names-and-contact-information"><i class="fa fa-check"></i><b>5.1</b> Instructor(s) name(s) and contact information</a></li>
+<li class="chapter" data-level="5.2" data-path="fluent-genomic-data-analysis-with-plyranges.html"><a href="fluent-genomic-data-analysis-with-plyranges.html#workshop-description"><i class="fa fa-check"></i><b>5.2</b> Workshop Description</a><ul>
+<li class="chapter" data-level="5.2.1" data-path="fluent-genomic-data-analysis-with-plyranges.html"><a href="fluent-genomic-data-analysis-with-plyranges.html#pre-requisites-2"><i class="fa fa-check"></i><b>5.2.1</b> Pre-requisites</a></li>
+<li class="chapter" data-level="5.2.2" data-path="fluent-genomic-data-analysis-with-plyranges.html"><a href="fluent-genomic-data-analysis-with-plyranges.html#workshop-participation"><i class="fa fa-check"></i><b>5.2.2</b> Workshop Participation</a></li>
+<li class="chapter" data-level="5.2.3" data-path="fluent-genomic-data-analysis-with-plyranges.html"><a href="fluent-genomic-data-analysis-with-plyranges.html#r-bioconductor-packages-used-2"><i class="fa fa-check"></i><b>5.2.3</b> <em>R</em> / <em>Bioconductor</em> packages used</a></li>
+<li class="chapter" data-level="5.2.4" data-path="fluent-genomic-data-analysis-with-plyranges.html"><a href="fluent-genomic-data-analysis-with-plyranges.html#time-outline-2"><i class="fa fa-check"></i><b>5.2.4</b> Time outline</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="fluent-genomic-data-analysis-with-plyranges.html"><a href="fluent-genomic-data-analysis-with-plyranges.html#workshop-goals-and-objectives-2"><i class="fa fa-check"></i><b>5.3</b> Workshop goals and objectives</a><ul>
+<li class="chapter" data-level="5.3.1" data-path="fluent-genomic-data-analysis-with-plyranges.html"><a href="fluent-genomic-data-analysis-with-plyranges.html#learning-goals"><i class="fa fa-check"></i><b>5.3.1</b> Learning goals</a></li>
+<li class="chapter" data-level="5.3.2" data-path="fluent-genomic-data-analysis-with-plyranges.html"><a href="fluent-genomic-data-analysis-with-plyranges.html#learning-objectives"><i class="fa fa-check"></i><b>5.3.2</b> Learning objectives</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="workshop.html"><a href="workshop.html"><i class="fa fa-check"></i><b>6</b> Workshop</a><ul>
+<li class="chapter" data-level="6.1" data-path="workshop.html"><a href="workshop.html#introduction-1"><i class="fa fa-check"></i><b>6.1</b> Introduction</a><ul>
+<li class="chapter" data-level="6.1.1" data-path="workshop.html"><a href="workshop.html#what-is-plyranges"><i class="fa fa-check"></i><b>6.1.1</b> What is plyranges?</a></li>
+<li class="chapter" data-level="6.1.2" data-path="workshop.html"><a href="workshop.html#why-use-plyranges"><i class="fa fa-check"></i><b>6.1.2</b> Why use plyranges?</a></li>
+<li class="chapter" data-level="6.1.3" data-path="workshop.html"><a href="workshop.html#who-is-this-workshop-for"><i class="fa fa-check"></i><b>6.1.3</b> Who is this workshop for?</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="workshop.html"><a href="workshop.html#setup"><i class="fa fa-check"></i><b>6.2</b> Setup</a></li>
+<li class="chapter" data-level="6.3" data-path="workshop.html"><a href="workshop.html#what-are-granges-objects"><i class="fa fa-check"></i><b>6.3</b> What are GRanges objects?</a></li>
+<li class="chapter" data-level="6.4" data-path="workshop.html"><a href="workshop.html#the-grammar"><i class="fa fa-check"></i><b>6.4</b> The Grammar</a><ul>
+<li class="chapter" data-level="6.4.1" data-path="workshop.html"><a href="workshop.html#core-verbs"><i class="fa fa-check"></i><b>6.4.1</b> Core verbs</a></li>
+<li class="chapter" data-level="6.4.2" data-path="workshop.html"><a href="workshop.html#verbs-specific-to-granges"><i class="fa fa-check"></i><b>6.4.2</b> Verbs specific to GRanges</a></li>
+<li class="chapter" data-level="6.4.3" data-path="workshop.html"><a href="workshop.html#exercises"><i class="fa fa-check"></i><b>6.4.3</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="6.5" data-path="workshop.html"><a href="workshop.html#data-import-and-creating-pipelines"><i class="fa fa-check"></i><b>6.5</b> Data import and creating pipelines</a><ul>
+<li class="chapter" data-level="6.5.1" data-path="workshop.html"><a href="workshop.html#worked-example-exploring-bigwig-files-from-annotationhub"><i class="fa fa-check"></i><b>6.5.1</b> Worked example: exploring BigWig files from AnnotationHub</a></li>
+<li class="chapter" data-level="6.5.2" data-path="workshop.html"><a href="workshop.html#worked-example-coverage-analysis-of-bam-files"><i class="fa fa-check"></i><b>6.5.2</b> Worked example: coverage analysis of BAM files</a></li>
+</ul></li>
+<li class="chapter" data-level="6.6" data-path="workshop.html"><a href="workshop.html#whats-next"><i class="fa fa-check"></i><b>6.6</b> What’s next?</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="appendix.html"><a href="appendix.html"><i class="fa fa-check"></i><b>7</b> Appendix</a></li>
+<li class="chapter" data-level="8" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>8</b> References</a></li>
+<li class="chapter" data-level="9" data-path="introduction-to-bioconductor-annotation-resources.html"><a href="introduction-to-bioconductor-annotation-resources.html"><i class="fa fa-check"></i><b>9</b> Introduction to Bioconductor annotation resources</a><ul>
+<li class="chapter" data-level="9.1" data-path="introduction-to-bioconductor-annotation-resources.html"><a href="introduction-to-bioconductor-annotation-resources.html#instructors"><i class="fa fa-check"></i><b>9.1</b> Instructors</a></li>
+<li class="chapter" data-level="9.2" data-path="introduction-to-bioconductor-annotation-resources.html"><a href="introduction-to-bioconductor-annotation-resources.html#workshop-description-1"><i class="fa fa-check"></i><b>9.2</b> Workshop Description</a><ul>
+<li class="chapter" data-level="9.2.1" data-path="introduction-to-bioconductor-annotation-resources.html"><a href="introduction-to-bioconductor-annotation-resources.html#prerequisites"><i class="fa fa-check"></i><b>9.2.1</b> Prerequisites</a></li>
+<li class="chapter" data-level="9.2.2" data-path="introduction-to-bioconductor-annotation-resources.html"><a href="introduction-to-bioconductor-annotation-resources.html#workshop-participation-1"><i class="fa fa-check"></i><b>9.2.2</b> Workshop Participation</a></li>
+<li class="chapter" data-level="9.2.3" data-path="introduction-to-bioconductor-annotation-resources.html"><a href="introduction-to-bioconductor-annotation-resources.html#r-bioconductor-packages-used-3"><i class="fa fa-check"></i><b>9.2.3</b> <em>R</em> / <em>Bioconductor</em> packages used</a></li>
+</ul></li>
+<li class="chapter" data-level="9.3" data-path="introduction-to-bioconductor-annotation-resources.html"><a href="introduction-to-bioconductor-annotation-resources.html#workshop-goals-and-objectives-3"><i class="fa fa-check"></i><b>9.3</b> Workshop goals and objectives</a><ul>
+<li class="chapter" data-level="9.3.1" data-path="introduction-to-bioconductor-annotation-resources.html"><a href="introduction-to-bioconductor-annotation-resources.html#learning-goals-1"><i class="fa fa-check"></i><b>9.3.1</b> Learning goals</a></li>
+<li class="chapter" data-level="9.3.2" data-path="introduction-to-bioconductor-annotation-resources.html"><a href="introduction-to-bioconductor-annotation-resources.html#learning-objectives-1"><i class="fa fa-check"></i><b>9.3.2</b> Learning objectives</a></li>
+</ul></li>
+<li class="chapter" data-level="9.4" data-path="introduction-to-bioconductor-annotation-resources.html"><a href="introduction-to-bioconductor-annotation-resources.html#annotation-workshop"><i class="fa fa-check"></i><b>9.4</b> Annotation Workshop</a><ul>
+<li class="chapter" data-level="9.4.1" data-path="introduction-to-bioconductor-annotation-resources.html"><a href="introduction-to-bioconductor-annotation-resources.html#goals-for-this-workshop"><i class="fa fa-check"></i><b>9.4.1</b> Goals for this workshop</a></li>
+<li class="chapter" data-level="9.4.2" data-path="introduction-to-bioconductor-annotation-resources.html"><a href="introduction-to-bioconductor-annotation-resources.html#what-do-we-mean-by-annotation"><i class="fa fa-check"></i><b>9.4.2</b> What do we mean by annotation?</a></li>
+<li class="chapter" data-level="9.4.3" data-path="introduction-to-bioconductor-annotation-resources.html"><a href="introduction-to-bioconductor-annotation-resources.html#specific-goal"><i class="fa fa-check"></i><b>9.4.3</b> Specific goal</a></li>
+<li class="chapter" data-level="9.4.4" data-path="introduction-to-bioconductor-annotation-resources.html"><a href="introduction-to-bioconductor-annotation-resources.html#data-containers"><i class="fa fa-check"></i><b>9.4.4</b> Data containers</a></li>
+<li class="chapter" data-level="9.4.5" data-path="introduction-to-bioconductor-annotation-resources.html"><a href="introduction-to-bioconductor-annotation-resources.html#expressionset"><i class="fa fa-check"></i><b>9.4.5</b> ExpressionSet</a></li>
+<li class="chapter" data-level="9.4.6" data-path="introduction-to-bioconductor-annotation-resources.html"><a href="introduction-to-bioconductor-annotation-resources.html#expressionset-continued"><i class="fa fa-check"></i><b>9.4.6</b> ExpressionSet (continued)</a></li>
+<li class="chapter" data-level="9.4.7" data-path="introduction-to-bioconductor-annotation-resources.html"><a href="introduction-to-bioconductor-annotation-resources.html#expressionset-continued-1"><i class="fa fa-check"></i><b>9.4.7</b> ExpressionSet (continued)</a></li>
+<li class="chapter" data-level="9.4.8" data-path="introduction-to-bioconductor-annotation-resources.html"><a href="introduction-to-bioconductor-annotation-resources.html#bioc-containers-vs-basic-structures"><i class="fa fa-check"></i><b>9.4.8</b> BioC containers vs basic structures</a></li>
+<li class="chapter" data-level="9.4.9" data-path="introduction-to-bioconductor-annotation-resources.html"><a href="introduction-to-bioconductor-annotation-resources.html#annotation-sources"><i class="fa fa-check"></i><b>9.4.9</b> Annotation sources</a></li>
+<li class="chapter" data-level="9.4.10" data-path="introduction-to-bioconductor-annotation-resources.html"><a href="introduction-to-bioconductor-annotation-resources.html#interacting-with-annodb-packages"><i class="fa fa-check"></i><b>9.4.10</b> Interacting with AnnoDb packages</a></li>
+<li class="chapter" data-level="9.4.11" data-path="introduction-to-bioconductor-annotation-resources.html"><a href="introduction-to-bioconductor-annotation-resources.html#simple-example"><i class="fa fa-check"></i><b>9.4.11</b> Simple example</a></li>
+<li class="chapter" data-level="9.4.12" data-path="introduction-to-bioconductor-annotation-resources.html"><a href="introduction-to-bioconductor-annotation-resources.html#questions"><i class="fa fa-check"></i><b>9.4.12</b> Questions!</a></li>
+<li class="chapter" data-level="9.4.13" data-path="introduction-to-bioconductor-annotation-resources.html"><a href="introduction-to-bioconductor-annotation-resources.html#more-questions"><i class="fa fa-check"></i><b>9.4.13</b> More questions!</a></li>
+<li class="chapter" data-level="9.4.14" data-path="introduction-to-bioconductor-annotation-resources.html"><a href="introduction-to-bioconductor-annotation-resources.html#another-example"><i class="fa fa-check"></i><b>9.4.14</b> Another example</a></li>
+<li class="chapter" data-level="9.4.15" data-path="introduction-to-bioconductor-annotation-resources.html"><a href="introduction-to-bioconductor-annotation-resources.html#the-mapids-function"><i class="fa fa-check"></i><b>9.4.15</b> The <code>mapIds</code> function</a></li>
+<li class="chapter" data-level="9.4.16" data-path="introduction-to-bioconductor-annotation-resources.html"><a href="introduction-to-bioconductor-annotation-resources.html#choices-for-multivals"><i class="fa fa-check"></i><b>9.4.16</b> Choices for multiVals</a></li>
+<li class="chapter" data-level="9.4.17" data-path="introduction-to-bioconductor-annotation-resources.html"><a href="introduction-to-bioconductor-annotation-resources.html#choices-for-multivals-continued"><i class="fa fa-check"></i><b>9.4.17</b> Choices for multiVals (continued)</a></li>
+<li class="chapter" data-level="9.4.18" data-path="introduction-to-bioconductor-annotation-resources.html"><a href="introduction-to-bioconductor-annotation-resources.html#chipdborgdb-questions"><i class="fa fa-check"></i><b>9.4.18</b> ChipDb/OrgDb questions</a></li>
+<li class="chapter" data-level="9.4.19" data-path="introduction-to-bioconductor-annotation-resources.html"><a href="introduction-to-bioconductor-annotation-resources.html#txdb-packages"><i class="fa fa-check"></i><b>9.4.19</b> TxDb packages</a></li>
+<li class="chapter" data-level="9.4.20" data-path="introduction-to-bioconductor-annotation-resources.html"><a href="introduction-to-bioconductor-annotation-resources.html#ensdb-packages"><i class="fa fa-check"></i><b>9.4.20</b> EnsDb packages</a></li>
+<li class="chapter" data-level="9.4.21" data-path="introduction-to-bioconductor-annotation-resources.html"><a href="introduction-to-bioconductor-annotation-resources.html#transcript-packages"><i class="fa fa-check"></i><b>9.4.21</b> Transcript packages</a></li>
+<li class="chapter" data-level="9.4.22" data-path="introduction-to-bioconductor-annotation-resources.html"><a href="introduction-to-bioconductor-annotation-resources.html#granges"><i class="fa fa-check"></i><b>9.4.22</b> GRanges</a></li>
+<li class="chapter" data-level="9.4.23" data-path="introduction-to-bioconductor-annotation-resources.html"><a href="introduction-to-bioconductor-annotation-resources.html#grangeslist"><i class="fa fa-check"></i><b>9.4.23</b> GRangesList</a></li>
+<li class="chapter" data-level="9.4.24" data-path="introduction-to-bioconductor-annotation-resources.html"><a href="introduction-to-bioconductor-annotation-resources.html#other-accessors"><i class="fa fa-check"></i><b>9.4.24</b> Other accessors</a></li>
+<li class="chapter" data-level="9.4.25" data-path="introduction-to-bioconductor-annotation-resources.html"><a href="introduction-to-bioconductor-annotation-resources.html#why-ranges-objects"><i class="fa fa-check"></i><b>9.4.25</b> Why *Ranges objects</a></li>
+<li class="chapter" data-level="9.4.26" data-path="introduction-to-bioconductor-annotation-resources.html"><a href="introduction-to-bioconductor-annotation-resources.html#ranges-use-cases"><i class="fa fa-check"></i><b>9.4.26</b> *Ranges use cases</a></li>
+<li class="chapter" data-level="9.4.27" data-path="introduction-to-bioconductor-annotation-resources.html"><a href="introduction-to-bioconductor-annotation-resources.html#summarizedexperiment-objects"><i class="fa fa-check"></i><b>9.4.27</b> SummarizedExperiment objects</a></li>
+<li class="chapter" data-level="9.4.28" data-path="introduction-to-bioconductor-annotation-resources.html"><a href="introduction-to-bioconductor-annotation-resources.html#txdb-exercises"><i class="fa fa-check"></i><b>9.4.28</b> TxDb exercises</a></li>
+<li class="chapter" data-level="9.4.29" data-path="introduction-to-bioconductor-annotation-resources.html"><a href="introduction-to-bioconductor-annotation-resources.html#organismdb-packages"><i class="fa fa-check"></i><b>9.4.29</b> OrganismDb packages</a></li>
+<li class="chapter" data-level="9.4.30" data-path="introduction-to-bioconductor-annotation-resources.html"><a href="introduction-to-bioconductor-annotation-resources.html#organismdb-packages-1"><i class="fa fa-check"></i><b>9.4.30</b> OrganismDb packages</a></li>
+<li class="chapter" data-level="9.4.31" data-path="introduction-to-bioconductor-annotation-resources.html"><a href="introduction-to-bioconductor-annotation-resources.html#organismdb-exercises"><i class="fa fa-check"></i><b>9.4.31</b> OrganismDb exercises</a></li>
+<li class="chapter" data-level="9.4.32" data-path="introduction-to-bioconductor-annotation-resources.html"><a href="introduction-to-bioconductor-annotation-resources.html#organism.dplyr-package"><i class="fa fa-check"></i><b>9.4.32</b> Organism.dplyr package</a></li>
+<li class="chapter" data-level="9.4.33" data-path="introduction-to-bioconductor-annotation-resources.html"><a href="introduction-to-bioconductor-annotation-resources.html#organism.dply-example"><i class="fa fa-check"></i><b>9.4.33</b> Organism.dply example</a></li>
+<li class="chapter" data-level="9.4.34" data-path="introduction-to-bioconductor-annotation-resources.html"><a href="introduction-to-bioconductor-annotation-resources.html#organism.dplyr-exercises"><i class="fa fa-check"></i><b>9.4.34</b> Organism.dplyr exercises</a></li>
+<li class="chapter" data-level="9.4.35" data-path="introduction-to-bioconductor-annotation-resources.html"><a href="introduction-to-bioconductor-annotation-resources.html#bsgenome-packages"><i class="fa fa-check"></i><b>9.4.35</b> BSgenome packages</a></li>
+<li class="chapter" data-level="9.4.36" data-path="introduction-to-bioconductor-annotation-resources.html"><a href="introduction-to-bioconductor-annotation-resources.html#bsgenome-packages-1"><i class="fa fa-check"></i><b>9.4.36</b> BSgenome packages</a></li>
+<li class="chapter" data-level="9.4.37" data-path="introduction-to-bioconductor-annotation-resources.html"><a href="introduction-to-bioconductor-annotation-resources.html#bsgenome-packages-2"><i class="fa fa-check"></i><b>9.4.37</b> BSgenome packages</a></li>
+<li class="chapter" data-level="9.4.38" data-path="introduction-to-bioconductor-annotation-resources.html"><a href="introduction-to-bioconductor-annotation-resources.html#bsgenome-exercises"><i class="fa fa-check"></i><b>9.4.38</b> BSgenome exercises</a></li>
+<li class="chapter" data-level="9.4.39" data-path="introduction-to-bioconductor-annotation-resources.html"><a href="introduction-to-bioconductor-annotation-resources.html#annotationhub-1"><i class="fa fa-check"></i><b>9.4.39</b> AnnotationHub</a></li>
+<li class="chapter" data-level="9.4.40" data-path="introduction-to-bioconductor-annotation-resources.html"><a href="introduction-to-bioconductor-annotation-resources.html#querying-annotationhub-1"><i class="fa fa-check"></i><b>9.4.40</b> Querying AnnotationHub</a></li>
+<li class="chapter" data-level="9.4.41" data-path="introduction-to-bioconductor-annotation-resources.html"><a href="introduction-to-bioconductor-annotation-resources.html#annotationhub-data-providers"><i class="fa fa-check"></i><b>9.4.41</b> AnnotationHub Data providers</a></li>
+<li class="chapter" data-level="9.4.42" data-path="introduction-to-bioconductor-annotation-resources.html"><a href="introduction-to-bioconductor-annotation-resources.html#annotationhub-data-classes"><i class="fa fa-check"></i><b>9.4.42</b> AnnotationHub Data classes</a></li>
+<li class="chapter" data-level="9.4.43" data-path="introduction-to-bioconductor-annotation-resources.html"><a href="introduction-to-bioconductor-annotation-resources.html#annotationhub-species"><i class="fa fa-check"></i><b>9.4.43</b> AnnotationHub Species</a></li>
+<li class="chapter" data-level="9.4.44" data-path="introduction-to-bioconductor-annotation-resources.html"><a href="introduction-to-bioconductor-annotation-resources.html#annotationhub-data-sources"><i class="fa fa-check"></i><b>9.4.44</b> AnnotationHub Data sources</a></li>
+<li class="chapter" data-level="9.4.45" data-path="introduction-to-bioconductor-annotation-resources.html"><a href="introduction-to-bioconductor-annotation-resources.html#annotationhub-query"><i class="fa fa-check"></i><b>9.4.45</b> AnnotationHub query</a></li>
+<li class="chapter" data-level="9.4.46" data-path="introduction-to-bioconductor-annotation-resources.html"><a href="introduction-to-bioconductor-annotation-resources.html#annotationhub-query-1"><i class="fa fa-check"></i><b>9.4.46</b> AnnotationHub query</a></li>
+<li class="chapter" data-level="9.4.47" data-path="introduction-to-bioconductor-annotation-resources.html"><a href="introduction-to-bioconductor-annotation-resources.html#selecting-annotationhub-resource"><i class="fa fa-check"></i><b>9.4.47</b> Selecting AnnotationHub resource</a></li>
+<li class="chapter" data-level="9.4.48" data-path="introduction-to-bioconductor-annotation-resources.html"><a href="introduction-to-bioconductor-annotation-resources.html#annotationhub-exercises"><i class="fa fa-check"></i><b>9.4.48</b> AnnotationHub exercises</a></li>
+<li class="chapter" data-level="9.4.49" data-path="introduction-to-bioconductor-annotation-resources.html"><a href="introduction-to-bioconductor-annotation-resources.html#biomart"><i class="fa fa-check"></i><b>9.4.49</b> biomaRt</a></li>
+<li class="chapter" data-level="9.4.50" data-path="introduction-to-bioconductor-annotation-resources.html"><a href="introduction-to-bioconductor-annotation-resources.html#biomart-data-sets"><i class="fa fa-check"></i><b>9.4.50</b> biomaRt data sets</a></li>
+<li class="chapter" data-level="9.4.51" data-path="introduction-to-bioconductor-annotation-resources.html"><a href="introduction-to-bioconductor-annotation-resources.html#biomart-queries"><i class="fa fa-check"></i><b>9.4.51</b> biomaRt queries</a></li>
+<li class="chapter" data-level="9.4.52" data-path="introduction-to-bioconductor-annotation-resources.html"><a href="introduction-to-bioconductor-annotation-resources.html#biomart-attributes-and-filters"><i class="fa fa-check"></i><b>9.4.52</b> biomaRt attributes and filters</a></li>
+<li class="chapter" data-level="9.4.53" data-path="introduction-to-bioconductor-annotation-resources.html"><a href="introduction-to-bioconductor-annotation-resources.html#biomart-query"><i class="fa fa-check"></i><b>9.4.53</b> biomaRt query</a></li>
+<li class="chapter" data-level="9.4.54" data-path="introduction-to-bioconductor-annotation-resources.html"><a href="introduction-to-bioconductor-annotation-resources.html#biomart-exercises"><i class="fa fa-check"></i><b>9.4.54</b> biomaRt exercises</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="workflow-for-multi-omics-analysis-with-multiassayexperiment.html"><a href="workflow-for-multi-omics-analysis-with-multiassayexperiment.html"><i class="fa fa-check"></i><b>10</b> Workflow for Multi-omics Analysis with MultiAssayExperiment</a><ul>
+<li class="chapter" data-level="10.1" data-path="workflow-for-multi-omics-analysis-with-multiassayexperiment.html"><a href="workflow-for-multi-omics-analysis-with-multiassayexperiment.html#instructor-names-and-contact-information"><i class="fa fa-check"></i><b>10.1</b> Instructor names and contact information</a></li>
+<li class="chapter" data-level="10.2" data-path="workflow-for-multi-omics-analysis-with-multiassayexperiment.html"><a href="workflow-for-multi-omics-analysis-with-multiassayexperiment.html#workshop-description-2"><i class="fa fa-check"></i><b>10.2</b> Workshop Description</a><ul>
+<li class="chapter" data-level="10.2.1" data-path="workflow-for-multi-omics-analysis-with-multiassayexperiment.html"><a href="workflow-for-multi-omics-analysis-with-multiassayexperiment.html#pre-requisites-3"><i class="fa fa-check"></i><b>10.2.1</b> Pre-requisites</a></li>
+<li class="chapter" data-level="10.2.2" data-path="workflow-for-multi-omics-analysis-with-multiassayexperiment.html"><a href="workflow-for-multi-omics-analysis-with-multiassayexperiment.html#workshop-participation-2"><i class="fa fa-check"></i><b>10.2.2</b> workshop Participation</a></li>
+<li class="chapter" data-level="10.2.3" data-path="workflow-for-multi-omics-analysis-with-multiassayexperiment.html"><a href="workflow-for-multi-omics-analysis-with-multiassayexperiment.html#rbioconductor-packages-used"><i class="fa fa-check"></i><b>10.2.3</b> R/Bioconductor packages used</a></li>
+<li class="chapter" data-level="10.2.4" data-path="workflow-for-multi-omics-analysis-with-multiassayexperiment.html"><a href="workflow-for-multi-omics-analysis-with-multiassayexperiment.html#time-outline-3"><i class="fa fa-check"></i><b>10.2.4</b> Time outline</a></li>
+</ul></li>
+<li class="chapter" data-level="10.3" data-path="workflow-for-multi-omics-analysis-with-multiassayexperiment.html"><a href="workflow-for-multi-omics-analysis-with-multiassayexperiment.html#workshop-goals-and-objectives-4"><i class="fa fa-check"></i><b>10.3</b> Workshop goals and objectives</a><ul>
+<li class="chapter" data-level="10.3.1" data-path="workflow-for-multi-omics-analysis-with-multiassayexperiment.html"><a href="workflow-for-multi-omics-analysis-with-multiassayexperiment.html#learning-goals-2"><i class="fa fa-check"></i><b>10.3.1</b> Learning goals</a></li>
+<li class="chapter" data-level="10.3.2" data-path="workflow-for-multi-omics-analysis-with-multiassayexperiment.html"><a href="workflow-for-multi-omics-analysis-with-multiassayexperiment.html#learning-objectives-2"><i class="fa fa-check"></i><b>10.3.2</b> Learning objectives</a></li>
+</ul></li>
+<li class="chapter" data-level="10.4" data-path="workflow-for-multi-omics-analysis-with-multiassayexperiment.html"><a href="workflow-for-multi-omics-analysis-with-multiassayexperiment.html#overview-of-key-data-classes"><i class="fa fa-check"></i><b>10.4</b> Overview of key data classes</a><ul>
+<li class="chapter" data-level="10.4.1" data-path="workflow-for-multi-omics-analysis-with-multiassayexperiment.html"><a href="workflow-for-multi-omics-analysis-with-multiassayexperiment.html#summarizedexperiment-raggedexperiment"><i class="fa fa-check"></i><b>10.4.1</b> <code>SummarizedExperiment</code> / <code>RaggedExperiment</code></a></li>
+<li class="chapter" data-level="10.4.2" data-path="workflow-for-multi-omics-analysis-with-multiassayexperiment.html"><a href="workflow-for-multi-omics-analysis-with-multiassayexperiment.html#multiassayexperiment"><i class="fa fa-check"></i><b>10.4.2</b> <code>MultiAssayExperiment</code></a></li>
+<li class="chapter" data-level="10.4.3" data-path="workflow-for-multi-omics-analysis-with-multiassayexperiment.html"><a href="workflow-for-multi-omics-analysis-with-multiassayexperiment.html#raggedexperiment"><i class="fa fa-check"></i><b>10.4.3</b> <code>RaggedExperiment</code></a></li>
+</ul></li>
+<li class="chapter" data-level="10.5" data-path="workflow-for-multi-omics-analysis-with-multiassayexperiment.html"><a href="workflow-for-multi-omics-analysis-with-multiassayexperiment.html#working-with-raggedexperiment"><i class="fa fa-check"></i><b>10.5</b> Working with RaggedExperiment</a><ul>
+<li class="chapter" data-level="10.5.1" data-path="workflow-for-multi-omics-analysis-with-multiassayexperiment.html"><a href="workflow-for-multi-omics-analysis-with-multiassayexperiment.html#constructing-a-raggedexperiment-object"><i class="fa fa-check"></i><b>10.5.1</b> Constructing a <code>RaggedExperiment</code> object</a></li>
+<li class="chapter" data-level="10.5.2" data-path="workflow-for-multi-omics-analysis-with-multiassayexperiment.html"><a href="workflow-for-multi-omics-analysis-with-multiassayexperiment.html#using-granges-objects"><i class="fa fa-check"></i><b>10.5.2</b> Using <code>GRanges</code> objects</a></li>
+<li class="chapter" data-level="10.5.3" data-path="workflow-for-multi-omics-analysis-with-multiassayexperiment.html"><a href="workflow-for-multi-omics-analysis-with-multiassayexperiment.html#assay-functions"><i class="fa fa-check"></i><b>10.5.3</b> *Assay functions</a></li>
+</ul></li>
+<li class="chapter" data-level="10.6" data-path="workflow-for-multi-omics-analysis-with-multiassayexperiment.html"><a href="workflow-for-multi-omics-analysis-with-multiassayexperiment.html#qreduceassay"><i class="fa fa-check"></i><b>10.6</b> qreduceAssay</a></li>
+<li class="chapter" data-level="10.7" data-path="workflow-for-multi-omics-analysis-with-multiassayexperiment.html"><a href="workflow-for-multi-omics-analysis-with-multiassayexperiment.html#working-with-multiassayexperiment"><i class="fa fa-check"></i><b>10.7</b> Working with MultiAssayExperiment</a><ul>
+<li class="chapter" data-level="10.7.1" data-path="workflow-for-multi-omics-analysis-with-multiassayexperiment.html"><a href="workflow-for-multi-omics-analysis-with-multiassayexperiment.html#the-multiassayexperiment-miniacc-demo-object"><i class="fa fa-check"></i><b>10.7.1</b> The MultiAssayExperiment miniACC demo object</a></li>
+<li class="chapter" data-level="10.7.2" data-path="workflow-for-multi-omics-analysis-with-multiassayexperiment.html"><a href="workflow-for-multi-omics-analysis-with-multiassayexperiment.html#coldata---information-biological-units"><i class="fa fa-check"></i><b>10.7.2</b> colData - information biological units</a></li>
+<li class="chapter" data-level="10.7.3" data-path="workflow-for-multi-omics-analysis-with-multiassayexperiment.html"><a href="workflow-for-multi-omics-analysis-with-multiassayexperiment.html#experimentlist---experiment-data"><i class="fa fa-check"></i><b>10.7.3</b> ExperimentList - experiment data</a></li>
+<li class="chapter" data-level="10.7.4" data-path="workflow-for-multi-omics-analysis-with-multiassayexperiment.html"><a href="workflow-for-multi-omics-analysis-with-multiassayexperiment.html#samplemap---relationship-graph"><i class="fa fa-check"></i><b>10.7.4</b> sampleMap - relationship graph</a></li>
+<li class="chapter" data-level="10.7.5" data-path="workflow-for-multi-omics-analysis-with-multiassayexperiment.html"><a href="workflow-for-multi-omics-analysis-with-multiassayexperiment.html#metadata"><i class="fa fa-check"></i><b>10.7.5</b> metadata</a></li>
+</ul></li>
+<li class="chapter" data-level="10.8" data-path="workflow-for-multi-omics-analysis-with-multiassayexperiment.html"><a href="workflow-for-multi-omics-analysis-with-multiassayexperiment.html#multiassayexperiment-subsetting"><i class="fa fa-check"></i><b>10.8</b> MultiAssayExperiment Subsetting</a><ul>
+<li class="chapter" data-level="10.8.1" data-path="workflow-for-multi-omics-analysis-with-multiassayexperiment.html"><a href="workflow-for-multi-omics-analysis-with-multiassayexperiment.html#single-bracket"><i class="fa fa-check"></i><b>10.8.1</b> Single bracket <code>[</code></a></li>
+<li class="chapter" data-level="10.8.2" data-path="workflow-for-multi-omics-analysis-with-multiassayexperiment.html"><a href="workflow-for-multi-omics-analysis-with-multiassayexperiment.html#subsetting-by-genomic-ranges"><i class="fa fa-check"></i><b>10.8.2</b> Subsetting by genomic ranges</a></li>
+<li class="chapter" data-level="10.8.3" data-path="workflow-for-multi-omics-analysis-with-multiassayexperiment.html"><a href="workflow-for-multi-omics-analysis-with-multiassayexperiment.html#double-bracket"><i class="fa fa-check"></i><b>10.8.3</b> Double bracket <code>[[</code></a></li>
+</ul></li>
+<li class="chapter" data-level="10.9" data-path="workflow-for-multi-omics-analysis-with-multiassayexperiment.html"><a href="workflow-for-multi-omics-analysis-with-multiassayexperiment.html#patients-with-complete-data"><i class="fa fa-check"></i><b>10.9</b> Patients with complete data</a></li>
+<li class="chapter" data-level="10.10" data-path="workflow-for-multi-omics-analysis-with-multiassayexperiment.html"><a href="workflow-for-multi-omics-analysis-with-multiassayexperiment.html#row-names-that-are-common-across-assays"><i class="fa fa-check"></i><b>10.10</b> Row names that are common across assays</a></li>
+<li class="chapter" data-level="10.11" data-path="workflow-for-multi-omics-analysis-with-multiassayexperiment.html"><a href="workflow-for-multi-omics-analysis-with-multiassayexperiment.html#extraction"><i class="fa fa-check"></i><b>10.11</b> Extraction</a><ul>
+<li class="chapter" data-level="10.11.1" data-path="workflow-for-multi-omics-analysis-with-multiassayexperiment.html"><a href="workflow-for-multi-omics-analysis-with-multiassayexperiment.html#assay-and-assays"><i class="fa fa-check"></i><b>10.11.1</b> assay and assays</a></li>
+</ul></li>
+<li class="chapter" data-level="10.12" data-path="workflow-for-multi-omics-analysis-with-multiassayexperiment.html"><a href="workflow-for-multi-omics-analysis-with-multiassayexperiment.html#summary-of-slots-and-accessors"><i class="fa fa-check"></i><b>10.12</b> Summary of slots and accessors</a></li>
+<li class="chapter" data-level="10.13" data-path="workflow-for-multi-omics-analysis-with-multiassayexperiment.html"><a href="workflow-for-multi-omics-analysis-with-multiassayexperiment.html#transformation-reshaping"><i class="fa fa-check"></i><b>10.13</b> Transformation / reshaping</a><ul>
+<li class="chapter" data-level="10.13.1" data-path="workflow-for-multi-omics-analysis-with-multiassayexperiment.html"><a href="workflow-for-multi-omics-analysis-with-multiassayexperiment.html#longformat"><i class="fa fa-check"></i><b>10.13.1</b> <code>longFormat</code></a></li>
+<li class="chapter" data-level="10.13.2" data-path="workflow-for-multi-omics-analysis-with-multiassayexperiment.html"><a href="workflow-for-multi-omics-analysis-with-multiassayexperiment.html#wideformat"><i class="fa fa-check"></i><b>10.13.2</b> <code>wideFormat</code></a></li>
+</ul></li>
+<li class="chapter" data-level="10.14" data-path="workflow-for-multi-omics-analysis-with-multiassayexperiment.html"><a href="workflow-for-multi-omics-analysis-with-multiassayexperiment.html#multiassayexperiment-class-construction-and-concatenation"><i class="fa fa-check"></i><b>10.14</b> MultiAssayExperiment class construction and concatenation</a><ul>
+<li class="chapter" data-level="10.14.1" data-path="workflow-for-multi-omics-analysis-with-multiassayexperiment.html"><a href="workflow-for-multi-omics-analysis-with-multiassayexperiment.html#multiassayexperiment-constructor-function"><i class="fa fa-check"></i><b>10.14.1</b> MultiAssayExperiment constructor function</a></li>
+<li class="chapter" data-level="10.14.2" data-path="workflow-for-multi-omics-analysis-with-multiassayexperiment.html"><a href="workflow-for-multi-omics-analysis-with-multiassayexperiment.html#prepmultiassay---constructor-function-helper"><i class="fa fa-check"></i><b>10.14.2</b> <code>prepMultiAssay</code> - Constructor function helper</a></li>
+<li class="chapter" data-level="10.14.3" data-path="workflow-for-multi-omics-analysis-with-multiassayexperiment.html"><a href="workflow-for-multi-omics-analysis-with-multiassayexperiment.html#c---concatenate-to-multiassayexperiment"><i class="fa fa-check"></i><b>10.14.3</b> <code>c</code> - concatenate to MultiAssayExperiment</a></li>
+<li class="chapter" data-level="10.14.4" data-path="workflow-for-multi-omics-analysis-with-multiassayexperiment.html"><a href="workflow-for-multi-omics-analysis-with-multiassayexperiment.html#building-a-multiassayexperiment-from-scratch"><i class="fa fa-check"></i><b>10.14.4</b> Building a MultiAssayExperiment from scratch</a></li>
+</ul></li>
+<li class="chapter" data-level="10.15" data-path="workflow-for-multi-omics-analysis-with-multiassayexperiment.html"><a href="workflow-for-multi-omics-analysis-with-multiassayexperiment.html#the-cancer-genome-atlas-tcga-as-multiassayexperiments"><i class="fa fa-check"></i><b>10.15</b> The Cancer Genome Atlas (TCGA) as MultiAssayExperiments</a></li>
+<li class="chapter" data-level="10.16" data-path="workflow-for-multi-omics-analysis-with-multiassayexperiment.html"><a href="workflow-for-multi-omics-analysis-with-multiassayexperiment.html#plotting-correlation-and-other-analyses"><i class="fa fa-check"></i><b>10.16</b> Plotting, correlation, and other analyses</a><ul>
+<li class="chapter" data-level="10.16.1" data-path="workflow-for-multi-omics-analysis-with-multiassayexperiment.html"><a href="workflow-for-multi-omics-analysis-with-multiassayexperiment.html#how-many-samples-have-data-for-each-combination-of-assays"><i class="fa fa-check"></i><b>10.16.1</b> How many samples have data for each combination of assays?</a></li>
+</ul></li>
+<li class="chapter" data-level="10.17" data-path="workflow-for-multi-omics-analysis-with-multiassayexperiment.html"><a href="workflow-for-multi-omics-analysis-with-multiassayexperiment.html#tcgautils-package"><i class="fa fa-check"></i><b>10.17</b> <code>TCGAutils</code> package</a><ul>
+<li class="chapter" data-level="10.17.1" data-path="workflow-for-multi-omics-analysis-with-multiassayexperiment.html"><a href="workflow-for-multi-omics-analysis-with-multiassayexperiment.html#what-types-of-samples-are-in-the-data"><i class="fa fa-check"></i><b>10.17.1</b> What types of samples are in the data?</a></li>
+<li class="chapter" data-level="10.17.2" data-path="workflow-for-multi-omics-analysis-with-multiassayexperiment.html"><a href="workflow-for-multi-omics-analysis-with-multiassayexperiment.html#is-there-subtype-data-available-in-the-multiassayexperiment-obtained-from"><i class="fa fa-check"></i><b>10.17.2</b> Is there subtype data available in the <code>MultiAssayExperiment</code> obtained from</a></li>
+<li class="chapter" data-level="10.17.3" data-path="workflow-for-multi-omics-analysis-with-multiassayexperiment.html"><a href="workflow-for-multi-omics-analysis-with-multiassayexperiment.html#kaplan-meier-plot-stratified-by-pathology_n_stage"><i class="fa fa-check"></i><b>10.17.3</b> Kaplan-meier plot stratified by pathology_N_stage</a></li>
+<li class="chapter" data-level="10.17.4" data-path="workflow-for-multi-omics-analysis-with-multiassayexperiment.html"><a href="workflow-for-multi-omics-analysis-with-multiassayexperiment.html#multivariate-cox-regression-including-rna-seq-copy-number-and-pathology"><i class="fa fa-check"></i><b>10.17.4</b> Multivariate Cox regression including RNA-seq, copy number, and pathology</a></li>
+<li class="chapter" data-level="10.17.5" data-path="workflow-for-multi-omics-analysis-with-multiassayexperiment.html"><a href="workflow-for-multi-omics-analysis-with-multiassayexperiment.html#correlation-between-rna-seq-and-copy-number"><i class="fa fa-check"></i><b>10.17.5</b> Correlation between RNA-seq and copy number</a></li>
+<li class="chapter" data-level="10.17.6" data-path="workflow-for-multi-omics-analysis-with-multiassayexperiment.html"><a href="workflow-for-multi-omics-analysis-with-multiassayexperiment.html#identifying-correlated-principal-components"><i class="fa fa-check"></i><b>10.17.6</b> Identifying correlated principal components</a></li>
+<li class="chapter" data-level="10.17.7" data-path="workflow-for-multi-omics-analysis-with-multiassayexperiment.html"><a href="workflow-for-multi-omics-analysis-with-multiassayexperiment.html#annotating-with-ranges"><i class="fa fa-check"></i><b>10.17.7</b> Annotating with ranges</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="maintaining-your-bioconductor-package.html"><a href="maintaining-your-bioconductor-package.html"><i class="fa fa-check"></i><b>11</b> Maintaining your Bioconductor package</a><ul>
+<li class="chapter" data-level="11.1" data-path="maintaining-your-bioconductor-package.html"><a href="maintaining-your-bioconductor-package.html#authors-1"><i class="fa fa-check"></i><b>11.1</b> Authors:</a></li>
+<li class="chapter" data-level="11.2" data-path="maintaining-your-bioconductor-package.html"><a href="maintaining-your-bioconductor-package.html#workshop-description-3"><i class="fa fa-check"></i><b>11.2</b> Workshop Description:</a></li>
+<li class="chapter" data-level="11.3" data-path="maintaining-your-bioconductor-package.html"><a href="maintaining-your-bioconductor-package.html#pre-requisites-4"><i class="fa fa-check"></i><b>11.3</b> Pre-requisites:</a></li>
+<li class="chapter" data-level="11.4" data-path="maintaining-your-bioconductor-package.html"><a href="maintaining-your-bioconductor-package.html#participation-2"><i class="fa fa-check"></i><b>11.4</b> Participation:</a></li>
+<li class="chapter" data-level="11.5" data-path="maintaining-your-bioconductor-package.html"><a href="maintaining-your-bioconductor-package.html#time-outline-50-mins-short-workshop"><i class="fa fa-check"></i><b>11.5</b> Time outline: 50 mins short workshop</a></li>
+<li class="chapter" data-level="11.6" data-path="maintaining-your-bioconductor-package.html"><a href="maintaining-your-bioconductor-package.html#workshop-goals-and-objectives-5"><i class="fa fa-check"></i><b>11.6</b> Workshop goals and objectives:</a></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="public-data-resources-and-bioconductor.html"><a href="public-data-resources-and-bioconductor.html"><i class="fa fa-check"></i><b>12</b> Public Data Resources and Bioconductor</a><ul>
+<li class="chapter" data-level="12.1" data-path="public-data-resources-and-bioconductor.html"><a href="public-data-resources-and-bioconductor.html#workshop-description-4"><i class="fa fa-check"></i><b>12.1</b> Workshop Description</a><ul>
+<li class="chapter" data-level="12.1.1" data-path="public-data-resources-and-bioconductor.html"><a href="public-data-resources-and-bioconductor.html#pre-requisites-5"><i class="fa fa-check"></i><b>12.1.1</b> Pre-requisites</a></li>
+<li class="chapter" data-level="12.1.2" data-path="public-data-resources-and-bioconductor.html"><a href="public-data-resources-and-bioconductor.html#workshop-participation-3"><i class="fa fa-check"></i><b>12.1.2</b> Workshop Participation</a></li>
+<li class="chapter" data-level="12.1.3" data-path="public-data-resources-and-bioconductor.html"><a href="public-data-resources-and-bioconductor.html#rbioconductor-packages-used-1"><i class="fa fa-check"></i><b>12.1.3</b> R/Bioconductor packages used</a></li>
+<li class="chapter" data-level="12.1.4" data-path="public-data-resources-and-bioconductor.html"><a href="public-data-resources-and-bioconductor.html#time-outline-4"><i class="fa fa-check"></i><b>12.1.4</b> Time outline</a></li>
+</ul></li>
+<li class="chapter" data-level="12.2" data-path="public-data-resources-and-bioconductor.html"><a href="public-data-resources-and-bioconductor.html#workshop-goals-and-objectives-6"><i class="fa fa-check"></i><b>12.2</b> workshop goals and objectives</a><ul>
+<li class="chapter" data-level="12.2.1" data-path="public-data-resources-and-bioconductor.html"><a href="public-data-resources-and-bioconductor.html#learning-goals-3"><i class="fa fa-check"></i><b>12.2.1</b> Learning goals</a></li>
+<li class="chapter" data-level="12.2.2" data-path="public-data-resources-and-bioconductor.html"><a href="public-data-resources-and-bioconductor.html#learning-objectives-3"><i class="fa fa-check"></i><b>12.2.2</b> Learning objectives</a></li>
+</ul></li>
+<li class="chapter" data-level="12.3" data-path="public-data-resources-and-bioconductor.html"><a href="public-data-resources-and-bioconductor.html#overview-2"><i class="fa fa-check"></i><b>12.3</b> Overview</a></li>
+<li class="chapter" data-level="12.4" data-path="public-data-resources-and-bioconductor.html"><a href="public-data-resources-and-bioconductor.html#geoquery"><i class="fa fa-check"></i><b>12.4</b> GEOquery</a></li>
+<li class="chapter" data-level="12.5" data-path="public-data-resources-and-bioconductor.html"><a href="public-data-resources-and-bioconductor.html#genomicdatacommons"><i class="fa fa-check"></i><b>12.5</b> GenomicDataCommons</a></li>
+<li class="chapter" data-level="12.6" data-path="public-data-resources-and-bioconductor.html"><a href="public-data-resources-and-bioconductor.html#sequence-read-archive"><i class="fa fa-check"></i><b>12.6</b> Sequence Read Archive</a></li>
+<li class="chapter" data-level="12.7" data-path="public-data-resources-and-bioconductor.html"><a href="public-data-resources-and-bioconductor.html#accessing-the-cancer-genome-atlas-tcga"><i class="fa fa-check"></i><b>12.7</b> Accessing The Cancer Genome Atlas (TCGA)</a><ul>
+<li class="chapter" data-level="12.7.1" data-path="public-data-resources-and-bioconductor.html"><a href="public-data-resources-and-bioconductor.html#curatedtcgadata"><i class="fa fa-check"></i><b>12.7.1</b> curatedTCGAData</a></li>
+</ul></li>
+<li class="chapter" data-level="12.8" data-path="public-data-resources-and-bioconductor.html"><a href="public-data-resources-and-bioconductor.html#gbm-dataset-example"><i class="fa fa-check"></i><b>12.8</b> GBM dataset example</a><ul>
+<li class="chapter" data-level="12.8.1" data-path="public-data-resources-and-bioconductor.html"><a href="public-data-resources-and-bioconductor.html#subtype-information"><i class="fa fa-check"></i><b>12.8.1</b> Subtype information</a></li>
+<li class="chapter" data-level="12.8.2" data-path="public-data-resources-and-bioconductor.html"><a href="public-data-resources-and-bioconductor.html#tcgabiolinks"><i class="fa fa-check"></i><b>12.8.2</b> TCGABiolinks</a></li>
+<li class="chapter" data-level="12.8.3" data-path="public-data-resources-and-bioconductor.html"><a href="public-data-resources-and-bioconductor.html#genomicdatacommons-1"><i class="fa fa-check"></i><b>12.8.3</b> GenomicDataCommons</a></li>
+</ul></li>
+<li class="chapter" data-level="12.9" data-path="public-data-resources-and-bioconductor.html"><a href="public-data-resources-and-bioconductor.html#microbiome-data"><i class="fa fa-check"></i><b>12.9</b> Microbiome data</a></li>
+<li class="chapter" data-level="12.10" data-path="public-data-resources-and-bioconductor.html"><a href="public-data-resources-and-bioconductor.html#pharmacogenomics"><i class="fa fa-check"></i><b>12.10</b> Pharmacogenomics</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://bioc2018.bioconductor.org/" target="blank">Bioconductor Conference</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">The Bioconductor 2018 Workshop Compilation</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="references" class="section level1">
+<h1><span class="header-section-number">8</span> References</h1>
+
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="appendix.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="introduction-to-bioconductor-annotation-resources.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": true,
+"facebook": false,
+"twitter": true,
+"google": false,
+"linkedin": false,
+"weibo": false,
+"instapper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"download": ["BioC2018.pdf", "BioC2018.epub"],
+"toc": {
+"collapse": "section"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "";
+    if (src === "" || src === "true") src = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(src))
+      src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
