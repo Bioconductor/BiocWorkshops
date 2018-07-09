@@ -39,9 +39,12 @@ setwd("Law_RNAseq123")
 url <- "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE63310&format=file"
 utils::download.file(url, destfile="GSE63310_RAW.tar", mode="wb")
 utils::untar("GSE63310_RAW.tar", exdir = ".")
-files <- c("GSM1545535_10_6_5_11.txt", "GSM1545536_9_6_5_11.txt", "GSM1545538_purep53.txt",
-  "GSM1545539_JMS8-2.txt", "GSM1545540_JMS8-3.txt", "GSM1545541_JMS8-4.txt",
-    "GSM1545542_JMS8-5.txt", "GSM1545544_JMS9-P7c.txt", "GSM1545545_JMS9-P8c.txt")
+
+files <- c("GSM1545535_10_6_5_11.txt", "GSM1545536_9_6_5_11.txt",
+    "GSM1545538_purep53.txt", "GSM1545539_JMS8-2.txt", "GSM1545540_JMS8-3.txt",
+    "GSM1545541_JMS8-4.txt", "GSM1545542_JMS8-5.txt", "GSM1545544_JMS9-P7c.txt",
+    "GSM1545545_JMS9-P8c.txt")
+
 for(i in paste(files, ".gz", sep=""))
     R.utils::gunzip(i, overwrite=TRUE)
 setwd("..")      
@@ -52,18 +55,13 @@ setwd("..")
 To get started with this analysis, download the file *GSE63310_RAW.tar* available online from [https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE63310&format=file](https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE63310&format=file), and extract the relevant files from this archive. Each of these text files contains the raw gene-level counts for a given sample. Note that our analysis only includes the basal, LP and ML samples from this experiment (see associated file names below). 
 
 ```{r import1}
-files <- c("GSM1545535_10_6_5_11.txt", "GSM1545536_9_6_5_11.txt", 
-   "GSM1545538_purep53.txt", "GSM1545539_JMS8-2.txt", 
-   "GSM1545540_JMS8-3.txt", "GSM1545541_JMS8-4.txt", 
-   "GSM1545542_JMS8-5.txt", "GSM1545544_JMS9-P7c.txt", 
-   "GSM1545545_JMS9-P8c.txt")
-read.delim(files[1], nrow=5)
+read.delim(file.path("Law_RNAseq123", files[1]), nrow=5)
 ```
 
 Whilst each of the nine text files can be read into **R** separately and combined into a matrix of counts, **edgeR** offers a convenient way to do this in one step using the `readDGE` function. The resulting DGEList-object contains a matrix of counts with 27,179 rows associated with unique Entrez gene identifiers (IDs) and nine columns associated with the individual samples in the experiment.
 
 ```{r import2}
-x <- readDGE(files, columns=c(1,3))
+x <- readDGE(file.path("Law_RNAseq123", files), columns=c(1,3))
 class(x)
 dim(x)
 ```
