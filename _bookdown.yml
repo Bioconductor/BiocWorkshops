@@ -21,7 +21,7 @@ rmd_files: [
 #  "Lee_Plyranges.Rmd", # error use dplyr::filter
   "MacDonald_Annotation.Rmd",
   "Ramos_MultiAssayExperiment.Rmd",
-  "Safikhani_Pharmacogenomics.Rmd", #inc
+#  "Safikhani_Pharmacogenomics.Rmd", #ERROR: in lm.fit
   "Turaga_MaintainBioc.Rmd", #inc
   "Waldron_PublicData.Rmd" #inc
 ]
