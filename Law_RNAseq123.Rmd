@@ -1,16 +1,8 @@
----
-title: "RNA-seq analysis is easy as 1-2-3 with limma, Glimma and edgeR"
-Authors:
-    Charity Law <law@wehi.edu.au>
-Last modified: 7 July, 2018.
----
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-options(digits=3)
-```
-
 # RNA-seq analysis is easy as 1-2-3 with limma, Glimma and edgeR
+
+## Instructor(s) name(s) and contact information
+
+* Charity Law (law@wehi.edu.au)
 
 ## Introduction
 
