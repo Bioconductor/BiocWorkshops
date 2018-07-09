@@ -13,6 +13,7 @@ Imports:
   beachmat,
   Biobase,
   BiocParallel,
+  BiocStyle,
   biomaRt,
   bookdown,
   BSgenome, 

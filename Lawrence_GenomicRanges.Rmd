@@ -251,7 +251,7 @@ shift(g, 5)
 resize(g, 30)
 ```
  
-The `r Biocpkg("GenomicRanges")` help page `?"intra-range-methods"`
+The `r BiocStyle::Biocpkg("GenomicRanges")` help page `?"intra-range-methods"`
 summarizes these methods.
 
 *Inter-range methods* involve comparisons between ranges in a
@@ -286,7 +286,7 @@ the ranges in a *GRanges* object.
 coverage(g)
 ```
  
-See the `r Biocpkg("GenomicRanges")` help page
+See the `r BiocStyle::Biocpkg("GenomicRanges")` help page
 `?"inter-range-methods"` for additional help.
 
 *Between-range methods* involve operations between two
@@ -634,7 +634,7 @@ objects}
 Interval overlapping is the process of comparing the ranges in two
 objects to determine if and when they overlap. As such, it is perhaps
 the most common operation performed on *GRanges* and
-*GRangesList* objects. To this end, the `r Biocpkg("GenomicRanges")`
+*GRangesList* objects. To this end, the `r BiocStyle::Biocpkg("GenomicRanges")`
 package provides a family of interval overlap functions. The most general
 of these functions is `findOverlaps`, which takes a query and a
 subject as inputs and returns a *Hits* object containing
