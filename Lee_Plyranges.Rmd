@@ -1,3 +1,6 @@
+---
+bibliography: Lee_Plyranges/plyranges.bib
+---
 # Fluent genomic data analysis with plyranges
 
 ## Instructor(s) name(s) and contact information
@@ -22,7 +25,7 @@ ask questions and interact with the instructors.
 
 ### Pre-requisites
 
-This workshop is mostly self-contained however familiarity with the following would be useful:
+This workshop is self-contained however familiarity with the following would be useful:
 
 - plyranges [vignette](https://sa-lee.github.io/plyranges/articles/an-introduction.html)
 - the GenomicRanges and IRanges packages
@@ -36,6 +39,7 @@ to any questions they have.
 ### _R_ / _Bioconductor_ packages used
 
 - plyranges
+- airway
 - AnnotationHub
 - GenomicRanges
 - IRanges
@@ -81,7 +85,8 @@ knitr::opts_chunk$set(message = FALSE,
 ### What is plyranges?
 
 The plyranges package is a domain specific language (DSL) built on top of the 
-IRanges and GenomicRanges packages. It is designed to quickly and coherently 
+IRanges and GenomicRanges packages (@Lee2018; @Lawrence2013-wg). 
+It is designed to quickly and coherently 
 analyse genomic data in the form of GRanges objects (more on those later!) and 
 from a wide variety of genomic data file types. For users who are familiar with 
 the tidyverse, the grammar that plyranges implements will look familiar but with
@@ -92,7 +97,7 @@ a few modifications for genomic specific tasks.
 The grammar that plyranges develops is helpful for reasoning
 about genomics data analysis, and provides a way of developing 
 short readable analysis pipelines. We have tried to emphasise consistency 
-and code readability.
+and code readability by following the design principles outlined by @Green1996-qg.
 
 One of the goals of plyranges is to provide an alternative entry point 
 to analysing genomics data with Bioconductor, especially for R beginners and 
@@ -105,14 +110,15 @@ provided by core Bioconductor packages that are useful for programming with.
 This workshop is intended for new users of Bioconductor, users who are
 interested to learn about grammar based approaches for data analysis,
 and users who are interested in learning how to use R to perform analyses
-like those available in the command line packages BEDTools and deeptools.
+like those available in the command line packages BEDTools @Quinlan2010-gc.
 
 If that's you, let's begin!
 
 ## Setup
 
 To participate in this workshop you'll need to have R >= 3.5 and install
-the plyranges, AnnotationHub, and airway Bioconductor 3.7 packages. You can achieve this
+the plyranges, AnnotationHub, and airway Bioconductor 3.7 packages 
+(@R-AnnotationHub; @R-airway). You can achieve this
 by installing the BiocManager package from CRAN, loading it then running the
 install command:
 
@@ -125,15 +131,7 @@ install(c("plyranges", "AnnotationHub", "airway"))
 ## What are GRanges objects?
 
 
-(ref:GRanges): An illustration of a GRanges data object for a single
-sample from an RNA-seq experiment. The core components of the object
-include a seqname column (representing the chromosome), a ranges column
-which consists of start and end coordinates for a genomic region, and a
-strand identifier (either positive, negative, or unstranded). Metadata
-are included as columns to the right of the dotted line as annotations
-(gene\_id) or range level covariates (score).
-
-```{r GRanges, echo = FALSE, fig.cap="(ref:GRanges)", out.width="\\textwidth"}
+```{r GRanges, echo = FALSE, fig.cap="An illustration of a GRanges data object for a single sample from an RNA-seq experiment. The core components of the object include a seqname column (representing the chromosome), a ranges column which consists of start and end coordinates for a genomic region, and a strand identifier (either positive, negative, or unstranded). Metadata are included as columns to the right of the dotted line as annotations (gene\\_id) or range level covariates (score).", out.width="\\textwidth"}
 knitr::include_graphics("./Lee_Plyranges/GRanges.pdf")
 ```
 
@@ -144,7 +142,7 @@ semantics for a genomics experiment: it has fixed columns
 for the chromosome, start and end coordinates, and the strand, along
 with an arbitrary set of additional columns, consisting of
 measurements or metadata specific to the data type or experiment
-(figure \@ref(GRanges)).  
+(figure \@ref(fig:GRanges)).  
 
 GRanges balances flexibility with formal
 constraints, so that it is applicable to virtually any genomic
@@ -174,8 +172,9 @@ The `as_granges` method takes a data.frame and allows you to quickly convert
 it to a GRanges object (and can you can also specify which columns in the 
 data.frame correspond to the columns in the GRanges).
 
-GRanges follows the tidy data principles: it is a rectangular
-table corresponding to a single biological context. Each row contains
+A GRanges object follows tidy data principles: it is a rectangular
+table corresponding to a single biological context (@Wickham2014-jc). 
+Each row contains
 a single observation and each column is a variable describing the
 observations. In the example above, each row corresponds to a single gene, and
 each column contains information about those genes. As GRanges are tidy,
@@ -185,7 +184,8 @@ dplyr.
 ## The Grammar
 
 Here we provide a quick overview of the functions available in plyranges
-and illustrate their use with some toy examples. In the final sections we
+and illustrate their use with some toy examples (see 
+\@ref(appendix) for an overview). In the final section we
 provide two worked examples (with exercises) that show you can use
 plyranges to explore publicly available genomics data and perform coverage
 analysis of BAM files.
@@ -441,7 +441,7 @@ We can further restrict the matching by whether the query is completely _within_
 the subject, and adding the _directed_ suffix ensures that 
 matching ranges have the same direction (strand).
 
-```{r olaps-fig, echo = FALSE, out.width="\\textwidth", fig.cap="Illustration of the three overlap join operators. Each join takes query and subject range as input (black and light gray rectangles, respectively). An index for the join is computed, returning a Hits object, which contains the indices of where the subject overlaps the query range. This index is used to expand the query ranges by where it was 'hit' by the subject ranges. The join semantics alter what is returned: for an \\textbf{inner} join the query range is returned for each match, for an \\textbf{intersect} the intersection is taken between overlapping ranges, and for a \\textbf{left} join all query ranges are returned even if the subject range does not overlap them. This principle is gnerally applied through the `plyranges` DSL for both overlaps and nearest neighbour operations."}
+```{r olaps-fig, echo = FALSE, out.width="\\textwidth", fig.cap="Illustration of the three overlap join operators. Each join takes query and subject range as input (black and light gray rectangles, respectively). An index for the join is computed, returning a Hits object, which contains the indices of where the subject overlaps the query range. This index is used to expand the query ranges by where it was 'hit' by the subject ranges. The join semantics alter what is returned: for an \\textbf{inner} join the query range is returned for each match, for an \\textbf{intersect} the intersection is taken between overlapping ranges, and for a \\textbf{left} join all query ranges are returned even if the subject range does not overlap them. This principle is gnerally applied through the plyranges package for both overlaps and nearest neighbour operations."}
 knitr::include_graphics("./Lee_Plyranges/olap.png")
 ```
 
@@ -496,12 +496,12 @@ data and perform exploratory analyses.
 
 In the workflow of ChIP-seq data analysis, we are often interested in 
 finding peaks from islands of coverage over a chromosome. Here we will use plyranges
-to explore ChiP-seq data from the Human Epigenome Roadmap project.
+to explore ChiP-seq data from the Human Epigenome Roadmap project @Roadmap-Epigenomics-Consortium2015-pr.
 
 #### Extracting data from AnnotationHub
 
 This data is available on Bioconductor's AnnotationHub. First we construct
-an AnnotationHub, and then query for all bigWigFiles related to 
+an AnnotationHub, and then `query()` for all bigWigFiles related to 
 the project that correspond to the following conditions:
 
 1. are from methylation marks (H3K4ME in the title)
@@ -528,8 +528,7 @@ head(metadata)
 
 To find out the name of the sample corresponding to 
 primary memory T-cells we can filter the data.frame. We extract the 
-sample ID corresponding to our filter. Note we use `dplyr::filter` because
-we are working with data.frames now.
+sample ID corresponding to our filter.
 
 ```{r}
 primary_tcells <-  metadata %>% 
@@ -597,7 +596,7 @@ chr10_scores <- bind_ranges(chr10_scores, .id = "signal_type")
 chr10_scores
 ```
 Since we want to call peaks over each signal type, we will create a grouped
-ranges object:
+GRanges object:
 
 ```{r}
 chr10_scores_by_signal <- chr10_scores %>% 
@@ -625,7 +624,7 @@ surrounds the max peak for each signal type.
 peak_region <- chr10_scores %>%
     join_overlap_inner(chr10_max_score_region) %>% 
     filter(signal_type.x == signal_type.y) 
-# make sure overlapping correct methlyation signal
+# the filter ensures overlapping correct methlyation signal
 ```
 
 #### Exercises
@@ -723,59 +722,62 @@ split_bam %>%
 #### Exercises 
 
 1. Compute the total depth of coverage across all features.
-2. How could you compute the proportion of bases covered over an entire genome?
+1. How could you compute the proportion of bases covered over an entire genome?
 (hint: `get_genome_info` and `S4Vectors::merge`)
-3. How could you compute the strand specific genome wide coverage?
-4. Create a workflow for computing the strand specific coverage for all BAM
+1. How could you compute the strand specific genome wide coverage?
+1. Create a workflow for computing the strand specific coverage for all BAM
 files.
-5. For each sample plot total breadth of coverage against the number of bases
+1. For each sample plot total breadth of coverage against the number of bases
 covered faceted by each sample name.
 
-# Appendix 
+# What's next?
 
-\begin{table}[!htbp]
+The grammar based approach for analysing data provides a consistent approach
+for analysing genomics experiments with Bioconductor. We have explored
+how plyranges can enable you to perform common analysis tasks required of 
+a bioinformatician. As plyranges is still a new and growing package, there is 
+definite room for improvement (and likely bugs), if you have any problems using
+it or think things could be easier or clearer please file an issue on 
+[github](https://github.com/sa-lee/plyranges). Contributions from the Bioconductor
+community are also more than welcome!
+
+
+# Appendix {#appendix}
+
 \centering
-\begin{tabular}{|l|l|p{6cm}|}
-  \hline
-  & Verb &  Description \\ 
-  \hline
-   & \textbf{\emph{summarise()}} & aggregate over column(s) \\ 
-   Aggregation & \emph{disjoin\_ranges()} & aggregate column(s) over the union of end coordinates \\
-   &  \emph{reduce\_ranges()} & aggregate column(s) by merging overlapping and neighbouring ranges \\
-   \hline
-   &  \textbf{\emph{mutate()}} & modifies any column \\
-   & \textbf{\emph{select()}} & select columns \\
-  Arithmetic (Unary) & \textbf{\emph{arrange()}} & sort by columns \\
-   & \emph{stretch()} & extend range by fixed amount \\
-   &  \emph{shift\_(direction)} & shift coordinates \\
-   & \emph{flank\_(direction)} & generate flanking regions \\
-   & \emph{\%intersection\% } & row-wise intersection \\
-   & \emph{\%union\%} & row-wise union \\
-   & \emph{compute\_coverage} & coverage over all ranges \\
-  Arithmetic (Binary) &  \emph{\%setdiff\%} & row-wise set difference \\
-   & \emph{between()} & row-wise gap range \\
-   & \emph{span()} & row-wise spanning range \\
-   \hline
-    & \emph{join\_overlap\_*()} & merge by overlapping ranges \\
-    & \emph{join\_nearest} & merge by nearest neighbour ranges \\
-    & \emph{join\_follow} & merge by following ranges \\
-    Merging & \emph{join\_precedes} & merge by preceding ranges \\
-    & \emph{union\_ranges} & range-wise union \\
-    & \emph{intersect\_ranges} & range-wise intersect \\
-    & \emph{setdiff\_ranges} & range-wise set difference \\
-    & \emph{complement\_ranges} & range-wise union \\
-  \hline
-   & \emph{anchor\_direction()} & fix coordinates at direction \\
-  Modifier & \textbf{\emph{group\_by()}} & partition by column(s)  \\ 
-   & \emph{group\_by\_overlaps()} & partition by overlaps \\
-   \hline
-   & \textbf{\emph{filter()}} & subset rows \\
-  Restriction & \emph{filter\_by\_overlaps()} & subset by overlap \\
-    & \emph{filter\_by\_non\_overlaps()} & subset by no overlap \\
-   \hline
-\end{tabular}
-\caption{Overview of the \texttt{plyranges} grammar. The core verbs are
-briefly described and categorised into one of: aggregation, unary or binary
-arithmetic, merging, modifier, or restriction. A verb is given bold text if
-its origin is from the \texttt{dplyr} grammar.}\label{tab:grammar}
-\end{table}
+                        Verb                            Description
+  --------------------- ------------------------------- --------------------------------------------------------------------
+                        ***summarise()***               aggregate over column(s)
+  Aggregation           *disjoin\_ranges()*             aggregate column(s) over the union of end coordinates
+                        *reduce\_ranges()*              aggregate column(s) by merging overlapping and neighbouring ranges
+                        ***mutate()***                  modifies any column
+                        ***select()***                  select columns
+  Arithmetic (Unary)    ***arrange()***                 sort by columns
+                        *stretch()*                     extend range by fixed amount
+                        *shift\_(direction)*            shift coordinates
+                        *flank\_(direction)*            generate flanking regions
+                        *%intersection%*                row-wise intersection
+                        *%union%*                       row-wise union
+                        *compute\_coverage*             coverage over all ranges
+  Arithmetic (Binary)   *%setdiff%*                     row-wise set difference
+                        *between()*                     row-wise gap range
+                        *span()*                        row-wise spanning range
+                        *join\_overlap\_()*             merge by overlapping ranges
+                        *join\_nearest*                 merge by nearest neighbour ranges
+                        *join\_follow*                  merge by following ranges
+  Merging               *join\_precedes*                merge by preceding ranges
+                        *union\_ranges*                 range-wise union
+                        *intersect\_ranges*             range-wise intersect
+                        *setdiff\_ranges*               range-wise set difference
+                        *complement\_ranges*            range-wise union
+                        *anchor\_direction()*           fix coordinates at direction
+  Modifier              ***group\_by()***               partition by column(s)
+                        *group\_by\_overlaps()*         partition by overlaps
+                        ***filter()***                  subset rows
+  Restriction           *filter\_by\_overlaps()*        subset by overlap
+                        *filter\_by\_non\_overlaps()*   subset by no overlap
+
+  : Overview of the plyranges grammar. The core verbs are briefly
+  described and categorised into one of: aggregation, unary or binary
+  arithmetic, merging, modifier, or restriction. A verb is given bold
+  text if its origin is from the dplyr grammar.
