@@ -50,7 +50,7 @@ Imports:
   jsonlite,
   limma,
   magrittr,
-  matrixStats (>= 0.52.2)
+  matrixStats (>= 0.52.2),
   memuse,
   mRMRe,
   MultiAssayExperiment,
