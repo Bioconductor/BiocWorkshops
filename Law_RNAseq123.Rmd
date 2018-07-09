@@ -25,9 +25,12 @@ library(Mus.musculus)
 
 ## Data packaging
 
-```{r download, cache=TRUE}
+```{r}
 dir.create("Law_RNAseq123")
 setwd("Law_RNAseq123")
+```
+
+```{r download, cache=TRUE}
 url <- "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE63310&format=file"
 utils::download.file(url, destfile="GSE63310_RAW.tar", mode="wb")
 utils::untar("GSE63310_RAW.tar", exdir = ".")
@@ -39,7 +42,6 @@ files <- c("GSM1545535_10_6_5_11.txt", "GSM1545536_9_6_5_11.txt",
 
 for(i in paste(files, ".gz", sep=""))
     R.utils::gunzip(i, overwrite=TRUE)
-setwd("..")      
 ```
 
 ### Reading in count-data
