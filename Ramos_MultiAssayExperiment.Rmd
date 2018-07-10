@@ -49,9 +49,11 @@ library(MultiAssayExperiment)
 library(GenomicRanges)
 library(RaggedExperiment)
 library(curatedTCGAData)
+library(GenomicDataCommons)
 library(SummarizedExperiment)
 library(TCGAutils)
 library(UpSetR)
+library(mirbase.db)
 library(AnnotationFilter)
 library(EnsDb.Hsapiens.v86)
 library(survival)
@@ -65,9 +67,11 @@ suppressPackageStartupMessages({
     library(GenomicRanges)
     library(RaggedExperiment)
     library(curatedTCGAData)
+    library(GenomicDataCommons)
     library(SummarizedExperiment)
     library(TCGAutils)
     library(UpSetR)
+    library(mirbase.db)
     library(AnnotationFilter)
     library(EnsDb.Hsapiens.v86)
     library(survival)
@@ -663,9 +667,29 @@ mutations and gistict, etc.
 
 ## `TCGAutils` package
 
+### "Simplification" of `curatedTCGAData` objects
+
+A number of helper functions are available for managing datasets from
+`curatedTCGAData`. These include:
+
+- `mirToRanges`: convert `SummarizedExperiment` datasets with microRNA to
+`RangedSummarizedExperiment`
+- `symbolsToRanges`: convert assays with gene symbols to genomic ranges
+(`SummarizedExperiment` to `RangedSummarizedExperiment`)
+- `qreduceTCGA`: convert `RaggedExperiment` objects to
+`RangedSummarizedExperiment`
+
+The `simplifyTCGA` function combines all of the above operations to create
+a more managable `MultiAssayExperiment` object and using
+`RangedSummarizedExperiment` assays where possible.
+
+```{r}
+(simpa <- TCGAutils::simplifyTCGA(acc))
+```
+
 Aside from the available reshaping functions already included in the
-`MultiAssayExperiment` package, the `TCGAutils` package provides a suite
-of helper functions for working with TCGA data. 
+`MultiAssayExperiment` package, the `TCGAutils` package provides additional
+helper functions for working with TCGA data.
 
 ### What types of samples are in the data?
 
@@ -693,10 +717,62 @@ getSubtypeMap(acc)
 head(colData(acc)$Histology)
 ```
 
+### Converting TCGA UUIDs to barcodes and back
+
+`TCGAutils` provides a number of ID translation functions.
+These allow the user to translate from either file or case UUIDs to TCGA
+barcodes and back. These functions work by querying the Genomic Data Commons API
+via the `GenomicDataCommons` package (thanks to Sean Davis).
+
+#### ID translations
+
 A number of other utility functions are available in `TCGAutils` including
-TCGA identifier translation from TCGA barcodes to UUIDs and vice versa and
-helper functions to create Bioconductor objects from TCGA exon files
-(legacy archive), copy number and GISTIC objects from `RTCGAToolbox`.
+TCGA identifier translation from TCGA barcodes to UUIDs and vice versa 
+
+A number of translation functions are available as part of the `TCGAutils`
+package. These include: 
+
+* UUIDtoBarcode
+* barcodeToUUID
+* UUIDtoUUID
+* filenameToBarcode (example not shown)
+
+Using the `GenomicDataCommons` we can obtain a set of **file** UUIDs associated
+with copy number variation files:
+
+```{r}
+que <- files() %>%
+    filter( ~ cases.project.project_id == "TCGA-COAD" &
+        data_category == "Copy Number Variation" &
+        data_type == "Copy Number Segment")
+q <- manifest(que)
+ids <- q$id[1:5]
+```
+
+We indicate the type of id by setting the `id_type` argument to `file_id`.
+This yields a small `data.frame` of `file_id`s and TCGA barcodes.
+
+```{r}
+(idtab <- UUIDtoBarcode(id_vector = ids, id_type = "file_id"))
+```
+
+The user is able to change the indicated endpoint for the barcode as below:
+
+```{r}
+UUIDtoBarcode(id_vector = ids, id_type = "file_id", end_point = "center")
+```
+
+To ensure accuracy, reverse translation is also possible from TCGA barcode
+to UUID. In this case, we will take the barcodes from the previous operation:
+
+```{r}
+tcgabcodes <- idtab$cases.submitter_id
+barcodeToUUID(tcgabcodes, id_type = "file_id")
+```
+
+**Note**. Helper functions to create Bioconductor objects from TCGA exon files
+(legacy archive), copy number and GISTIC objects from `RTCGAToolbox` are
+also available in `TCGAutils`.
 
 ### Kaplan-meier plot stratified by pathology_N_stage
 
