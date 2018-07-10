@@ -32,14 +32,50 @@ by the `curatedTCGAData` package.
 ### R/Bioconductor packages used
 
 * [MultiAssayExperiment](https://bioconductor.org/packages/MultiAssayExperiment)
+* [GenomicRanges](https://bioconductor.org/packages/GenomicRanges)
 * [RaggedExperiment](https://bioconductor.org/packages/RaggedExperiment)
 * [curatedTCGAData](https://bioconductor.org/packages/curatedTCGAData)
 * [SummarizedExperiment](https://bioconductor.org/packages/SummarizedExperiment)
 * [TCGAutils](https://bioconductor.org/packages/TCGAutils)
 * [UpSetR](https://bioconductor.org/packages/UpSetR)
+* [AnnotationFilter](https://bioconductor.org/packages/AnnotationFilter)
 * [EnsDb.Hsapiens.v86](https://bioconductor.org/packages/EnsDb.Hsapiens.v86)
+* [survival](https://cran.r-project.org/package=survival)
 * [survminer](https://cran.r-project.org/package=survminer)
 * [pheatmap](https://cran.r-project.org/package=pheatmap)
+
+```{r, eval = FALSE}
+library(MultiAssayExperiment)
+library(GenomicRanges)
+library(RaggedExperiment)
+library(curatedTCGAData)
+library(SummarizedExperiment)
+library(TCGAutils)
+library(UpSetR)
+library(AnnotationFilter)
+library(EnsDb.Hsapiens.v86)
+library(survival)
+library(survminer)
+library(pheatmap)
+```
+
+```{r, echo = FALSE}
+suppressPackageStartupMessages({
+    library(MultiAssayExperiment)
+    library(GenomicRanges)
+    library(RaggedExperiment)
+    library(curatedTCGAData)
+    library(SummarizedExperiment)
+    library(TCGAutils)
+    library(UpSetR)
+    library(AnnotationFilter)
+    library(EnsDb.Hsapiens.v86)
+    library(survival)
+    library(survminer)
+    library(pheatmap)
+    library(S4Vectors)
+})
+```
 
 ### Time outline
 
@@ -103,7 +139,6 @@ We start with a couple of `GRanges` objects, each representing an individual
 sample:
 
 ```{r}
-library(GenomicRanges)
 sample1 <- GRanges(
     c(A = "chr1:1-10:-", B = "chr1:8-14:+", C = "chr2:15-18:+"),
     score = 3:5)
@@ -121,7 +156,6 @@ colDat <- DataFrame(id = 1:2)
 ### Using `GRanges` objects
 
 ```{r}
-library(RaggedExperiment)
 
 ragexp <- RaggedExperiment(
     sample1 = sample1,
@@ -134,7 +168,6 @@ ragexp
 It can also be constructed from a `GRangesList`:
 
 ```{r}
-library(GenomicRanges)
 example(GRangesList)
 rgx <- RaggedExperiment(grl)
 ```
@@ -243,10 +276,6 @@ for every patient:
 5. **miRNASeqGene**: microRNA abundance by microRNA-seq.
 
 ```{r}
-suppressPackageStartupMessages({
-    library(MultiAssayExperiment)
-    library(S4Vectors)
-})
 data(miniACC)
 miniACC
 ```
@@ -569,7 +598,6 @@ Most unrestricted TCGA data are available as MultiAssayExperiment objects from
 the `curatedTCGAData` package. This represents a lot of harmonization!
 
 ```{r}
-library(curatedTCGAData)
 curatedTCGAData("ACC")
 acc <- curatedTCGAData("ACC",
     assays=c("miRNASeqGene", "RPPAArray", "Mutation", "RNASeq2GeneNorm"),
@@ -615,7 +643,6 @@ of helper functions for working with TCGA data.
 The `sampleTables` function gives you an overview of samples in each assay:
 
 ```{r}
-library(TCGAutils)
 sampleTables(acc)
 
 head(sampleTypes)
@@ -650,10 +677,6 @@ The colData provides clinical data for things like a Kaplan-Meier plot for
 overall survival stratified by nodal stage.
 
 ```{r}
-suppressPackageStartupMessages({
-  library(survival)
-  library(survminer)
-})
 Surv(miniACC$days_to_death, miniACC$vital_status)
 ```
 
@@ -868,16 +891,12 @@ these as a GRangesList which can be used to replace the rowRanges of the
 SummarizedExperiment objects:
 
 ```{r}
-getrr <- function(identifiers, EnsDbFilterFunc="SymbolFilter"){
-  suppressPackageStartupMessages({
-    library(AnnotationFilter)
-    library(EnsDb.Hsapiens.v86)
-  })
-    FUN <- get(EnsDbFilterFunc)
-    edb <- EnsDb.Hsapiens.v86
-    afl <- AnnotationFilterList(FUN(identifiers),
-                                SeqNameFilter(c(1:21, "X", "Y")),
-                                TxBiotypeFilter("protein_coding"))
+getrr <- function(identifiers, EnsDbFilterFunc=AnnotationFilter::SymbolFilter) {
+    edb <- EnsDb.Hsapiens.v86::EnsDb.Hsapiens.v86
+    afl <- AnnotationFilterList(
+        EnsDbFilterFunc(identifiers),
+        SeqNameFilter(c(1:21, "X", "Y")),
+        TxBiotypeFilter("protein_coding"))
     gr <- genes(edb, filter=afl)
     grl <- split(gr, factor(identifiers))
     grl <- grl[match(identifiers, names(grl))]

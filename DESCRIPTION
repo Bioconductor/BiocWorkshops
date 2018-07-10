@@ -88,6 +88,7 @@ Imports:
   statmod,
   stringr,
   SummarizedExperiment,
+  survival,
   survminer,
   TCGAutils,
   TCGAbiolinks,
