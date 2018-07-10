@@ -567,8 +567,9 @@ The data remain on disk until requested (we'll see how to do this later on in th
 ```{r}
 library(HDF5Array)
 
-# TODO: What path to use?
-hdf5_file <- "hdf5_mat.h5"
+hdf5_file <- file.path(
+    "500_Effectively_Using_the_DelayedArray_Framework", 
+    "hdf5_mat.h5")
 # NOTE: We can use rhdf5::h5ls() to take a look what is in the HDF5 file.
 #       This is very useful when working interactively!
 rhdf5::h5ls(hdf5_file)
@@ -645,7 +646,7 @@ Maintaining support for ordinary arrays can also be critical for popular Biocond
 - realization
 - block-processing
     - array grid
-    - viewport
+    - array viewport
 
 #### Learning goals 
 
