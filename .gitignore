@@ -14,3 +14,9 @@ bookdown*
 tmp-pdfcrop-*
 figures
 packrat/lib*/
+
+*.normalized_results
+
+MANIFEST.txt
+
+Homo_sapiens_genes__GRCh37_p13_.rda
