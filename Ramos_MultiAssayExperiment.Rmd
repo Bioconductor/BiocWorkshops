@@ -35,6 +35,11 @@ by the `curatedTCGAData` package.
 * [RaggedExperiment](https://bioconductor.org/packages/RaggedExperiment)
 * [curatedTCGAData](https://bioconductor.org/packages/curatedTCGAData)
 * [SummarizedExperiment](https://bioconductor.org/packages/SummarizedExperiment)
+* [TCGAutils](https://bioconductor.org/packages/TCGAutils)
+* [UpSetR](https://bioconductor.org/packages/UpSetR)
+* [EnsDb.Hsapiens.v86](https://bioconductor.org/packages/EnsDb.Hsapiens.v86)
+* [survminer](https://cran.r-project.org/package=survminer)
+* [pheatmap](https://cran.r-project.org/package=pheatmap)
 
 ### Time outline
 
@@ -64,8 +69,6 @@ by the `curatedTCGAData` package.
 * perform subsetting, reshaping, growing, and extraction of a MultiAssayExperiment
 * link MultiAssayExperiment data with packages for differential expression,
 machine learning, and plotting
-
-# Workshop
 
 ## Overview of key data classes
 
@@ -100,6 +103,7 @@ We start with a couple of `GRanges` objects, each representing an individual
 sample:
 
 ```{r}
+library(GenomicRanges)
 sample1 <- GRanges(
     c(A = "chr1:1-10:-", B = "chr1:8-14:+", C = "chr2:15-18:+"),
     score = 3:5)
@@ -320,7 +324,7 @@ sampleMap(miniACC)
 * relates experimental observations (`colnames`) to `colData`
 * permits experiment-specific sample naming, missing, and replicate observations
 
-<p style="text-align: right;"> <a href="#header">back to top</a> </p>
+<p style="text-align: right;"> [back to top](#overview-of-key-data-classes) </p>
 
 ### metadata
 
@@ -431,7 +435,7 @@ accmatched2 <- intersectRows(miniACC[, , c("RNASeq2GeneNorm", "gistict", "Mutati
 rownames(accmatched2)
 ```
 
-<p style="text-align: right;"> <a href="#header">back to top</a> </p>
+<p style="text-align: right;"> [back to top](#overview-of-key-data-classes) </p>
 
 ## Extraction
 
@@ -457,7 +461,7 @@ assays(miniACC)
 * Whereas the `[[` returned an assay as its original class, `assay()` and
 `assays()` convert the assay data to matrix form.
 
-<p style="text-align: right;"> <a href="#header">back to top</a> </p>
+<p style="text-align: right;"> [back to top](#overview-of-key-data-classes) </p>
 
 ## Summary of slots and accessors
 
@@ -548,7 +552,7 @@ miniACC2 <- c(miniACC, log2rnaseq = log2(assays(miniACC)$RNASeq2GeneNorm), mapFr
 experiments(miniACC2)
 ```
 
-<p style="text-align: right;"> <a href="#header">back to top</a> </p>
+<p style="text-align: right;"> [back to top](#overview-of-key-data-classes) </p>
 
 ### Building a MultiAssayExperiment from scratch
 
@@ -690,7 +694,7 @@ regression, etc.
 
 For further detail, see the main MultiAssayExperiment vignette.
 
-<p style="text-align: right;"> <a href="#header">back to top</a> </p>
+<p style="text-align: right;"> [back to top](#overview-of-key-data-classes) </p>
 
 ### Correlation between RNA-seq and copy number
 
@@ -773,7 +777,7 @@ boxplot(RNASeq2GeneNorm_EIF4E ~ gistict_EIF4E,
         ylab="RNA-seq counts")
 ```
 
-<p style="text-align: right;"> <a href="#header">back to top</a> </p>
+<p style="text-align: right;"> [back to top](#overview-of-key-data-classes) </p>
 
 ### Identifying correlated principal components
 
@@ -846,7 +850,7 @@ pheatmap::pheatmap(mycors)
 The highest correlation present is between PC2 of the RNA-seq assay, and PC1 of
 the protein assay.
 
-<p style="text-align: right;"> <a href="#header">back to top</a> </p>
+<p style="text-align: right;"> [back to top](#overview-of-key-data-classes) </p>
 
 ### Annotating with ranges
 
@@ -913,4 +917,4 @@ the genomic location of those microRNA, or the locations of their predicted
 targets, but we don't do it here. Assigning genomic ranges of microRNA targets
 would be an easy way to subset them according to their targets.
 
-<p style="text-align: right;"> <a href="#header">back to top</a> </p>
+<p style="text-align: right;"> [back to top](#overview-of-key-data-classes) </p>

@@ -1,10 +1,17 @@
 # Working with Genomic Data in R with the DECIPHER package
 
-## Authors: 
-* Nicholas Cooley (<npc19@pitt.edu>)
-* Erik Wright (<eswright@pitt.edu>)
+Authors:
+    Nicholas Cooley^[University of Pittsburgh]
+    Erik Wright^[University of Pittsburgh]
+Last Modified: 29 June, 2018
+    
+<!--
+  bookdown::render_book("", "bookdown::gitbook")
+-->
 
-## Workshop Description
+## Overview
+
+### Workshop Description
 
 In this workshop we will give an introduction to working with biological
 sequence data in R using the Biostrings and DECIPHER packages. We will cover:
@@ -65,3 +72,159 @@ This will be a lab where participants follow along on their computers.
 * Predict orthologs from syntenic maps
 * Select core and pan genomes from predicted orthologs
 * Construct and interpret phylogenetic trees
+
+### Workshop
+
+This is a workflow...
+```{r, echo = FALSE}
+# Load packages
+suppressMessages(library(DECIPHER))
+suppressMessages(library(phytools))
+suppressMessages(library(FindHomology))
+load("/Users/npc19/Desktop/WorkshopData.RData",
+     verbose = TRUE)
+```
+## selection of genomes, deposition into sql database
+```{r, echo = FALSE}
+# Decipher works in sql databases, and our genomes can be sent directly to this database from the ftp site
+DBPath <- tempfile() # in your own work a temp file is likely inadvisable
+
+# Genomes is a file of character vectors of ftp addresses
+for (i in seq_along(Genomes)) {
+  Seqs2DB(seqs = Genomes[i],
+          type = "FASTA",
+          dbFile = DBPath,
+          identifier = as.character(i),
+          tblName = "Seqs")
+}
+```
+## Comparison of genomes
+```{r, echo = FALSE}
+# In the interest of time we will use the first 4
+SyntenyObject <- FindSynteny(dbFile = DBPath,
+                             identifier = as.character(1:4),
+                             verbose = FALSE)
+# Plot SyntenyObject one way
+plot(SyntenyObject,
+     type = "neighbor")
+# Plot a Subset of SyntenyObject another way
+pairs(SyntenyObject[2:3, 2:3])
+# Plot all of SyntenyObject in a pairs plot
+pairs(SyntenyObject)
+
+# Utilizing gene calls, and the hits from the synteny object
+MatrixObject <- NucleotideOverlap(SyntenyObject = SyntenyObject,
+                                  GeneCalls = GeneCalls[1:4],
+                                  Verbose = FALSE)
+
+# This object provides a list of genes that are paired by syntenic hits for each pair of genomes
+MatrixObject[1, 2][[1]][1:10, ]
+```
+## Predict Homology between genes that are linked by syntenic hits
+```{r, echo = FALSE}
+Homologs <- Catalog(MatrixObject,
+                    Verbose = FALSE)
+
+# This object is a list of matrices that describes which genes -represented by integers- are paired, across which pairs of genomes, represented by columns
+length(Homologs)
+Homologs[[1]]
+Homologs[head(which(sapply(Homologs,
+                           function(x) nrow(x)) == 1L))]
+
+# In this case, this is trivial, but in cases with larger sets of genomes, it may not be
+MaxRows <- max(sapply(Homologs,
+                      function(x) nrow(x)),
+               na.rm = TRUE)
+# Genes that are homologous across the whole set of genomes, and are completely transitive, represent the 'core' genome for this set of genomes
+CoreSet <- which(sapply(Homologs,
+                        function(x) nrow(x)) == MaxRows)
+```
+Use the core genome to create an alignment
+```{r, echo = FALSE}
+# Select core genes individually from each genome and align them, then concatonate the aligments
+CoreGenome <- CoreAligner(Homologs[CoreSet],
+                          PATH = DBPath,
+                          GeneCalls = GeneCalls[1:4],
+                          Verbose = TRUE)
+
+# Create a distance matrix, that can be used to create a dendrogram
+CoreDist <- DistanceMatrix(myXStringSet = CoreGenome,
+                           verbose = FALSE,
+                           correction = "Jukes-Cantor")
+
+CoreDend <- IdClusters(myDistMatrix = CoreDist,
+                       myXStringSet = CoreGenome,
+                       method = "NJ",
+                       verbose = FALSE,
+                       showPlot = TRUE,
+                       type = "dendrogram")
+```
+The presence and absence of genes across the set of genomes can also be used to create a distance matrix
+```{r, echo = FALSE}
+# Create a logical presence/absence matrix for orthologs
+LogicalMatrix <- vector("list",
+                        length = length(Homologs))
+pBar <- txtProgressBar(style = 1L)
+TimeStart <- Sys.time()
+for (i in seq_along(Homologs)) {
+  LogicalMatrix[[i]] <- vector("logical",
+                               length = ncol(Homologs[[i]]))
+  for (j in seq_along(LogicalMatrix[[i]])) {
+    if (length(unique(Homologs[[i]][, j])) > 1L) {
+      LogicalMatrix[[i]][j] <- TRUE
+    }
+  }
+  setTxtProgressBar(pb = pBar,
+                    value = i/length(LogicalMatrix))
+}
+
+LogicalMatrix <- do.call(cbind, LogicalMatrix)
+
+# Use this logical matrix to create a distance matrix
+PanGenome <- dist(LogicalMatrix,
+                  method = "binary")
+
+# Create a dendrogram
+PanDend <- IdClusters(myDistMatrix = PanGenome,
+                      method = "NJ",
+                      type = "dendrogram",
+                      showPlot = TRUE,
+                      verbose = FALSE)
+```
+Compare two genomes with a tangleogram using phytools
+```{r}
+tf1 <- tempfile()
+tf2 <- tempfile()
+
+WriteDendrogram(x =PanDend,
+                file = tf1)
+
+WriteDendrogram(x = CoreDend,
+                file = tf2)
+
+PanPhylo <- read.tree(file = tf1)
+CorePhylo <- read.tree(file = tf2)
+
+unlink(tf1)
+unlink(tf2)
+
+CompObject <- cophylo(tr1 = PanPhylo,
+                      tr2 = CorePhylo)
+
+plot(CompObject,
+     link.type = "curved",
+     link.lwd = 3,
+     link.lty = "solid",
+     link.col = make.transparent("blue", 0.25),
+     f.size = 0.35)
+```
+
+TODO: A Lot
+
+
+
+
+
+
+
+

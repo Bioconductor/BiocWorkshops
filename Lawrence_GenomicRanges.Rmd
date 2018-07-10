@@ -63,3 +63,615 @@ Describe how students will be expected to participate in the workshop.
 * Manipulate GRanges and related objects
 * Use the ranges algebra to analyze genomic ranges
 * Implement efficient workflows based on the *Ranges infrastructure
+
+## *GRanges*: Genomic Ranges
+
+The *GRanges* class represents a collection of genomic ranges
+that each have a single start and end location on the genome. It can be
+used to store the location of genomic features such as contiguous binding
+sites, transcripts, and exons. These objects can be created by using the
+`GRanges` constructor function. For example,
+
+```{r}
+suppressPackageStartupMessages({
+ library(BiocStyle)
+ library(GenomicRanges)
+})
+```
+
+```{r example-GRanges}
+gr <- GRanges(
+    seqnames = Rle(c("chr1", "chr2", "chr1", "chr3"), c(1, 3, 2, 4)),
+    ranges = IRanges(101:110, end = 111:120, names = head(letters, 10)),
+    strand = Rle(strand(c("-", "+", "*", "+", "-")), c(1, 2, 2, 3, 2)),
+    score = 1:10,
+    GC = seq(1, 0, length=10))
+gr
+options(warn=2)
+```
+
+creates a *GRanges* object with 10 genomic ranges.
+The output of the *GRanges* `show` method separates the
+information into a left and right hand region that are separated by
+`|` symbols. The genomic coordinates (seqnames, ranges, and strand)
+are located on the left-hand side and the metadata columns (annotation)
+are located on the right. For this example, the metadata is
+comprised of `score` and `GC` information, but almost
+anything can be stored in the metadata portion of a *GRanges*
+object.
+
+The components of the genomic coordinates within a *GRanges*
+object can be extracted using the `seqnames`, `ranges`,
+and `strand` accessor functions.
+ 
+```{r GRanges-location-accessors}
+seqnames(gr)
+ranges(gr)
+strand(gr)
+```
+
+The genomic ranges can be extracted without corresponding metadata
+with `granges`
+ 
+```{r granges-accessor}
+granges(gr)
+``` 
+ 
+Annotations for these coordinates can be extracted as a
+*DataFrame* object using the `mcols` accessor.
+ 
+```{r metadataAccess}
+mcols(gr)
+mcols(gr)$score
+```
+
+Information about the lengths of the various sequences that the ranges
+are aligned to can also be stored in the *GRanges* object. So
+if this is data from *Homo sapiens*, we can set the values as:
+ 
+```{r setSeqLengths}
+seqlengths(gr) <- c(249250621, 243199373, 198022430)
+```
+ 
+And then retrieves as:
+```{r setSeqLengths2}
+seqlengths(gr)
+```
+ 
+Methods for accessing the `length` and `names` have
+also been defined.
+ 
+```{r names}
+names(gr)
+length(gr)
+```
+
+
+## Splitting and combining *GRanges* objects
+
+*GRanges* objects can be devided into groups using the
+`split` method. This produces a *GRangesList* object,
+a class that will be discussed in detail in the next section.
+ 
+```{r splitAppendGRanges}
+sp <- split(gr, rep(1:2, each=5))
+sp
+```
+ 
+Separate *GRanges* instances can be concatenated by using the
+`c` and `append` methods.
+ 
+```{r combine}
+c(sp[[1]], sp[[2]])
+```
+
+## Subsetting  *GRanges* objects
+
+*GRanges* objects act like vectors of ranges, with the expected
+vector-like subsetting operations available
+ 
+```{r subset1}
+gr[2:3]
+```
+ 
+A second argument to the `[` subset operator can be used
+to specify which metadata columns to extract from the
+*GRanges* object. For example,
+ 
+```{r subset2}
+gr[2:3, "GC"]
+```
+
+Elements can also be assigned to the *GRanges* object.  Here is
+an example where the second row of a *GRanges* object is
+replaced with the first row of `gr`.
+ 
+```{r assign1}
+singles <- split(gr, names(gr))
+grMod <- gr
+grMod[2] <- singles[[1]]
+head(grMod, n=3)
+```
+
+There are methods to repeat, reverse, or select specific portions of
+*GRanges* objects.
+ 
+```{r other}
+rep(singles[[2]], times = 3)
+rev(gr)
+head(gr,n=2)
+tail(gr,n=2)
+window(gr, start=2,end=4)
+gr[IRanges(start=c(2,7), end=c(3,9))]
+```
+
+## Basic interval operations for *GRanges* objects
+
+Basic interval characteristics of *GRanges* objects can
+be extracted using the `start`, `end`, `width`,
+and `range` methods.
+ 
+```{r IRangesStuff}
+g <- gr[1:3]
+g <- append(g, singles[[10]])
+start(g)
+end(g)
+width(g)
+range(g)
+```
+
+The *GRanges* class also has many methods for manipulating the
+ranges. The methods can be classified as *intra-range methods*,
+*inter-range methods*, and *between-range methods*.
+
+*Intra-range methods* operate on each element of a
+*GRanges* object independent of the other ranges in the
+object. For example, the `flank` method can be used to recover
+regions flanking the set of ranges represented by the *GRanges*
+object. So to get a *GRanges* object containing the ranges that
+include the 10 bases upstream of the ranges:
+ 
+```{r flank}
+flank(g, 10)
+```
+ 
+And to include the downstream bases:
+ 
+```{r flank2}
+flank(g, 10, start=FALSE)
+```
+ 
+Other examples of intra-range methods include `resize` and
+`shift`. The `shift` method will move the ranges by a
+specific number of base pairs, and the `resize` method will
+extend the ranges by a specified width.
+ 
+```{r shiftAndResize}
+shift(g, 5)
+resize(g, 30)
+```
+ 
+The `r BiocStyle::Biocpkg("GenomicRanges")` help page `?"intra-range-methods"`
+summarizes these methods.
+
+*Inter-range methods* involve comparisons between ranges in a
+single *GRanges* object. For instance, the `reduce`
+method will align the ranges and merge overlapping ranges to produce a
+simplified set.
+ 
+```{r reduce}
+reduce(g)
+```
+ 
+Sometimes one is interested in the gaps or the qualities of the gaps
+between the ranges represented by your *GRanges* object.  The
+`gaps` method provides this information:
+reduced version of your ranges:
+ 
+```{r gaps}
+gaps(g)
+```
+ 
+The `disjoin` method represents a *GRanges* object as a
+collection of non-overlapping ranges:
+ 
+```{r disjoin}
+disjoin(g)
+```
+ 
+The `coverage` method quantifies the degree of overlap for all
+the ranges in a *GRanges* object.
+ 
+```{r coverage}
+coverage(g)
+```
+ 
+See the `r BiocStyle::Biocpkg("GenomicRanges")` help page
+`?"inter-range-methods"` for additional help.
+
+*Between-range methods* involve operations between two
+*GRanges* objects; some of these are summarized in the next
+section.
+
+## Interval set operations for *GRanges* objects
+
+*Between-range methods* calculate relationships between different
+*GRanges* objects. Of central importance are
+`findOverlaps` and related operations; these are discussed
+below.  Additional operations treat *GRanges* as mathematical
+sets of coordinates; `union(g, g2)` is the union of the
+coordinates in `g` and `g2`. Here are examples for
+calculating the `union`, the `intersect` and the
+asymmetric difference (using `setdiff`).
+ 
+```{r intervals1}
+g2 <- head(gr, n=2)
+union(g, g2)
+intersect(g, g2)
+setdiff(g, g2)
+```
+
+Related methods are available when the structure of the
+*GRanges* objects are 'parallel' to one another, i.e., element
+1 of object 1 is related to element 1 of object 2, and so on. These
+operations all begin with a `p`, which is short for
+parallel. The methods then perform element-wise, e.g., the union of
+element 1 of object 1 with element 1 of object 2, etc. A requirement
+for these operations is that the number of elements in each
+*GRanges* object is the same, and that both of the objects have
+the same seqnames and strand assignments throughout.
+ 
+```{r intervals2}
+g3 <- g[1:2]
+ranges(g3[1]) <- IRanges(start=105, end=112)
+punion(g2, g3)
+pintersect(g2, g3)
+psetdiff(g2, g3)
+```
+
+For more information on the `GRanges` classes be sure to consult
+the manual page.
+ 
+```{r manPage, eval=FALSE}
+?GRanges
+```
+ 
+A relatively comprehensive list of available methods is discovered
+with
+ 
+```{r granges-methods, eval=FALSE}
+methods(class="GRanges")
+``` 
+
+
+
+## *GRangesList*: Groups of Genomic Ranges
+
+Some important genomic features, such as spliced transcripts that are
+are comprised of exons, are inherently compound structures. Such a
+feature makes much more sense when expressed as a compound object
+such as a *GRangesList*. Whenever genomic features consist of
+multiple ranges that are grouped by a parent feature, they can be
+represented as a *GRangesList* object. Consider the simple
+example of the two transcript `GRangesList` below created
+using the `GRangesList` constructor.
+ 
+```{r example-GRangesList}
+gr1 <- GRanges(
+    seqnames = "chr2", 
+    ranges = IRanges(103, 106),
+    strand = "+", 
+    score = 5L, GC = 0.45)
+gr2 <- GRanges(
+    seqnames = c("chr1", "chr1"),
+    ranges = IRanges(c(107, 113), width = 3),
+    strand = c("+", "-"), 
+    score = 3:4, GC = c(0.3, 0.5))
+grl <- GRangesList("txA" = gr1, "txB" = gr2)
+grl
+```
+
+The `show` method for a *GRangesList* object displays
+it as a named list of *GRanges* objects, where the names of
+this list are considered to be the names of the grouping feature. In
+the example above, the groups of individual exon ranges are represented
+as separate *GRanges* objects which are further organized into a
+list structure where each element name is a transcript name. Many
+other combinations of grouped and labeled *GRanges* objects are
+possible of course, but this example is expected to be a common
+arrangement. 
+
+
+## Basic *GRangesList* accessors
+
+Just as with *GRanges* object, the components of the genomic
+coordinates within a *GRangesList* object can be extracted
+using simple accessor methods. Not surprisingly, the
+*GRangesList* objects have many of the same accessors as
+*GRanges* objects.  The difference is that many of these
+methods return a list since the input is now essentially a list of
+*GRanges* objects. Here are a few examples:
+ 
+```{r basicGRLAccessors}
+seqnames(grl)
+ranges(grl)
+strand(grl)
+```
+ 
+The `length` and `names` methods will return the length
+or names of the list and the `seqlengths` method will return the
+set of sequence lengths.
+ 
+```{r exceptions}
+length(grl)
+names(grl)
+seqlengths(grl)
+```
+
+The `elementNROWS` method returns a list of integers
+corresponding to the result of calling `NROW` on each
+individual *GRanges* object contained by the
+*GRangesList*. This is a faster alternative to calling
+`lapply` on the *GRangesList*.
+ 
+```{r elementNROWS}
+elementNROWS(grl)
+```
+ 
+`isEmpty` tests if a *GRangesList* object contains
+anything.
+ 
+```{r isEmpty}
+isEmpty(grl)
+```
+
+In the context of a *GRangesList* object, the `mcols`
+method performs a similar operation to what it does on a
+*GRanges* object. However, this metadata now refers to
+information at the list level instead of the level of the individual
+*GRanges* objects.
+ 
+```{r mcolsGRL}
+mcols(grl) <- c("Transcript A","Transcript B")
+mcols(grl)
+```
+ 
+Element-level metadata can be retrieved by unlisting the
+`GRangesList`, and extracting the metadata
+ 
+```{r mcolsGRL-unlist}
+mcols(unlist(grl))
+``` 
+
+## Combining *GRangesList* objects
+
+*GRangesList* objects can be unlisted to combine the separate
+*GRanges* objects that they contain as an expanded
+*GRanges*.
+
+```{r unlistGRL}
+ul <- unlist(grl)
+ul
+```
+
+Append lists using `append` or `c`.
+
+A \href{https://support.bioconductor.org/p/89339/}{support site user}
+had two *GRangesList* objects with 'parallel' elements, and
+wanted to combined these element-wise into a single
+*GRangesList*. One solution is to use `pc()` -- parallel
+(element-wise) `c()`. A more general solution is to concatenate
+the lists and then re-group by some factor, in this case the names of
+the elements.
+
+```{r pc-grl}
+grl1 <- GRangesList(
+    gr1 = GRanges("chr2", IRanges(3, 6)),
+    gr2 = GRanges("chr1", IRanges(c(7,13), width = 3)))
+grl2 <- GRangesList(
+    gr1 = GRanges("chr2", IRanges(9, 12)),
+    gr2 = GRanges("chr1", IRanges(c(25,38), width = 3)))
+
+pc(grl1, grl2)
+
+grl3 <- c(grl1, grl2)
+regroup(grl3, names(grl3))
+``` 
+
+## Basic interval operations for *GRangesList* objects
+
+For interval operations, many of the same methods exist for
+*GRangesList* objects that exist for *GRanges* objects.
+ 
+```{r intOpsGRL}
+start(grl)
+end(grl)
+width(grl)
+```
+ 
+These operations return a data structure representing, e.g.,
+*IntegerList*, a list where all elements are integers; it can
+be convenient to use mathematical and other operations on
+**List* objects that work on each element, e.g.,
+ 
+```{r List-ops}
+sum(width(grl))  # sum of widths of each grl element
+``` 
+ 
+
+Most of the intra-, inter- and between-range methods operate on
+*GRangesList* objects, e.g., to shift all the *GRanges*
+objects in a *GRangesList* object, or calculate the
+coverage. Both of these operations are also carried out across each
+*GRanges* list member.
+ 
+```{r coverageGRL}
+shift(grl, 20)
+coverage(grl)
+```
+
+## Subsetting *GRangesList* objects
+
+A *GRangesList* object is behaves like a `list`:
+`[` returns a *GRangesList* containing a subset of the
+original object; `[[` or `\$` returns the
+*GRanges* object at that location in the list.
+ 
+```{r subsetGRL, eval=FALSE}
+grl[1]
+grl[[1]]
+grl["txA"]
+grl$txB
+```
+ 
+In addition, subsetting a *GRangesList* also accepts a second
+parameter to specify which of the metadata columns you wish to select.
+ 
+```{r subsetGRL2}
+grl[1, "score"]
+grl["txB", "GC"]
+``` 
+
+The `head`, `tail`, `rep`, `rev`, and
+`window` methods all behave as you would expect them to for a
+list object. For example, the elements referred to by `window`
+are now list elements instead of *GRanges* elements.
+ 
+```{r otherSubsetGRL}
+rep(grl[[1]], times = 3)
+rev(grl)
+head(grl, n=1)
+tail(grl, n=1)
+window(grl, start=1, end=1)
+grl[IRanges(start=2, end=2)]
+```
+
+
+## Looping over *GRangesList* objects
+
+For *GRangesList* objects there is also a family of
+`apply` methods. These include `lapply`, `sapply`,
+`mapply`, `endoapply`, `mendoapply`, `Map`,
+and `Reduce`.
+
+The different looping methods defined for *GRangesList* objects
+are useful for returning different kinds of results.  The standard
+`lapply` and `sapply` behave according to convention,
+with the `lapply` method returning a list and `sapply`
+returning a more simplified output.
+ 
+```{r lapply}
+lapply(grl, length)
+sapply(grl, length)
+```
+ 
+As with *IRanges* objects, there is also a multivariate version
+of `sapply`, called `mapply`, defined for
+*GRangesList* objects. And, if you don't want the results
+simplified, you can call the `Map` method, which does the same
+things as `mapply` but without simplifying the output.
+ 
+```{r mapply}
+grl2 <- shift(grl, 10)
+names(grl2) <- c("shiftTxA", "shiftTxB")
+
+mapply(c, grl, grl2)
+Map(c, grl, grl2)
+```
+
+Sometimes you will want to get back a modified version of the
+*GRangesList* that you originally passed in. 
+
+An endomorphism is a transformation of an object to another instance
+of the same class .  This is achieved using the `endoapply`
+method, which will return the results as a *GRangesList*
+object.
+ 
+```{r endoapply}
+endoapply(grl, rev)
+mendoapply(c, grl, grl2)
+```
+ 
+The `Reduce` method will allow the *GRanges* objects to
+be collapsed across the whole of the *GRangesList* object.
+% Again, this seems like a sub-optimal example to me.
+```{r ReduceGRL}
+Reduce(c, grl)
+```
+
+Explicit element-wise operations (`lapply()` and friends) on
+*GRangesList* objects with many elements can be slow. It is
+therefore beneficial to explore operations that work on `*List`
+objects directly (e.g., many of the `group generic' operators, see
+`?S4groupGeneric`, and the set and parallel set operators (e.g.,
+`union`, `punion`). A useful and fast strategy is to
+`unlist` the *GRangesList* to a *GRanges* object,
+operate on the *GRanges* object, then `relist` the
+result, e.g.,
+ 
+```{r unlist-relist}
+gr <- unlist(grl)
+gr$log_score <- log(gr$score)
+grl <- relist(gr, grl)
+grl
+``` 
+ 
+See also `?extractList`.
+
+For more information on the `GRangesList` classes be sure to
+consult the manual page and available methods
+ 
+```{r manPage2, eval=FALSE}
+?GRangesList
+methods(class="GRangesList")   # _partial_ list
+```
+
+
+
+\section{Interval overlaps involving *GRanges* and *GRangesList*
+objects}
+
+Interval overlapping is the process of comparing the ranges in two
+objects to determine if and when they overlap. As such, it is perhaps
+the most common operation performed on *GRanges* and
+*GRangesList* objects. To this end, the `r BiocStyle::Biocpkg("GenomicRanges")`
+package provides a family of interval overlap functions. The most general
+of these functions is `findOverlaps`, which takes a query and a
+subject as inputs and returns a *Hits* object containing
+the index pairings for the overlapping elements.
+
+```{r findOverlaps}
+mtch <- findOverlaps(gr, grl)
+as.matrix(mtch)
+```
+
+\noindent
+As suggested in the sections discussing the nature of the
+*GRanges* and *GRangesList* classes, the index in the
+above matrix of hits for a *GRanges* object is a single range
+while for a *GRangesList* object it is the set of ranges that
+define a "feature".
+
+Another function in the overlaps family is `countOverlaps`,
+which tabulates the number of overlaps for each element in the query.
+
+```{r countOL}
+countOverlaps(gr, grl)
+```
+
+A third function in this family is `subsetByOverlaps`,
+which extracts the elements in the query that overlap at least one
+element in the subject.
+
+```{r subsetByOverlaps}
+subsetByOverlaps(gr,grl)
+```
+
+Finally, you can use the `select` argument to get the index
+of the first overlapping element in the subject for each element
+in the query.
+
+```{r select-first}
+findOverlaps(gr, grl, select="first")
+findOverlaps(grl, gr, select="first")
+```

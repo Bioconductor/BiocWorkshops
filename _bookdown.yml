@@ -9,6 +9,19 @@ before_chapter_script: "_common.R"
 
 rmd_files: [
   "index.Rmd",
-  "201_Love_DESeq2.Rmd"
-
+  "201_Love_DESeq2.Rmd",
+  "220_Das_SingleCellRNASeq.Rmd",
+#  "230_Isserlin_RCy3_intro.Rmd", #ERROR: cytoscapeVersionInfo not found
+#  "500_Effectively_Using_the_DelayedArray_Framework.Rmd", # ERROR: can't open file @line 559
+#  "Coetzee_StatePaintR.Rmd", # inc
+#  "Cooley_DECIPHER.Rmd", # ERROR: cannot open the connection
+  "Geistlinger_Omics.Rmd",
+  "Law_RNAseq123.Rmd",
+  "Lawrence_GenomicRanges.Rmd",
+  "Lee_Plyranges.Rmd",
+  "MacDonald_Annotation.Rmd",
+  "Ramos_MultiAssayExperiment.Rmd",
+#  "Safikhani_Pharmacogenomics.Rmd", #ERROR: in lm.fit
+  "Turaga_MaintainBioc.Rmd", #inc
+  "Waldron_PublicData.Rmd" #inc
 ]

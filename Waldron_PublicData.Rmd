@@ -1,10 +1,21 @@
+---
+Authors:
+    Levi Waldron^[City University of New York, New York, NY, USA]
+    Benjamin Haibe-Kain^[Princess Margaret Cancer Center, Toronto, Canada]
+    Sean Davis^[Center for Cancer Research, National Cancer Institute, National Institutes of Health, Bethesda, MD, USA]
+bibliography: Waldron_PublicData/Waldron_PublicData.bib
+Last modified: 2 July, 2018.
+---
+
+```{r include=FALSE, cache=FALSE}
+knitr::opts_chunk$set(
+    comment = "#>",
+    collapse = TRUE,
+    cache = TRUE
+)
+```
+
 # Public Data Resources and Bioconductor
-
-## Instructors
-
-- Levi Waldron, City University of New York, New York, NY, USA
-- Benjamin Haibe-Kain, Princess Margaret Cancer Center, Toronto, Canada
-- Sean Davis, Center for Cancer Research, National Cancer Institute, National Institutes of Health, Bethesda, MD, USA
 
 ## Workshop Description 
 
@@ -24,10 +35,7 @@ Genome Atlas.
 
 Interested students can prepare by reviewing vignettes of the packages listed in "R/Bioconductor packages used" to gain background on aspects of interest to them.
 
-Some more general background on these resources is published in:
-
-Kannan L, Ramos M, Re A, El-Hachem N, Safikhani Z, Gendoo DMA, Davis S, Gomez-Cabrero D, Castelo R, Hansen KD, Carey VJ, Morgan M, Culhane AC, Haibe-Kains B, Waldron L: **Public data and open source tools for multi-assay genomic investigation of disease.** *Brief. Bioinform.* 2016, 17:603–615. [(link)](http://dx.doi.org/10.1093/bib/bbv080)
-
+Some more general background on these resources is published in @Kannan2016-yv.
 
 ### Workshop Participation 
 
@@ -79,3 +87,77 @@ objects ready for analysis and comparison to in-house datasets.
 * find and download 'omics data from the Genomic Data Commons and Sequence Read Archive
 * download and manipulate data from The Cancer Genome Atlas and Human Microbiome Project
 * download and explore pharmacogenomics data
+
+## Overview
+
+## GEOquery
+
+## GenomicDataCommons
+
+## Sequence Read Archive
+
+## Accessing The Cancer Genome Atlas (TCGA)
+
+### curatedTCGAData
+
+Load packages:
+
+```{r}
+suppressPackageStartupMessages({
+    library(curatedTCGAData)
+    library(MultiAssayExperiment)
+})
+```
+
+Checking available cancer codes and assays in TCGA data:
+
+```{r}
+curatedTCGAData(diseaseCode = "*", assays = "*", dry.run = TRUE)
+```
+
+Check potential files to be downloaded:
+
+```{r}
+curatedTCGAData(diseaseCode = "COAD", dry.run = TRUE)
+```
+
+## GBM dataset example
+
+```{r, message=FALSE}
+gbm <- curatedTCGAData("COAD", c("RPPA*"), dry.run=FALSE)
+gbm
+```
+
+**Note**. See the `\BiocPkg("MultiAssayExperiment") vignette for more details on using this object.
+
+### Subtype information
+
+Some cancer datasets contain associated subtype information within the
+clinical datasets provided. This subtype information is included in the
+metadata of `colData` of the `MultiAssayExperiment` object. To obtain these
+variable names, run the `metadata` function on the `colData` of the object
+such as:
+
+```{r}
+head(metadata(colData(gbm))[["subtypes"]])
+```
+
+
+
+### TCGABiolinks
+### GenomicDataCommons
+
+## Microbiome data
+
+Bioconductor provides a couple curated resources of microbiome data. 
+Most microbiome data are generated either by targeted amplicon sequencing (usually of variable regions of the 16S ribosomal RNA gene) or by metagenomic shotgun sequencing. 
+
+cheap (multiplex hundreds of samples)
+relatively small data
+provides genus-level taxonomy and inferred metabolic function for bacteria and archaea
+
+
+curatedMetagenomicData and HMP16SData
+
+## Pharmacogenomics
+
