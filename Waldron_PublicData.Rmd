@@ -45,13 +45,13 @@ Each component will include runnable examples of typical usage that students are
 
 ### R/Bioconductor packages used
 
-* [GEOquery](http://bioconductor.org/packages/GEOquery/): Access to the NCBI Gene Expression Omnibus (GEO), a public repository of gene expression (primarily microarray) data.
-* [GenomicDataCommons](http://bioconductor.org/packages/GenomicDataCommons/): Access to the NIH / NCI Genomic Data Commons RESTful service.
-* [SRAdb](http://bioconductor.org/packages/SRAdb/): A compilation of metadata from the NCBI Sequence Read Archive, the largest public repository of sequencing data from the next generation of sequencing platforms, and tools
-* [curatedTCGAData](http://bioconductor.org/packages/curatedTCGAData/): Curated data from The Cancer Genome Atlas (TCGA) as MultiAssayExperiment Objects
-* [curatedMetagenomicData](http://bioconductor.org/packages/curatedMetagenomicData/): Curated metagenomic data of the human microbiome
-* [HMP16SData](http://bioconductor.org/packages/HMP16SData/): Curated metagenomic data of the human microbiome
-* [PharmacoGx](https://bioconductor.org/packages/PharmacoGx/): Analysis of large-scale pharmacogenomic data
+* `r BiocStyle::Biocpkg("GEOquery")`: Access to the NCBI Gene Expression Omnibus (GEO), a public repository of gene expression (primarily microarray) data.
+* `r BiocStyle::Biocpkg("GenomicDataCommons")`: Access to the NIH / NCI Genomic Data Commons RESTful service.
+* `r BiocStyle::Biocpkg("SRAdb")`: A compilation of metadata from the NCBI Sequence Read Archive, the largest public repository of sequencing data from the next generation of sequencing platforms, and tools
+* `r BiocStyle::Biocpkg("curatedTCGAData")`: Curated data from The Cancer Genome Atlas (TCGA) as MultiAssayExperiment Objects
+* `r BiocStyle::Biocpkg("curatedMetagenomicData")`: Curated metagenomic data of the human microbiome
+* `r BiocStyle::Biocpkg("HMP16SData")`: Curated metagenomic data of the human microbiome
+* `r BiocStyle::Biocpkg("PharmacoGx")`: Analysis of large-scale pharmacogenomic data
 
 
 ### Time outline
