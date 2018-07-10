@@ -25,12 +25,10 @@ library(Mus.musculus)
 
 ## Data packaging
 
-```{r}
+```{r download, cache=TRUE}
 dir.create("Law_RNAseq123")
 setwd("Law_RNAseq123")
-```
 
-```{r download, cache=TRUE}
 url <- "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE63310&format=file"
 utils::download.file(url, destfile="GSE63310_RAW.tar", mode="wb")
 utils::untar("GSE63310_RAW.tar", exdir = ".")
