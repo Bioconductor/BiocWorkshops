@@ -108,7 +108,7 @@ machine learning, and plotting
 
 ## Overview of key data classes
 
-### `SummarizedExperiment` / `RaggedExperiment`
+### `SummarizedExperiment` / `RangedSummarizedExperiment`
 
 ![SummarizedExperiment_Schematic](Ramos_MultiAssayExperiment/SummarizedExperiment.svg)
 
@@ -182,6 +182,20 @@ We use the constructor function to create the `RaggedExperiment` object.
 
 ### *Assay functions
 
+A suite of *Assay operations allow users to resize the matrix-like
+representation of ranges to varying row dimensions
+(see [RaggedExperiment Figure](#raggedexperiment) for a visual example).
+
+The four main functions for row management are: 
+
+* [sparseAssay](#sparseassay)
+* [compactAssay](#compactassay)
+* [disjoinAssay](#disjoinassay)
+* [qreduceAssay](#qreduceassay)
+
+Depending on the function, the row ranges are either left as-is, combined,
+disjoint, or windowed. 
+
 #### sparseAssay
 
 The most straightforward matrix representation of a `RaggedExperiment` will
@@ -214,7 +228,7 @@ argument to assay values of overlapping ranges.
 disjoinAssay(ragexp, simplifyDisjoin = mean)
 ```
 
-## qreduceAssay
+#### qreduceAssay
 
 The `qreduceAssay` function works with a `query` parameter that highlights
 a window of ranges for the resulting matrix. The returned matrix will have
