@@ -156,21 +156,29 @@ colDat <- DataFrame(id = 1:2)
 ### Using `GRanges` objects
 
 ```{r}
-
-ragexp <- RaggedExperiment(
+(ragexp <- RaggedExperiment(
     sample1 = sample1,
     sample2 = sample2,
-    colData = colDat)
-
-ragexp
+    colData = colDat))
 ```
 
 It can also be constructed from a `GRangesList`:
 
-```{r}
+(Here we take a `GRangesList` from the package examples)
+```{r, results = 'hide', echo = FALSE}
 example(GRangesList)
-rgx <- RaggedExperiment(grl)
 ```
+
+```{r, eval = FALSE}
+example(GRangesList)
+```
+
+We use the constructor function to create the `RaggedExperiment` object.
+
+```{r}
+(rgx <- RaggedExperiment(grl))
+```
+
 
 ### *Assay functions
 
