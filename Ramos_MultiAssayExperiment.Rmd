@@ -110,7 +110,9 @@ machine learning, and plotting
 
 ### `SummarizedExperiment` / `RangedSummarizedExperiment`
 
-![SummarizedExperiment_Schematic](Ramos_MultiAssayExperiment/SummarizedExperiment.svg)
+```{r, echo = FALSE, fig.cap = "A matrix-like container where rows represent features of interest and columns represent samples. The objects contain one or more assays, each represented by a matrix-like object of numeric or other mode."}
+knitr::include_graphics("Ramos_MultiAssayExperiment/SummarizedExperiment.svg")
+```
 
 _The_ standard Bioconductor class convenient for storing experimental results
 produced by sequencing and microarry experiments. Each object can store
@@ -122,14 +124,19 @@ well as phenotype/clinical data. Supersedes the use of `ExpressionSet`.
 An integrative container for coordinating multi-omics experiment data on a
 set of biological specimens.
 
-![MultiAssayExperiment_Schematic](Ramos_MultiAssayExperiment/MultiAssayExperiment.png)
+```{r, echo = FALSE, fig.cap="MultiAssayExperiment object schematic. colData provides data about the patients, cell lines, or other biological units, with one row per unit and one column per variable. The experiments are a list of assay datasets of arbitrary class.  The sampleMap relates each column (observation) in ExperimentList to exactly one row (biological unit) in colData; however, one row of colData may map to zero, one, or more columns per assay, allowing for missing and replicate assays. sampleMap allows for per-assay sample naming conventions. Metadata can be used to store information in arbitrary format about the MultiAssayExperiment. Green stripes indicate a mapping of one subject to multiple observations across experiments.", out.width="\\maxwidth"}
+knitr::include_graphics("Ramos_MultiAssayExperiment/MultiAssayExperiment.png")
+```
 
 ### `RaggedExperiment`
 
 A flexible data representation for copy number, mutation, and other
-ragged array schema for genomic location data.
+ragged array schema for genomic location data. It aims to provide a framework
+for a set of samples that have _differing_ numbers of genomic ranges.
 
-![RaggedExperiment_Schematic](Ramos_MultiAssayExperiment/RaggedExperiment.png)
+```{r, echo=FALSE, fig.cap="RaggedExperiment object schematic. Rows and columns represent genomic ranges and samples, respectively. Assay operations can be performed with (from left to right) compactAssay, qreduceAssay, and sparseAssay.", out.width="\\maxwidth"}
+knitr::include_graphics("Ramos_MultiAssayExperiment/RaggedExperiment.png")
+```
 
 ## Working with RaggedExperiment
 
@@ -621,9 +628,11 @@ the `curatedTCGAData` package. This represents a lot of harmonization!
 
 ```{r}
 curatedTCGAData("ACC")
-acc <- curatedTCGAData("ACC",
-    assays=c("miRNASeqGene", "RPPAArray", "Mutation", "RNASeq2GeneNorm"),
-    dry.run=FALSE)
+suppressMessages({
+    acc <- curatedTCGAData("ACC",
+        assays = c("miRNASeqGene", "RPPAArray", "Mutation", "RNASeq2GeneNorm"),
+        dry.run = FALSE)
+})
 acc
 ```
 
