@@ -135,15 +135,6 @@ extends("SingleCellExperiment")
 
 Thus, although `SingleCellExperiment` provides additional methods over `RangedSummarizedExperiment`, it also inherits all the methods of `SummarizedExperiment` and `RangedSummarizedExperiment`, so everything you learn about `SummarizedExperiment` will be applicable to `SingleCellExperiment`.
 
-### `MultiAssayExperiment`
-
-`MultiAssayExperiment` is an integrative container for coordinating multi-omics experiment data on a
-set of biological specimens. As much as possible, its methods adopt the same vocabulary as `SummarizedExperiment`.
-
-```{r, echo = FALSE, fig.cap="MultiAssayExperiment object schematic. colData provides data about the patients, cell lines, or other biological units, with one row per unit and one column per variable. The experiments are a list of assay datasets of arbitrary class.  The sampleMap relates each column (observation) in ExperimentList to exactly one row (biological unit) in colData; however, one row of colData may map to zero, one, or more columns per assay, allowing for missing and replicate assays. sampleMap allows for per-assay sample naming conventions. Metadata can be used to store information in arbitrary format about the MultiAssayExperiment. Green stripes indicate a mapping of one subject to multiple observations across experiments.", out.width="\\maxwidth"}
-knitr::include_graphics("Ramos_MultiAssayExperiment/MultiAssayExperiment.png")
-```
-
 ### `RaggedExperiment`
 
 `RaggedExperiment` is a flexible data representation for segmented copy number, somatic mutations such as
@@ -160,30 +151,74 @@ to matrix format.
 knitr::include_graphics("Ramos_MultiAssayExperiment/RaggedExperiment.png")
 ```
 
+### `MultiAssayExperiment`
+
+`MultiAssayExperiment` is an integrative container for coordinating multi-omics experiment data on a
+set of biological specimens. As much as possible, its methods adopt the same vocabulary as `SummarizedExperiment`.
+A `MultiAssayExperiment` can contain any number of assays with different representations. 
+Assays may be *ID-based*, where measurements are indexed identifiers of
+genes, microRNA, proteins, microbes, etc.  Alternatively, assays may be
+*range-based*, where measurements correspond to genomic ranges that can be
+represented as `GRanges` objects, such as gene expression or copy number.  
+For ID-based assays, there is no requirement that the same IDs be
+present for different experiments.  For range-based assays, there is also
+no requirement that the same ranges be present for different experiments;
+furthermore, it is possible for different samples within an experiment to be
+represented by different ranges.  The following data classes have been tested 
+to work as elements of a `MultiAssayExperiment`:
+
+1. `matrix`: the most basic class for ID-based datasets, could be used for
+example for gene expression summarized per-gene, microRNA, metabolomics, or
+microbiome data.
+2. `SummarizedExperiment` and derived methods: described above, could be used 
+for miRNA, gene expression, proteomics, or any matrix-like data where
+measurements are represented by IDs.
+3. `RangedSummarizedExperiment`: described above, could be used
+for gene expression, methylation, or other data types referring to genomic
+positions.
+4. `ExpressionSet`: Another rich representation for ID-based datasets, supported
+only for legacy reasons
+5. `RaggedExperiment`: described above, for non-rectangular (ragged) ranged-based datasets
+such as segmented copy number, where segmentation of
+copy number alterations occurs and different genomic locations in each sample.
+6. `RangedVcfStack`: For VCF archives broken up by chromosome (see `VcfStack`
+class defined in the `GenomicFiles` package)
+7. `DelayedMatrix`: An on-disk representation of matrix-like objects for large
+datasets. It reduces memory usage and optimizes performance with delayed
+operations. This class is part of the `DelayedArray` package.
+
+Note that any data class extending these classes, and in fact any data class supporting row and column names and subsetting can be used as an element of a `MultiAssayExperiment`.
+
+```{r, echo = FALSE, fig.cap="MultiAssayExperiment object schematic. colData provides data about the patients, cell lines, or other biological units, with one row per unit and one column per variable. The experiments are a list of assay datasets of arbitrary class.  The sampleMap relates each column (observation) in ExperimentList to exactly one row (biological unit) in colData; however, one row of colData may map to zero, one, or more columns per assay, allowing for missing and replicate assays. sampleMap allows for per-assay sample naming conventions. Metadata can be used to store information in arbitrary format about the MultiAssayExperiment. Green stripes indicate a mapping of one subject to multiple observations across experiments.", out.width="\\maxwidth"}
+knitr::include_graphics("Ramos_MultiAssayExperiment/MultiAssayExperiment.png")
+```
+
 ## Working with RaggedExperiment
+
+You can skip this section if you prefer to focus on the functionality of `MultiAssayExperiment`. In most use cases, you would likely convert a `RaggedExperiment`
+to matrix or `RangedSummarizedExperiment` using one of the `Assay` functions below, and either concatenate this rectangular object to the `MultiAssayExperiment` or use it to replace the `RaggedExperiment`.  
 
 ### Constructing a `RaggedExperiment` object
 
-We start with a couple of `GRanges` objects, each representing an individual
-sample:
+We start with a toy example of two `GRanges` objects, providing ranges on two chromosomes
+in two samples:
 
 ```{r}
 sample1 <- GRanges(
-    c(A = "chr1:1-10:-", B = "chr1:8-14:+", C = "chr2:15-18:+"),
-    score = 3:5)
+    c(A = "chr1:1-10:-", B = "chr1:8-14:+", C = "chr1:15-18:+"),
+    score = 3:5, type=c("germline", "somatic", "germline"))
 sample2 <- GRanges(
-    c(D = "chr1:1-10:-", E = "chr2:11-18:+"),
-    score = 1:2)
+    c(D = "chr1:1-10:-", E = "chr1:11-18:+"),
+    score = 11:12, type=c("germline", "somatic"))
 ```
 
 Include column data `colData` to describe the samples:
 
 ```{r}
-colDat <- DataFrame(id = 1:2)
+colDat <- DataFrame(id=1:2, status = factor(c("control", "case")))
 ```
 
-### Using `GRanges` objects
-
+The `RaggedExperiment` can be constructed from individual `Granges`:
 ```{r}
 (ragexp <- RaggedExperiment(
     sample1 = sample1,
@@ -191,23 +226,18 @@ colDat <- DataFrame(id = 1:2)
     colData = colDat))
 ```
 
-It can also be constructed from a `GRangesList`:
-
-(Here we take a `GRangesList` from the package examples)
-```{r, results = 'hide', echo = FALSE}
-example(GRangesList)
+Or from a `GRangesList`:
+```{r}
+grl <- GRangesList(sample1=sample1, sample2=sample2)
+ragexp2 <- RaggedExperiment(grl, colData = colDat)
+identical(ragexp, ragexp2)
 ```
 
-```{r, eval = FALSE}
-example(GRangesList)
-```
-
-We use the constructor function to create the `RaggedExperiment` object.
+Note that the original ranges are is represented as the `rowRanges` of the `RaggedExperiment`:
 
 ```{r}
-(rgx <- RaggedExperiment(grl))
+rowRanges(ragexp)
 ```
-
 
 ### *Assay functions
 
@@ -215,42 +245,54 @@ A suite of *Assay operations allow users to resize the matrix-like
 representation of ranges to varying row dimensions
 (see [RaggedExperiment Figure](#raggedexperiment) for a visual example).
 
-The four main _Assay_ functions for row management are: 
+The four main _Assay_ functions for converting to matrix are: 
 
-* [sparseAssay](#sparseassay): leave ranges as-is
-* [compactAssay](#compactassay): combine ranges
-* [disjoinAssay](#disjoinassay): disjoin ranges
-* [qreduceAssay](#qreduceassay): find overlaps with provided range "windows"
+* [sparseAssay](#sparseassay): leave ranges exactly as-is
+* [compactAssay](#compactassay): combine identical ranges
+* [disjoinAssay](#disjoinassay): disjoin ranges that overlap across samples
+* [qreduceAssay](#qreduceassay): find overlaps with provided "query" ranges
 
-Depending on the function, the row ranges are either left as-is, combined,
-disjoint, or windowed. 
+These each have a corresponding function for conversion to [RangedSummarizedExperiment](#Conversion to RangedSummarizedExperiment).  
 
 #### sparseAssay
 
 The most straightforward matrix representation of a `RaggedExperiment` will
-return a matrix of dimensions equal to the product of the number of ranges and
-samples.
-
+return a matrix with the number of rows equal to the total number of ranges defined across all
+samples. *i.e.* the 5 rows of the `sparseAssay` result:
 ```{r}
-dim(ragexp)
-Reduce(`*`, dim(ragexp))
 sparseAssay(ragexp)
-length(sparseAssay(ragexp))
+```
+correspond to the ranges of the unlisted `GRangesList`:
+```{r}
+unlist(grl)
+```
+The rownames of the `sparseAssay` result are equal to the names of the `GRanges` elements.
+The values in the matrix returned by `sparseAssay` correspond to the first columns of the 
+`mcols` of each `GRangesList` element, in this case the "score" column. 
+
+Note, this is the default `assay()` method of `RaggedExperiment`:
+```{r}
+assay(ragexp, "score")
+assay(ragexp, "type")
 ```
 
 #### compactAssay
 
-Samples with identical ranges are placed in the same row. Non-disjoint ranges
-are **not** collapsed.
+The dimensions of the `compactAssay` result differ from that of the `sparseAssay` result only 
+if there are identical ranges in different samples. Identical ranges are placed in the same row in
+the output. Ranges with any difference in start, end, or strand, will be
+kept on different rows. Non-disjoint ranges are **not** collapsed.
 
 ```{r}
 compactAssay(ragexp)
+compactAssay(ragexp, "type")
 ```
+Note that row names are constructed from the ranges, and the names of the `GRanges` vectors are 
+lost, unlike in the `sparseAssay` result.
 
 #### disjoinAssay
 
-This function returns a matrix where the rows are _disjoint_[^1] ranges, across all samples. Elements
-of the matrix are summarized by applying the `simplifyDisjoin` functional
+This function is similar to `compactAssay` except the rows are _disjoint_[^1] ranges. Elements of the matrix are summarized by applying the `simplifyDisjoin` functional
 argument to assay values of overlapping ranges.
 
 ```{r}
@@ -261,33 +303,15 @@ disjoinAssay(ragexp, simplifyDisjoin = mean)
 
 #### qreduceAssay
 
-The `qreduceAssay` function requires a `query` argument that provides
-a "window" of ranges, and which become the rows of the resulting matrix. The returned matrix will have
-dimensions `length(query)` by `ncol(x)`. Elements of the resulting matrix contain assay values for the
-_i_ th query range and the _j_ th sample, summarized according to the
-`simplifyReduce` functional argument.
+The `qreduceAssay` function is the most complicated but likely the most useful of the `RaggedExperiment`
+*Assay* functions. It requires you to provide a `query` argument that is a `GRanges` vector, and 
+the rows of the resulting matrix correspond to the elements of this `GRanges`. The returned matrix will have
+dimensions `length(query)` by `ncol(x)`. Elements of the resulting matrix correspond to the overlap of the
+_i_ th `query` range in the _j_ th sample, summarized according to the `simplifyReduce` functional argument.
+This can be useful, for example, to calculate per-gene copy number or mutation status by providing
+the genomic ranges of every gene as the `query`.
 
-For demonstration purposes, we can have a look at the original `GRangesList`
-and the associated scores from which the current `ragexp` object is derived:
-
-```{r}
-unlist(grl, use.names = FALSE)
-```
-
-This data is represented as `rowRanges` and `assays` in `RaggedExperiment`:
-
-```{r}
-rowRanges(ragexp)
-assay(ragexp, "score")
-```
-
-Here we provide the "query" region of interest:
-
-```{r}
-(query <- GRanges(c("chr1:1-14:-", "chr2:11-18:+")))
-```
-
- The `simplifyReduce` argument in `qreduceAssay` allows the user to summarize
+The `simplifyReduce` argument in `qreduceAssay` allows the user to summarize
 overlapping regions with a custom method for the given "query" region of
 interest. We provide one for calculating a weighted average score per
 query range, where the weight is proportional to the overlap widths between
@@ -304,14 +328,33 @@ weightedmean <- function(scores, ranges, qranges)
 }
 ```
 
-A call to `qreduceAssay` involves the `RaggedExperiment`, the `GRanges` query
-and the `simplifyReduce` functional argument.
+The call to `qreduceAssay` calculates the overlaps between the ranges of each sample:
+```{r}
+grl
+```
 
+with the query ranges (an arbitrary set is defined here for demonstration):
+First create a demonstration "query" region of interest:
+```{r}
+(query <- GRanges(c("chr1:1-14:-", "chr1:15-18:+")))
+```
+
+using the `simplifyReduce` function to resolve overlapping ranges and return a matrix with rows 
+corresponding to the query:
 ```{r}
 qreduceAssay(ragexp, query, simplifyReduce = weightedmean)
 ```
 
-**Note**: Coercion to `SummarizedExperiment` is possible. 
+### Conversion to RangedSummarizedExperiment
+
+These methods all have corresponding methods to return a `RangedSummarizedExperiment` and preserve the `colData`:
+```{r, results='hide'}
+sparseSummarizedExperiment(ragexp)
+compactSummarizedExperiment(ragexp)
+disjoinSummarizedExperiment(ragexp, simplify = mean)
+qreduceSummarizedExperiment(ragexp, query=query, simplify=weightedmean)
+```
+
 
 ## Working with MultiAssayExperiment
 
@@ -346,11 +389,14 @@ colData(miniACC)[1:4, 1:4]
 table(miniACC$race)
 ```
 
-*Key points:*
+*Key points about the colData:*
 
-* One row per patient
 * Each row maps to zero or more observations in each experiment in the
 `ExperimentList`, below.
+* One row per biological unit
+    + `MultiAssayExperiment` supports both missing observations and replicate observations, ie one row of `colData` can map to 0, 1, or more columns of any of the experimental data matrices.
+    + therefore you could treat replicate observations as one or multiple rows of `colData`, and this will result in different behaviors of functions you will learn later like subsetting, `duplicated()`, and `wideFormat()`.
+    + multiple time points, or distinct biological replicates, should probably be separate rows of the `colData`.
 
 ### ExperimentList - experiment data
 
@@ -465,7 +511,8 @@ miniACC[, , "RNASeq2GeneNorm"]
 If any ExperimentList objects have features represented by genomic ranges (e.g.
 `RangedSummarizedExperiment`, `RaggedExperiment`), then a `GRanges` object in
 the first subsetting position will subset these objects as in
-`GenomicRanges::findOverlaps()`.
+`GenomicRanges::findOverlaps()`. Any non-ranged `ExperimentList` element will 
+be subset to zero rows.
 
 
 ### Double bracket `[[`
@@ -645,16 +692,17 @@ The package [cheat sheet](https://bioconductor.org/packages/release/bioc/vignett
 If anything is unclear, please ask a question at
 https://support.bioconductor.org/ or create an issue on the [MultiAssayExperiment issue tracker](https://github.com/waldronlab/MultiAssayExperiment/issues).
 
-## The Cancer Genome Atlas (TCGA) as MultiAssayExperiments
+## The Cancer Genome Atlas (TCGA) as MultiAssayExperiment objects
 
 Most unrestricted TCGA data are available as MultiAssayExperiment objects from
 the `curatedTCGAData` package. This represents a lot of harmonization!
 
 ```{r}
+library(curatedTCGAData)
 curatedTCGAData("ACC")
 suppressMessages({
     acc <- curatedTCGAData("ACC",
-        assays = c("miRNASeqGene", "RPPAArray", "Mutation", "RNASeq2GeneNorm"),
+        assays = c("miRNASeqGene", "RPPAArray", "Mutation", "RNASeq2GeneNorm", "CNVSNP"),
         dry.run = FALSE)
 })
 acc
@@ -665,8 +713,11 @@ data, as well as material curated from the supplements of published TCGA primary
 papers at the end of the colData columns:
 
 ```{r}
+dim(colData(acc))
 tail(colnames(colData(acc)), 10)
 ```
+
+The `TCGAutils` package provides additional helper functions, see below. 
 
 ## Plotting, correlation, and other analyses
 
