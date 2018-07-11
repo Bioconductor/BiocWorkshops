@@ -311,7 +311,9 @@ and the `simplifyReduce` functional argument.
 qreduceAssay(ragexp, query, simplifyReduce = weightedmean)
 ```
 
-**Note**: Coercion to `SummarizedExperiment` is possible. 
+**Note**: Related functions are available to coerce to `SummarizedExperiment`
+from `RaggedExperiment` using `*SummarizedExperiment` functions (e.g.,
+`sparseSummarizedExperiment`).
 
 ## Working with MultiAssayExperiment
 
@@ -722,6 +724,27 @@ sampleTables(acc)
 
 head(sampleTypes)
 ```
+
+### Assays are not from the same type of sample. How can I separate these out?
+
+**Solution**
+
+The `splitAssays` function lets you split your assays based on the samples
+present in the data. See the `sampleTypes` table in the `TCGAutils` package
+for a list of all the TCGA codes.
+
+```{r}
+data(sampleTypes)
+head(sampleTypes)
+```
+
+```{r}
+splitAssays(acc, sampleCodes = c("01", "10"))
+```
+
+Based on the TCGA barcodes, the datasets in the `ExperimentList` are split then
+grouped into assays that correspond with the given sample codes. To distinguish
+assays, sample codes are appended to the name of each assay.
 
 ### Is there subtype data available in the `MultiAssayExperiment` obtained from
 `curatedTCGAData`?
