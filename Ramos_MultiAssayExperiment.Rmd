@@ -23,7 +23,7 @@ List any workshop prerequisites, for example:
 * Familiarity with the GRanges and SummarizedExperiment classes
 * Familiarity with 'omics data types including copy number and gene expression
 
-### workshop Participation
+### Workshop Participation
 
 Students will have a chance to build a `MultiAssayExperiment` object
 from scratch, and will also work with more complex objects provided
@@ -51,6 +51,7 @@ library(RaggedExperiment)
 library(curatedTCGAData)
 library(GenomicDataCommons)
 library(SummarizedExperiment)
+library(SingleCellExperiment)
 library(TCGAutils)
 library(UpSetR)
 library(mirbase.db)
@@ -69,6 +70,7 @@ suppressPackageStartupMessages({
     library(curatedTCGAData)
     library(GenomicDataCommons)
     library(SummarizedExperiment)
+    library(SingleCellExperiment)
     library(TCGAutils)
     library(UpSetR)
     library(mirbase.db)
@@ -112,21 +114,31 @@ machine learning, and plotting
 
 ## Overview of key data classes
 
+This section summarizes three fundamental data classes for the representation of multi-omics
+experiments. 
+
 ### `SummarizedExperiment` / `RangedSummarizedExperiment`
 
 ```{r, echo = FALSE, fig.cap = "A matrix-like container where rows represent features of interest and columns represent samples. The objects contain one or more assays, each represented by a matrix-like object of numeric or other mode."}
 knitr::include_graphics("Ramos_MultiAssayExperiment/SummarizedExperiment.svg")
 ```
 
-_The_ standard Bioconductor class convenient for storing experimental results
-produced by sequencing and microarry experiments. Each object can store
-multiple experiments with associated metadata such as features and samples, as
-well as phenotype/clinical data. Supersedes the use of `ExpressionSet`.
+`SummarizedExperiment` is the most important Bioconductor class for matrix-like 
+experimental data, including from RNA sequencing and microarray experiments. It can store
+multiple experimental data matrices of identical dimensions, with associated metadata on the rows/genes/transcripts/other measurements (`rowData`), column/sample phenotype or clinical data (`colData`),
+and the overall experiment (`metadata`). The derivative class `RangedSummarizedExperiment` associates
+a `GRanges` or `GRangesList` vector with the rows. These classes supersede the use of `ExpressionSet`. Note that many other classes for experimental data are actually derived from `SummarizedExperiment`; for example, the `SingleCellExperiment` class for single-cell RNA sequencing experiments extends `RangedSummarizedExperiment`, which in turn extends `SummarizedExperiment`:
+```{r}
+library(SingleCellExperiment)
+extends("SingleCellExperiment")
+```
+
+Thus, although `SingleCellExperiment` provides additional methods over `RangedSummarizedExperiment`, it also inherits all the methods of `SummarizedExperiment` and `RangedSummarizedExperiment`, so everything you learn about `SummarizedExperiment` will be applicable to `SingleCellExperiment`.
 
 ### `MultiAssayExperiment`
 
-An integrative container for coordinating multi-omics experiment data on a
-set of biological specimens.
+`MultiAssayExperiment` is an integrative container for coordinating multi-omics experiment data on a
+set of biological specimens. As much as possible, its methods adopt the same vocabulary as `SummarizedExperiment`.
 
 ```{r, echo = FALSE, fig.cap="MultiAssayExperiment object schematic. colData provides data about the patients, cell lines, or other biological units, with one row per unit and one column per variable. The experiments are a list of assay datasets of arbitrary class.  The sampleMap relates each column (observation) in ExperimentList to exactly one row (biological unit) in colData; however, one row of colData may map to zero, one, or more columns per assay, allowing for missing and replicate assays. sampleMap allows for per-assay sample naming conventions. Metadata can be used to store information in arbitrary format about the MultiAssayExperiment. Green stripes indicate a mapping of one subject to multiple observations across experiments.", out.width="\\maxwidth"}
 knitr::include_graphics("Ramos_MultiAssayExperiment/MultiAssayExperiment.png")
@@ -134,9 +146,15 @@ knitr::include_graphics("Ramos_MultiAssayExperiment/MultiAssayExperiment.png")
 
 ### `RaggedExperiment`
 
-A flexible data representation for copy number, mutation, and other
-ragged array schema for genomic location data. It aims to provide a framework
-for a set of samples that have _differing_ numbers of genomic ranges.
+`RaggedExperiment` is a flexible data representation for segmented copy number, somatic mutations such as
+represented in `.vcf` files, and other ragged array schema for genomic location data. 
+Like the `GRangesList` class from `GenomicRanges`, `RaggedExperiment` can be used to represent 
+_differing_ genomic ranges on each of a set of samples. In fact, `RaggedExperiment` contains a `GRangesList`:
+```{r}
+showClass("RaggedExperiment")
+```
+However, `RaggedExperiment` provides a flexible set of _Assay_ methods to support transformation of such data 
+to matrix format.
 
 ```{r, echo=FALSE, fig.cap="RaggedExperiment object schematic. Rows and columns represent genomic ranges and samples, respectively. Assay operations can be performed with (from left to right) compactAssay, qreduceAssay, and sparseAssay.", out.width="\\maxwidth"}
 knitr::include_graphics("Ramos_MultiAssayExperiment/RaggedExperiment.png")
@@ -197,12 +215,12 @@ A suite of *Assay operations allow users to resize the matrix-like
 representation of ranges to varying row dimensions
 (see [RaggedExperiment Figure](#raggedexperiment) for a visual example).
 
-The four main functions for row management are: 
+The four main _Assay_ functions for row management are: 
 
-* [sparseAssay](#sparseassay)
-* [compactAssay](#compactassay)
-* [disjoinAssay](#disjoinassay)
-* [qreduceAssay](#qreduceassay)
+* [sparseAssay](#sparseassay): leave ranges as-is
+* [compactAssay](#compactassay): combine ranges
+* [disjoinAssay](#disjoinassay): disjoin ranges
+* [qreduceAssay](#qreduceassay): find overlaps with provided range "windows"
 
 Depending on the function, the row ranges are either left as-is, combined,
 disjoint, or windowed. 
@@ -231,7 +249,7 @@ compactAssay(ragexp)
 
 #### disjoinAssay
 
-This function returns a matrix of disjoint ranges across all samples. Elements
+This function returns a matrix where the rows are _disjoint_[^1] ranges, across all samples. Elements
 of the matrix are summarized by applying the `simplifyDisjoin` functional
 argument to assay values of overlapping ranges.
 
@@ -239,11 +257,13 @@ argument to assay values of overlapping ranges.
 disjoinAssay(ragexp, simplifyDisjoin = mean)
 ```
 
+[^1]: A _disjoint_ set of ranges has no overlap between any ranges of the set.
+
 #### qreduceAssay
 
-The `qreduceAssay` function works with a `query` parameter that highlights
-a window of ranges for the resulting matrix. The returned matrix will have
-dimensions `length(query)` by `ncol(x)`. Elements contain assay values for the
+The `qreduceAssay` function requires a `query` argument that provides
+a "window" of ranges, and which become the rows of the resulting matrix. The returned matrix will have
+dimensions `length(query)` by `ncol(x)`. Elements of the resulting matrix contain assay values for the
 _i_ th query range and the _j_ th sample, summarized according to the
 `simplifyReduce` functional argument.
 
@@ -291,7 +311,7 @@ and the `simplifyReduce` functional argument.
 qreduceAssay(ragexp, query, simplifyReduce = weightedmean)
 ```
 
-**Note**: Coercion is possible to `SummarizedExperiment`.
+**Note**: Coercion to `SummarizedExperiment` is possible. 
 
 ## Working with MultiAssayExperiment
 
