@@ -1,10 +1,3 @@
----
-editor_options:
-  chunk_output_type: console
-output:
-  html_document: default
-  pdf_document: default
----
 # Analysis of single-cell RNA-seq data: Dimensionality reduction, clustering, and lineage inference
 
 Authors:

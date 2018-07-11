@@ -1,22 +1,3 @@
-```{r include=FALSE, cache=FALSE}
-knitr::opts_chunk$set(
-    comment = "#>",
-    collapse = TRUE,
-    cache = TRUE
-)
-```
-```{r include=FALSE, cache=FALSE}
-knitr::opts_chunk$set(
-    comment = "#>",
-    collapse = TRUE,
-    cache = TRUE
-)
-```
----
-output: html_document
-editor_options: 
-  chunk_output_type: console
----
 # Effectively using the DelayedArray framework to support the analysis of large datasets
 
 Authors:
