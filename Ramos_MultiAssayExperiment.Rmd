@@ -2,18 +2,18 @@
 
 ## Instructor names and contact information
 
-* Marcel Ramos
-* Ludwig Geistlinger
-* Levi Waldron
+* Marcel Ramos^[City University of New York, New York, NY, USA] ^[Roswell Park Comprehensive Cancer Center, Buffalo, NY] (<marcel.ramos@roswellpark.org>)
+* Ludwig Geistlinger^[City University of New York, New York, NY, USA]
+* Levi Waldron^[City University of New York, New York, NY, USA]
 
 ## Workshop Description
 
-This workshop demonstrates data management and analyses of multiple 
-assays associated with a single set of biological specimens, 
-using the `MultiAssayExperiment` data class and methods. It introduces 
-the `RaggedExperiment` data class, which provides efficient and powerful 
-operations for representation of copy number and mutation and variant 
-data that are represented by different genomic ranges for each specimen. 
+This workshop demonstrates data management and analyses of multiple
+assays associated with a single set of biological specimens,
+using the `MultiAssayExperiment` data class and methods. It introduces
+the `RaggedExperiment` data class, which provides efficient and powerful
+operations for representation of copy number and mutation and variant
+data that are represented by different genomic ranges for each specimen.
 
 ### Pre-requisites
 
@@ -23,18 +23,65 @@ List any workshop prerequisites, for example:
 * Familiarity with the GRanges and SummarizedExperiment classes
 * Familiarity with 'omics data types including copy number and gene expression
 
-### workshop Participation
+### Workshop Participation
 
-Students will have a chance to build a `MultiAssayExperiment` object 
+Students will have a chance to build a `MultiAssayExperiment` object
 from scratch, and will also work with more complex objects provided
 by the `curatedTCGAData` package.
 
 ### R/Bioconductor packages used
 
-* [MultiAssayExperiment]
-* [RaggedExperiment]
-* [curatedTCGAData]
-* [SummarizedExperiment]
+* [MultiAssayExperiment](https://bioconductor.org/packages/MultiAssayExperiment)
+* [GenomicRanges](https://bioconductor.org/packages/GenomicRanges)
+* [RaggedExperiment](https://bioconductor.org/packages/RaggedExperiment)
+* [curatedTCGAData](https://bioconductor.org/packages/curatedTCGAData)
+* [SummarizedExperiment](https://bioconductor.org/packages/SummarizedExperiment)
+* [TCGAutils](https://bioconductor.org/packages/TCGAutils)
+* [UpSetR](https://bioconductor.org/packages/UpSetR)
+* [AnnotationFilter](https://bioconductor.org/packages/AnnotationFilter)
+* [EnsDb.Hsapiens.v86](https://bioconductor.org/packages/EnsDb.Hsapiens.v86)
+* [survival](https://cran.r-project.org/package=survival)
+* [survminer](https://cran.r-project.org/package=survminer)
+* [pheatmap](https://cran.r-project.org/package=pheatmap)
+
+```{r, eval = FALSE}
+library(MultiAssayExperiment)
+library(GenomicRanges)
+library(RaggedExperiment)
+library(curatedTCGAData)
+library(GenomicDataCommons)
+library(SummarizedExperiment)
+library(SingleCellExperiment)
+library(TCGAutils)
+library(UpSetR)
+library(mirbase.db)
+library(AnnotationFilter)
+library(EnsDb.Hsapiens.v86)
+library(survival)
+library(survminer)
+library(pheatmap)
+```
+
+```{r, echo = FALSE}
+suppressPackageStartupMessages({
+    library(MultiAssayExperiment)
+    library(GenomicRanges)
+    library(RaggedExperiment)
+    library(curatedTCGAData)
+    library(GenomicDataCommons)
+    library(SummarizedExperiment)
+    library(SingleCellExperiment)
+    library(TCGAutils)
+    library(UpSetR)
+    library(mirbase.db)
+    library(AnnotationFilter)
+    library(EnsDb.Hsapiens.v86)
+    library(survival)
+    library(survminer)
+    library(pheatmap)
+    library(S4Vectors)
+})
+```
 
 ### Time outline
 
@@ -62,32 +109,209 @@ by the `curatedTCGAData` package.
 * use curatedTCGAData to create custom TCGA MultiAssayExperiment objects
 * create a MultiAssayExperiment for TCGA or other multi'omics data
 * perform subsetting, reshaping, growing, and extraction of a MultiAssayExperiment
-* link MultiAssayExperiment data with packages for differential expression, 
+* link MultiAssayExperiment data with packages for differential expression,
 machine learning, and plotting
-
-# Workshop
 
 ## Overview of key data classes
 
-### `SummarizedExperiment` / `RaggedExperiment`
+This section summarizes three fundamental data classes for the representation of multi-omics
+experiments. 
 
-![SummarizedExperiment_Schematic](Ramos_MultiAssayExperiment/SummarizedExperiment.svg)
+### `SummarizedExperiment` / `RangedSummarizedExperiment`
+
+```{r, echo = FALSE, fig.cap = "A matrix-like container where rows represent features of interest and columns represent samples. The objects contain one or more assays, each represented by a matrix-like object of numeric or other mode."}
+knitr::include_graphics("Ramos_MultiAssayExperiment/SummarizedExperiment.svg")
+```
+
+`SummarizedExperiment` is the most important Bioconductor class for matrix-like 
+experimental data, including from RNA sequencing and microarray experiments. It can store
+multiple experimental data matrices of identical dimensions, with associated metadata on the rows/genes/transcripts/other measurements (`rowData`), column/sample phenotype or clinical data (`colData`),
+and the overall experiment (`metadata`). The derivative class `RangedSummarizedExperiment` associates
+a `GRanges` or `GRangesList` vector with the rows. These classes supersede the use of `ExpressionSet`. Note that many other classes for experimental data are actually derived from `SummarizedExperiment`; for example, the `SingleCellExperiment` class for single-cell RNA sequencing experiments extends `RangedSummarizedExperiment`, which in turn extends `SummarizedExperiment`:
+```{r}
+library(SingleCellExperiment)
+extends("SingleCellExperiment")
+```
+
+Thus, although `SingleCellExperiment` provides additional methods over `RangedSummarizedExperiment`, it also inherits all the methods of `SummarizedExperiment` and `RangedSummarizedExperiment`, so everything you learn about `SummarizedExperiment` will be applicable to `SingleCellExperiment`.
 
 ### `MultiAssayExperiment`
 
-An integrative container for coordinating multi-omics experiment data on a
-set of biological specimens.
+`MultiAssayExperiment` is an integrative container for coordinating multi-omics experiment data on a
+set of biological specimens. As much as possible, its methods adopt the same vocabulary as `SummarizedExperiment`.
 
-![MultiAssayExperiment_Schematic](Ramos_MultiAssayExperiment/MultiAssayExperiment.png)
+```{r, echo = FALSE, fig.cap="MultiAssayExperiment object schematic. colData provides data about the patients, cell lines, or other biological units, with one row per unit and one column per variable. The experiments are a list of assay datasets of arbitrary class.  The sampleMap relates each column (observation) in ExperimentList to exactly one row (biological unit) in colData; however, one row of colData may map to zero, one, or more columns per assay, allowing for missing and replicate assays. sampleMap allows for per-assay sample naming conventions. Metadata can be used to store information in arbitrary format about the MultiAssayExperiment. Green stripes indicate a mapping of one subject to multiple observations across experiments.", out.width="\\maxwidth"}
+knitr::include_graphics("Ramos_MultiAssayExperiment/MultiAssayExperiment.png")
+```
 
 ### `RaggedExperiment`
 
-A flexible data representation for copy number, mutation, and other
-ragged array schema for genomic location data.
+`RaggedExperiment` is a flexible data representation for segmented copy number, somatic mutations such as
+represented in `.vcf` files, and other ragged array schema for genomic location data. 
+Like the `GRangesList` class from `GenomicRanges`, `RaggedExperiment` can be used to represent 
+_differing_ genomic ranges on each of a set of samples. In fact, `RaggedExperiment` contains a `GRangesList`:
+```{r}
+showClass("RaggedExperiment")
+```
+However, `RaggedExperiment` provides a flexible set of _Assay_ methods to support transformation of such data 
+to matrix format.
 
-![RaggedExperiment_Schematic](Ramos_MultiAssayExperiment/RaggedExperiment.png)
+```{r, echo=FALSE, fig.cap="RaggedExperiment object schematic. Rows and columns represent genomic ranges and samples, respectively. Assay operations can be performed with (from left to right) compactAssay, qreduceAssay, and sparseAssay.", out.width="\\maxwidth"}
+knitr::include_graphics("Ramos_MultiAssayExperiment/RaggedExperiment.png")
+```
 
 ## Working with RaggedExperiment
+
+### Constructing a `RaggedExperiment` object
+
+We start with a couple of `GRanges` objects, each representing an individual
+sample:
+
+```{r}
+sample1 <- GRanges(
+    c(A = "chr1:1-10:-", B = "chr1:8-14:+", C = "chr2:15-18:+"),
+    score = 3:5)
+sample2 <- GRanges(
+    c(D = "chr1:1-10:-", E = "chr2:11-18:+"),
+    score = 1:2)
+```
+
+Include column data `colData` to describe the samples:
+
+```{r}
+colDat <- DataFrame(id = 1:2)
+```
+
+### Using `GRanges` objects
+
+```{r}
+(ragexp <- RaggedExperiment(
+    sample1 = sample1,
+    sample2 = sample2,
+    colData = colDat))
+```
+
+It can also be constructed from a `GRangesList`:
+
+(Here we take a `GRangesList` from the package examples)
+```{r, results = 'hide', echo = FALSE}
+example(GRangesList)
+```
+
+```{r, eval = FALSE}
+example(GRangesList)
+```
+
+We use the constructor function to create the `RaggedExperiment` object.
+
+```{r}
+(rgx <- RaggedExperiment(grl))
+```
+
+
+### *Assay functions
+
+A suite of *Assay operations allow users to resize the matrix-like
+representation of ranges to varying row dimensions
+(see [RaggedExperiment Figure](#raggedexperiment) for a visual example).
+
+The four main _Assay_ functions for row management are: 
+
+* [sparseAssay](#sparseassay): leave ranges as-is
+* [compactAssay](#compactassay): combine ranges
+* [disjoinAssay](#disjoinassay): disjoin ranges
+* [qreduceAssay](#qreduceassay): find overlaps with provided range "windows"
+
+Depending on the function, the row ranges are either left as-is, combined,
+disjoint, or windowed. 
+
+#### sparseAssay
+
+The most straightforward matrix representation of a `RaggedExperiment` will
+return a matrix of dimensions equal to the product of the number of ranges and
+samples.
+
+```{r}
+dim(ragexp)
+Reduce(`*`, dim(ragexp))
+sparseAssay(ragexp)
+length(sparseAssay(ragexp))
+```
+
+#### compactAssay
+
+Samples with identical ranges are placed in the same row. Non-disjoint ranges
+are **not** collapsed.
+
+```{r}
+compactAssay(ragexp)
+```
+
+#### disjoinAssay
+
+This function returns a matrix where the rows are _disjoint_[^1] ranges, across all samples. Elements
+of the matrix are summarized by applying the `simplifyDisjoin` functional
+argument to assay values of overlapping ranges.
+
+```{r}
+disjoinAssay(ragexp, simplifyDisjoin = mean)
+```
+
+[^1]: A _disjoint_ set of ranges has no overlap between any ranges of the set.
+
+#### qreduceAssay
+
+The `qreduceAssay` function requires a `query` argument that provides
+a "window" of ranges, and which become the rows of the resulting matrix. The returned matrix will have
+dimensions `length(query)` by `ncol(x)`. Elements of the resulting matrix contain assay values for the
+_i_ th query range and the _j_ th sample, summarized according to the
+`simplifyReduce` functional argument.
+
+For demonstration purposes, we can have a look at the original `GRangesList`
+and the associated scores from which the current `ragexp` object is derived:
+
+```{r}
+unlist(grl, use.names = FALSE)
+```
+
+This data is represented as `rowRanges` and `assays` in `RaggedExperiment`:
+
+```{r}
+rowRanges(ragexp)
+assay(ragexp, "score")
+```
+
+Here we provide the "query" region of interest:
+
+```{r}
+(query <- GRanges(c("chr1:1-14:-", "chr2:11-18:+")))
+```
+
+ The `simplifyReduce` argument in `qreduceAssay` allows the user to summarize
+overlapping regions with a custom method for the given "query" region of
+interest. We provide one for calculating a weighted average score per
+query range, where the weight is proportional to the overlap widths between
+overlapping ranges and a query range.
+
+_Note_ that there are three arguments to this function. See the documentation
+for additional details.
+
+```{r}
+weightedmean <- function(scores, ranges, qranges)
+{
+    isects <- pintersect(ranges, qranges)
+    sum(scores * width(isects)) / sum(width(isects))
+}
+```
+
+A call to `qreduceAssay` involves the `RaggedExperiment`, the `GRanges` query
+and the `simplifyReduce` functional argument.
+
+```{r}
+qreduceAssay(ragexp, query, simplifyReduce = weightedmean)
+```
+
+**Note**: Coercion to `SummarizedExperiment` is possible. 
 
 ## Working with MultiAssayExperiment
 
@@ -105,10 +329,6 @@ for every patient:
 5. **miRNASeqGene**: microRNA abundance by microRNA-seq.
 
 ```{r}
-suppressPackageStartupMessages({
-    library(MultiAssayExperiment)
-    library(S4Vectors)
-})
 data(miniACC)
 miniACC
 ```
@@ -186,7 +406,7 @@ sampleMap(miniACC)
 * relates experimental observations (`colnames`) to `colData`
 * permits experiment-specific sample naming, missing, and replicate observations
 
-<p style="text-align: right;"> <a href="#header">back to top</a> </p>
+<p style="text-align: right;"> [back to top](#overview-of-key-data-classes) </p>
 
 ### metadata
 
@@ -297,7 +517,7 @@ accmatched2 <- intersectRows(miniACC[, , c("RNASeq2GeneNorm", "gistict", "Mutati
 rownames(accmatched2)
 ```
 
-<p style="text-align: right;"> <a href="#header">back to top</a> </p>
+<p style="text-align: right;"> [back to top](#overview-of-key-data-classes) </p>
 
 ## Extraction
 
@@ -305,7 +525,7 @@ rownames(accmatched2)
 
 The `assay` and `assays` methods follow `SummarizedExperiment` convention.
 The `assay` (singular) method will extract the first element of the
-`ExperimentList` and will return a `matrix`. 
+`ExperimentList` and will return a `matrix`.
 
 ```{r}
 class(assay(miniACC))
@@ -323,7 +543,7 @@ assays(miniACC)
 * Whereas the `[[` returned an assay as its original class, `assay()` and
 `assays()` convert the assay data to matrix form.
 
-<p style="text-align: right;"> <a href="#header">back to top</a> </p>
+<p style="text-align: right;"> [back to top](#overview-of-key-data-classes) </p>
 
 ## Summary of slots and accessors
 
@@ -359,7 +579,7 @@ etc), and following these are the *vital_status* and *days_to_death* colData
 columns that have been added:
 
 ```{r}
-longFormat(miniACC[c("TP53", "CTNNB1"), , ], 
+longFormat(miniACC[c("TP53", "CTNNB1"), , ],
            colDataCols = c("vital_status", "days_to_death"))
 ```
 
@@ -370,7 +590,7 @@ one row per primary identifier (patient). Here, each variable becomes a new
 column:
 
 ```{r}
-wideFormat(miniACC[c("TP53", "CTNNB1"), , ], 
+wideFormat(miniACC[c("TP53", "CTNNB1"), , ],
            colDataCols = c("vital_status", "days_to_death"))
 ```
 
@@ -414,7 +634,7 @@ miniACC2 <- c(miniACC, log2rnaseq = log2(assays(miniACC)$RNASeq2GeneNorm), mapFr
 experiments(miniACC2)
 ```
 
-<p style="text-align: right;"> <a href="#header">back to top</a> </p>
+<p style="text-align: right;"> [back to top](#overview-of-key-data-classes) </p>
 
 ### Building a MultiAssayExperiment from scratch
 
@@ -428,13 +648,15 @@ https://support.bioconductor.org/ or create an issue on the [MultiAssayExperimen
 ## The Cancer Genome Atlas (TCGA) as MultiAssayExperiments
 
 Most unrestricted TCGA data are available as MultiAssayExperiment objects from
-the curatedTCGAData package. This represents a lot of harmonization!
+the `curatedTCGAData` package. This represents a lot of harmonization!
 
 ```{r}
-library(curatedTCGAData)
 curatedTCGAData("ACC")
-acc <- curatedTCGAData("ACC", 
-                assays=c("miRNASeqGene", "RPPAArray", "Mutation", "RNASeq2GeneNorm"), dry.run=FALSE)
+suppressMessages({
+    acc <- curatedTCGAData("ACC",
+        assays = c("miRNASeqGene", "RPPAArray", "Mutation", "RNASeq2GeneNorm"),
+        dry.run = FALSE)
+})
 acc
 ```
 
@@ -463,6 +685,115 @@ In this dataset only 43 samples have all 5 assays, 32 are missing reverse-phase
 protein (RPPAArray), 2 are missing Mutations, 1 is missing gistict, 12 have only
 mutations and gistict, etc.
 
+## `TCGAutils` package
+
+### "Simplification" of `curatedTCGAData` objects
+
+A number of helper functions are available for managing datasets from
+`curatedTCGAData`. These include:
+
+- `mirToRanges`: convert `SummarizedExperiment` datasets with microRNA to
+`RangedSummarizedExperiment`
+- `symbolsToRanges`: convert assays with gene symbols to genomic ranges
+(`SummarizedExperiment` to `RangedSummarizedExperiment`)
+- `qreduceTCGA`: convert `RaggedExperiment` objects to
+`RangedSummarizedExperiment`
+
+The `simplifyTCGA` function combines all of the above operations to create
+a more managable `MultiAssayExperiment` object and using
+`RangedSummarizedExperiment` assays where possible.
+
+```{r}
+(simpa <- TCGAutils::simplifyTCGA(acc))
+```
+
+Aside from the available reshaping functions already included in the
+`MultiAssayExperiment` package, the `TCGAutils` package provides additional
+helper functions for working with TCGA data.
+
+### What types of samples are in the data?
+
+**Solution**
+
+The `sampleTables` function gives you an overview of samples in each assay:
+
+```{r}
+sampleTables(acc)
+
+head(sampleTypes)
+```
+
+### Is there subtype data available in the `MultiAssayExperiment` obtained from
+`curatedTCGAData`?
+
+**Solution**
+
+The `getSubtypeMap` function will show actual variable names found in `colData`
+that contain subtype information. This can only be obtained from
+`MultiAssayExperiment` objects provided by `curatedTCGAData`. 
+
+```{r}
+getSubtypeMap(acc)
+head(colData(acc)$Histology)
+```
+
+### Converting TCGA UUIDs to barcodes and back
+
+`TCGAutils` provides a number of ID translation functions.
+These allow the user to translate from either file or case UUIDs to TCGA
+barcodes and back. These functions work by querying the Genomic Data Commons API
+via the `GenomicDataCommons` package (thanks to Sean Davis).
+
+#### ID translations
+
+A number of other utility functions are available in `TCGAutils` including
+TCGA identifier translation from TCGA barcodes to UUIDs and vice versa 
+
+A number of translation functions are available as part of the `TCGAutils`
+package. These include: 
+
+* UUIDtoBarcode
+* barcodeToUUID
+* UUIDtoUUID
+* filenameToBarcode (example not shown)
+
+Using the `GenomicDataCommons` we can obtain a set of **file** UUIDs associated
+with copy number variation files:
+
+```{r}
+que <- files() %>%
+    filter( ~ cases.project.project_id == "TCGA-COAD" &
+        data_category == "Copy Number Variation" &
+        data_type == "Copy Number Segment")
+q <- manifest(que)
+ids <- q$id[1:5]
+```
+
+We indicate the type of id by setting the `id_type` argument to `file_id`.
+This yields a small `data.frame` of `file_id`s and TCGA barcodes.
+
+```{r}
+(idtab <- UUIDtoBarcode(id_vector = ids, id_type = "file_id"))
+```
+
+The user is able to change the indicated endpoint for the barcode as below:
+
+```{r}
+UUIDtoBarcode(id_vector = ids, id_type = "file_id", end_point = "center")
+```
+
+To ensure accuracy, reverse translation is also possible from TCGA barcode
+to UUID. In this case, we will take the barcodes from the previous operation:
+
+```{r}
+tcgabcodes <- idtab$cases.submitter_id
+barcodeToUUID(tcgabcodes, id_type = "file_id")
+```
+
+**Note**. Helper functions to create Bioconductor objects from TCGA exon files
+(legacy archive), copy number and GISTIC objects from `RTCGAToolbox` are
+also available in `TCGAutils`.
+
 ### Kaplan-meier plot stratified by pathology_N_stage
 
 Create a Kaplan-meier plot, using pathology_N_stage as a stratifying variable.
@@ -473,10 +804,6 @@ The colData provides clinical data for things like a Kaplan-Meier plot for
 overall survival stratified by nodal stage.
 
 ```{r}
-suppressPackageStartupMessages({
-  library(survival)
-  library(survminer)
-})
 Surv(miniACC$days_to_death, miniACC$vital_status)
 ```
 
@@ -495,7 +822,7 @@ ggsurvplot(fit, data = colData(miniACCsurv), risk.table = TRUE)
 Choose the *EZH2* gene for demonstration. This subsetting will drop assays with
 no row named EZH2:
 ```{r}
-wideacc = wideFormat(miniACC["EZH2", , ], 
+wideacc = wideFormat(miniACC["EZH2", , ],
     colDataCols=c("vital_status", "days_to_death", "pathology_N_stage"))
 wideacc$y = Surv(wideacc$days_to_death, wideacc$vital_status)
 head(wideacc)
@@ -505,7 +832,7 @@ Perform a multivariate Cox regression with *EZH2* copy number (gistict),
 log2-transformed *EZH2* expression (RNASeq2GeneNorm), and nodal status
 (pathology_N_stage) as predictors:
 ```{r}
-coxph(Surv(days_to_death, vital_status) ~ gistict_EZH2 + log2(RNASeq2GeneNorm_EZH2) + pathology_N_stage, 
+coxph(Surv(days_to_death, vital_status) ~ gistict_EZH2 + log2(RNASeq2GeneNorm_EZH2) + pathology_N_stage,
       data=wideacc)
 ```
 
@@ -517,7 +844,7 @@ regression, etc.
 
 For further detail, see the main MultiAssayExperiment vignette.
 
-<p style="text-align: right;"> <a href="#header">back to top</a> </p>
+<p style="text-align: right;"> [back to top](#overview-of-key-data-classes) </p>
 
 ### Correlation between RNA-seq and copy number
 
@@ -557,7 +884,9 @@ Transpose both, so genes are in columns:
 subacc.list <- lapply(subacc.list, t)
 ```
 
-Calculate the correlation between columns in the first matrix and columns in the second matrix:
+Calculate the correlation between columns in the first matrix and columns in the
+second matrix:
+
 ```{r}
 corres <- cor(subacc.list[[1]], subacc.list[[2]])
 ```
@@ -592,13 +921,13 @@ head(df)
 ```
 
 ```{r}
-boxplot(RNASeq2GeneNorm_EIF4E ~ gistict_EIF4E, 
+boxplot(RNASeq2GeneNorm_EIF4E ~ gistict_EIF4E,
         data=df, varwidth=TRUE,
         xlab="GISTIC Relative Copy Number Call",
         ylab="RNA-seq counts")
 ```
 
-<p style="text-align: right;"> <a href="#header">back to top</a> </p>
+<p style="text-align: right;"> [back to top](#overview-of-key-data-classes) </p>
 
 ### Identifying correlated principal components
 
@@ -615,7 +944,7 @@ getLoadings <- function(x, ncomp=10, dolog=FALSE, center=TRUE, scale.=TRUE){
   if(dolog){
     x <- log2(x + 1)
   }
-  pc = prcomp(x, center=center, scale.=scale.) 
+  pc = prcomp(x, center=center, scale.=scale.)
   return(t(pc$rotation[, 1:10]))
 }
 ```
@@ -671,7 +1000,7 @@ pheatmap::pheatmap(mycors)
 The highest correlation present is between PC2 of the RNA-seq assay, and PC1 of
 the protein assay.
 
-<p style="text-align: right;"> <a href="#header">back to top</a> </p>
+<p style="text-align: right;"> [back to top](#overview-of-key-data-classes) </p>
 
 ### Annotating with ranges
 
@@ -689,16 +1018,12 @@ these as a GRangesList which can be used to replace the rowRanges of the
 SummarizedExperiment objects:
 
 ```{r}
-getrr <- function(identifiers, EnsDbFilterFunc="SymbolFilter"){
-  suppressPackageStartupMessages({
-    library(AnnotationFilter)
-    library(EnsDb.Hsapiens.v86)
-  })
-    FUN <- get(EnsDbFilterFunc)
-    edb <- EnsDb.Hsapiens.v86
-    afl <- AnnotationFilterList(FUN(identifiers),
-                                SeqNameFilter(c(1:21, "X", "Y")),
-                                TxBiotypeFilter("protein_coding"))
+getrr <- function(identifiers, EnsDbFilterFunc=AnnotationFilter::SymbolFilter) {
+    edb <- EnsDb.Hsapiens.v86::EnsDb.Hsapiens.v86
+    afl <- AnnotationFilterList(
+        EnsDbFilterFunc(identifiers),
+        SeqNameFilter(c(1:21, "X", "Y")),
+        TxBiotypeFilter("protein_coding"))
     gr <- genes(edb, filter=afl)
     grl <- split(gr, factor(identifiers))
     grl <- grl[match(identifiers, names(grl))]
@@ -738,4 +1063,4 @@ the genomic location of those microRNA, or the locations of their predicted
 targets, but we don't do it here. Assigning genomic ranges of microRNA targets
 would be an easy way to subset them according to their targets.
 
-<p style="text-align: right;"> <a href="#header">back to top</a> </p>
+<p style="text-align: right;"> [back to top](#overview-of-key-data-classes) </p>

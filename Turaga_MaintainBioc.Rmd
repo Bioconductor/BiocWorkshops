@@ -1,8 +1,8 @@
-Maintaining your Bioconductor package
-========================================================
+# Maintaining your Bioconductor package
 
-## Authors: 
-* Nitesh Turaga (<nitesh.turaga@roswellpark.org>)
+## Instructor name and contact information
+
+* Nitesh Turaga ^[Roswell Park Comprehensive Cancer Center, Buffalo, NY] (<nitesh.turaga@roswellpark.org>)
 
 ## Workshop Description:
 

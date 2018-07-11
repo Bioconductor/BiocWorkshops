@@ -684,22 +684,18 @@ browseURL(file.path(tmp,"glimma","MD-Plot.html"))
 
 ### Simulate with *splatter*
 
+In this last section, we show that *DESeq2* can be integrated with
+another Bioconductor package *zinbwave* [@Risso2018] in order to model
+and account for additional zeros (more than expected by the Negative
+Binomial model). This can be useful for single cell RNA-seq
+experiments.
+
 Here we use the *splatter* package to simulate single-cell RNA-seq
-data.
+data [@Zappia2017]. We then use the methods defined in
+@VandenBergePerraudeau to combine *zinbwave* observation weights with
+*DESeq2* modeling of negative binomial counts.
 
-TODO put these as citations
-
-* Zappia, Phipson, and Oshlack "Splatter: simulation of single-cell RNA
-sequencing data" *Genome Biology* (2017)
-[doi: 10.1186/s13059-017-1305-0](https://doi.org/10.1186/s13059-017-1305-0)
-
-We then use the methods defined in the following paper to combine
-*zinbwave* observation weights with *DESeq2* modeling of negative
-binomial counts.
-
-* Van den Berge & Perraudeau *et al* "Observation weights unlock bulk
-RNA-seq tools for zero inflation and single-cell applications" *Genome Biology* (2018)
-[doi: 10.1186/s13059-018-1406-4](https://doi.org/10.1186/s13059-018-1406-4)
+From @VandenBergePerraudeau:
 
 > It is important to note that while methods such as ZINB-WaVE and
 > ZINGER can successfully identify excess zeros, they cannot, however,
@@ -716,6 +712,8 @@ be biological or technical).
 
 ### Simulate single-cell count data with *splatter*
 
+The following chunks of code create a *splatter* simulation:
+
 ```{r}
 library("splatter")
 params <- newSplatParams()
@@ -730,14 +728,20 @@ set.seed(1)
 sim <- splatSimulate(params, group.prob=c(.5,.5), method="groups")
 ```
 
+We can plot the amount of dropouts over the true counts:
+
 ```{r}
 plot(log10(rowMeans(assays(sim)[["TrueCounts"]])),
      rowMeans(assays(sim)[["Dropout"]]))
 ```
 
+We will store the true log2 fold change for comparison:
+
 ```{r}
 rowData(sim)$log2FC <- with(rowData(sim), log2(DEFacGroup2/DEFacGroup1))
 ```
+
+The true dispersion for the Negative Binomial component, over the mean:
 
 ```{r}
 rowData(sim)$trueDisp <- rowMeans(assays(sim)[["BCV"]])^2
@@ -750,31 +754,49 @@ text(300, gridlines, labels=gridlines, col=cols, pos=3)
 
 ### Model zeros with *zinbwave*
 
+The following code subsets the dataset and creates a `condition`
+variable that we will use to test for differential expression:
+
 ```{r}
 library(zinbwave)
 keep <- rowSums(counts(sim) >= 5) >= 25
 table(keep)
 zinb <- sim[keep,]
 zinb$condition <- factor(zinb$Group)
+```
+
+We need to re-arrange the assays in the `zinb` object such that
+`"counts"` is the first assay:
+
+```{r}
 nms <- c("counts", setdiff(assayNames(zinb), "counts"))
 assays(zinb) <- assays(zinb)[nms]
-system.time({
-  zinb <- zinbwave(zinb, K=0, BPPARAM=SerialParam(), epsilon=1e12)
-})
+```
+
+Finally we fit the *ZINB-WaVE* model. See `?zinbwave` and the
+*zinbwave* vignette for more details, including options on
+parallelization. It runs in less than a minute on this simulated
+dataset (with not so many cells).
+
+```{r}
+zinb <- zinbwave(zinb, K=0, BPPARAM=SerialParam(), epsilon=1e12)
 ```
 
 ### Model non-zeros with *DESeq2*
 
-Van De Berge and Perraudeau and others have shown the LRT may perform
+Now we import the `zinb` object using *DESeqDataSet* (which works
+because the *SingleCellExperiment* object builds on top of the
+*SummarizedExperiment*). All of the simulation information comes along
+in the metadata columns of the object.
+
+@VandenBergePerraudeau and others have shown the LRT may perform
 better for null hypothesis testing, so we use the LRT. In order to use
 the Wald test, it is recommended to set `useT=TRUE`.
 
 ```{r}
 zdds <- DESeqDataSet(zinb, design=~condition)
-system.time({
-  zdds <- DESeq(zdds, test="LRT", reduced=~1,
-                sfType="poscounts", minmu=1e-6, minRep=Inf)
-})
+zdds <- DESeq(zdds, test="LRT", reduced=~1,
+              sfType="poscounts", minmu=1e-6, minRep=Inf)
 ```
 
 ### Plot dispersion estimates
@@ -827,7 +849,7 @@ with(mcols(zdds), plot(trueDisp, dispMAP, log="xy"))
 abline(0,1,col="red")
 ```
 
-Extract results table.
+Extract results table:
 
 ```{r}
 zres <- results(zdds, independentFiltering=FALSE)

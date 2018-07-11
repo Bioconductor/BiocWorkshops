@@ -1,22 +1,3 @@
-```{r include=FALSE, cache=FALSE}
-knitr::opts_chunk$set(
-    comment = "#>",
-    collapse = TRUE,
-    cache = TRUE
-)
-```
-```{r include=FALSE, cache=FALSE}
-knitr::opts_chunk$set(
-    comment = "#>",
-    collapse = TRUE,
-    cache = TRUE
-)
-```
----
-output: html_document
-editor_options: 
-  chunk_output_type: console
----
 # Effectively using the DelayedArray framework to support the analysis of large datasets
 
 Authors:
@@ -567,8 +548,9 @@ The data remain on disk until requested (we'll see how to do this later on in th
 ```{r}
 library(HDF5Array)
 
-# TODO: What path to use?
-hdf5_file <- "hdf5_mat.h5"
+hdf5_file <- file.path(
+    "500_Effectively_Using_the_DelayedArray_Framework", 
+    "hdf5_mat.h5")
 # NOTE: We can use rhdf5::h5ls() to take a look what is in the HDF5 file.
 #       This is very useful when working interactively!
 rhdf5::h5ls(hdf5_file)
@@ -645,7 +627,7 @@ Maintaining support for ordinary arrays can also be critical for popular Biocond
 - realization
 - block-processing
     - array grid
-    - viewport
+    - array viewport
 
 #### Learning goals 
 
@@ -722,7 +704,7 @@ We'll discuss delayed operations more, shortly.
 
 This section will be updated to address questions and to summarise the discussion from the presentation of this workshop at BioC2018. 
 
-# TODOs
+## TODOs
 
 - Use **BiocStyle**?
 -  Show packages depend on one another, with HDF5Array as the root (i.e. explain the HDF5 stack)
