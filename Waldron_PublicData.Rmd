@@ -1,21 +1,14 @@
 ---
-Title: 
-    Public Data Resources and Bioconductor
-Authors:
-    Levi Waldron^[City University of New York, New York, NY, USA]
-    Benjamin Haibe-Kain^[Princess Margaret Cancer Center, Toronto, Canada]
-    Sean Davis^[Center for Cancer Research, National Cancer Institute, National Institutes of Health, Bethesda, MD, USA]
 bibliography: Waldron_PublicData/Waldron_PublicData.bib
-Last modified: 2 July, 2018.
 ---
 
-```{r include=FALSE, cache=FALSE}
-knitr::opts_chunk$set(
-    comment = "#>",
-    collapse = TRUE,
-    cache = TRUE
-)
-```
+# Public Data Resources and Bioconductor
+
+## Instructor name(s) and contact information
+
+* Levi Waldron^[City University of New York, New York, NY, USA]
+* Benjamin Haibe-Kain^[Princess Margaret Cancer Center, Toronto, Canada]
+* Sean Davis^[Center for Cancer Research, National Cancer Institute, National Institutes of Health, Bethesda, MD, USA]
 
 ## Syllabus
 

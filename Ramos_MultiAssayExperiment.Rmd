@@ -2,9 +2,9 @@
 
 ## Instructor names and contact information
 
-* Marcel Ramos
-* Ludwig Geistlinger
-* Levi Waldron
+* Marcel Ramos^[City University of New York, New York, NY, USA] ^[Roswell Park Comprehensive Cancer Center, Buffalo, NY] (<marcel.ramos@roswellpark.org>)
+* Ludwig Geistlinger^[City University of New York, New York, NY, USA]
+* Levi Waldron^[City University of New York, New York, NY, USA]
 
 ## Workshop Description
 
