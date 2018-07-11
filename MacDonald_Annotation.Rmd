@@ -112,21 +112,37 @@ library(Organism.dplyr)
 
 Map a known ID to other functional or positional information
 
-<img src=".MacDonald_Annotation/mapping.png" style="width: 800px;"/>
+```{r, out.width = "75%",  echo = FALSE}
+
+knitr::include_graphics("./.MacDonald_Annotation/mapping.png")
+
+
+```
+
 
 ### Specific goal
 
 We have data and statistics, and we want to add other useful
 information
 
-<img src=".MacDonald_Annotation/boxes.png", style="width: 800px;"/>
+```{r, out.width = "75%", echo = FALSE}
+
+knitr::include_graphics("./.MacDonald_Annotation/boxes.png")
+
+```
+
 
 The end result might be as simple as a data.frame or HTML table, or as complex as a
 `RangedSummarizedExperiment`
 
 ### Data containers
 
-<img src=".MacDonald_Annotation/eset.png", style="width: 800px;"/>
+```{r, out.width = "75%", echo = FALSE}
+
+knitr::include_graphics("./.MacDonald_Annotation/eset.png")
+
+```
+
 
 ### ExpressionSet
 
@@ -426,7 +442,12 @@ txs[txs %over% gns[1:2,]]
 SummarizedExperiment objects are like ExpressionSets, but the row-wise
 annotations are GRanges, so you can subset by genomic locations:
 
-<img src=".MacDonald_Annotation/subset.png", style="width: 800px;"/>
+```{r, out.width = "75%",  echo = FALSE}
+
+knitr::include_graphics("./.MacDonald_Annotation/subset.png")
+
+
+```
 
 SummarizedExperiment objects are popular objects for representing expression
 data and other rectangular data (feature x sample data). Incoming packages are
