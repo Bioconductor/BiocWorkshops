@@ -2,7 +2,6 @@
 
 Authors:
     Nicholas Cooley^[University of Pittsburgh]
-    Erik Wright^[University of Pittsburgh]
 Last Modified: 29 June, 2018
     
 <!--
@@ -27,9 +26,9 @@ sequence data in R using the Biostrings and DECIPHER packages. We will cover:
 ### Pre-requisites
 
 * Familiarity with Biostrings
-* Familiarity with DECIPHER Databases (Ref. 1)
+* Familiarity with DECIPHER Databases [^1]
 
-1. [Wright, E. S. The R Journal 2016, 8 (1), 352–359.](https://journal.r-project.org/archive/2016-1/wright.pdf)
+[^1]: [Wright, E. S. The R Journal 2016, 8 (1), 352–359.](https://journal.r-project.org/archive/2016-1/wright.pdf)
 
 ### Workshop Participation
 
@@ -75,62 +74,249 @@ This will be a lab where participants follow along on their computers.
 
 ### Workshop
 
-This is a workflow...
-```{r, echo = FALSE}
-# Load packages
-suppressMessages(library(DECIPHER))
-suppressMessages(library(phytools))
-suppressMessages(library(FindHomology))
-load("/Users/npc19/Desktop/WorkshopData.RData",
-     verbose = TRUE)
+In this worshop we will be walking through a comparative genomics pipeline using functions within the R package DECIPHER, and within a package that is currently under construction under the name FindHomology.
+
+Lipid membranes are ubiquitious in living organisms, however the individual lipid molecules that compose membranes have a wide variety of structures. The biosynthesis of common lipid molecules is well understood, conversely the biosynthesis of more exotic lipid molecules is not. The genomes selected today are from the archaeal phylum Thaumarchaeota, which are known for being anammox archaea, meaning they convert ammonia to nitrite. In addition to that, these archaea all produce a series of unusual lipids. Since these lipids are shared across the entire phylum from which these genomes are pulled, it is possible that the biosynthetic genes responsible for lipid construction are shared across the selected genomes, and part of their 'core' genome.
+
+Our goal with this workshop is to show how functions within DECIPHER, in addition to those found within FindHomology can be used to predict and compare the core and pan genome for these selected genomes.
+
+To begin with, we will load the required packages:
+DECIPHER and FindHomology will provide tools to complete the phylogenetic analysis, while phytools will provide visualization tools, specifically for the visualization of tangelograms, and stringr is used for a specific string operation.
+
+```{r things to load}
+library(DECIPHER)
+library(devtools)
+install_github(repo = "npcooley/FindHomology")
+library(FindHomology)
+library(stringr)
 ```
-## selection of genomes, deposition into sql database
-```{r, echo = FALSE}
-# Decipher works in sql databases, and our genomes can be sent directly to this database from the ftp site
-DBPath <- tempfile() # in your own work a temp file is likely inadvisable
+
+The first step in this process is selecting the genomes we want to work with. A command like the one below, using the NCBI command line utilities, will select FTP directories for the latest, complete genomes for any organism matching the term "Nitrosopumilus" or "Nitrososphaera"from genbank. NCBI command line tools are complex, flexible, and powerful. If you have them installed on your personal system, the esearch command would look like this:
+
+```{bash ncbi command line, eval = FALSE}
+esearch -db assembly -query 'Nitrosopumilus[organism] OR Nitrososphaera and "complete genome"[filter] AND "latest genbank"[filter]"' | efetch -format docsum | xtract -pattern DocumentSummary -block FtpPath -match "@type:genbank" -element FtpPath | sed 's/$/\//' > ftpdirpaths
+```
+
+We can similarly pass this command through R to the terminal if we want to skip this step, or we have a big workflow in R and are unwilling to switch between applications.
+
+```{r ncbi command line through r, eval = FALSE}
+system(paste("esearch -db assembly",
+             "-query 'Nitrosopumilus[organism] OR Nitrososphaera[Organism] AND \"complete genome\"[filter]",
+             "AND \"latest genbank\"[filter]\"\'",
+             "|",
+             "efetch -format docsum",
+             "|",
+             "xtract -pattern DocumentSummary -block FtpPath -match",
+             "\"@type:genbank\"",
+             "-element FtpPath",
+             "|",
+             "sed ", "'", "s", '/', '$', '/', '\\', '//', "'",
+             ">",
+             "ftpdirpaths",
+             sep = " "))
+```
+
+There is currently a bug in using NCBI commands directly through RStudio. If you chose to commandeer this code for your own use, the paste statement, wrapped inside a system call, will work through the regular R console without a problem. The modest workaround below will work in RStudio.[^2]
+
+```{r commandline through rstudio, eval = FALSE}
+myTerm <- rstudioapi::terminalCreate(show = FALSE)
+rstudioapi::terminalSend(myTerm, paste("esearch -db assembly",
+                                       "-query 'Nitrosopumilus[organism] OR Nitrososphaera[Organism] AND \"complete genome\"[filter]",
+                                       "AND \"latest genbank\"[filter]\"\'",
+                                       "|",
+                                       "efetch -format docsum",
+                                       "|",
+                                       "xtract -pattern DocumentSummary -block FtpPath -match",
+                                       "\"@type:genbank\"",
+                                       "-element FtpPath",
+                                       "|",
+                                       "sed ", "'", "s", '/', '$', '/', '\\', '//', "'",
+                                       ">",
+                                       "ftpdirpaths",
+                                       sep = " "))
+Sys.sleep(1)
+repeat{
+    Sys.sleep(0.1)
+    if(rstudioapi::terminalBusy(myTerm) == FALSE){
+        print("Code Executed")
+        break
+    }
+}
+```
+
+Once these file paths are collected, however you choose to do so, we can grab genomic FASTA files for the genomes, and the .gff files for gene calls and annotations. There are several ways to collect gene calls, and annotations, such as Prodigal (for gene calls) and Prokka (for annotations), which by default uses Prodigal to find gene boundaries. Using the NCBI annotations is simple and conducive for this workshop. However if you are working on sequence data that you have generated or collected yourself, NCBI annotations will not be available. 
+
+```{r get package data, echo = FALSE}
+data("ftpdirpaths")
+```
+
+
+```{r collect files from ftp directories}
+Genomes <- ftpdirpaths
+x <- strsplit(Genomes,
+              split = "/")
+Annotations <- vector("character",
+                      length = length(Genomes))
+GeneCalls <- vector("list",
+                    length = length(Genomes))
+for (i in seq_along(Annotations)) {
+  Annotations[i] <- paste(Genomes[i],
+                      x[[i]][10L],
+                      "_genomic.gff.gz",
+                      sep = "")
+  z1 <- gzcon(url(Annotations[i]))
+  z2 <- textConnection(readLines(z1))
+  z3 <- readLines(z2)
+  z4 <- strsplit(z3,
+                 split = "\t")
+  Start <- sapply(z4,
+                  function(x) ifelse(test = length(x) == 9L & x[3] == "CDS",
+                                     yes = x[4],
+                                     no = NA),
+                  USE.NAMES = FALSE)
+  Stop <- sapply(z4,
+                 function(x) ifelse(test = length(x) == 9L & x[3] == "CDS",
+                                    yes = x[5],
+                                    no = NA),
+                 USE.NAMES = FALSE)
+  Strand <- sapply(z4,
+                   function(x) ifelse(test = length(x) == 9L & x[3] == "CDS",
+                                      yes = x[7],
+                                      no = NA),
+                   USE.NAMES = FALSE)
+  Product <- sapply(z4,
+                    function(x) ifelse(test = length(x) == 9L & x[3] == "CDS",
+                                       yes = x[9],
+                                       no = NA),
+                    USE.NAMES = FALSE)
+  Product <- str_extract(Product,
+                         "(?<=product=)(.*)(?=;protein_id)")
+  # Subsetting here for positions which have starts, stops, strands, and annotations
+  z5 <- as.integer(Start[which(!is.na(Start) &
+                                 !is.na(Stop) &
+                                 !is.na(Strand) &
+                                 !is.na(Product))])
+  z6 <- as.integer(Stop[which(!is.na(Start) &
+                                !is.na(Stop) &
+                                !is.na(Strand) &
+                                !is.na(Product))])
+  z7 <- Strand[which(!is.na(Start) &
+                       !is.na(Stop) &
+                       !is.na(Strand) &
+                       !is.na(Product))]
+  z8 <- Product[which(!is.na(Start) &
+                        !is.na(Stop) &
+                        !is.na(Strand) &
+                        !is.na(Product))]
+  GeneCalls[[i]] <- data.frame("Start" = z5,
+                               "Stop" = z6,
+                               "Strand" = z7,
+                               "Annotation" = z8,
+                               stringsAsFactors = FALSE)
+}
+for (i in seq_along(Genomes)) {
+  Genomes[i] <- paste(Genomes[i],
+                      x[[i]][10L],
+                      "_genomic.fna.gz",
+                      sep = "")
+}
+```
+
+Viable genome web addresses can be directly read by BioStrings to provide a DNAStringSet object. A fundamental object for working with sequence data in R.
+
+```{r an xstringset object}
+readDNAStringSet(Genomes[1])
+```
+
+## DECIPHER and Databases
+
+DECIPHER works with sequence data by importing it directly into SQL databases. These databases provide a concise method for organization and storage of data. From these databases sequences can be accessed quickly and easily, while accidental changes to sequences during workflow are prevented. DECIPHER will connect to databases through either a Database connection, or a character vector of a filepath to a sqlite file. In this first chunk of code we will use a database connection.
+
+```{r decipher part 1}
+DBPath <- tempfile() # in your own work a temp file is likely inadvisable, for this workshop it is used for simplicity
+
+DBConn <- dbConnect(SQLite(),
+                    DBPath)
 
 # Genomes is a file of character vectors of ftp addresses
 for (i in seq_along(Genomes)) {
   Seqs2DB(seqs = Genomes[i],
           type = "FASTA",
-          dbFile = DBPath,
+          dbFile = DBConn,
           identifier = as.character(i),
           tblName = "Seqs")
 }
+
+dbDisconnect(DBConn)
+# identifying details of the database can be viewed in your systems browser:
+# BrowseDB(DBPath)
 ```
+
 ## Comparison of genomes
-```{r, echo = FALSE}
-# In the interest of time we will use the first 4
+
+Comparison of genomes will be accomplished with Synteny. Generically when regions in a genome are the same, they are syntenic matches. Often this is accomplished through matching runs of reciprocal best blast hits. Generically, if in genome 1, genes A-B-C are reciprocal best blast hits to genes Z-Y-X in genome 2, the region encompassing those genes would be considered syntenic.
+
+In DECIPHER this is accomplished using k-mer matching, and by default works in translated space. So in this workflow, we will be determining Synteny between genomes before we consider the gene calls we have already collected.
+
+**Simple Examples of Synteny**
+
+```{r decipher part 2}
+# Here we will use a file path instead of a dbconnection
 SyntenyObject <- FindSynteny(dbFile = DBPath,
-                             identifier = as.character(1:4),
-                             verbose = FALSE)
-# Plot SyntenyObject one way
-plot(SyntenyObject,
-     type = "neighbor")
-# Plot a Subset of SyntenyObject another way
-pairs(SyntenyObject[2:3, 2:3])
-# Plot all of SyntenyObject in a pairs plot
-pairs(SyntenyObject)
-
-# Utilizing gene calls, and the hits from the synteny object
-MatrixObject <- NucleotideOverlap(SyntenyObject = SyntenyObject,
-                                  GeneCalls = GeneCalls[1:4],
-                                  Verbose = FALSE)
-
-# This object provides a list of genes that are paired by syntenic hits for each pair of genomes
-MatrixObject[1, 2][[1]][1:10, ]
+                             verbose = TRUE)
 ```
+```{r}
+plot(SyntenyObject)
+```
+```{r}
+plot(SyntenyObject,
+     "frequency")
+```
+```{r}
+plot(SyntenyObject,
+     "neighbor")
+```
+```{r}
+pairs(SyntenyObject[4:5, 4:5])
+```
+```{r}
+pairs(SyntenyObject)
+```
+
 ## Predict Homology between genes that are linked by syntenic hits
-```{r, echo = FALSE}
+
+The FindHomology package contains 3 functions, the first two of which run below. NucleotideOverlap takes in an object of class Synteny, and a list of GeneCalls. We previously generated the Synteny object  "SyntenyObject", using DECIPHER's function FindSynteny, and a list of Gene calls and annotations, called "GeneCalls". Here we will use these two objects to build what is functionally a list of lists of pairs of genes that are linked by hits.
+
+This is a fun object to scroll through, but is not represented well visually, a simple example would be:
+
+| Genome 1 | Genome 2 | # of Nucleotides |
+|----------|----------|------------------|
+| Gene A   | Gene Z   |             25L  |
+| Gene B   | Gene Y   |             14L  |
+| Gene C   | Gene X   |            145L  |
+| Gene ... | Gene ... |             ...  |
+
+The reason we name this "MatrixObject" below is because the shape and dimensions of our data are dependent upon our Synteny object. As in, if our Synteny object we built with 5 genomes, that object is a 5 x 5 matrix. NucleotideOverlap accesses the upper triangle of that object to build a 5 x 5 matrix where each position is built from data in the analogous position from the Synteny object. MatrixObject[1, 2] below was created from SyntenyObject[1, 2] and so on and so forth.
+
+```{r find homology part 1}
+MatrixObject <- NucleotideOverlap(SyntenyObject = SyntenyObject,
+                                  GeneCalls = GeneCalls,
+                                  Verbose = TRUE)
+```
+
+
+
+```{r find homology part 2}
 Homologs <- Catalog(MatrixObject,
-                    Verbose = FALSE)
+                    Verbose = TRUE)
+```
 
-# This object is a list of matrices that describes which genes -represented by integers- are paired, across which pairs of genomes, represented by columns
-length(Homologs)
-Homologs[[1]]
-Homologs[head(which(sapply(Homologs,
-                           function(x) nrow(x)) == 1L))]
 
+```{r find homology objects part 1}
+hist(sapply(Homologs,
+            function(x) nrow(x)))
+```
+```{r determine core sets}
 # In this case, this is trivial, but in cases with larger sets of genomes, it may not be
 MaxRows <- max(sapply(Homologs,
                       function(x) nrow(x)),
@@ -140,11 +326,11 @@ CoreSet <- which(sapply(Homologs,
                         function(x) nrow(x)) == MaxRows)
 ```
 Use the core genome to create an alignment
-```{r, echo = FALSE}
+```{r align core genes}
 # Select core genes individually from each genome and align them, then concatonate the aligments
 CoreGenome <- CoreAligner(Homologs[CoreSet],
                           PATH = DBPath,
-                          GeneCalls = GeneCalls[1:4],
+                          GeneCalls = GeneCalls,
                           Verbose = TRUE)
 
 # Create a distance matrix, that can be used to create a dendrogram
@@ -159,13 +345,18 @@ CoreDend <- IdClusters(myDistMatrix = CoreDist,
                        showPlot = TRUE,
                        type = "dendrogram")
 ```
+
+```{r tidy up our workspace, echo = FALSE}
+unlink(DBPath)
+```
+
+
 The presence and absence of genes across the set of genomes can also be used to create a distance matrix
-```{r, echo = FALSE}
+```{r build pan genome}
 # Create a logical presence/absence matrix for orthologs
 LogicalMatrix <- vector("list",
                         length = length(Homologs))
 pBar <- txtProgressBar(style = 1L)
-TimeStart <- Sys.time()
 for (i in seq_along(Homologs)) {
   LogicalMatrix[[i]] <- vector("logical",
                                length = ncol(Homologs[[i]]))
@@ -189,10 +380,12 @@ PanDend <- IdClusters(myDistMatrix = PanGenome,
                       method = "NJ",
                       type = "dendrogram",
                       showPlot = TRUE,
-                      verbose = FALSE)
+                      verbose = TRUE)
 ```
-Compare two genomes with a tangleogram using phytools
-```{r}
+
+Create a simple tangleogram by comparing the core and pan dendrograms
+
+```{r simple tangleogram}
 tf1 <- tempfile()
 tf2 <- tempfile()
 
@@ -201,26 +394,23 @@ WriteDendrogram(x =PanDend,
 
 WriteDendrogram(x = CoreDend,
                 file = tf2)
-
-PanPhylo <- read.tree(file = tf1)
-CorePhylo <- read.tree(file = tf2)
-
 unlink(tf1)
 unlink(tf2)
-
-CompObject <- cophylo(tr1 = PanPhylo,
-                      tr2 = CorePhylo)
-
-plot(CompObject,
-     link.type = "curved",
-     link.lwd = 3,
-     link.lty = "solid",
-     link.col = make.transparent("blue", 0.25),
-     f.size = 0.35)
+layout(matrix(1:2, nrow = 1L))
+p <- par(mar = c(4, 5, 2, 0))
+plot(CoreDend, horiz = TRUE, leaflab = "none")
+par(mar = c(4, 4, 2, 1))
+plot(PanDend, horiz = TRUE, xlim = c(0, attr(PanDend, "height")), leaflab = "none")
+C.Ord <- unlist(CoreDend)
+P.Ord <- unlist(PanDend)
+segments(-0.05, seq_along(C.Ord), -0.01, match(C.Ord, P.Ord), xpd = TRUE)
+par(p)
 ```
 
-TODO: A Lot
 
+TODO: More Text, several simpler examples to precede synteny plots, references
+
+[^2]: Thanks to [Serdar Balci](https://twitter.com/serdarbalci) for providing this workaround!
 
 
 
