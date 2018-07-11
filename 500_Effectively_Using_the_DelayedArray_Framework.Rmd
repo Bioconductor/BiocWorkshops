@@ -704,7 +704,7 @@ We'll discuss delayed operations more, shortly.
 
 This section will be updated to address questions and to summarise the discussion from the presentation of this workshop at BioC2018. 
 
-# TODOs
+## TODOs
 
 - Use **BiocStyle**?
 -  Show packages depend on one another, with HDF5Array as the root (i.e. explain the HDF5 stack)
