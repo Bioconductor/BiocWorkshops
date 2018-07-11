@@ -1,7 +1,3 @@
----
-bibliography: Lee_Plyranges/plyranges.bib
----
-
 # Fluent genomic data analysis with plyranges
 
 ## Instructor(s) name(s) and contact information
@@ -111,7 +107,7 @@ provided by core Bioconductor packages that are useful for programming with.
 This workshop is intended for new users of Bioconductor, users who are
 interested to learn about grammar based approaches for data analysis,
 and users who are interested in learning how to use R to perform analyses
-like those available in the command line packages BEDTools @Quinlan2010-gc.
+like those available in the command line packages BEDTools (@Quinlan2010-gc).
 
 If that's you, let's begin!
 
@@ -781,5 +777,3 @@ Category               Verb                            Description
   described and categorised into one of: aggregation, unary or binary
   arithmetic, merging, modifier, or restriction. A verb is given bold
   text if its origin is from the dplyr grammar.
-
-## References 
