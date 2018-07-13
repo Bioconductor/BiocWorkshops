@@ -9,7 +9,8 @@ bibliography: [
   "201_Love_DESeq2.bib",
   "220_Das_SingleCellRNASeq.bib",
   "230_cyto_automation.bib",
-  "Lee_Plyranges/plyranges.bib"
+  "Lee_Plyranges/plyranges.bib",
+  "Waldron_PublicData/Waldron_PublicData.bib"
   ]
 ---
 
