@@ -85,7 +85,132 @@ objects ready for analysis and comparison to in-house datasets.
 
 ## Overview
 
+
+Before proceeding, ensure that the following packages are installed.
+
+```{r eval=FALSE}
+required_pkgs = c(
+  "TCGAbiolinks", 
+  "GEOquery", 
+  "GenomicDataCommons",
+  "limma",
+  "curatedTCGAData",
+  "recount",
+  "curatedMetagenomicData",
+  "phyloseq",
+  "HMP16SData")
+BiocManager::install(required_pkgs)
+```
+
 ## GEOquery
+
+[@Sean2007-cv]
+
+The NCBI Gene Expression Omnibus (GEO) serves as a public repository for a wide range of high-throughput experimental data. These data include single and dual channel microarray-based experiments measuring mRNA, genomic DNA, and protein abundance, as well as non-array techniques such as serial analysis of gene expression (SAGE), mass spectrometry proteomic data, and high-throughput sequencing data.
+The `r BiocStyle::Biocpkg("GEOquery")` package [@Sean2007-cv] forms a bridge between this public repository and the analysis capabilities
+in Bioconductor.
+
+### Overview of GEO
+
+At the most basic level of organization of GEO, there are four basic entity types.  The first three (Sample, Platform, and Series) are supplied by users; the fourth, the dataset, is compiled and curated by GEO staff from the user-submitted data. See [the GEO home page](https://www.ncbi.nlm.nih.gov/geo/) for more information.
+
+#### Platforms
+
+A Platform record describes the list of elements on the array (e.g., cDNAs, oligonucleotide probesets, ORFs, antibodies) or the list of elements that may be detected and quantified in that experiment (e.g., SAGE tags, peptides). Each Platform record is assigned a unique and stable GEO accession number (GPLxxx). A Platform may reference many Samples that have been submitted by multiple submitters.
+
+#### Samples
+
+A Sample record describes the conditions under which an individual Sample was handled, the manipulations it underwent, and the abundance measurement of each element derived from it. Each Sample record is assigned a unique and stable GEO accession number (GSMxxx). A Sample entity must reference only one Platform and may be included in multiple Series.
+
+#### Series
+
+A Series record defines a set of related Samples considered to be part of a group, how the Samples are related, and if and how they are ordered. A Series provides a focal point and description of the experiment as a whole. Series records may also contain tables describing extracted data, summary conclusions, or analyses. Each Series record is assigned a unique and stable GEO accession number (GSExxx).  Series records are available in a couple of formats which are handled by GEOquery independently.  The smaller and new GSEMatrix files are quite fast to parse; a simple flag is used by GEOquery to choose to use GSEMatrix files (see below).
+
+#### Datasets
+
+GEO DataSets (GDSxxx) are curated sets of GEO Sample data. There are hundreds of GEO datasets available, but GEO discontinued creating 
+GDS records several years ago. We mention them here for completeness only.
+
+### Getting Started using GEOquery
+
+Getting data from GEO is really quite easy.  There is only one command that is needed, `getGEO`.  This one function interprets its input to determine how to get the data from GEO and then parse the data into useful R data structures.
+
+
+```{r loadLibrary, message=FALSE}
+library(GEOquery)
+```
+
+With the library loaded, we are free to access any GEO accession. 
+
+### Use case: MDS plot of cancer data
+
+The data we are going to access are from [this paper](https://doi.org/10.1158/1055-9965.EPI-17-0461). 
+
+> Background: The tumor microenvironment is an important factor in cancer immunotherapy response. To further understand how a tumor affects the local immune system, we analyzed immune gene expression differences between matching normal and tumor tissue.Methods: We analyzed public and new gene expression data from solid cancers and isolated immune cell populations. We also determined the correlation between CD8, FoxP3 IHC, and our gene signatures.Results: We observed that regulatory T cells (Tregs) were one of the main drivers of immune gene expression differences between normal and tumor tissue. A tumor-specific CD8 signature was slightly lower in tumor tissue compared with normal of most (12 of 16) cancers, whereas a Treg signature was higher in tumor tissue of all cancers except liver. Clustering by Treg signature found two groups in colorectal cancer datasets. The high Treg cluster had more samples that were consensus molecular subtype 1/4, right-sided, and microsatellite-instable, compared with the low Treg cluster. Finally, we found that the correlation between signature and IHC was low in our small dataset, but samples in the high Treg cluster had significantly more CD8+ and FoxP3+ cells compared with the low Treg cluster.Conclusions: Treg gene expression is highly indicative of the overall tumor immune environment.Impact: In comparison with the consensus molecular subtype and microsatellite status, the Treg signature identifies more colorectal tumors with high immune activation that may benefit from cancer immunotherapy. 
+
+In this little exercise, we will:
+
+1. Access public omics data using the GEOquery package
+2. Convert the public omics data to a `SummarizedExperiment` object.
+3. Perform a simple unsupervised analysis to visualize these public data.
+
+Use the [GEOquery] package to fetch data about [GSE103512].
+
+```{r geoquery10, echo=TRUE, cache=TRUE, message=FALSE}
+gse = getGEO("GSE103512")[[1]]
+```
+
+Note that `getGEO`, when used to retrieve *GSE* records, returns a list. The members of the list each represent
+one *GEO Platform*, since each *GSE* record can contain multiple related datasets (eg., gene expression and DNA methylation). 
+In this case, the list is of length one, but it is still necessary to grab the first elment. 
+
+The first step--a detail--is to convert from the older Bioconductor data structure (GEOquery was written in 2007), the `ExpressionSet`, to the newer `SummarizedExperiment`. One line suffices.
+
+```{r convertToSE, message=FALSE}
+library(SummarizedExperiment)
+se = as(gse, "SummarizedExperiment")
+```
+
+Examine two variables of interest, cancer type and tumor/normal status. 
+
+```{r geoquery20,echo=TRUE,cache=TRUE}
+with(colData(se),table(`cancer.type.ch1`,`normal.ch1`))
+```
+
+Filter gene expression by variance to find most informative genes.
+
+```{r sds,cache=TRUE,echo=TRUE}
+sds = apply(assay(se, 'exprs'),1,sd)
+dat = assay(se, 'exprs')[order(sds,decreasing = TRUE)[1:500],]
+```
+
+Perform [multidimensional scaling] and prepare for plotting. We will be using ggplot2, so
+we need to make a data.frame before plotting. 
+
+```{r mds,echo=TRUE,cache=TRUE}
+mdsvals = cmdscale(dist(t(dat)))
+mdsvals = as.data.frame(mdsvals)
+mdsvals$Type=factor(colData(se)[,'cancer.type.ch1'])
+mdsvals$Normal = factor(colData(se)[,'normal.ch1'])
+head(mdsvals)
+```
+
+And do the plot.
+
+```{r mdsplot,echo=TRUE,fig.align='center'}
+library(ggplot2)
+ggplot(mdsvals, aes(x=V1,y=V2,shape=Normal,color=Type)) + 
+    geom_point( alpha=0.6) + theme(text=element_text(size = 18))
+```
+
+[R]: https://cran.r-project.org/
+[GEOquery]: https://bioconductor.org/packages/GEOquery
+[GSE103512]: https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE103512
+[multidimensional scaling]: https://en.wikipedia.org/wiki/Multidimensional_scaling
+
+### Accessing Raw Data from GEO
+
+NCBI GEO accepts (but has not always required) raw data such as .CEL files, .CDF files, images, etc. It is also not uncommon for some RNA-seq or other sequencing datasets to supply *only* raw data (with accompanying sample information, of course), necessitating  Sometimes, it is useful to get quick access to such data.  A single function, `getGEOSuppFiles`, can take as an argument a GEO accession and will download all the raw data associate with that accession.  By default, the function will create a directory in the current working directory to store the raw data for the chosen GEO accession.
 
 ## GenomicDataCommons
 
