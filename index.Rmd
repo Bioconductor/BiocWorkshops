@@ -5,6 +5,12 @@ description: "This book is a central repository for all the workshops submitted 
 site: bookdown::bookdown_site
 github-repo: Bioconductor/BiocWorkshops
 documentclass: book
+bibliography: [
+  "201_Love_DESeq2.bib",
+  "220_Das_SingleCellRNASeq.bib",
+  "230_cyto_automation.bib",
+  "Lee_Plyranges/plyranges.bib"
+  ]
 ---
 
 [![Travis Build Status](https://travis-ci.org/Bioconductor/BiocWorkshops.png?branch=master)](https://travis-ci.org/Bioconductor/BiocWorkshops)

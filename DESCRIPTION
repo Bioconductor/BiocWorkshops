@@ -75,6 +75,8 @@ Imports:
   RColorBrewer,
   Rcpp,
   RCy3,
+  RCurl,
+  gProfileR,
   readr,
   recount,
   regioneR,
