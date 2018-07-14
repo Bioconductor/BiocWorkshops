@@ -117,7 +117,7 @@ machine learning, and plotting
 This section summarizes three fundamental data classes for the representation of multi-omics
 experiments. 
 
-### `SummarizedExperiment` / `RangedSummarizedExperiment`
+### `(Ranged)SummarizedExperiment`
 
 ```{r, echo = FALSE, fig.cap = "A matrix-like container where rows represent features of interest and columns represent samples. The objects contain one or more assays, each represented by a matrix-like object of numeric or other mode."}
 knitr::include_graphics("Ramos_MultiAssayExperiment/SummarizedExperiment.svg")
@@ -358,6 +358,13 @@ qreduceSummarizedExperiment(ragexp, query=query, simplify=weightedmean)
 
 ## Working with MultiAssayExperiment
 
+## API cheat sheet
+
+```{r cheatsheet, echo = FALSE, fig.cap = "The MultiAssayExperiment API for construction, access, subsetting, management, and reshaping to formats for application of R/Bioconductor graphics and analysis packages.", out.width="\\maxwidth"}
+knitr::include_graphics("MultiAssayExperiment_cheatsheet.png")
+```
+
+
 ### The MultiAssayExperiment miniACC demo object
 
 Get started by trying out `MultiAssayExperiment` using a subset of the TCGA
@@ -526,7 +533,7 @@ the `ExpressionSet` object containing RNA-seq data:
 miniACC[[1L]]  #or equivalently, miniACC[["RNASeq2GeneNorm"]]
 ```
 
-## Patients with complete data
+## Complete cases
 
 `complete.cases()` shows which patients have complete data for all assays:
 
@@ -719,36 +726,23 @@ tail(colnames(colData(acc)), 10)
 
 The `TCGAutils` package provides additional helper functions, see below. 
 
-## Plotting, correlation, and other analyses
+## Utilities for TCGA
 
-### How many samples have data for each combination of assays?
-
-**Solution**
-
-The built-in `upsetSamples` creates an "upset" Venn diagram to answer this
-question:
-
-```{r}
-upsetSamples(miniACC)
-```
-
-In this dataset only 43 samples have all 5 assays, 32 are missing reverse-phase
-protein (RPPAArray), 2 are missing Mutations, 1 is missing gistict, 12 have only
-mutations and gistict, etc.
-
-## `TCGAutils` package
+Aside from the available reshaping functions already included in the
+`MultiAssayExperiment` package, the `r Biocpkg("TCGAutils")` package provides additional
+helper functions for working with TCGA data.
 
 ### "Simplification" of `curatedTCGAData` objects
 
 A number of helper functions are available for managing datasets from
 `curatedTCGAData`. These include:
 
-- `mirToRanges`: convert `SummarizedExperiment` datasets with microRNA to
-`RangedSummarizedExperiment`
-- `symbolsToRanges`: convert assays with gene symbols to genomic ranges
-(`SummarizedExperiment` to `RangedSummarizedExperiment`)
-- `qreduceTCGA`: convert `RaggedExperiment` objects to
-`RangedSummarizedExperiment`
+- Conversions of `SummarizedExperiment` to `RangedSummarizedExperiment` based on `TxDb.Hsapiens.UCSC.hg19.knownGene` for:
+    - `mirToRanges`: microRNA
+    - `symbolsToRanges`: gene symbols 
+- `qreduceTCGA`: convert `RaggedExperiment` objects to `RangedSummarizedExperiment` with one row per gene symbol, for:
+    - segmented copy number datasets ("CNVSNP" and "CNASNP")
+    - somatic mutation datasets ("Mutation"), with a value of 1 for any non-silent mutation and a value of 0 for no mutation or silent mutation
 
 The `simplifyTCGA` function combines all of the above operations to create
 a more managable `MultiAssayExperiment` object and using
@@ -757,10 +751,6 @@ a more managable `MultiAssayExperiment` object and using
 ```{r}
 (simpa <- TCGAutils::simplifyTCGA(acc))
 ```
-
-Aside from the available reshaping functions already included in the
-`MultiAssayExperiment` package, the `TCGAutils` package provides additional
-helper functions for working with TCGA data.
 
 ### What types of samples are in the data?
 
@@ -774,8 +764,9 @@ sampleTables(acc)
 head(sampleTypes)
 ```
 
-### Is there subtype data available in the `MultiAssayExperiment` obtained from
-`curatedTCGAData`?
+### Curated molecular subtypes
+
+Is there subtype data available in the `MultiAssayExperiment` obtained from `curatedTCGAData`?
 
 **Solution**
 
@@ -793,57 +784,38 @@ head(colData(acc)$Histology)
 `TCGAutils` provides a number of ID translation functions.
 These allow the user to translate from either file or case UUIDs to TCGA
 barcodes and back. These functions work by querying the Genomic Data Commons API
-via the `GenomicDataCommons` package (thanks to Sean Davis).
+via the `GenomicDataCommons` package (thanks to Sean Davis). These include: 
 
-#### ID translations
+* `UUIDtoBarcode()`
+* `barcodeToUUID()`
+* `UUIDtoUUID()`
+* `filenameToBarcode()`
 
-A number of other utility functions are available in `TCGAutils` including
-TCGA identifier translation from TCGA barcodes to UUIDs and vice versa 
+See the `r BiocStyle::Biocpkg("TCGAutils")` help pages for details.
 
-A number of translation functions are available as part of the `TCGAutils`
-package. These include: 
+### Other TCGA data types
 
-* UUIDtoBarcode
-* barcodeToUUID
-* UUIDtoUUID
-* filenameToBarcode (example not shown)
+Helper functions to add TCGA exon files (legacy archive), copy number and 
+GISTIC copy number calls to MultiAssayExperiment objects are also available in `r BiocStyle::Biocpkg("TCGAutils")`.
 
-Using the `GenomicDataCommons` we can obtain a set of **file** UUIDs associated
-with copy number variation files:
+## Plotting, correlation, and other analyses
 
-```{r}
-que <- files() %>%
-    filter( ~ cases.project.project_id == "TCGA-COAD" &
-        data_category == "Copy Number Variation" &
-        data_type == "Copy Number Segment")
-q <- manifest(que)
-ids <- q$id[1:5]
-```
+These provide exercises and solutions using the `miniACC` dataset.
 
-We indicate the type of id by setting the `id_type` argument to `file_id`.
-This yields a small `data.frame` of `file_id`s and TCGA barcodes.
+### How many `miniACC` samples have data for each combination of assays?
+
+**Solution**
+
+The built-in `upsetSamples` creates an "upset" Venn diagram to answer this
+question:
 
 ```{r}
-(idtab <- UUIDtoBarcode(id_vector = ids, id_type = "file_id"))
+upsetSamples(miniACC)
 ```
 
-The user is able to change the indicated endpoint for the barcode as below:
-
-```{r}
-UUIDtoBarcode(id_vector = ids, id_type = "file_id", end_point = "center")
-```
-
-To ensure accuracy, reverse translation is also possible from TCGA barcode
-to UUID. In this case, we will take the barcodes from the previous operation:
-
-```{r}
-tcgabcodes <- idtab$cases.submitter_id
-barcodeToUUID(tcgabcodes, id_type = "file_id")
-```
-
-**Note**. Helper functions to create Bioconductor objects from TCGA exon files
-(legacy archive), copy number and GISTIC objects from `RTCGAToolbox` are
-also available in `TCGAutils`.
+In this dataset only 43 samples have all 5 assays, 32 are missing reverse-phase
+protein (RPPAArray), 2 are missing Mutations, 1 is missing gistict, 12 have only
+mutations and gistict, etc.
 
 ### Kaplan-meier plot stratified by pathology_N_stage
 
@@ -1054,6 +1026,7 @@ the protein assay.
 <p style="text-align: right;"> [back to top](#overview-of-key-data-classes) </p>
 
 ### Annotating with ranges
+This section doesn't use the `TCGAutils` shortcuts, and is more generally applicable.
 
 Convert all the `ExperimentList` elements in `miniACC`  to
 `RangedSummarizedExperiment` objects.  Then use `rowRanges` to annotate these
