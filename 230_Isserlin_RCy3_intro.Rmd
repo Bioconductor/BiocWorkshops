@@ -13,6 +13,16 @@ bibliography: 230_cyto_automation.bib
 ---
 # Cytoscape Automation in R using Rcy3
 
+```{r lib, echo=FALSE, results="hide"}
+suppressPackageStartupMessages({
+	library(EnrichmentBrowser)
+	library(RCy3)
+	library(RColorBrewer)
+	library(gProfileR)
+	library(RCurl)
+})
+```
+
 ##Overview
 
 ### Instructor(s) name(s) and contact information
@@ -282,7 +292,7 @@ knitr::include_graphics("./230_Isserlin_RCy3_intro/images/screenshot_networkload
 Remember. All networks we make are created in Cytoscape so get an image of the resulting network and include it in your current analysis if desired.
 
 ```{r initial_network_screenshot, include=TRUE}
-initial_network_png_file_name <- paste(getwd(),"/230_Isserlin_RCy3_intro/images/","initial_example_network.png",sep="")
+initial_network_png_file_name <- file.path(getwd(),"230_Isserlin_RCy3_intro", "images","initial_example_network.png")
 
 ```
 
@@ -383,7 +393,7 @@ knitr::include_graphics("./230_Isserlin_RCy3_intro/images/screenshot_stringnetwo
 
 Get a screenshot of the initial network
 ```{r initial_string_network_screenshot, include=TRUE}
-initial_string_network_png_file_name <- paste(getwd(),"/230_Isserlin_RCy3_intro/images/","initial_string_network.png",sep="")
+initial_string_network_png_file_name <- file.path(getwd(),"230_Isserlin_RCy3_intro", "images", "initial_string_network.png")
 
 ```
 
@@ -432,7 +442,7 @@ layoutNetwork('force-directed defaultSpringCoefficient=0.0000008 defaultSpringLe
 
 Get a screenshot of the re-laid out network
 ```{r relayout_string_network_screenshot, include=TRUE}
-relayout_string_network_png_file_name <- paste(getwd(),"/230_Isserlin_RCy3_intro/images/","relayout_string_network.png",sep="")
+relayout_string_network_png_file_name <- file.path(getwd(),"230_Isserlin_RCy3_intro", "images","relayout_string_network.png")
 
 ```
 
@@ -554,7 +564,7 @@ setNodeSizeMapping(table.column = 'LR.mesen', table.column.values = c(min(RNASeq
 
 Get a screenshot of the resulting network
 ```{r mesen_string_network_screenshot, include=TRUE}
-mesen_string_network_png_file_name <- paste(getwd(),"/230_Isserlin_RCy3_intro/images/","mesen_string_network.png",sep="")
+mesen_string_network_png_file_name <- file.path(getwd(),"230_Isserlin_RCy3_intro", "images","mesen_string_network.png")
 
 ```
 
@@ -595,7 +605,7 @@ RNAseq_correlation_matrix <- RNAseq_correlation_matrix[which(rowSums(RNAseq_corr
                           which(colSums(RNAseq_correlation_matrix) !=0)]
 
 #write out the correlation file
-correlation_filename <- paste(getwd(), "230_Isserlin_RCy3_intro/data/TCGA_OV_RNAseq_expression_correlation_matrix.txt", sep="/") 
+correlation_filename <- file.path(getwd(), "230_Isserlin_RCy3_intro", "data", "TCGA_OV_RNAseq_expression_correlation_matrix.txt") 
 write.table( RNAseq_correlation_matrix,  file = correlation_filename, col.names  = TRUE, row.names = FALSE, sep = "\t", quote=FALSE)
 
 ```
@@ -691,7 +701,7 @@ setNodeColorMapping(table.column = "node_class",table.column.values = unique_typ
 ```
 
 ```{r correlationnetwork, include=TRUE}
-correlation_network_png_file_name <- paste(getwd(),"/230_Isserlin_RCy3_intro/images/","correlation_network.png",sep="")
+correlation_network_png_file_name <- file.path(getwd(),"230_Isserlin_RCy3_intro", "images","correlation_network.png")
 
 ```
 
@@ -783,8 +793,8 @@ Run gProfiler.  g:Profiler will return a set of pathways and functions that are 
   em_results <- runGprofiler(subnetwork_node_table$name)
   
  #write out the g:Profiler results
- em_results_filename <-paste(getwd(),
-                            "230_Isserlin_RCy3_intro/data",paste("gprofiler_cluster",current_cluster,"enr_results.txt",sep="_"),sep="/")
+ em_results_filename <-file.path(getwd(),
+                            "230_Isserlin_RCy3_intro", "data",paste("gprofiler_cluster",current_cluster,"enr_results.txt",sep="_"))
 
   write.table(em_results,em_results_filename,col.name=TRUE,sep="\t",row.names=FALSE,quote=FALSE)
   
@@ -814,7 +824,7 @@ Create an enrichment map with the returned g:Profiler results.  An enrichment ma
 Export image of resulting Enrichment map.
 
 ```{r cluster1em, include=TRUE}
-cluster1em_png_file_name <- paste(getwd(),"/230_Isserlin_RCy3_intro/images/","cluster1em.png",sep="")
+cluster1em_png_file_name <- file.path(getwd(),"230_Isserlin_RCy3_intro", "images","cluster1em.png")
 
 ```
 
@@ -849,7 +859,7 @@ Annotate the Enrichment map to get the general themes that are found in the enri
 Export image of resulting Annotated Enrichment map.
 
 ```{r cluster1em_annot, include=TRUE}
-cluster1em_annot_png_file_name <- paste(getwd(),"/230_Isserlin_RCy3_intro/images/","cluster1em_annot.png",sep="")
+cluster1em_annot_png_file_name <- file.path(getwd(),"230_Isserlin_RCy3_intro", "images","cluster1em_annot.png")
 
 ```
 
@@ -905,7 +915,7 @@ rx = gregexpr("(?<=<a href=\")(.*.GOBP_AllPathways_no_GO_iea.*.)(.gmt)(?=\">)",
   contents, perl = TRUE)
 gmt_file = unlist(regmatches(contents, rx))
 
-dest_gmt_file <- paste(getwd(),paste("230_Isserlin_RCy3_intro/data",gmt_file,sep="/") ,sep="/")
+dest_gmt_file <- file.path(getwd(), "230_Isserlin_RCy3_intro", "data", gmt_file)
 
 download.file(
     paste(gmt_url,gmt_file,sep=""),
@@ -917,7 +927,7 @@ download.file(
 
 Load in the gmt file
 
-```{r eval=FALSE}
+```{r eval=TRUE}
 baderlab.gs <- getGenesets(dest_gmt_file)
 baderlab.gs[1:2]
 ```
@@ -929,7 +939,7 @@ Create the dataset required by EnrichmentBrowser tools
 #create the expression file - A tab separated text file containing expression values. Columns = samples/subjects; rows = features/probes/genes; NO headers, row or column names.
 expr <- RNASeq_expression
 
-sumexpr_filename <- paste(getwd(), "230_Isserlin_RCy3_intro/data/SummarizeExperiment_expression.txt", sep="/") 
+sumexpr_filename <- file.path(getwd(), "230_Isserlin_RCy3_intro/data/SummarizeExperiment_expression.txt") 
 write.table( expr ,  file = sumexpr_filename , col.names  = FALSE, row.names = FALSE, sep = "\t", quote=FALSE)
 
 
@@ -938,13 +948,13 @@ rowData <- cbind(RNASeq_gene_scores$Name,rowData)
 colnames(rowData)[2] <- "FC"
 colnames(rowData)[6] <- "ADJ.PVAL"
 
-sumexpr_rdat_filename <- paste(getwd(), "230_Isserlin_RCy3_intro/data/SummarizeExperiment_rdat.txt", sep="/") 
+sumexpr_rdat_filename <- file.path(getwd(), "230_Isserlin_RCy3_intro/data/SummarizeExperiment_rdat.txt") 
 write.table( rowData[,1] ,  file = sumexpr_rdat_filename , col.names  = FALSE, row.names = FALSE, sep = "\t", quote=FALSE)
 
 #load in the data classification data
 # A tab separated text file containing annotation information for the samples in either *two or three* columns. NO headers, row or column names. The number of rows/samples in this file should match the number of columns/samples of the expression matrix. The 1st column is reserved for the sample IDs; The 2nd column is reserved for a *BINARY* group assignment. Use '0' and '1' for unaffected (controls) and affected (cases) sample class
 classDefinitions_RNASeq <- read.table( 
-  paste(getwd(), "230_Isserlin_RCy3_intro/data","RNASeq_classdefinitions.txt", sep="/"), header = TRUE, sep = "\t", quote="\"", stringsAsFactors = FALSE)
+  file.path(getwd(), "230_Isserlin_RCy3_intro/data","RNASeq_classdefinitions.txt"), header = TRUE, sep = "\t", quote="\"", stringsAsFactors = FALSE)
 
 colData <- data.frame(Sample = colnames(RNASeq_expression),
                       GROUP = classDefinitions_RNASeq$SUBTYPE, 
@@ -953,7 +963,7 @@ rownames(colData) <- colnames(RNASeq_expression)
 colData$GROUP[which(colData$GROUP != "Mesenchymal")] <- 0
 colData$GROUP[which(colData$GROUP == "Mesenchymal")] <- 1
 
-sumexpr_cdat_filename <- paste(getwd(), "230_Isserlin_RCy3_intro/data/SummarizeExperiment_cdat.txt", sep="/") 
+sumexpr_cdat_filename <- file.path(getwd(), "230_Isserlin_RCy3_intro/data/SummarizeExperiment_cdat.txt") 
 write.table( colData ,  file = sumexpr_cdat_filename , col.names  = FALSE, row.names = FALSE, sep = "\t", quote=FALSE)
 
 #create the Summarize Experiment object
@@ -997,8 +1007,8 @@ em_results_mesen <- data.frame(name = ora.all$res.tbl$GENE.SET,descr = ora.all$r
                                pvalue=ora.all$res.tbl$P.VALUE, qvalue=ora.all$res.tbl$Q.VALUE.X, stringsAsFactors = FALSE)
 
 #write out the ora results
- em_results_mesen_filename <-paste(getwd(),
-                            "230_Isserlin_RCy3_intro/data","mesen_ora_enr_results.txt",sep="/")
+ em_results_mesen_filename <-file.path(getwd(),
+                            "230_Isserlin_RCy3_intro/data","mesen_ora_enr_results.txt")
 
   write.table(em_results_mesen,em_results_mesen_filename,col.name=TRUE,sep="\t",row.names=FALSE,quote=FALSE)
   
@@ -1025,7 +1035,7 @@ Create an enrichment map with the returned ORA results.
 Export image of resulting Enrichment map.
 
 ```{r mesenem, include=TRUE}
-mesenem_png_file_name <- paste(getwd(),"/230_Isserlin_RCy3_intro/images/","mesenem.png",sep="")
+mesenem_png_file_name <- file.path(getwd(),"230_Isserlin_RCy3_intro", "images","mesenem.png")
 
 ```
 
@@ -1060,7 +1070,7 @@ Annotate the Enrichment map to get the general themes that are found in the enri
 Export image of resulting Annotated Enrichment map. (Manually zoomed into a small section of the network)
 
 ```{r mesenem_annot, include=TRUE}
-mesenem_annot_png_file_name <- paste(getwd(),"/230_Isserlin_RCy3_intro/images/","mesenem_annot.png",sep="")
+mesenem_annot_png_file_name <- file.path(getwd(),"230_Isserlin_RCy3_intro", "images", "mesenem_annot.png")
 
 ```
 
