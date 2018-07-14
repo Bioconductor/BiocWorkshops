@@ -65,6 +65,7 @@ Imports:
   parallel,
   PharmacoGx,
   pheatmap,
+  phyloseq,
   phytools,
   plyranges,
   princurve,
