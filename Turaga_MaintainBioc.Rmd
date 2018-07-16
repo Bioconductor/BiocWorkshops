@@ -19,17 +19,17 @@ package. We will also highlight one particular git practice which need
 to be done while updating and maintaining your package on out git
 system.
 
-## Pre-requisites
+### Pre-requisites
 
 Accepted Bioconductor package or plans to contribute a Bioconductor
 package in the future.
 
-## Participation
+### Participation
 
 Students will be expected to follow along with their laptops if they
 choose to, although it is not needed.
 
-## Time outline: 50 mins short workshop
+### Time outline: 50 mins short workshop
 
 * Introduction: 10 mins
 * Why maintain your package
@@ -44,7 +44,7 @@ choose to, although it is not needed.
 	* GitHub + webhooks
 * Round up of resources available: 5 mins
 
-## Workshop goals and objectives
+### Workshop goals and objectives
 
 * Gain knowledge of how to track Bioconductor packages via download
   statistics, RSS feeds.
