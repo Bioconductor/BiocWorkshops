@@ -885,6 +885,13 @@ exportImage(cluster1em_annot_png_file_name, type = "png")
 knitr::include_graphics(cluster1em_annot_png_file_name)
 ```
 
+Dense networks small or large never look like network figures we so often see in journals.  A lot of manual tweaking, reorganization and optimization is involved in getting that perfect figure ready network.  The above network is what the network starts as.  The below figure is what it can look like after a few minutes of manual reorganiazation.  (individual clusters were selected from the auto annotate panel and separated from other clusters)
+
+```{r cluster1em_annot_man_fig, echo=FALSE, fig.cap="Example Annotated Enrichment Map created when running an enrichment analysis using g:Profiler with the genes that are part of cluster 1 after manual adjusting to generate a cleaner figure"}
+cluster1em_annot_man_png_file_name <- file.path(getwd(),"230_Isserlin_RCy3_intro", "images","cluster1em_annot_man.png")
+knitr::include_graphics(cluster1em_annot_man_png_file_name)
+```
+
 ### Use Case 3 - Functional Enrichment of Omics set.
 
 Reducing our large OMICs expression set to a simple list of genes eliminates the majority of the signals present in the data.  Thresholding will only highlight the strong signals neglecting the often more interesting subtle signals. In order to capitalize on the wealth of data present in the data we need to perform pathway enrichment analysis on the entire expression set. There are many tools in R or as standalone apps that perform this type of analysis.  
