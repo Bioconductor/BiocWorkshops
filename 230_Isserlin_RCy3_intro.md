@@ -1,17 +1,4 @@
 
----
-title: "Cytoscape Automation in R using Rcy3"
-author: "Ruth Isserlin"
-output:
-  revealjs::revealjs_presentation:
-    theme: league
-    self_contained: false
-  html_notebook:
-    css: 230_Isserlin_RCy3_intro/custom.css
-  html_document:
-    css: 230_Isserlin_RCy3_intro/custom.css
-bibliography: 230_cyto_automation.bib
----
 # Cytoscape Automation in R using Rcy3
 
 
