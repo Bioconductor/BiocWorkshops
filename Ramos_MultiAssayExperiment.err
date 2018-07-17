@@ -1,0 +1,8 @@
+
+
+processing file: Ramos_MultiAssayExperiment.Rmd
+Quitting from lines 815-821 (Ramos_MultiAssayExperiment.Rmd) 
+Error in filter(., ~cases.project.project_id == "TCGA-COAD" & data_category ==  : 
+  ensembldb::filter requires an 'EnsDb' object as input. To call the filter function from the stats or dplyr package use stats::filter and dplyr::filter instead.
+Calls: <Anonymous> ... _fseq -> freduce -> withVisible -> <Anonymous> -> filter
+Execution halted
