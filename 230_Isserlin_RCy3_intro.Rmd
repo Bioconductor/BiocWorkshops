@@ -1,6 +1,6 @@
 # Cytoscape Automation in R using Rcy3
 
-```{r lib, echo=FALSE, results="hide"}
+```{r lib, echo=FALSE, results="hide", cache=FALSE}
 suppressPackageStartupMessages({
 	library(EnrichmentBrowser)
 	library(RCy3)
@@ -969,7 +969,7 @@ sumexpr_cdat_filename <- file.path(getwd(), "230_Isserlin_RCy3_intro","data","Su
 write.table( colData ,  file = sumexpr_cdat_filename , col.names  = FALSE, row.names = FALSE, sep = "\t", quote=FALSE)
 
 #create the Summarize Experiment object
-se_OV <- readSE(assay.file = sumexpr_filename , cdat.file = sumexpr_cdat_filename, rdat.file = sumexpr_rdat_filename)
+se_OV <- EnrichmentBrowser::readSE(assay.file = sumexpr_filename , cdat.file = sumexpr_cdat_filename, rdat.file = sumexpr_rdat_filename)
 
 
 ```
