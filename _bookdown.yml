@@ -9,6 +9,7 @@ before_chapter_script: "_common.R"
 
 rmd_files: [
   "index.Rmd",
+  "100_Morgan_RBiocForAll.Rmd",
   "201_Love_DESeq2.Rmd",
 #  "220_Das_SingleCellRNASeq.Rmd", # missing refs Peer2017 Pierson2015 Tseng2005
   "230_Isserlin_RCy3_intro.Rmd",
