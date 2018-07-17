@@ -1316,7 +1316,7 @@ download_study(project_info$project)
 ```
 
 ```
-## 2018-07-17 12:15:22 downloading file rse_gene.Rdata to SRP009615
+## 2018-07-17 16:59:36 downloading file rse_gene.Rdata to SRP009615
 ```
 followed by loading the data
 

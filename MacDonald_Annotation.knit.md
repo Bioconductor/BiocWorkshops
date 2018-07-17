@@ -984,10 +984,6 @@ hub <- AnnotationHub()
 ```
 
 ```
-## No internet connection using 'localHub=TRUE'
-```
-
-```
 ## snapshotDate(): 2018-06-27
 ```
 
@@ -996,22 +992,28 @@ hub
 ```
 
 ```
-## AnnotationHub with 5 records
+## AnnotationHub with 44925 records
 ## # snapshotDate(): 2018-06-27 
-## # $dataprovider: BroadInstitute, Ensembl, ftp://ftp.ncbi.nlm.nih.gov/ge...
-## # $species: Homo sapiens
-## # $rdataclass: BigWigFile, GRanges, OrgDb, data.frame
+## # $dataprovider: BroadInstitute, Ensembl, UCSC, ftp://ftp.ncbi.nlm.nih....
+## # $species: Homo sapiens, Mus musculus, Drosophila melanogaster, Bos ta...
+## # $rdataclass: GRanges, BigWigFile, FaFile, TwoBitFile, Rle, OrgDb, Cha...
 ## # additional mcols(): taxonomyid, genome, description,
 ## #   coordinate_1_based, maintainer, rdatadateadded, preparerclass,
 ## #   tags, rdatapath, sourceurl, sourcetype 
-## # retrieve records with, e.g., 'object[["AH33454"]]' 
+## # retrieve records with, e.g., 'object[["AH2"]]' 
 ## 
-##             title                          
-##   AH33454 | E048-H3K4me1.pval.signal.bigwig
-##   AH33455 | E048-H3K4me3.pval.signal.bigwig
-##   AH41830 | EID_metadata.tab               
-##   AH50377 | Homo_sapiens.GRCh38.83.gtf     
-##   AH61777 | org.Hs.eg.db.sqlite
+##             title                                                   
+##   AH2     | Ailuropoda_melanoleuca.ailMel1.69.dna.toplevel.fa       
+##   AH3     | Ailuropoda_melanoleuca.ailMel1.69.dna_rm.toplevel.fa    
+##   AH4     | Ailuropoda_melanoleuca.ailMel1.69.dna_sm.toplevel.fa    
+##   AH5     | Ailuropoda_melanoleuca.ailMel1.69.ncrna.fa              
+##   AH6     | Ailuropoda_melanoleuca.ailMel1.69.pep.all.fa            
+##   ...       ...                                                     
+##   AH63655 | phastCons46wayPrimates.UCSC.hg19.chrX.rds               
+##   AH63656 | phastCons46wayPrimates.UCSC.hg19.chrY.rds               
+##   AH63657 | Alternative Splicing Annotation for Homo sapiens (Human)
+##   AH63658 | Allele data from the IPD IMGT/HLA database              
+##   AH63659 | Allele data from the IPD KIR database
 ```
 ### Querying AnnotationHub
 
@@ -1049,9 +1051,30 @@ unique(hub$dataprovider)
 ```
 
 ```
-## [1] "BroadInstitute"                       
-## [2] "Ensembl"                              
-## [3] "ftp://ftp.ncbi.nlm.nih.gov/gene/DATA/"
+##  [1] "Ensembl"                              
+##  [2] "UCSC"                                 
+##  [3] "RefNet"                               
+##  [4] "Inparanoid8"                          
+##  [5] "NHLBI"                                
+##  [6] "ChEA"                                 
+##  [7] "Pazar"                                
+##  [8] "NIH Pathway Interaction Database"     
+##  [9] "Haemcode"                             
+## [10] "BroadInstitute"                       
+## [11] "PRIDE"                                
+## [12] "Gencode"                              
+## [13] "CRIBI"                                
+## [14] "Genoscope"                            
+## [15] "MISO, VAST-TOOLS, UCSC"               
+## [16] "UWashington"                          
+## [17] "Stanford"                             
+## [18] "dbSNP"                                
+## [19] "BioMart"                              
+## [20] "GeneOntology"                         
+## [21] "KEGG"                                 
+## [22] "URGI"                                 
+## [23] "ftp://ftp.ncbi.nlm.nih.gov/gene/DATA/"
+## [24] "EMBL-EBI"
 ```
 
 ### AnnotationHub Data classes
@@ -1062,7 +1085,27 @@ unique(hub$rdataclass)
 ```
 
 ```
-## [1] "BigWigFile" "data.frame" "GRanges"    "OrgDb"
+##  [1] "FaFile"                           
+##  [2] "GRanges"                          
+##  [3] "data.frame"                       
+##  [4] "Inparanoid8Db"                    
+##  [5] "TwoBitFile"                       
+##  [6] "ChainFile"                        
+##  [7] "SQLiteConnection"                 
+##  [8] "biopax"                           
+##  [9] "BigWigFile"                       
+## [10] "AAStringSet"                      
+## [11] "MSnSet"                           
+## [12] "mzRpwiz"                          
+## [13] "mzRident"                         
+## [14] "list"                             
+## [15] "TxDb"                             
+## [16] "Rle"                              
+## [17] "EnsDb"                            
+## [18] "VcfFile"                          
+## [19] "igraph"                           
+## [20] "OrgDb"                            
+## [21] "data.frame, DNAStringSet, GRanges"
 ```
 ### AnnotationHub Species
 
@@ -1072,7 +1115,9 @@ head(unique(hub$species))
 ```
 
 ```
-## [1] "Homo sapiens"
+## [1] "Ailuropoda melanoleuca" "Anolis carolinensis"   
+## [3] "Bos taurus"             "Caenorhabditis elegans"
+## [5] "Callithrix jacchus"     "Canis familiaris"
 ```
 
 ```r
@@ -1080,7 +1125,7 @@ length(unique(hub$species))
 ```
 
 ```
-## [1] 1
+## [1] 1971
 ```
 ### AnnotationHub Data sources
 
@@ -1090,7 +1135,12 @@ unique(hub$sourcetype)
 ```
 
 ```
-## [1] "BigWig"       "tab"          "GTF"          "NCBI/ensembl"
+##  [1] "FASTA"        "UCSC track"   "GTF"          "TSV"         
+##  [5] "Inparanoid"   "TwoBit"       "Chain"        "GRASP"       
+##  [9] "Zip"          "CSV"          "BioPax"       "BioPaxLevel2"
+## [13] "RData"        "BED"          "BigWig"       "tab"         
+## [17] "mzTab"        "mzML"         "mzid"         "GFF"         
+## [21] "ensembl"      "VCF"          "NCBI/ensembl" "NCBI/UniProt"
 ```
 ### AnnotationHub query
 
@@ -1101,22 +1151,28 @@ qry
 ```
 
 ```
-## AnnotationHub with 1 record
+## AnnotationHub with 56 records
 ## # snapshotDate(): 2018-06-27 
-## # names(): AH50377
-## # $dataprovider: Ensembl
+## # $dataprovider: Ensembl, UCSC
 ## # $species: Homo sapiens
 ## # $rdataclass: GRanges
-## # $rdatadateadded: 2016-01-25
-## # $title: Homo_sapiens.GRCh38.83.gtf
-## # $description: Gene Annotation for Homo sapiens
-## # $taxonomyid: 9606
-## # $genome: GRCh38
-## # $sourcetype: GTF
-## # $sourceurl: ftp://ftp.ensembl.org/pub/release-83/gtf/homo_sapiens/Hom...
-## # $sourcesize: 45686084
-## # $tags: c("GTF", "ensembl", "Gene", "Transcript", "Annotation") 
-## # retrieve record with 'object[["AH50377"]]'
+## # additional mcols(): taxonomyid, genome, description,
+## #   coordinate_1_based, maintainer, rdatadateadded, preparerclass,
+## #   tags, rdatapath, sourceurl, sourcetype 
+## # retrieve records with, e.g., 'object[["AH5046"]]' 
+## 
+##             title                                          
+##   AH5046  | Ensembl Genes                                  
+##   AH5160  | Ensembl Genes                                  
+##   AH5311  | Ensembl Genes                                  
+##   AH5434  | Ensembl Genes                                  
+##   AH5435  | Ensembl EST Genes                              
+##   ...       ...                                            
+##   AH60085 | Homo_sapiens.GRCh38.91.gtf                     
+##   AH61125 | Homo_sapiens.GRCh38.92.abinitio.gtf            
+##   AH61126 | Homo_sapiens.GRCh38.92.chr.gtf                 
+##   AH61127 | Homo_sapiens.GRCh38.92.chr_patch_hapl_scaff.gtf
+##   AH61128 | Homo_sapiens.GRCh38.92.gtf
 ```
 ### AnnotationHub query
 
@@ -1126,7 +1182,62 @@ qry$sourceurl
 ```
 
 ```
-## [1] "ftp://ftp.ensembl.org/pub/release-83/gtf/homo_sapiens/Homo_sapiens.GRCh38.83.gtf.gz"
+##  [1] "rtracklayer://hgdownload.cse.ucsc.edu/goldenpath/hg19/database/ensGene"                                  
+##  [2] "rtracklayer://hgdownload.cse.ucsc.edu/goldenpath/hg18/database/ensGene"                                  
+##  [3] "rtracklayer://hgdownload.cse.ucsc.edu/goldenpath/hg17/database/ensGene"                                  
+##  [4] "rtracklayer://hgdownload.cse.ucsc.edu/goldenpath/hg16/database/ensGene"                                  
+##  [5] "rtracklayer://hgdownload.cse.ucsc.edu/goldenpath/hg16/database/ensEstGene"                               
+##  [6] "ftp://ftp.ensembl.org/pub/release-70/gtf/homo_sapiens/Homo_sapiens.GRCh37.70.gtf.gz"                     
+##  [7] "ftp://ftp.ensembl.org/pub/release-69/gtf/homo_sapiens/Homo_sapiens.GRCh37.69.gtf.gz"                     
+##  [8] "ftp://ftp.ensembl.org/pub/release-71/gtf/homo_sapiens/Homo_sapiens.GRCh37.71.gtf.gz"                     
+##  [9] "ftp://ftp.ensembl.org/pub/release-72/gtf/homo_sapiens/Homo_sapiens.GRCh37.72.gtf.gz"                     
+## [10] "ftp://ftp.ensembl.org/pub/release-73/gtf/homo_sapiens/Homo_sapiens.GRCh37.73.gtf.gz"                     
+## [11] "ftp://ftp.ensembl.org/pub/release-74/gtf/homo_sapiens/Homo_sapiens.GRCh37.74.gtf.gz"                     
+## [12] "ftp://ftp.ensembl.org/pub/release-75/gtf/homo_sapiens/Homo_sapiens.GRCh37.75.gtf.gz"                     
+## [13] "ftp://ftp.ensembl.org/pub/release-78/gtf/homo_sapiens/Homo_sapiens.GRCh38.78.gtf.gz"                     
+## [14] "ftp://ftp.ensembl.org/pub/release-76/gtf/homo_sapiens/Homo_sapiens.GRCh38.76.gtf.gz"                     
+## [15] "ftp://ftp.ensembl.org/pub/release-79/gtf/homo_sapiens/Homo_sapiens.GRCh38.79.gtf.gz"                     
+## [16] "ftp://ftp.ensembl.org/pub/release-77/gtf/homo_sapiens/Homo_sapiens.GRCh38.77.gtf.gz"                     
+## [17] "ftp://ftp.ensembl.org/pub/release-80/gtf/homo_sapiens/Homo_sapiens.GRCh38.80.gtf.gz"                     
+## [18] "ftp://ftp.ensembl.org/pub/release-81/gtf/homo_sapiens/Homo_sapiens.GRCh38.81.gtf.gz"                     
+## [19] "ftp://ftp.ensembl.org/pub/release-82/gtf/homo_sapiens/Homo_sapiens.GRCh38.82.gtf.gz"                     
+## [20] "ftp://ftp.ensembl.org/pub/release-83/gtf/homo_sapiens/Homo_sapiens.GRCh38.83.gtf.gz"                     
+## [21] "ftp://ftp.ensembl.org/pub/release-84/gtf/homo_sapiens/Homo_sapiens.GRCh38.84.abinitio.gtf.gz"            
+## [22] "ftp://ftp.ensembl.org/pub/release-84/gtf/homo_sapiens/Homo_sapiens.GRCh38.84.chr.gtf.gz"                 
+## [23] "ftp://ftp.ensembl.org/pub/release-84/gtf/homo_sapiens/Homo_sapiens.GRCh38.84.chr_patch_hapl_scaff.gtf.gz"
+## [24] "ftp://ftp.ensembl.org/pub/release-84/gtf/homo_sapiens/Homo_sapiens.GRCh38.84.gtf.gz"                     
+## [25] "ftp://ftp.ensembl.org/pub/release-85/gtf/homo_sapiens/Homo_sapiens.GRCh38.85.abinitio.gtf.gz"            
+## [26] "ftp://ftp.ensembl.org/pub/release-85/gtf/homo_sapiens/Homo_sapiens.GRCh38.85.chr.gtf.gz"                 
+## [27] "ftp://ftp.ensembl.org/pub/release-85/gtf/homo_sapiens/Homo_sapiens.GRCh38.85.chr_patch_hapl_scaff.gtf.gz"
+## [28] "ftp://ftp.ensembl.org/pub/release-85/gtf/homo_sapiens/Homo_sapiens.GRCh38.85.gtf.gz"                     
+## [29] "ftp://ftp.ensembl.org/pub/release-86/gtf/homo_sapiens/Homo_sapiens.GRCh38.86.abinitio.gtf.gz"            
+## [30] "ftp://ftp.ensembl.org/pub/release-86/gtf/homo_sapiens/Homo_sapiens.GRCh38.86.chr.gtf.gz"                 
+## [31] "ftp://ftp.ensembl.org/pub/release-86/gtf/homo_sapiens/Homo_sapiens.GRCh38.86.chr_patch_hapl_scaff.gtf.gz"
+## [32] "ftp://ftp.ensembl.org/pub/release-86/gtf/homo_sapiens/Homo_sapiens.GRCh38.86.gtf.gz"                     
+## [33] "ftp://ftp.ensembl.org/pub/release-87/gtf/homo_sapiens/Homo_sapiens.GRCh38.87.abinitio.gtf.gz"            
+## [34] "ftp://ftp.ensembl.org/pub/release-87/gtf/homo_sapiens/Homo_sapiens.GRCh38.87.chr.gtf.gz"                 
+## [35] "ftp://ftp.ensembl.org/pub/release-87/gtf/homo_sapiens/Homo_sapiens.GRCh38.87.chr_patch_hapl_scaff.gtf.gz"
+## [36] "ftp://ftp.ensembl.org/pub/release-87/gtf/homo_sapiens/Homo_sapiens.GRCh38.87.gtf.gz"                     
+## [37] "ftp://ftp.ensembl.org/pub/release-88/gtf/homo_sapiens/Homo_sapiens.GRCh38.88.abinitio.gtf.gz"            
+## [38] "ftp://ftp.ensembl.org/pub/release-88/gtf/homo_sapiens/Homo_sapiens.GRCh38.88.chr.gtf.gz"                 
+## [39] "ftp://ftp.ensembl.org/pub/release-88/gtf/homo_sapiens/Homo_sapiens.GRCh38.88.chr_patch_hapl_scaff.gtf.gz"
+## [40] "ftp://ftp.ensembl.org/pub/release-88/gtf/homo_sapiens/Homo_sapiens.GRCh38.88.gtf.gz"                     
+## [41] "ftp://ftp.ensembl.org/pub/release-89/gtf/homo_sapiens/Homo_sapiens.GRCh38.89.abinitio.gtf.gz"            
+## [42] "ftp://ftp.ensembl.org/pub/release-89/gtf/homo_sapiens/Homo_sapiens.GRCh38.89.chr.gtf.gz"                 
+## [43] "ftp://ftp.ensembl.org/pub/release-89/gtf/homo_sapiens/Homo_sapiens.GRCh38.89.chr_patch_hapl_scaff.gtf.gz"
+## [44] "ftp://ftp.ensembl.org/pub/release-89/gtf/homo_sapiens/Homo_sapiens.GRCh38.89.gtf.gz"                     
+## [45] "ftp://ftp.ensembl.org/pub/release-90/gtf/homo_sapiens/Homo_sapiens.GRCh38.90.abinitio.gtf.gz"            
+## [46] "ftp://ftp.ensembl.org/pub/release-90/gtf/homo_sapiens/Homo_sapiens.GRCh38.90.chr.gtf.gz"                 
+## [47] "ftp://ftp.ensembl.org/pub/release-90/gtf/homo_sapiens/Homo_sapiens.GRCh38.90.chr_patch_hapl_scaff.gtf.gz"
+## [48] "ftp://ftp.ensembl.org/pub/release-90/gtf/homo_sapiens/Homo_sapiens.GRCh38.90.gtf.gz"                     
+## [49] "ftp://ftp.ensembl.org/pub/release-91/gtf/homo_sapiens/Homo_sapiens.GRCh38.91.abinitio.gtf.gz"            
+## [50] "ftp://ftp.ensembl.org/pub/release-91/gtf/homo_sapiens/Homo_sapiens.GRCh38.91.chr.gtf.gz"                 
+## [51] "ftp://ftp.ensembl.org/pub/release-91/gtf/homo_sapiens/Homo_sapiens.GRCh38.91.chr_patch_hapl_scaff.gtf.gz"
+## [52] "ftp://ftp.ensembl.org/pub/release-91/gtf/homo_sapiens/Homo_sapiens.GRCh38.91.gtf.gz"                     
+## [53] "ftp://ftp.ensembl.org/pub/release-92/gtf/homo_sapiens/Homo_sapiens.GRCh38.92.abinitio.gtf.gz"            
+## [54] "ftp://ftp.ensembl.org/pub/release-92/gtf/homo_sapiens/Homo_sapiens.GRCh38.92.chr.gtf.gz"                 
+## [55] "ftp://ftp.ensembl.org/pub/release-92/gtf/homo_sapiens/Homo_sapiens.GRCh38.92.chr_patch_hapl_scaff.gtf.gz"
+## [56] "ftp://ftp.ensembl.org/pub/release-92/gtf/homo_sapiens/Homo_sapiens.GRCh38.92.gtf.gz"
 ```
 
 ### Selecting AnnotationHub resource
@@ -1152,7 +1263,7 @@ GRCh38TxDb
 ## # exon_nrow: 675836
 ## # cds_nrow: 270225
 ## # Db created by: GenomicFeatures package from Bioconductor
-## # Creation time: 2018-07-17 12:15:47 -0400 (Tue, 17 Jul 2018)
+## # Creation time: 2018-07-17 17:00:17 -0400 (Tue, 17 Jul 2018)
 ## # GenomicFeatures version at creation time: 1.33.0
 ## # RSQLite version at creation time: 2.1.1
 ## # DBSCHEMAVERSION: 1.2

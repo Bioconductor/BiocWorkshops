@@ -1024,7 +1024,7 @@ methylation_files
 ```
 
 ```
-## AnnotationHub with 2 records
+## AnnotationHub with 5 records
 ## # snapshotDate(): 2018-06-27 
 ## # $dataprovider: BroadInstitute
 ## # $species: Homo sapiens
@@ -1034,9 +1034,12 @@ methylation_files
 ## #   tags, rdatapath, sourceurl, sourcetype 
 ## # retrieve records with, e.g., 'object[["AH33454"]]' 
 ## 
-##             title                          
-##   AH33454 | E048-H3K4me1.pval.signal.bigwig
-##   AH33455 | E048-H3K4me3.pval.signal.bigwig
+##             title                                  
+##   AH33454 | E048-H3K4me1.pval.signal.bigwig        
+##   AH33455 | E048-H3K4me3.pval.signal.bigwig        
+##   AH39974 | E048-H3K4me1.imputed.pval.signal.bigwig
+##   AH40101 | E048-H3K4me2.imputed.pval.signal.bigwig
+##   AH40228 | E048-H3K4me3.imputed.pval.signal.bigwig
 ```
 
 So we'll take the first two entries and download them as BigWigFiles:

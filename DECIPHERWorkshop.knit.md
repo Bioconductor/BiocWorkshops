@@ -191,7 +191,7 @@ install_github(repo = "npcooley/FindHomology")
 ```
 ## '/usr/lib/R/bin/R' --no-site-file --no-environ --no-save --no-restore  \
 ##   --quiet CMD INSTALL  \
-##   '/tmp/RtmpeWIbat/devtools1370769e2fa6/npcooley-FindHomology-e9629cf'  \
+##   '/tmp/Rtmpy85uJF/devtools40ef6f623845/npcooley-FindHomology-e9629cf'  \
 ##   --library='/usr/local/lib/R/R-3.5-bioc-devel' --install-tests
 ```
 
@@ -375,49 +375,49 @@ for (i in seq_along(Genomes)) {
 ## Reading FASTA file chunk 1
 ## 
 ## 1 total sequence in table Seqs.
-## Time difference of 0.6 secs
+## Time difference of 0.59 secs
 ## 
 ## Reading FASTA file chunk 1
 ## 
 ## Added 1 new sequence to table Seqs.
 ## 2 total sequences in table Seqs.
-## Time difference of 0.75 secs
+## Time difference of 0.91 secs
 ## 
 ## Reading FASTA file chunk 1
 ## 
 ## Added 1 new sequence to table Seqs.
 ## 3 total sequences in table Seqs.
-## Time difference of 0.49 secs
+## Time difference of 0.61 secs
 ## 
 ## Reading FASTA file chunk 1
 ## 
 ## Added 1 new sequence to table Seqs.
 ## 4 total sequences in table Seqs.
-## Time difference of 0.71 secs
+## Time difference of 0.62 secs
 ## 
 ## Reading FASTA file chunk 1
 ## 
 ## Added 1 new sequence to table Seqs.
 ## 5 total sequences in table Seqs.
-## Time difference of 0.95 secs
-## 
-## Reading FASTA file chunk 1
-## 
-## Added 1 new sequence to table Seqs.
-## 6 total sequences in table Seqs.
 ## Time difference of 0.66 secs
 ## 
 ## Reading FASTA file chunk 1
 ## 
 ## Added 1 new sequence to table Seqs.
+## 6 total sequences in table Seqs.
+## Time difference of 0.68 secs
+## 
+## Reading FASTA file chunk 1
+## 
+## Added 1 new sequence to table Seqs.
 ## 7 total sequences in table Seqs.
-## Time difference of 0.55 secs
+## Time difference of 0.77 secs
 ## 
 ## Reading FASTA file chunk 1
 ## 
 ## Added 1 new sequence to table Seqs.
 ## 8 total sequences in table Seqs.
-## Time difference of 0.52 secs
+## Time difference of 0.65 secs
 ```
 
 ```r
@@ -444,7 +444,7 @@ SyntenyObject <- FindSynteny(dbFile = DBPath,
 ```
 ## ===========================================================================
 ## 
-## Time difference of 60.29 secs
+## Time difference of 58.84 secs
 ```
 
 ```r
@@ -503,7 +503,7 @@ MatrixObject <- NucleotideOverlap(SyntenyObject = SyntenyObject,
 
 ```
 ## ===========================================================================
-## Time difference of 1.011542 mins
+## Time difference of 57.88707 secs
 ```
 
 
@@ -516,7 +516,7 @@ Homologs <- Catalog(MatrixObject,
 
 ```
 ## ===========================================================================
-## Time difference of 1.850396 mins
+## Time difference of 1.831006 mins
 ```
 
 
@@ -549,7 +549,7 @@ CoreGenome <- CoreAligner(Homologs[CoreSet],
 
 ```
 ## ===========================================================================
-## Time difference of 32.4754 secs
+## Time difference of 32.53976 secs
 ```
 
 ```r
