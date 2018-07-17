@@ -1,14 +1,18 @@
 #!/bin/bash                                                                                                                                   
 
-cd $(mktemp -d)  #start in a clean directory
-git clone git@github.com:Bioconductor/BiocWorkshops.git
-cd BiocWorkshops
+#cd $(mktemp -d)  #start in a clean directory
+#git clone git@github.com:Bioconductor/BiocWorkshops.git
+#cd BiocWorkshops
+#chmod 755 *.sh
+
+
 git clone -b individual_builds \
     git@github.com:Bioconductor/BiocWorkshops.git \
     individual_builds
 
 cd individual_builds
 git rm -r *.err *.md
+cd ..
 
 for file in `ls *.Rmd | grep '^[0-9A-Z]'`; do
   log=${file%.Rmd}.log
@@ -63,3 +67,4 @@ cp -r ../docs/* ./
 git add --all *
 git commit -m "Update the book" || true
 git push -q origin gh-pages
+cd ..
