@@ -117,6 +117,8 @@ Part 2: _Bioconductor_
 
 ### _RStudio_ orientation
 
+![](100_Morgan_RBiocForAll/RStudio.png)
+
 ### Very basics
 
 _R_ works by typing into the console. A very simple example is to add the numbers 1 and 2.
