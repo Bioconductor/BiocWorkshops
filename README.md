@@ -7,7 +7,7 @@ github-repo: Bioconductor/BiocWorkshops
 documentclass: book
 ---
 
-[![Travis Build Status](https://travis-ci.org/Bioconductor/BiocWorkshops.svg?branch=master)](https://travis-ci.org/Bioconductor/BiocWorkshops)
+The most up-to-date error messages and `.md` files from builds of individual workshops are [here](https://github.com/Bioconductor/BiocWorkshops/tree/individual_builds).
 
 # Introduction
 
