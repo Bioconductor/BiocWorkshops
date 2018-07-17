@@ -49,7 +49,7 @@ done
 
 cp *.knit.md individual_builds
 cd individual_builds
-git add -all *.err *.md
+git add --all *.err *.md
 git commit -am "individual builds to individual_builds"
 git push -q origin master
 cd ..
