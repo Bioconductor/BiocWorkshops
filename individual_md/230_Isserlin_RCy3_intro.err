@@ -12,8 +12,8 @@ Content type 'unknown' length 8012269 bytes (7.6 MB)
 ==================================================
 downloaded 7.6 MB
 
-output file: 230_Isserlin_RCy3_intro.knit.md
-
-pandoc: Filter pandoc-citeproc not found
-Error: pandoc document conversion failed with error 85
+Quitting from lines 1001-1016 (230_Isserlin_RCy3_intro.Rmd) 
+Error in data.frame(name = ora.all$res.tbl$GENE.SET, descr = ora.all$res.tbl$GENE.SET,  : 
+  arguments imply differing number of rows: 9002, 0
+Calls: <Anonymous> ... withCallingHandlers -> withVisible -> eval -> eval -> data.frame
 Execution halted
