@@ -1316,7 +1316,7 @@ download_study(project_info$project)
 ```
 
 ```
-## 2018-07-17 06:41:15 downloading file rse_gene.Rdata to SRP009615
+## 2018-07-17 10:13:14 downloading file rse_gene.Rdata to SRP009615
 ```
 followed by loading the data
 
@@ -1398,7 +1398,7 @@ esl <- curatedMetagenomicData(oral, dryrun = FALSE)
 ```
 
 ```
-## snapshotDate(): 2018-07-16
+## snapshotDate(): 2018-07-17
 ```
 
 ```
@@ -1419,7 +1419,7 @@ esl <- curatedMetagenomicData(oral, dryrun = FALSE)
 ```
 
 ```
-## snapshotDate(): 2018-07-16
+## snapshotDate(): 2018-07-17
 ```
 
 ```
@@ -1473,7 +1473,7 @@ suppressPackageStartupMessages(library(HMP16SData))
 ```
 
 ```
-## snapshotDate(): 2018-07-16
+## snapshotDate(): 2018-07-17
 ```
 
 *[HMP16SData](http://bioconductor.org/packages/HMP16SData)*[@Schiffer2018-qy] is a Bioconductor ExperimentData package of the Human Microbiome Project (HMP) 16S rRNA sequencing data. Taxonomic count data files are provided as downloaded from the HMP Data Analysis and Coordination Center from its QIIME pipeline. Processed data is provided as `SummarizedExperiment` class objects via *[ExperimentHub](http://bioconductor.org/packages/ExperimentHub)*. Like other ExperimentHub-based packages, a convenience function does downloading, automatic local caching, and serializing of a Bioconductor data class. This returns taxonomic counts from the V1-3 variable region of the 16S rRNA gene, along with the unrestricted participant data and phylogenetic tree. 
@@ -1483,7 +1483,7 @@ V13()
 ```
 
 ```
-## snapshotDate(): 2018-07-16
+## snapshotDate(): 2018-07-17
 ```
 
 ```

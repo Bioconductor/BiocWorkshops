@@ -1,3 +1,4 @@
+
 # Analysis of single-cell RNA-seq data: Dimensionality reduction, clustering, and lineage inference
 
 Authors:
@@ -106,13 +107,78 @@ The following packages are needed.
 # Bioconductor
 library(BiocParallel)
 library(SingleCellExperiment)
+#> Loading required package: SummarizedExperiment
+#> Loading required package: GenomicRanges
+#> Loading required package: stats4
+#> Loading required package: BiocGenerics
+#> Loading required package: parallel
+#> 
+#> Attaching package: 'BiocGenerics'
+#> The following objects are masked from 'package:parallel':
+#> 
+#>     clusterApply, clusterApplyLB, clusterCall, clusterEvalQ,
+#>     clusterExport, clusterMap, parApply, parCapply, parLapply,
+#>     parLapplyLB, parRapply, parSapply, parSapplyLB
+#> The following objects are masked from 'package:stats':
+#> 
+#>     IQR, mad, sd, var, xtabs
+#> The following objects are masked from 'package:base':
+#> 
+#>     anyDuplicated, append, as.data.frame, basename, cbind,
+#>     colMeans, colnames, colSums, dirname, do.call, duplicated,
+#>     eval, evalq, Filter, Find, get, grep, grepl, intersect,
+#>     is.unsorted, lapply, lengths, Map, mapply, match, mget, order,
+#>     paste, pmax, pmax.int, pmin, pmin.int, Position, rank, rbind,
+#>     Reduce, rowMeans, rownames, rowSums, sapply, setdiff, sort,
+#>     table, tapply, union, unique, unsplit, which, which.max,
+#>     which.min
+#> Loading required package: S4Vectors
+#> 
+#> Attaching package: 'S4Vectors'
+#> The following object is masked from 'package:base':
+#> 
+#>     expand.grid
+#> Loading required package: IRanges
+#> Loading required package: GenomeInfoDb
+#> Loading required package: Biobase
+#> Welcome to Bioconductor
+#> 
+#>     Vignettes contain introductory material; view with
+#>     'browseVignettes()'. To cite Bioconductor, see
+#>     'citation("Biobase")', and for packages 'citation("pkgname")'.
+#> Loading required package: DelayedArray
+#> Loading required package: matrixStats
+#> 
+#> Attaching package: 'matrixStats'
+#> The following objects are masked from 'package:Biobase':
+#> 
+#>     anyMissing, rowMedians
+#> 
+#> Attaching package: 'DelayedArray'
+#> The following objects are masked from 'package:matrixStats':
+#> 
+#>     colMaxs, colMins, colRanges, rowMaxs, rowMins, rowRanges
+#> The following objects are masked from 'package:base':
+#> 
+#>     aperm, apply
 library(clusterExperiment)
 library(scone)
 library(zinbwave)
+#> 
+#> Attaching package: 'zinbwave'
+#> The following objects are masked from 'package:clusterExperiment':
+#> 
+#>     nFeatures, nSamples
 library(slingshot)
+#> Loading required package: princurve
+#> Warning in rgl.init(initValue, onlyNULL): RGL: unable to open X11 display
+#> Warning: 'rgl_init' failed, running with rgl.useNULL = TRUE
 
 # CRAN
 library(gam)
+#> Loading required package: splines
+#> Loading required package: foreach
+#> Loaded gam 1.15
 library(RColorBrewer)
 
 set.seed(20)
@@ -137,20 +203,17 @@ library(fletcher2017data)
 
 data(fletcher)
 fletcher
-```
-
-```
-## class: SingleCellExperiment 
-## dim: 28284 849 
-## metadata(0):
-## assays(1): counts
-## rownames(28284): Xkr4 LOC102640625 ... Ggcx.1 eGFP
-## rowData names(0):
-## colnames(849): OEP01_N706_S501 OEP01_N701_S501 ... OEL23_N704_S503
-##   OEL23_N703_S502
-## colData names(19): Experiment Batch ... CreER ERCC_reads
-## reducedDimNames(0):
-## spikeNames(0):
+#> class: SingleCellExperiment 
+#> dim: 28284 849 
+#> metadata(0):
+#> assays(1): counts
+#> rownames(28284): Xkr4 LOC102640625 ... Ggcx.1 eGFP
+#> rowData names(0):
+#> colnames(849): OEP01_N706_S501 OEP01_N701_S501 ... OEL23_N704_S503
+#>   OEL23_N703_S502
+#> colData names(19): Experiment Batch ... CreER ERCC_reads
+#> reducedDimNames(0):
+#> spikeNames(0):
 ```
 
 Throughout the workshop, we use the class `SingleCellExperiment` to keep track of the counts and their associated metadata within a single object. 
@@ -165,88 +228,85 @@ The cell-level metadata contain quality control measures, sequencing batch ID, a
 
 ```r
 colData(fletcher)
-```
-
-```
-## DataFrame with 849 rows and 19 columns
-##                          Experiment    Batch publishedClusters    NREADS
-##                            <factor> <factor>         <numeric> <numeric>
-## OEP01_N706_S501     K5ERRY_UI_96HPT      Y01                 1   3313260
-## OEP01_N701_S501     K5ERRY_UI_96HPT      Y01                 1   2902430
-## OEP01_N707_S507     K5ERRY_UI_96HPT      Y01                 1   2307940
-## OEP01_N705_S501     K5ERRY_UI_96HPT      Y01                 1   3337400
-## OEP01_N704_S507     K5ERRY_UI_96HPT      Y01                -2    117892
-## ...                             ...      ...               ...       ...
-## OEL23_N704_S510 K5ERP63CKO_UI_14DPT      P14                -2   2407440
-## OEL23_N705_S502 K5ERP63CKO_UI_14DPT      P14                -2   2308940
-## OEL23_N706_S502 K5ERP63CKO_UI_14DPT      P14                12   2215640
-## OEL23_N704_S503 K5ERP63CKO_UI_14DPT      P14                12   2673790
-## OEL23_N703_S502 K5ERP63CKO_UI_14DPT      P14                 7   2450320
-##                  NALIGNED    RALIGN TOTAL_DUP    PRIMER
-##                 <numeric> <numeric> <numeric> <numeric>
-## OEP01_N706_S501   3167600   95.6035   47.9943 0.0154566
-## OEP01_N701_S501   2757790   95.0167    45.015 0.0182066
-## OEP01_N707_S507   2178350   94.3852   43.7832 0.0219196
-## OEP01_N705_S501   3183720   95.3952   43.2688 0.0183041
-## OEP01_N704_S507     98628   83.6596   18.0576 0.0623744
-## ...                   ...       ...       ...       ...
-## OEL23_N704_S510   2305060   95.7472   47.1489 0.0159111
-## OEL23_N705_S502   2203300   95.4244   62.5638 0.0195812
-## OEL23_N706_S502   2108490   95.1637   50.6643 0.0182207
-## OEL23_N704_S503   2568300   96.0546   60.5481 0.0155611
-## OEL23_N703_S502   2363500   96.4567   48.4164 0.0122704
-##                 PCT_RIBOSOMAL_BASES PCT_CODING_BASES PCT_UTR_BASES
-##                           <numeric>        <numeric>     <numeric>
-## OEP01_N706_S501               2e-06          0.20013      0.230654
-## OEP01_N701_S501                   0         0.182461       0.20181
-## OEP01_N707_S507                   0         0.152627      0.207897
-## OEP01_N705_S501               2e-06         0.169514      0.207342
-## OEP01_N704_S507             1.4e-05         0.110724      0.199174
-## ...                             ...              ...           ...
-## OEL23_N704_S510                   0         0.287346      0.314104
-## OEL23_N705_S502                   0         0.337264      0.297077
-## OEL23_N706_S502               7e-06         0.244333      0.262663
-## OEL23_N704_S503                   0         0.343203      0.338217
-## OEL23_N703_S502               8e-06         0.259367      0.238239
-##                 PCT_INTRONIC_BASES PCT_INTERGENIC_BASES PCT_MRNA_BASES
-##                          <numeric>            <numeric>      <numeric>
-## OEP01_N706_S501           0.404205             0.165009       0.430784
-## OEP01_N701_S501           0.465702             0.150027       0.384271
-## OEP01_N707_S507           0.511416              0.12806       0.360524
-## OEP01_N705_S501           0.457556             0.165586       0.376856
-## OEP01_N704_S507           0.489514             0.200573       0.309898
-## ...                            ...                  ...            ...
-## OEL23_N704_S510           0.250658             0.147892        0.60145
-## OEL23_N705_S502           0.230214             0.135445       0.634341
-## OEL23_N706_S502           0.355899             0.137097       0.506997
-## OEL23_N704_S503           0.174696             0.143885        0.68142
-## OEL23_N703_S502           0.376091             0.126294       0.497606
-##                 MEDIAN_CV_COVERAGE MEDIAN_5PRIME_BIAS MEDIAN_3PRIME_BIAS
-##                          <numeric>          <numeric>          <numeric>
-## OEP01_N706_S501           0.843857           0.061028           0.521079
-## OEP01_N701_S501            0.91437            0.03335           0.373993
-## OEP01_N707_S507           0.955405           0.014606            0.49123
-## OEP01_N705_S501            0.81663           0.101798           0.525238
-## OEP01_N704_S507            1.19978                  0           0.706512
-## ...                            ...                ...                ...
-## OEL23_N704_S510           0.698455           0.198224           0.419745
-## OEL23_N705_S502           0.830816           0.105091           0.398755
-## OEL23_N706_S502           0.805627           0.103363           0.431862
-## OEL23_N704_S503           0.745201           0.118615            0.38422
-## OEL23_N703_S502           0.711685           0.196725           0.377926
-##                     CreER ERCC_reads
-##                 <numeric>  <numeric>
-## OEP01_N706_S501         1      10516
-## OEP01_N701_S501      3022       9331
-## OEP01_N707_S507      2329       7386
-## OEP01_N705_S501       717       6387
-## OEP01_N704_S507        60        992
-## ...                   ...        ...
-## OEL23_N704_S510       659          0
-## OEL23_N705_S502      1552          0
-## OEL23_N706_S502         0          0
-## OEL23_N704_S503         0          0
-## OEL23_N703_S502      2222          0
+#> DataFrame with 849 rows and 19 columns
+#>                          Experiment    Batch publishedClusters    NREADS
+#>                            <factor> <factor>         <numeric> <numeric>
+#> OEP01_N706_S501     K5ERRY_UI_96HPT      Y01                 1   3313260
+#> OEP01_N701_S501     K5ERRY_UI_96HPT      Y01                 1   2902430
+#> OEP01_N707_S507     K5ERRY_UI_96HPT      Y01                 1   2307940
+#> OEP01_N705_S501     K5ERRY_UI_96HPT      Y01                 1   3337400
+#> OEP01_N704_S507     K5ERRY_UI_96HPT      Y01                -2    117892
+#> ...                             ...      ...               ...       ...
+#> OEL23_N704_S510 K5ERP63CKO_UI_14DPT      P14                -2   2407440
+#> OEL23_N705_S502 K5ERP63CKO_UI_14DPT      P14                -2   2308940
+#> OEL23_N706_S502 K5ERP63CKO_UI_14DPT      P14                12   2215640
+#> OEL23_N704_S503 K5ERP63CKO_UI_14DPT      P14                12   2673790
+#> OEL23_N703_S502 K5ERP63CKO_UI_14DPT      P14                 7   2450320
+#>                  NALIGNED    RALIGN TOTAL_DUP    PRIMER
+#>                 <numeric> <numeric> <numeric> <numeric>
+#> OEP01_N706_S501   3167600   95.6035   47.9943 0.0154566
+#> OEP01_N701_S501   2757790   95.0167    45.015 0.0182066
+#> OEP01_N707_S507   2178350   94.3852   43.7832 0.0219196
+#> OEP01_N705_S501   3183720   95.3952   43.2688 0.0183041
+#> OEP01_N704_S507     98628   83.6596   18.0576 0.0623744
+#> ...                   ...       ...       ...       ...
+#> OEL23_N704_S510   2305060   95.7472   47.1489 0.0159111
+#> OEL23_N705_S502   2203300   95.4244   62.5638 0.0195812
+#> OEL23_N706_S502   2108490   95.1637   50.6643 0.0182207
+#> OEL23_N704_S503   2568300   96.0546   60.5481 0.0155611
+#> OEL23_N703_S502   2363500   96.4567   48.4164 0.0122704
+#>                 PCT_RIBOSOMAL_BASES PCT_CODING_BASES PCT_UTR_BASES
+#>                           <numeric>        <numeric>     <numeric>
+#> OEP01_N706_S501               2e-06          0.20013      0.230654
+#> OEP01_N701_S501                   0         0.182461       0.20181
+#> OEP01_N707_S507                   0         0.152627      0.207897
+#> OEP01_N705_S501               2e-06         0.169514      0.207342
+#> OEP01_N704_S507             1.4e-05         0.110724      0.199174
+#> ...                             ...              ...           ...
+#> OEL23_N704_S510                   0         0.287346      0.314104
+#> OEL23_N705_S502                   0         0.337264      0.297077
+#> OEL23_N706_S502               7e-06         0.244333      0.262663
+#> OEL23_N704_S503                   0         0.343203      0.338217
+#> OEL23_N703_S502               8e-06         0.259367      0.238239
+#>                 PCT_INTRONIC_BASES PCT_INTERGENIC_BASES PCT_MRNA_BASES
+#>                          <numeric>            <numeric>      <numeric>
+#> OEP01_N706_S501           0.404205             0.165009       0.430784
+#> OEP01_N701_S501           0.465702             0.150027       0.384271
+#> OEP01_N707_S507           0.511416              0.12806       0.360524
+#> OEP01_N705_S501           0.457556             0.165586       0.376856
+#> OEP01_N704_S507           0.489514             0.200573       0.309898
+#> ...                            ...                  ...            ...
+#> OEL23_N704_S510           0.250658             0.147892        0.60145
+#> OEL23_N705_S502           0.230214             0.135445       0.634341
+#> OEL23_N706_S502           0.355899             0.137097       0.506997
+#> OEL23_N704_S503           0.174696             0.143885        0.68142
+#> OEL23_N703_S502           0.376091             0.126294       0.497606
+#>                 MEDIAN_CV_COVERAGE MEDIAN_5PRIME_BIAS MEDIAN_3PRIME_BIAS
+#>                          <numeric>          <numeric>          <numeric>
+#> OEP01_N706_S501           0.843857           0.061028           0.521079
+#> OEP01_N701_S501            0.91437            0.03335           0.373993
+#> OEP01_N707_S507           0.955405           0.014606            0.49123
+#> OEP01_N705_S501            0.81663           0.101798           0.525238
+#> OEP01_N704_S507            1.19978                  0           0.706512
+#> ...                            ...                ...                ...
+#> OEL23_N704_S510           0.698455           0.198224           0.419745
+#> OEL23_N705_S502           0.830816           0.105091           0.398755
+#> OEL23_N706_S502           0.805627           0.103363           0.431862
+#> OEL23_N704_S503           0.745201           0.118615            0.38422
+#> OEL23_N703_S502           0.711685           0.196725           0.377926
+#>                     CreER ERCC_reads
+#>                 <numeric>  <numeric>
+#> OEP01_N706_S501         1      10516
+#> OEP01_N701_S501      3022       9331
+#> OEP01_N707_S507      2329       7386
+#> OEP01_N705_S501       717       6387
+#> OEP01_N704_S507        60        992
+#> ...                   ...        ...
+#> OEL23_N704_S510       659          0
+#> OEL23_N705_S502      1552          0
+#> OEL23_N706_S502         0          0
+#> OEL23_N704_S503         0          0
+#> OEL23_N703_S502      2222          0
 ```
 
 
@@ -281,10 +341,7 @@ mfilt <- metric_sample_filter(counts(fletcher),
 mfilt <- !apply(simplify2array(mfilt[!is.na(mfilt)]), 1, any)
 filtered <- fletcher[, mfilt]
 dim(filtered)
-```
-
-```
-## [1] 28284   747
+#> [1] 28284   747
 ```
 
 After sample filtering, we are left with 747 good quality cells.
@@ -299,20 +356,17 @@ We can use to functions from the `clusterExperiment` package to compute a filter
 filtered <- makeFilterStats(filtered, filterStats="var", transFun = log1p)
 filtered <- filterData(filtered, percentile=1000, filterStats="var")
 filtered
-```
-
-```
-## class: SingleCellExperiment 
-## dim: 1000 747 
-## metadata(0):
-## assays(1): counts
-## rownames(1000): Cbr2 Cyp2f2 ... Rnf13 Atp7b
-## rowData names(1): var
-## colnames(747): OEP01_N706_S501 OEP01_N701_S501 ... OEL23_N704_S503
-##   OEL23_N703_S502
-## colData names(19): Experiment Batch ... CreER ERCC_reads
-## reducedDimNames(0):
-## spikeNames(0):
+#> class: SingleCellExperiment 
+#> dim: 1000 747 
+#> metadata(0):
+#> assays(1): counts
+#> rownames(1000): Cbr2 Cyp2f2 ... Rnf13 Atp7b
+#> rowData names(1): var
+#> colnames(747): OEP01_N706_S501 OEP01_N701_S501 ... OEL23_N704_S503
+#>   OEL23_N703_S502
+#> colData names(19): Experiment Batch ... CreER ERCC_reads
+#> reducedDimNames(0):
+#> spikeNames(0):
 ```
 
 In the original work [@Fletcher2017], cells were clustered into 14 different clusters, with 151 cells not assigned to any cluster (i.e., cluster label of `-2`). 
@@ -325,12 +379,9 @@ col_clus <- c("transparent", "#1B9E77", "antiquewhite2", "cyan", "#E7298A",
               "#B3DE69", "#FF7F00", "#A6761D", "#1F78B4")
 names(col_clus) <- sort(unique(publishedClusters))
 table(publishedClusters)
-```
-
-```
-## publishedClusters
-##  -2   1   2   3   4   5   7   8   9  10  11  12  14  15 
-## 151  90  25  54  35  93  58  27  74  26  21  35  26  32
+#> publishedClusters
+#>  -2   1   2   3   4   5   7   8   9  10  11  12  14  15 
+#> 151  90  25  54  35  93  58  27  74  26  21  35  26  32
 ```
 
 ## Normalization and dimensionality reduction: ZINB-WaVE
@@ -365,22 +416,13 @@ The function `zinbwave` returns a `SingleCellExperiment` object that includes no
 
 ```r
 assayNames(clustered)
-```
-
-```
-## [1] "normalizedValues" "residuals"        "counts"
-```
-
-```r
+#> [1] "normalizedValues" "residuals"        "counts"
 norm <- assay(clustered, "normalizedValues")
 norm[1:3,1:3]
-```
-
-```
-##        OEP01_N706_S501 OEP01_N701_S501 OEP01_N707_S507
-## Cbr2          4.531898        4.369185       -4.142982
-## Cyp2f2        4.359680        4.324476        4.124527
-## Gstm1         4.724216        4.621898        4.403587
+#>        OEP01_N706_S501 OEP01_N701_S501 OEP01_N707_S507
+#> Cbr2          4.531898        4.369185       -4.142982
+#> Cyp2f2        4.359680        4.324476        4.124527
+#> Gstm1         4.724216        4.621898        4.403587
 ```
 
 ### Dimensionality reduction
@@ -390,30 +432,15 @@ The `zinbwave` function's main use is to perform dimensionality reduction. The r
 
 ```r
 reducedDimNames(clustered)
-```
-
-```
-## [1] "zinbwave"
-```
-
-```r
+#> [1] "zinbwave"
 W <- reducedDim(clustered, "zinbwave")
 dim(W)
-```
-
-```
-## [1] 747  50
-```
-
-```r
+#> [1] 747  50
 W[1:3, 1:3]
-```
-
-```
-##                        W1        W2          W3
-## OEP01_N706_S501 0.5494761 1.1745361 -0.93175747
-## OEP01_N701_S501 0.4116797 0.3015379 -0.46922527
-## OEP01_N707_S507 0.7394759 0.3365600 -0.07959226
+#>                        W1        W2          W3
+#> OEP01_N706_S501 0.5494761 1.1745361 -0.93175747
+#> OEP01_N701_S501 0.4116797 0.3015379 -0.46922527
+#> OEP01_N707_S507 0.7394759 0.3365600 -0.07959226
 ```
 
 
@@ -459,27 +486,24 @@ Again, the previously loaded `clustered` object already contains the results of 
 
 ```r
 clustered
-```
-
-```
-## class: ClusterExperiment 
-## dim: 1000 747 
-## reducedDimNames: zinbwave 
-## filterStats: var 
-## -----------
-## Primary cluster type: makeConsensus 
-## Primary cluster label: makeConsensus 
-## Table of clusters (of primary clustering):
-##  -1  c1  c2  c3  c4  c5  c6  c7 
-## 184 145 119 105 100  48  33  13 
-## Total number of clusterings: 13 
-## Dendrogram run on 'makeConsensus' (cluster index: 1)
-## -----------
-## Workflow progress:
-## clusterMany run? Yes 
-## makeConsensus run? Yes 
-## makeDendrogram run? Yes 
-## mergeClusters run? No
+#> class: ClusterExperiment 
+#> dim: 1000 747 
+#> reducedDimNames: zinbwave 
+#> filterStats: var 
+#> -----------
+#> Primary cluster type: makeConsensus 
+#> Primary cluster label: makeConsensus 
+#> Table of clusters (of primary clustering):
+#>  -1  c1  c2  c3  c4  c5  c6  c7 
+#> 184 145 119 105 100  48  33  13 
+#> Total number of clusterings: 13 
+#> Dendrogram run on 'makeConsensus' (cluster index: 1)
+#> -----------
+#> Workflow progress:
+#> clusterMany run? Yes 
+#> makeConsensus run? Yes 
+#> makeDendrogram run? Yes 
+#> mergeClusters run? No
 ```
 
 Note that the results of the `RSEC` function is an object of the `ClusterExperiment` class, which extends the `SingleCellExperiment` class, by adding additional information on the clustering results.
@@ -487,32 +511,23 @@ Note that the results of the `RSEC` function is an object of the `ClusterExperim
 
 ```r
 is(clustered, "SingleCellExperiment")
-```
-
-```
-## [1] TRUE
-```
-
-```r
+#> [1] TRUE
 slotNames(clustered)
-```
-
-```
-##  [1] "transformation"            "clusterMatrix"            
-##  [3] "primaryIndex"              "clusterInfo"              
-##  [5] "clusterTypes"              "dendro_samples"           
-##  [7] "dendro_clusters"           "dendro_index"             
-##  [9] "dendro_outbranch"          "coClustering"             
-## [11] "clusterLegend"             "orderSamples"             
-## [13] "merge_index"               "merge_dendrocluster_index"
-## [15] "merge_method"              "merge_demethod"           
-## [17] "merge_cutoff"              "merge_nodeProp"           
-## [19] "merge_nodeMerge"           "int_elementMetadata"      
-## [21] "int_colData"               "int_metadata"             
-## [23] "reducedDims"               "rowRanges"                
-## [25] "colData"                   "assays"                   
-## [27] "NAMES"                     "elementMetadata"          
-## [29] "metadata"
+#>  [1] "transformation"            "clusterMatrix"            
+#>  [3] "primaryIndex"              "clusterInfo"              
+#>  [5] "clusterTypes"              "dendro_samples"           
+#>  [7] "dendro_clusters"           "dendro_index"             
+#>  [9] "dendro_outbranch"          "coClustering"             
+#> [11] "clusterLegend"             "orderSamples"             
+#> [13] "merge_index"               "merge_dendrocluster_index"
+#> [15] "merge_method"              "merge_demethod"           
+#> [17] "merge_cutoff"              "merge_nodeProp"           
+#> [19] "merge_nodeMerge"           "int_elementMetadata"      
+#> [21] "int_colData"               "int_metadata"             
+#> [23] "reducedDims"               "rowRanges"                
+#> [25] "colData"                   "assays"                   
+#> [27] "NAMES"                     "elementMetadata"          
+#> [29] "metadata"
 ```
 
 The resulting candidate clusterings can be visualized using the `plotClusters` function (Figure \@ref(fig:examinemakeConsensus)), where columns correspond to cells and rows to different clusterings. Each sample is color-coded based on its clustering for that row, where the colors have been chosen to try to match up clusters that show large overlap accross rows. The first row correspond to a consensus clustering across all candidate clusterings.
@@ -544,12 +559,9 @@ The distribution of cells across the consensus clusters can be visualized in Fig
 
 ```r
 table(primaryClusterNamed(clustered))
-```
-
-```
-## 
-##  -1  c1  c2  c3  c4  c5  c6  c7 
-## 184 145 119 105 100  48  33  13
+#> 
+#>  -1  c1  c2  c3  c4  c5  c6  c7 
+#> 184 145 119 105 100  48  33  13
 ```
 
 
@@ -640,25 +652,22 @@ From the original published work, we know that the starting cluster should corre
 
 ```r
 table(data.frame(original = publishedClusters, ours = primaryClusterNamed(clustered)))
-```
-
-```
-##         ours
-## original -1 c1 c2 c3 c4 c5 c6 c7
-##       -2 55 45 30  5  6  1  3  6
-##       1  44 46  0  0  0  0  0  0
-##       2   1  0  0  0 24  0  0  0
-##       3   2  2  1  0 49  0  0  0
-##       4   2  2 31  0  0  0  0  0
-##       5  44 47  2  0  0  0  0  0
-##       7   4  0 54  0  0  0  0  0
-##       8  26  1  0  0  0  0  0  0
-##       9   0  0  1 65  1  0  0  7
-##       10  1  0  0  0  0 25  0  0
-##       11  2  2  0  0 17  0  0  0
-##       12  0  0  0 35  0  0  0  0
-##       14  2  0  0  0  2 22  0  0
-##       15  1  0  0  0  1  0 30  0
+#>         ours
+#> original -1 c1 c2 c3 c4 c5 c6 c7
+#>       -2 55 45 30  5  6  1  3  6
+#>       1  44 46  0  0  0  0  0  0
+#>       2   1  0  0  0 24  0  0  0
+#>       3   2  2  1  0 49  0  0  0
+#>       4   2  2 31  0  0  0  0  0
+#>       5  44 47  2  0  0  0  0  0
+#>       7   4  0 54  0  0  0  0  0
+#>       8  26  1  0  0  0  0  0  0
+#>       9   0  0  1 65  1  0  0  7
+#>       10  1  0  0  0  0 25  0  0
+#>       11  2  2  0  0 17  0  0  0
+#>       12  0  0  0 35  0  0  0  0
+#>       14  2  0  0  0  2 22  0  0
+#>       15  1  0  0  0  1  0 30  0
 ```
 
 Cluster name | Description | Color | Correspondence
@@ -679,6 +688,7 @@ pseudoCe <- clustered[,!primaryClusterNamed(clustered) %in% c("-1")]
 X <- reducedDim(pseudoCe,type="zinbwave")
 mds <- cmdscale(dist(X), eig = TRUE, k = 4)
 lineages <- slingshot(mds$points, clusterLabels = primaryClusterNamed(pseudoCe), start.clus = "c1")
+#> Using full covariance matrix
 ```
 
 Before discussing the simultaneous principal curves, we examine the global structure of the lineages by plotting the MST on the clusters. This shows that our implementation has recovered the lineages found in the published work (Figure \@ref(fig:tree)). The `slingshot` package also includes functionality for 3-dimensional visualization as in Figure \@ref(fig:stemcelldiff), using the `plot3d` function from the package `rgl`.
@@ -709,23 +719,20 @@ pairs(lineages, type="curves", col = colorCl)
 
 ```r
 lineages
-```
-
-```
-## class: SlingshotDataSet 
-## 
-##  Samples Dimensions
-##      563          4
-## 
-## lineages: 3 
-## Lineage1: c1  c4  c5  c7  c3  
-## Lineage2: c1  c4  c6  
-## Lineage3: c1  c2  
-## 
-## curves: 3 
-## Curve1: Length: 9.5222	Samples: 361.18
-## Curve2: Length: 7.8207	Samples: 234.02
-## Curve3: Length: 4.2823	Samples: 254.86
+#> class: SlingshotDataSet 
+#> 
+#>  Samples Dimensions
+#>      563          4
+#> 
+#> lineages: 3 
+#> Lineage1: c1  c4  c5  c7  c3  
+#> Lineage2: c1  c4  c6  
+#> Lineage3: c1  c2  
+#> 
+#> curves: 3 
+#> Curve1: Length: 9.5222	Samples: 361.18
+#> Curve2: Length: 7.8207	Samples: 234.02
+#> Curve3: Length: 4.2823	Samples: 254.86
 ```
 
 As an alternative, we could have incorporated the MDS results into the `clustered` object and applied `slingshot` directly to it. Here, we need to specify that we want to use the MDS results, because `slingshot` would otherwise use the first element of the `reducedDims` list (in this case, the 10-dimensional `W` matrix from `zinbwave`).
@@ -734,127 +741,119 @@ As an alternative, we could have incorporated the MDS results into the `clustere
 ```r
 reducedDim(pseudoCe, "MDS") <- mds$points
 pseudoCe <- slingshot(pseudoCe, reducedDim = "MDS", start.clus = "c1")
+#> Using full covariance matrix
 pseudoCe
-```
-
-```
-## class: ClusterExperiment 
-## dim: 1000 563 
-## reducedDimNames: zinbwave MDS 
-## filterStats: var 
-## -----------
-## Primary cluster type: makeConsensus 
-## Primary cluster label: makeConsensus 
-## Table of clusters (of primary clustering):
-##  c1  c2  c3  c4  c5  c6  c7 
-## 145 119 105 100  48  33  13 
-## Total number of clusterings: 14 
-## No dendrogram present
-## -----------
-## Workflow progress:
-## clusterMany run? Yes 
-## makeConsensus run? Yes 
-## makeDendrogram run? No 
-## mergeClusters run? No
-```
-
-```r
+#> class: ClusterExperiment 
+#> dim: 1000 563 
+#> reducedDimNames: zinbwave MDS 
+#> filterStats: var 
+#> -----------
+#> Primary cluster type: makeConsensus 
+#> Primary cluster label: makeConsensus 
+#> Table of clusters (of primary clustering):
+#>  c1  c2  c3  c4  c5  c6  c7 
+#> 145 119 105 100  48  33  13 
+#> Total number of clusterings: 14 
+#> No dendrogram present
+#> -----------
+#> Workflow progress:
+#> clusterMany run? Yes 
+#> makeConsensus run? Yes 
+#> makeDendrogram run? No 
+#> mergeClusters run? No
 colData(pseudoCe)
-```
-
-```
-## DataFrame with 563 rows and 23 columns
-##                          Experiment    Batch publishedClusters    NREADS
-##                            <factor> <factor>         <numeric> <numeric>
-## OEP01_N706_S501     K5ERRY_UI_96HPT      Y01                 1   3313260
-## OEP01_N701_S501     K5ERRY_UI_96HPT      Y01                 1   2902430
-## OEP01_N707_S507     K5ERRY_UI_96HPT      Y01                 1   2307940
-## OEP01_N705_S501     K5ERRY_UI_96HPT      Y01                 1   3337400
-## OEP01_N702_S508     K5ERRY_UI_96HPT      Y01                -2    525096
-## ...                             ...      ...               ...       ...
-## OEL23_N704_S510 K5ERP63CKO_UI_14DPT      P14                -2   2407440
-## OEL23_N705_S502 K5ERP63CKO_UI_14DPT      P14                -2   2308940
-## OEL23_N706_S502 K5ERP63CKO_UI_14DPT      P14                12   2215640
-## OEL23_N704_S503 K5ERP63CKO_UI_14DPT      P14                12   2673790
-## OEL23_N703_S502 K5ERP63CKO_UI_14DPT      P14                 7   2450320
-##                  NALIGNED    RALIGN TOTAL_DUP    PRIMER
-##                 <numeric> <numeric> <numeric> <numeric>
-## OEP01_N706_S501   3167600   95.6035   47.9943 0.0154566
-## OEP01_N701_S501   2757790   95.0167    45.015 0.0182066
-## OEP01_N707_S507   2178350   94.3852   43.7832 0.0219196
-## OEP01_N705_S501   3183720   95.3952   43.2688 0.0183041
-## OEP01_N702_S508    484847   92.3349    18.806 0.0248804
-## ...                   ...       ...       ...       ...
-## OEL23_N704_S510   2305060   95.7472   47.1489 0.0159111
-## OEL23_N705_S502   2203300   95.4244   62.5638 0.0195812
-## OEL23_N706_S502   2108490   95.1637   50.6643 0.0182207
-## OEL23_N704_S503   2568300   96.0546   60.5481 0.0155611
-## OEL23_N703_S502   2363500   96.4567   48.4164 0.0122704
-##                 PCT_RIBOSOMAL_BASES PCT_CODING_BASES PCT_UTR_BASES
-##                           <numeric>        <numeric>     <numeric>
-## OEP01_N706_S501               2e-06          0.20013      0.230654
-## OEP01_N701_S501                   0         0.182461       0.20181
-## OEP01_N707_S507                   0         0.152627      0.207897
-## OEP01_N705_S501               2e-06         0.169514      0.207342
-## OEP01_N702_S508                   0         0.130247      0.230848
-## ...                             ...              ...           ...
-## OEL23_N704_S510                   0         0.287346      0.314104
-## OEL23_N705_S502                   0         0.337264      0.297077
-## OEL23_N706_S502               7e-06         0.244333      0.262663
-## OEL23_N704_S503                   0         0.343203      0.338217
-## OEL23_N703_S502               8e-06         0.259367      0.238239
-##                 PCT_INTRONIC_BASES PCT_INTERGENIC_BASES PCT_MRNA_BASES
-##                          <numeric>            <numeric>      <numeric>
-## OEP01_N706_S501           0.404205             0.165009       0.430784
-## OEP01_N701_S501           0.465702             0.150027       0.384271
-## OEP01_N707_S507           0.511416              0.12806       0.360524
-## OEP01_N705_S501           0.457556             0.165586       0.376856
-## OEP01_N702_S508           0.477167             0.161738       0.361095
-## ...                            ...                  ...            ...
-## OEL23_N704_S510           0.250658             0.147892        0.60145
-## OEL23_N705_S502           0.230214             0.135445       0.634341
-## OEL23_N706_S502           0.355899             0.137097       0.506997
-## OEL23_N704_S503           0.174696             0.143885        0.68142
-## OEL23_N703_S502           0.376091             0.126294       0.497606
-##                 MEDIAN_CV_COVERAGE MEDIAN_5PRIME_BIAS MEDIAN_3PRIME_BIAS
-##                          <numeric>          <numeric>          <numeric>
-## OEP01_N706_S501           0.843857           0.061028           0.521079
-## OEP01_N701_S501            0.91437            0.03335           0.373993
-## OEP01_N707_S507           0.955405           0.014606            0.49123
-## OEP01_N705_S501            0.81663           0.101798           0.525238
-## OEP01_N702_S508            1.13937                  0           0.671565
-## ...                            ...                ...                ...
-## OEL23_N704_S510           0.698455           0.198224           0.419745
-## OEL23_N705_S502           0.830816           0.105091           0.398755
-## OEL23_N706_S502           0.805627           0.103363           0.431862
-## OEL23_N704_S503           0.745201           0.118615            0.38422
-## OEL23_N703_S502           0.711685           0.196725           0.377926
-##                     CreER ERCC_reads slingClusters slingPseudotime_1
-##                 <numeric>  <numeric>   <character>         <numeric>
-## OEP01_N706_S501         1      10516            c1                NA
-## OEP01_N701_S501      3022       9331            c1  1.17515653761044
-## OEP01_N707_S507      2329       7386            c1  1.05748079781731
-## OEP01_N705_S501       717       6387            c1  1.60358158878545
-## OEP01_N702_S508         6       1218            c1  1.15877575705362
-## ...                   ...        ...           ...               ...
-## OEL23_N704_S510       659          0            c2                NA
-## OEL23_N705_S502      1552          0            c2                NA
-## OEL23_N706_S502         0          0            c3  8.14395128888675
-## OEL23_N704_S503         0          0            c3  8.53434676157714
-## OEL23_N703_S502      2222          0            c2                NA
-##                 slingPseudotime_2 slingPseudotime_3
-##                         <numeric>         <numeric>
-## OEP01_N706_S501                NA 0.697871418266869
-## OEP01_N701_S501  1.16494701596924  1.14847054886023
-## OEP01_N707_S507  1.06066237725119  1.03504665341862
-## OEP01_N705_S501  1.60908934773813  1.44641122178585
-## OEP01_N702_S508  1.16613825160874   1.4234303656098
-## ...                           ...               ...
-## OEL23_N704_S510                NA  2.01886955959061
-## OEL23_N705_S502                NA  3.75361856214768
-## OEL23_N706_S502                NA                NA
-## OEL23_N704_S503                NA                NA
-## OEL23_N703_S502                NA  2.74672712926307
+#> DataFrame with 563 rows and 23 columns
+#>                          Experiment    Batch publishedClusters    NREADS
+#>                            <factor> <factor>         <numeric> <numeric>
+#> OEP01_N706_S501     K5ERRY_UI_96HPT      Y01                 1   3313260
+#> OEP01_N701_S501     K5ERRY_UI_96HPT      Y01                 1   2902430
+#> OEP01_N707_S507     K5ERRY_UI_96HPT      Y01                 1   2307940
+#> OEP01_N705_S501     K5ERRY_UI_96HPT      Y01                 1   3337400
+#> OEP01_N702_S508     K5ERRY_UI_96HPT      Y01                -2    525096
+#> ...                             ...      ...               ...       ...
+#> OEL23_N704_S510 K5ERP63CKO_UI_14DPT      P14                -2   2407440
+#> OEL23_N705_S502 K5ERP63CKO_UI_14DPT      P14                -2   2308940
+#> OEL23_N706_S502 K5ERP63CKO_UI_14DPT      P14                12   2215640
+#> OEL23_N704_S503 K5ERP63CKO_UI_14DPT      P14                12   2673790
+#> OEL23_N703_S502 K5ERP63CKO_UI_14DPT      P14                 7   2450320
+#>                  NALIGNED    RALIGN TOTAL_DUP    PRIMER
+#>                 <numeric> <numeric> <numeric> <numeric>
+#> OEP01_N706_S501   3167600   95.6035   47.9943 0.0154566
+#> OEP01_N701_S501   2757790   95.0167    45.015 0.0182066
+#> OEP01_N707_S507   2178350   94.3852   43.7832 0.0219196
+#> OEP01_N705_S501   3183720   95.3952   43.2688 0.0183041
+#> OEP01_N702_S508    484847   92.3349    18.806 0.0248804
+#> ...                   ...       ...       ...       ...
+#> OEL23_N704_S510   2305060   95.7472   47.1489 0.0159111
+#> OEL23_N705_S502   2203300   95.4244   62.5638 0.0195812
+#> OEL23_N706_S502   2108490   95.1637   50.6643 0.0182207
+#> OEL23_N704_S503   2568300   96.0546   60.5481 0.0155611
+#> OEL23_N703_S502   2363500   96.4567   48.4164 0.0122704
+#>                 PCT_RIBOSOMAL_BASES PCT_CODING_BASES PCT_UTR_BASES
+#>                           <numeric>        <numeric>     <numeric>
+#> OEP01_N706_S501               2e-06          0.20013      0.230654
+#> OEP01_N701_S501                   0         0.182461       0.20181
+#> OEP01_N707_S507                   0         0.152627      0.207897
+#> OEP01_N705_S501               2e-06         0.169514      0.207342
+#> OEP01_N702_S508                   0         0.130247      0.230848
+#> ...                             ...              ...           ...
+#> OEL23_N704_S510                   0         0.287346      0.314104
+#> OEL23_N705_S502                   0         0.337264      0.297077
+#> OEL23_N706_S502               7e-06         0.244333      0.262663
+#> OEL23_N704_S503                   0         0.343203      0.338217
+#> OEL23_N703_S502               8e-06         0.259367      0.238239
+#>                 PCT_INTRONIC_BASES PCT_INTERGENIC_BASES PCT_MRNA_BASES
+#>                          <numeric>            <numeric>      <numeric>
+#> OEP01_N706_S501           0.404205             0.165009       0.430784
+#> OEP01_N701_S501           0.465702             0.150027       0.384271
+#> OEP01_N707_S507           0.511416              0.12806       0.360524
+#> OEP01_N705_S501           0.457556             0.165586       0.376856
+#> OEP01_N702_S508           0.477167             0.161738       0.361095
+#> ...                            ...                  ...            ...
+#> OEL23_N704_S510           0.250658             0.147892        0.60145
+#> OEL23_N705_S502           0.230214             0.135445       0.634341
+#> OEL23_N706_S502           0.355899             0.137097       0.506997
+#> OEL23_N704_S503           0.174696             0.143885        0.68142
+#> OEL23_N703_S502           0.376091             0.126294       0.497606
+#>                 MEDIAN_CV_COVERAGE MEDIAN_5PRIME_BIAS MEDIAN_3PRIME_BIAS
+#>                          <numeric>          <numeric>          <numeric>
+#> OEP01_N706_S501           0.843857           0.061028           0.521079
+#> OEP01_N701_S501            0.91437            0.03335           0.373993
+#> OEP01_N707_S507           0.955405           0.014606            0.49123
+#> OEP01_N705_S501            0.81663           0.101798           0.525238
+#> OEP01_N702_S508            1.13937                  0           0.671565
+#> ...                            ...                ...                ...
+#> OEL23_N704_S510           0.698455           0.198224           0.419745
+#> OEL23_N705_S502           0.830816           0.105091           0.398755
+#> OEL23_N706_S502           0.805627           0.103363           0.431862
+#> OEL23_N704_S503           0.745201           0.118615            0.38422
+#> OEL23_N703_S502           0.711685           0.196725           0.377926
+#>                     CreER ERCC_reads slingClusters slingPseudotime_1
+#>                 <numeric>  <numeric>   <character>         <numeric>
+#> OEP01_N706_S501         1      10516            c1                NA
+#> OEP01_N701_S501      3022       9331            c1  1.17515653761044
+#> OEP01_N707_S507      2329       7386            c1  1.05748079781731
+#> OEP01_N705_S501       717       6387            c1  1.60358158878545
+#> OEP01_N702_S508         6       1218            c1  1.15877575705362
+#> ...                   ...        ...           ...               ...
+#> OEL23_N704_S510       659          0            c2                NA
+#> OEL23_N705_S502      1552          0            c2                NA
+#> OEL23_N706_S502         0          0            c3  8.14395128888675
+#> OEL23_N704_S503         0          0            c3  8.53434676157714
+#> OEL23_N703_S502      2222          0            c2                NA
+#>                 slingPseudotime_2 slingPseudotime_3
+#>                         <numeric>         <numeric>
+#> OEP01_N706_S501                NA 0.697871418266869
+#> OEP01_N701_S501  1.16494701596924  1.14847054886023
+#> OEP01_N707_S507  1.06066237725119  1.03504665341862
+#> OEP01_N705_S501  1.60908934773813  1.44641122178585
+#> OEP01_N702_S508  1.16613825160874   1.4234303656098
+#> ...                           ...               ...
+#> OEL23_N704_S510                NA  2.01886955959061
+#> OEL23_N705_S502                NA  3.75361856214768
+#> OEL23_N706_S502                NA                NA
+#> OEL23_N704_S503                NA                NA
+#> OEL23_N703_S502                NA  2.74672712926307
 ```
 
 The result of `slingshot` applied to a `ClusterExperiment` object is still of class `ClusterExperiment`. Note that we did not specify a set of cluster labels, implying that `slingshot` should use the default `primaryClusterNamed` vector.

@@ -12,8 +12,8 @@ Content type 'unknown' length 8012269 bytes (7.6 MB)
 ==================================================
 downloaded 7.6 MB
 
-Quitting from lines 1001-1016 (230_Isserlin_RCy3_intro.Rmd) 
-Error in data.frame(name = ora.all$res.tbl$GENE.SET, descr = ora.all$res.tbl$GENE.SET,  : 
-  arguments imply differing number of rows: 9002, 0
-Calls: <Anonymous> ... withCallingHandlers -> withVisible -> eval -> eval -> data.frame
+Quitting from lines 928-963 (230_Isserlin_RCy3_intro.Rmd) 
+Error in readSE(assay.file = sumexpr_filename, cdat.file = sumexpr_cdat_filename,  : 
+  could not find function "readSE"
+Calls: <Anonymous> ... handle -> withCallingHandlers -> withVisible -> eval -> eval
 Execution halted

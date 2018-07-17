@@ -1263,7 +1263,7 @@ GRCh38TxDb
 ## # exon_nrow: 675836
 ## # cds_nrow: 270225
 ## # Db created by: GenomicFeatures package from Bioconductor
-## # Creation time: 2018-07-17 06:43:07 -0400 (Tue, 17 Jul 2018)
+## # Creation time: 2018-07-17 10:15:14 -0400 (Tue, 17 Jul 2018)
 ## # GenomicFeatures version at creation time: 1.33.0
 ## # RSQLite version at creation time: 2.1.1
 ## # DBSCHEMAVERSION: 1.2
@@ -1289,10 +1289,10 @@ listMarts()
 
 ```
 ##                biomart               version
-## 1 ENSEMBL_MART_ENSEMBL      Ensembl Genes 92
-## 2   ENSEMBL_MART_MOUSE      Mouse strains 92
-## 3     ENSEMBL_MART_SNP  Ensembl Variation 92
-## 4 ENSEMBL_MART_FUNCGEN Ensembl Regulation 92
+## 1 ENSEMBL_MART_ENSEMBL      Ensembl Genes 93
+## 2   ENSEMBL_MART_MOUSE      Mouse strains 93
+## 3     ENSEMBL_MART_SNP  Ensembl Variation 93
+## 4 ENSEMBL_MART_FUNCGEN Ensembl Regulation 93
 ```
 ### biomaRt data sets
 

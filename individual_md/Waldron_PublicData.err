@@ -36,6 +36,21 @@ Welcome to Bioconductor
 
 Setting options('download.file.method.GEOquery'='auto')
 Setting options('GEOquery.inmemory.gpl'=FALSE)
+Found 1 file(s)
+GSE103512_series_matrix.txt.gz
+trying URL 'https://ftp.ncbi.nlm.nih.gov/geo/series/GSE103nnn/GSE103512/matrix/GSE103512_series_matrix.txt.gz'
+Content type 'application/x-gzip' length 82939292 bytes (79.1 MB)
+==================================================
+downloaded 79.1 MB
+
+Parsed with column specification:
+cols(
+  .default = col_double(),
+  ID_REF = col_character()
+)
+See spec(...) for full column specifications.
+File stored at: 
+/tmp/RtmpW0FUyF/GPL13158.soft
 Loading required package: GenomicRanges
 Loading required package: stats4
 Loading required package: S4Vectors
@@ -109,10 +124,16 @@ ooo Check if there results for the query
 o Preparing output
 -------------------
 Downloading data for project TCGA-ACC
-Of the 79 files for download 79 already exist.
-All samples have been already downloaded
+GDCdownload will download 79 files. A total of 34.286371 MB
+Downloading chunk 1 of 8 (10 files, size = 4.339362 MB) as Sat_Jul_14_17_12_47_2018_0.tar.gz
+Downloading chunk 2 of 8 (10 files, size = 4.338631 MB) as Sat_Jul_14_17_12_47_2018_1.tar.gz
+Downloading chunk 3 of 8 (10 files, size = 4.342654 MB) as Sat_Jul_14_17_12_47_2018_2.tar.gz
+Downloading chunk 4 of 8 (10 files, size = 4.341223 MB) as Sat_Jul_14_17_12_47_2018_3.tar.gz
+Downloading chunk 5 of 8 (10 files, size = 4.337931 MB) as Sat_Jul_14_17_12_47_2018_4.tar.gz
+Downloading chunk 6 of 8 (10 files, size = 4.33881 MB) as Sat_Jul_14_17_12_47_2018_5.tar.gz
+Downloading chunk 7 of 8 (10 files, size = 4.340974 MB) as Sat_Jul_14_17_12_47_2018_6.tar.gz
+Downloading chunk 8 of 8 (9 files, size = 3.906786 MB) as Sat_Jul_14_17_12_47_2018_7.tar.gz
 Downloading genome information (try:0) Using: Homo sapiens genes (GRCh37.p13)
-Loading from disk
 Starting to add information to samples
  => Add clinical information to samples
 Add FFPE information. More information at: 
@@ -154,9 +175,9 @@ Content type 'application/octet-stream' length 3130229 bytes (3.0 MB)
 ==================================================
 downloaded 3.0 MB
 
-output file: Waldron_PublicData.knit.md
-
-pandoc: Duplicate note reference `1' "source" (line 1134, column 1)
-pandoc: Filter pandoc-citeproc not found
-Error: pandoc document conversion failed with error 85
+Failed with error:  'there is no package called 'phyloseq''
+Quitting from lines 954-955 (Waldron_PublicData.Rmd) 
+Error in ExpressionSet2phyloseq(esl[[1]], phylogenetictree = TRUE) : 
+  Please install the 'phyloseq' package to make phyloseq objects
+Calls: <Anonymous> ... withVisible -> eval -> eval -> ExpressionSet2phyloseq
 Execution halted

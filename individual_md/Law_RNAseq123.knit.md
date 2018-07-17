@@ -224,13 +224,6 @@ library(Mus.musculus)
 
 ```r
 dir.create("Law_RNAseq123")
-```
-
-```
-## Warning in dir.create("Law_RNAseq123"): 'Law_RNAseq123' already exists
-```
-
-```r
 setwd("Law_RNAseq123")
 
 url <- "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE63310&format=file"
