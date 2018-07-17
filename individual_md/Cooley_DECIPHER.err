@@ -1,0 +1,7 @@
+
+
+processing file: Cooley_DECIPHER.Rmd
+Quitting from lines 80-86 (Cooley_DECIPHER.Rmd) 
+Error in readChar(con, 5L, useBytes = TRUE) : cannot open the connection
+Calls: <Anonymous> ... withCallingHandlers -> withVisible -> eval -> eval -> load -> readChar
+Execution halted
