@@ -100,7 +100,7 @@ to a Biologist.
 
 Map a known ID to other functional or positional information
 
-<img src="./.MacDonald_Annotation/mapping.png" width="75%" />
+<img src="./.MacDonald_Annotation/mapping.png" width="640" />
 
 
 ### Specific goal
@@ -110,14 +110,12 @@ information
 
 <img src="./.MacDonald_Annotation/boxes.png" width="75%" />
 
-
 The end result might be as simple as a data.frame or HTML table, or as complex as a
 `RangedSummarizedExperiment`
 
 ### Data containers
 
 <img src="./.MacDonald_Annotation/eset.png" width="75%" />
-
 
 ### ExpressionSet
 
@@ -683,46 +681,42 @@ src
 #>   id_transcript, ranges_cds, ranges_exon, ranges_gene, ranges_tx
 ```
 
-### Organism.dply example
+### Organism.dplyr
+
+Get promoters from a TxDb object (we use a small version)
 
 
 ```r
-# TxTb function
+
+options(width = 120)
 promoters(src)
 #> <SQL>
 #> SELECT *
 #> FROM `ranges_tx`
 #> GRanges object with 88 ranges and 2 metadata columns:
-#>                      seqnames              ranges strand |     tx_id
-#>                         <Rle>           <IRanges>  <Rle> | <integer>
-#>   uc001hzz.2             chr1 243843037-243845236      - |     15880
-#>   uc021plu.1             chr1 243843385-243845584      - |     15881
-#>   uc001iab.3             chr1 243843083-243845282      - |     15882
-#>   uc057qvr.1             chr1 243849929-243852128      - |     15883
-#>   uc057qvt.1             chr1 243614947-243617146      - |     15884
-#>          ...              ...                 ...    ... .       ...
-#>   uc064xqh.1 chrUn_GL000220v1       110025-112224      + |    197741
-#>   uc064xqi.1 chrUn_GL000220v1       112151-114350      + |    197742
-#>   uc064xqj.1 chrUn_GL000220v1       115428-117627      + |    197743
-#>   uc064xqk.1 chrUn_GL000220v1       116197-118396      + |    197744
-#>   uc033dnj.2 chrUn_GL000220v1       153997-156196      + |    197750
-#>                  tx_name
-#>              <character>
-#>   uc001hzz.2  uc001hzz.2
-#>   uc021plu.1  uc021plu.1
-#>   uc001iab.3  uc001iab.3
-#>   uc057qvr.1  uc057qvr.1
-#>   uc057qvt.1  uc057qvt.1
-#>          ...         ...
-#>   uc064xqh.1  uc064xqh.1
-#>   uc064xqi.1  uc064xqi.1
-#>   uc064xqj.1  uc064xqj.1
-#>   uc064xqk.1  uc064xqk.1
-#>   uc033dnj.2  uc033dnj.2
+#>                      seqnames              ranges strand |     tx_id     tx_name
+#>                         <Rle>           <IRanges>  <Rle> | <integer> <character>
+#>   uc001hzz.2             chr1 243843037-243845236      - |     15880  uc001hzz.2
+#>   uc021plu.1             chr1 243843385-243845584      - |     15881  uc021plu.1
+#>   uc001iab.3             chr1 243843083-243845282      - |     15882  uc001iab.3
+#>   uc057qvr.1             chr1 243849929-243852128      - |     15883  uc057qvr.1
+#>   uc057qvt.1             chr1 243614947-243617146      - |     15884  uc057qvt.1
+#>          ...              ...                 ...    ... .       ...         ...
+#>   uc064xqh.1 chrUn_GL000220v1       110025-112224      + |    197741  uc064xqh.1
+#>   uc064xqi.1 chrUn_GL000220v1       112151-114350      + |    197742  uc064xqi.1
+#>   uc064xqj.1 chrUn_GL000220v1       115428-117627      + |    197743  uc064xqj.1
+#>   uc064xqk.1 chrUn_GL000220v1       116197-118396      + |    197744  uc064xqk.1
+#>   uc033dnj.2 chrUn_GL000220v1       153997-156196      + |    197750  uc033dnj.2
 #>   -------
 #>   seqinfo: 455 sequences (1 circular) from hg38 genome
+```
+### Organism.dplyr
 
-# see a table in database
+Extract a table from the underlying database
+
+
+```r
+
 tbl(src, "id")
 #> # Source:   table<id> [?? x 6]
 #> # Database: sqlite 3.22.0 []
@@ -739,8 +733,14 @@ tbl(src, "id")
 #>  9 10     8p22     ENSG00000156006 NAT2   N-acetyltransferase 2  NAT2    
 #> 10 100    20q13.12 ENSG00000196839 ADA    adenosine deaminase    ADA     
 #> # ... with more rows
+```
 
-# information from two tables 
+### Organism.dplyr
+Make a complex query between tables in the underlying database
+
+
+```r
+
 inner_join(tbl(src, "id"), tbl(src, "ranges_gene")) %>%
 		    filter(symbol %in% c("ADA", "NAT2")) %>%
 		    dplyr::select(gene_chrom, gene_start, gene_end,
@@ -756,6 +756,7 @@ inner_join(tbl(src, "id"), tbl(src, "ranges_gene")) %>%
 #> 4 chr8         18391245 18401218 +           NAT2   NAT2  8p22    
 #> 5 chr20        44619522 44651742 -           ADA    ADA   20q13.12
 ```
+
 
 ### Organism.dplyr exercises
 
@@ -780,12 +781,9 @@ using `available.genomes`
 
 library(BSgenome)
 head(available.genomes())
-#> [1] "BSgenome.Alyrata.JGI.v1"                
-#> [2] "BSgenome.Amellifera.BeeBase.assembly4"  
-#> [3] "BSgenome.Amellifera.UCSC.apiMel2"       
-#> [4] "BSgenome.Amellifera.UCSC.apiMel2.masked"
-#> [5] "BSgenome.Athaliana.TAIR.04232008"       
-#> [6] "BSgenome.Athaliana.TAIR.TAIR9"
+#> [1] "BSgenome.Alyrata.JGI.v1"                 "BSgenome.Amellifera.BeeBase.assembly4"  
+#> [3] "BSgenome.Amellifera.UCSC.apiMel2"        "BSgenome.Amellifera.UCSC.apiMel2.masked"
+#> [5] "BSgenome.Athaliana.TAIR.04232008"        "BSgenome.Athaliana.TAIR.TAIR9"
 ```
 ### BSgenome packages
 
@@ -803,19 +801,18 @@ Hsapiens
 #> # release date: Feb. 2009
 #> # release name: Genome Reference Consortium GRCh37
 #> # 93 sequences:
-#> #   chr1                  chr2                  chr3                 
-#> #   chr4                  chr5                  chr6                 
-#> #   chr7                  chr8                  chr9                 
-#> #   chr10                 chr11                 chr12                
-#> #   chr13                 chr14                 chr15                
-#> #   ...                   ...                   ...                  
-#> #   chrUn_gl000235        chrUn_gl000236        chrUn_gl000237       
-#> #   chrUn_gl000238        chrUn_gl000239        chrUn_gl000240       
-#> #   chrUn_gl000241        chrUn_gl000242        chrUn_gl000243       
-#> #   chrUn_gl000244        chrUn_gl000245        chrUn_gl000246       
-#> #   chrUn_gl000247        chrUn_gl000248        chrUn_gl000249       
-#> # (use 'seqnames()' to see all the sequence names, use the '$' or '[['
-#> # operator to access a given sequence)
+#> #   chr1                  chr2                  chr3                  chr4                  chr5                 
+#> #   chr6                  chr7                  chr8                  chr9                  chr10                
+#> #   chr11                 chr12                 chr13                 chr14                 chr15                
+#> #   chr16                 chr17                 chr18                 chr19                 chr20                
+#> #   chr21                 chr22                 chrX                  chrY                  chrM                 
+#> #   ...                   ...                   ...                   ...                   ...                  
+#> #   chrUn_gl000227        chrUn_gl000228        chrUn_gl000229        chrUn_gl000230        chrUn_gl000231       
+#> #   chrUn_gl000232        chrUn_gl000233        chrUn_gl000234        chrUn_gl000235        chrUn_gl000236       
+#> #   chrUn_gl000237        chrUn_gl000238        chrUn_gl000239        chrUn_gl000240        chrUn_gl000241       
+#> #   chrUn_gl000242        chrUn_gl000243        chrUn_gl000244        chrUn_gl000245        chrUn_gl000246       
+#> #   chrUn_gl000247        chrUn_gl000248        chrUn_gl000249                                                   
+#> # (use 'seqnames()' to see all the sequence names, use the '$' or '[[' operator to access a given sequence)
 ```
 
 ### BSgenome packages
@@ -829,11 +826,11 @@ passing in a GRanges object, to get just a region.
 
 getSeq(Hsapiens, "chr1")
 #>   249250621-letter "DNAString" instance
-#> seq: NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN...NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
+#> seq: NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN...NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
 getSeq(Hsapiens, gns["5467",])
 #>   A DNAStringSet instance of length 1
-#>     width seq                                          names               
-#> [1] 85634 GCGGAGCGTGTGACGCTGCGG...TATTTAAGAGCTGACTGGAA 5467
+#>     width seq                                                                                       names               
+#> [1] 85634 GCGGAGCGTGTGACGCTGCGGCCGCCGCGGACCTGGGGATTAA...ACTTTAAATAAATGGGAATTAAATATTTAAGAGCTGACTGGAA 5467
 ```
 The Biostrings package contains most of the code for dealing with
 these `*StringSet` objects - please see the Biostrings vignettes and
@@ -860,12 +857,11 @@ hub <- AnnotationHub()
 hub
 #> AnnotationHub with 44925 records
 #> # snapshotDate(): 2018-06-27 
-#> # $dataprovider: BroadInstitute, Ensembl, UCSC, ftp://ftp.ncbi.nlm.nih....
-#> # $species: Homo sapiens, Mus musculus, Drosophila melanogaster, Bos ta...
-#> # $rdataclass: GRanges, BigWigFile, FaFile, TwoBitFile, Rle, OrgDb, Cha...
-#> # additional mcols(): taxonomyid, genome, description,
-#> #   coordinate_1_based, maintainer, rdatadateadded, preparerclass,
-#> #   tags, rdatapath, sourceurl, sourcetype 
+#> # $dataprovider: BroadInstitute, Ensembl, UCSC, ftp://ftp.ncbi.nlm.nih.gov/gene/DATA/, Haemcode, Inparanoid8, Pazar,...
+#> # $species: Homo sapiens, Mus musculus, Drosophila melanogaster, Bos taurus, Pan troglodytes, Rattus norvegicus, Dan...
+#> # $rdataclass: GRanges, BigWigFile, FaFile, TwoBitFile, Rle, OrgDb, ChainFile, EnsDb, Inparanoid8Db, TxDb
+#> # additional mcols(): taxonomyid, genome, description, coordinate_1_based, maintainer, rdatadateadded,
+#> #   preparerclass, tags, rdatapath, sourceurl, sourcetype 
 #> # retrieve records with, e.g., 'object[["AH2"]]' 
 #> 
 #>             title                                                   
@@ -899,11 +895,9 @@ queries are based on
 ```r
 
 names(mcols(hub))
-#>  [1] "title"              "dataprovider"       "species"           
-#>  [4] "taxonomyid"         "genome"             "description"       
-#>  [7] "coordinate_1_based" "maintainer"         "rdatadateadded"    
-#> [10] "preparerclass"      "tags"               "rdataclass"        
-#> [13] "rdatapath"          "sourceurl"          "sourcetype"
+#>  [1] "title"              "dataprovider"       "species"            "taxonomyid"         "genome"            
+#>  [6] "description"        "coordinate_1_based" "maintainer"         "rdatadateadded"     "preparerclass"     
+#> [11] "tags"               "rdataclass"         "rdatapath"          "sourceurl"          "sourcetype"
 ```
 
 
@@ -913,30 +907,18 @@ names(mcols(hub))
 ```r
 
 unique(hub$dataprovider)
-#>  [1] "Ensembl"                              
-#>  [2] "UCSC"                                 
-#>  [3] "RefNet"                               
-#>  [4] "Inparanoid8"                          
-#>  [5] "NHLBI"                                
-#>  [6] "ChEA"                                 
-#>  [7] "Pazar"                                
-#>  [8] "NIH Pathway Interaction Database"     
-#>  [9] "Haemcode"                             
-#> [10] "BroadInstitute"                       
-#> [11] "PRIDE"                                
-#> [12] "Gencode"                              
-#> [13] "CRIBI"                                
-#> [14] "Genoscope"                            
-#> [15] "MISO, VAST-TOOLS, UCSC"               
-#> [16] "UWashington"                          
-#> [17] "Stanford"                             
-#> [18] "dbSNP"                                
-#> [19] "BioMart"                              
-#> [20] "GeneOntology"                         
-#> [21] "KEGG"                                 
-#> [22] "URGI"                                 
-#> [23] "ftp://ftp.ncbi.nlm.nih.gov/gene/DATA/"
-#> [24] "EMBL-EBI"
+#>  [1] "Ensembl"                               "UCSC"                                 
+#>  [3] "RefNet"                                "Inparanoid8"                          
+#>  [5] "NHLBI"                                 "ChEA"                                 
+#>  [7] "Pazar"                                 "NIH Pathway Interaction Database"     
+#>  [9] "Haemcode"                              "BroadInstitute"                       
+#> [11] "PRIDE"                                 "Gencode"                              
+#> [13] "CRIBI"                                 "Genoscope"                            
+#> [15] "MISO, VAST-TOOLS, UCSC"                "UWashington"                          
+#> [17] "Stanford"                              "dbSNP"                                
+#> [19] "BioMart"                               "GeneOntology"                         
+#> [21] "KEGG"                                  "URGI"                                 
+#> [23] "ftp://ftp.ncbi.nlm.nih.gov/gene/DATA/" "EMBL-EBI"
 ```
 
 ### AnnotationHub Data classes
@@ -945,27 +927,13 @@ unique(hub$dataprovider)
 ```r
 
 unique(hub$rdataclass)
-#>  [1] "FaFile"                           
-#>  [2] "GRanges"                          
-#>  [3] "data.frame"                       
-#>  [4] "Inparanoid8Db"                    
-#>  [5] "TwoBitFile"                       
-#>  [6] "ChainFile"                        
-#>  [7] "SQLiteConnection"                 
-#>  [8] "biopax"                           
-#>  [9] "BigWigFile"                       
-#> [10] "AAStringSet"                      
-#> [11] "MSnSet"                           
-#> [12] "mzRpwiz"                          
-#> [13] "mzRident"                         
-#> [14] "list"                             
-#> [15] "TxDb"                             
-#> [16] "Rle"                              
-#> [17] "EnsDb"                            
-#> [18] "VcfFile"                          
-#> [19] "igraph"                           
-#> [20] "OrgDb"                            
-#> [21] "data.frame, DNAStringSet, GRanges"
+#>  [1] "FaFile"                            "GRanges"                           "data.frame"                       
+#>  [4] "Inparanoid8Db"                     "TwoBitFile"                        "ChainFile"                        
+#>  [7] "SQLiteConnection"                  "biopax"                            "BigWigFile"                       
+#> [10] "AAStringSet"                       "MSnSet"                            "mzRpwiz"                          
+#> [13] "mzRident"                          "list"                              "TxDb"                             
+#> [16] "Rle"                               "EnsDb"                             "VcfFile"                          
+#> [19] "igraph"                            "OrgDb"                             "data.frame, DNAStringSet, GRanges"
 ```
 ### AnnotationHub Species
 
@@ -973,8 +941,7 @@ unique(hub$rdataclass)
 ```r
 
 head(unique(hub$species))
-#> [1] "Ailuropoda melanoleuca" "Anolis carolinensis"   
-#> [3] "Bos taurus"             "Caenorhabditis elegans"
+#> [1] "Ailuropoda melanoleuca" "Anolis carolinensis"    "Bos taurus"             "Caenorhabditis elegans"
 #> [5] "Callithrix jacchus"     "Canis familiaris"
 length(unique(hub$species))
 #> [1] 1971
@@ -985,12 +952,10 @@ length(unique(hub$species))
 ```r
 
 unique(hub$sourcetype)
-#>  [1] "FASTA"        "UCSC track"   "GTF"          "TSV"         
-#>  [5] "Inparanoid"   "TwoBit"       "Chain"        "GRASP"       
-#>  [9] "Zip"          "CSV"          "BioPax"       "BioPaxLevel2"
-#> [13] "RData"        "BED"          "BigWig"       "tab"         
-#> [17] "mzTab"        "mzML"         "mzid"         "GFF"         
-#> [21] "ensembl"      "VCF"          "NCBI/ensembl" "NCBI/UniProt"
+#>  [1] "FASTA"        "UCSC track"   "GTF"          "TSV"          "Inparanoid"   "TwoBit"       "Chain"       
+#>  [8] "GRASP"        "Zip"          "CSV"          "BioPax"       "BioPaxLevel2" "RData"        "BED"         
+#> [15] "BigWig"       "tab"          "mzTab"        "mzML"         "mzid"         "GFF"          "ensembl"     
+#> [22] "VCF"          "NCBI/ensembl" "NCBI/UniProt"
 ```
 ### AnnotationHub query
 
@@ -1004,9 +969,8 @@ qry
 #> # $dataprovider: Ensembl, UCSC
 #> # $species: Homo sapiens
 #> # $rdataclass: GRanges
-#> # additional mcols(): taxonomyid, genome, description,
-#> #   coordinate_1_based, maintainer, rdatadateadded, preparerclass,
-#> #   tags, rdatapath, sourceurl, sourcetype 
+#> # additional mcols(): taxonomyid, genome, description, coordinate_1_based, maintainer, rdatadateadded,
+#> #   preparerclass, tags, rdatapath, sourceurl, sourcetype 
 #> # retrieve records with, e.g., 'object[["AH5046"]]' 
 #> 
 #>             title                                          
@@ -1108,7 +1072,7 @@ GRCh38TxDb
 #> # exon_nrow: 675836
 #> # cds_nrow: 270225
 #> # Db created by: GenomicFeatures package from Bioconductor
-#> # Creation time: 2018-07-16 15:54:15 +0000 (Mon, 16 Jul 2018)
+#> # Creation time: 2018-07-18 18:42:38 +0000 (Wed, 18 Jul 2018)
 #> # GenomicFeatures version at creation time: 1.33.0
 #> # RSQLite version at creation time: 2.1.1
 #> # DBSCHEMAVERSION: 1.2
@@ -1132,10 +1096,10 @@ can see the choices of servers that we can use:
 library(biomaRt)
 listMarts()
 #>                biomart               version
-#> 1 ENSEMBL_MART_ENSEMBL      Ensembl Genes 92
-#> 2   ENSEMBL_MART_MOUSE      Mouse strains 92
-#> 3     ENSEMBL_MART_SNP  Ensembl Variation 92
-#> 4 ENSEMBL_MART_FUNCGEN Ensembl Regulation 92
+#> 1 ENSEMBL_MART_ENSEMBL      Ensembl Genes 93
+#> 2   ENSEMBL_MART_MOUSE      Mouse strains 93
+#> 3     ENSEMBL_MART_SNP  Ensembl Variation 93
+#> 4 ENSEMBL_MART_FUNCGEN Ensembl Regulation 93
 ```
 ### biomaRt data sets
 
@@ -1147,20 +1111,13 @@ server.
 
 mart <- useMart("ENSEMBL_MART_ENSEMBL")
 head(listDatasets(mart))
-#>                       dataset                        description
-#> 1  acarolinensis_gene_ensembl     Anole lizard genes (AnoCar2.0)
-#> 2   amelanoleuca_gene_ensembl              Panda genes (ailMel1)
-#> 3     amexicanus_gene_ensembl        Cave fish genes (AstMex102)
-#> 4     anancymaae_gene_ensembl Ma's night monkey genes (Anan_2.0)
-#> 5 aplatyrhynchos_gene_ensembl          Duck genes (BGI_duck_1.0)
-#> 6        btaurus_gene_ensembl                 Cow genes (UMD3.1)
-#>        version
-#> 1    AnoCar2.0
-#> 2      ailMel1
-#> 3    AstMex102
-#> 4     Anan_2.0
-#> 5 BGI_duck_1.0
-#> 6       UMD3.1
+#>                       dataset                        description      version
+#> 1  acarolinensis_gene_ensembl     Anole lizard genes (AnoCar2.0)    AnoCar2.0
+#> 2   amelanoleuca_gene_ensembl              Panda genes (ailMel1)      ailMel1
+#> 3     amexicanus_gene_ensembl        Cave fish genes (AstMex102)    AstMex102
+#> 4     anancymaae_gene_ensembl Ma's night monkey genes (Anan_2.0)     Anan_2.0
+#> 5 aplatyrhynchos_gene_ensembl          Duck genes (BGI_duck_1.0) BGI_duck_1.0
+#> 6        btaurus_gene_ensembl                 Cow genes (UMD3.1)       UMD3.1
 ```
 ### biomaRt queries
 

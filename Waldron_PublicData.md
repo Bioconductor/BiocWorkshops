@@ -1075,11 +1075,19 @@ ACCse
 
 
 
-By default, the `curatedTCGAData()` function will only show available datasets, and not download anything. The arguments are shown here only for demonstration, the same result is obtained with no arguments:
 
 ```r
 library(curatedTCGAData)
 library(MultiAssayExperiment)
+```
+
+
+By default, the `curatedTCGAData()` function will only show available datasets,
+and not download anything. The arguments are shown here only for demonstration,
+the same result is obtained with no arguments:
+
+
+```r
 curatedTCGAData(diseaseCode = "*", assays = "*")
 #> Please see the list below for available cohorts and assays
 #> Available Cancer codes:
@@ -1176,9 +1184,6 @@ head(metadata(colData(ACCmae))[["subtypes"]])
 The *[recount](http://bioconductor.org/packages/recount)*[@Collado-Torres2017-ww] package provides uniformly processed `RangedSummarizedExperiment` objects at the gene, exon, or exon-exon junctions level, the raw counts, the phenotype metadata used, the urls to sample coverage bigWig files and mean coverage bigWig file, for every study available. The `RangedSummarizedExperiment` objects can be used for differential expression analysis. These are also accessible through a web interface [^4].
 
 
-```
-#> No methods found in package 'IRanges' for request: 'subset' when loading 'derfinder'
-```
 
 *[recount](http://bioconductor.org/packages/recount)* provides a search function:
 
@@ -1191,7 +1196,7 @@ It is not an ExperimentHub package, so downloading and serializing is slightly m
 
 ```r
 download_study(project_info$project)
-#> 2018-07-16 15:58:26 downloading file rse_gene.Rdata to SRP009615
+#> 2018-07-18 18:43:21 downloading file rse_gene.Rdata to SRP009615
 ```
 followed by loading the data
 
@@ -1267,17 +1272,15 @@ oral <- c("BritoIL_2016.metaphlan_bugs_list.oralcavity",
           "Castro-NallarE_2015.metaphlan_bugs_list.oralcavity")
 esl <- curatedMetagenomicData(oral, dryrun = FALSE)
 #> Working on BritoIL_2016.metaphlan_bugs_list.oralcavity
-#> snapshotDate(): 2018-07-16
+#> snapshotDate(): 2018-07-17
 #> see ?curatedMetagenomicData and browseVignettes('curatedMetagenomicData') for documentation
-#> downloading 1 resources
-#> retrieving 1 resource
+#> downloading 0 resources
 #> loading from cache 
 #>     '/home/mramos//.ExperimentHub/1179'
 #> Working on Castro-NallarE_2015.metaphlan_bugs_list.oralcavity
-#> snapshotDate(): 2018-07-16
+#> snapshotDate(): 2018-07-17
 #> see ?curatedMetagenomicData and browseVignettes('curatedMetagenomicData') for documentation
-#> downloading 1 resources
-#> retrieving 1 resource
+#> downloading 0 resources
 #> loading from cache 
 #>     '/home/mramos//.ExperimentHub/391'
 ```
@@ -1308,17 +1311,15 @@ See the documentation of *[phyloseq](http://bioconductor.org/packages/phyloseq)*
 
 ```r
 suppressPackageStartupMessages(library(HMP16SData))
-#> snapshotDate(): 2018-07-16
 ```
 
 *[HMP16SData](http://bioconductor.org/packages/HMP16SData)*[@Schiffer2018-qy] is a Bioconductor ExperimentData package of the Human Microbiome Project (HMP) 16S rRNA sequencing data. Taxonomic count data files are provided as downloaded from the HMP Data Analysis and Coordination Center from its QIIME pipeline. Processed data is provided as `SummarizedExperiment` class objects via *[ExperimentHub](http://bioconductor.org/packages/ExperimentHub)*. Like other ExperimentHub-based packages, a convenience function does downloading, automatic local caching, and serializing of a Bioconductor data class. This returns taxonomic counts from the V1-3 variable region of the 16S rRNA gene, along with the unrestricted participant data and phylogenetic tree. 
 
 ```r
 V13()
-#> snapshotDate(): 2018-07-16
+#> snapshotDate(): 2018-07-17
 #> see ?HMP16SData and browseVignettes('HMP16SData') for documentation
-#> downloading 1 resources
-#> retrieving 1 resource
+#> downloading 0 resources
 #> loading from cache 
 #>     '/home/mramos//.ExperimentHub/1117'
 #> class: SummarizedExperiment 
