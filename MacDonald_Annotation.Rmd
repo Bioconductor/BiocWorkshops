@@ -114,7 +114,7 @@ Map a known ID to other functional or positional information
 
 ```{r, out.wdth = "75%", echo = FALSE}
 
-knitr::include_graphics("./.MacDonald_annotation/mapping.png")
+knitr::include_graphics("./.MacDonald_Annotation/mapping.png")
 
 ```
 
@@ -126,7 +126,7 @@ information
 
 ```{r, out.width = "75%", echo = FALSE}
 
-knitr::include_graphics("./.MacDonald_annotation/boxes.png")
+knitr::include_graphics("./.MacDonald_Annotation/boxes.png")
 
 ```
 
@@ -137,7 +137,7 @@ The end result might be as simple as a data.frame or HTML table, or as complex a
 
 ```{r, out.width = "75%", echo = FALSE}
 
-knitr::include_graphics("./.MacDonald_annotation/eset.png")
+knitr::include_graphics("./.MacDonald_Annotation/eset.png")
 
 ```
 
@@ -441,7 +441,7 @@ annotations are GRanges, so you can subset by genomic locations:
 
 ```{r, out.width = "75%", echo = FALSE}
 
-knitr::include_graphics("./.MacDonald_annotation/subset.png")
+knitr::include_graphics("./.MacDonald_Annotation/subset.png")
 
 ```
 
