@@ -1,7 +1,3 @@
----
-bibliography: Lee_Plyranges/plyranges.bib
----
-
 # Fluent genomic data analysis with plyranges
 
 ## Instructor(s) name(s) and contact information
@@ -111,7 +107,7 @@ provided by core Bioconductor packages that are useful for programming with.
 This workshop is intended for new users of Bioconductor, users who are
 interested to learn about grammar based approaches for data analysis,
 and users who are interested in learning how to use R to perform analyses
-like those available in the command line packages BEDTools @Quinlan2010-gc.
+like those available in the command line packages BEDTools (@Quinlan2010-gc).
 
 If that's you, let's begin!
 
@@ -132,8 +128,8 @@ install(c("plyranges", "AnnotationHub", "airway"))
 ## What are GRanges objects?
 
 
-```{r GRanges, echo = FALSE, fig.cap="An illustration of a GRanges data object for a single sample from an RNA-seq experiment. The core components of the object include a seqname column (representing the chromosome), a ranges column which consists of start and end coordinates for a genomic region, and a strand identifier (either positive, negative, or unstranded). Metadata are included as columns to the right of the dotted line as annotations (gene\\_id) or range level covariates (score).", out.width="\\textwidth"}
-knitr::include_graphics("./Lee_Plyranges/GRanges.pdf")
+```{r GRanges, echo = FALSE, fig.cap="An illustration of a GRanges data object for a single sample from an RNA-seq experiment. The core components of the object include a seqname column (representing the chromosome), a ranges column which consists of start and end coordinates for a genomic region, and a strand identifier (either positive, negative, or unstranded). Metadata are included as columns to the right of the dotted line as annotations (gene_id) or range level covariates (score).", out.width="\\textwidth"}
+knitr::include_graphics("./Lee_Plyranges/GRanges.png")
 ```
 
 
@@ -781,5 +777,3 @@ Category               Verb                            Description
   described and categorised into one of: aggregation, unary or binary
   arithmetic, merging, modifier, or restriction. A verb is given bold
   text if its origin is from the dplyr grammar.
-
-## References

@@ -12,6 +12,11 @@ addons:
       - libglu1-mesa-dev
       - libudunits2-dev
 
+# blocklist
+branches:
+  except:
+  - master
+
 cache:
   directories:
   - $TRAVIS_BUILD_DIR/docs

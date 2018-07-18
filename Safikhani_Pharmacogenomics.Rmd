@@ -99,9 +99,9 @@ library(Biobase, verbose=FALSE)
 \subsection{Downloading PharmacoSet objects}
 We have made the PharmacoSet objects of the curated datasets available for download using functions provided in the package. A table of available PharmacoSet objects can be obtained by using the *availablePSets* function. Any of the PharmacoSets in the table can then be downloaded by calling *downloadPSet*, which saves the datasets into a directory of the users choice, and returns the data into the R session. 
 ```{r download_psets, eval=TRUE, results='hide'}
-  availablePSets()
-  GDSC <- downloadPSet("GDSC") 
-  CCLE <- downloadPSet("CCLE")
+  availablePSets(saveDir=file.path(".", "Safikhani_Pharmacogenomics"))
+  GDSC <- downloadPSet("GDSC", saveDir=file.path(".", "Safikhani_Pharmacogenomics")) 
+  CCLE <- downloadPSet("CCLE", saveDir=file.path(".", "Safikhani_Pharmacogenomics"))
 ```
 
 \section{Reproducibility}
@@ -379,7 +379,7 @@ for(method in c("ridge", "lasso", "random_forest", "svm")){
                       method=method,
                       folds.no=5,
                       sampling.no=1,
-                      features.no=100,
+                      features.no=10,
                       feature.selection="mRMR",
                       assessment=c("corr", "mCI"))
   
@@ -396,8 +396,8 @@ for(method in c("ridge", "lasso", "random_forest", "svm")){
 
 \section{Session Info}
 This document was generated with the following R version and packages loaded:
-```{r sessionInfo,echo=FALSE, results='asis'}
-  toLatex(sessionInfo())
+```{r sessionInfo}
+  sessionInfo()
 ```
 
 
