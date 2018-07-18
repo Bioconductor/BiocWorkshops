@@ -112,10 +112,9 @@ library(Organism.dplyr)
 
 Map a known ID to other functional or positional information
 
-```{r, out.width = "75%",  echo = FALSE}
+```{r, out.wdth = "75%", echo = FALSE}
 
-knitr::include_graphics("./.MacDonald_Annotation/mapping.png")
-
+knitr::include_graphics("./.MacDonald_annotation/mapping.png")
 
 ```
 
@@ -127,10 +126,9 @@ information
 
 ```{r, out.width = "75%", echo = FALSE}
 
-knitr::include_graphics("./.MacDonald_Annotation/boxes.png")
+knitr::include_graphics("./.MacDonald_annotation/boxes.png")
 
 ```
-
 
 The end result might be as simple as a data.frame or HTML table, or as complex as a
 `RangedSummarizedExperiment`
@@ -139,10 +137,9 @@ The end result might be as simple as a data.frame or HTML table, or as complex a
 
 ```{r, out.width = "75%", echo = FALSE}
 
-knitr::include_graphics("./.MacDonald_Annotation/eset.png")
+knitr::include_graphics("./.MacDonald_annotation/eset.png")
 
 ```
-
 
 ### ExpressionSet
 
@@ -442,10 +439,9 @@ txs[txs %over% gns[1:2,]]
 SummarizedExperiment objects are like ExpressionSets, but the row-wise
 annotations are GRanges, so you can subset by genomic locations:
 
-```{r, out.width = "75%",  echo = FALSE}
+```{r, out.width = "75%", echo = FALSE}
 
-knitr::include_graphics("./.MacDonald_Annotation/subset.png")
-
+knitr::include_graphics("./.MacDonald_annotation/subset.png")
 
 ```
 
@@ -524,21 +520,39 @@ src <- src_organism(dbpath = hg38light())
 src
 ```
 
-### Organism.dply example
+## Organism.dplyr 
+
+Get promoters from a TxDb object (we use a small version)
 
 ```{r, warning = FALSE}
-# TxTb function
+
+options(width = 120)
 promoters(src)
 
-# see a table in database
+```
+## Organism.dplyr 
+
+Extract a table from the underlying database
+
+```{r, warning = FALSE}
+
 tbl(src, "id")
 
-# information from two tables 
+
+```
+
+## Organism.dplyr
+Make a complex query between tables in the underlying database
+
+```{r, warning = FALSE}
+
 inner_join(tbl(src, "id"), tbl(src, "ranges_gene")) %>%
 		    filter(symbol %in% c("ADA", "NAT2")) %>%
 		    dplyr::select(gene_chrom, gene_start, gene_end,
 		    gene_strand, symbol, alias, map)
+
 ```
+
 
 ### Organism.dplyr exercises
 
