@@ -800,8 +800,8 @@ hdf5_file <- file.path(
 # NOTE: We can use rhdf5::h5ls() to take a look what is in the HDF5 file.
 #       This is very useful when working interactively!
 rhdf5::h5ls(hdf5_file)
-#>   group     name       otype  dclass     dim
-#> 0     / hdf5_mat H5I_DATASET INTEGER 105 x 2
+#>   group     name       otype  dclass  dim
+#> 0     / hdf5_mat H5I_DATASET INTEGER  x 2
 
 # We can create the HDF5Array by first creating a HDF5ArraySeed and then 
 # creating the HDF5Array.
@@ -841,7 +841,7 @@ da_hdf5
 str(da_hdf5)
 #> Formal class 'HDF5Matrix' [package "HDF5Array"] with 1 slot
 #>   ..@ seed:Formal class 'HDF5ArraySeed' [package "HDF5Array"] with 5 slots
-#>   .. .. ..@ filepath : chr "/home/lwaldron/Source/BiocWorkshops/500_Effectively_Using_the_DelayedArray_Framework/hdf5_mat.h5"
+#>   .. .. ..@ filepath : chr "/home/mramos/Source/github/BiocWorkshops/500_Effectively_Using_the_DelayedArray_Framework/hdf5_mat.h5"
 #>   .. .. ..@ name     : chr "hdf5_mat"
 #>   .. .. ..@ dim      : int [1:2] 105 2
 #>   .. .. ..@ first_val: int 1

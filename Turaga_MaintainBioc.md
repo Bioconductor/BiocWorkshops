@@ -38,12 +38,14 @@ choose to, although it is not needed.
 * Outline how to use infrastructure: 35 mins
 	* Build report
 	* Landing page badges
-	* RSS feeds
 	* Download statistics
-	* Support site, Github issues, Bioc-devel mailing list
-* Sync package with Github / Bioconductor before every change
-	* GitHub + webhooks
+	* RSS feeds
+	* Support site, Bioc-devel mailing list
+    * Github
+        * Sync package with Github / Bioconductor before every change
+	    * Github issues
 * Round up of resources available: 5 mins
+* Acknowledgements
 
 ### Workshop goals and objectives
 
@@ -58,7 +60,7 @@ choose to, although it is not needed.
 
 ## Introduction
 
-**Maintainer** - Who should people contact if they have a problem with
+Maintainer - Who should people contact if they have a problem with
 this package? You must have someones name and email address here. You
 must make sure this is up to date and accurate.
 
@@ -70,28 +72,49 @@ reasons.
 
 	Maintainer: Who to complain to <your_fault@fix.it>
 
+or
 
-Interchangable terminology
+	Authors@R: c(
+		person("Complain", "here", email="your_fault@fix.it", role=c("aut", "cre"),
+		person("Don't", "Complain", role="aut"))
+	)
+
+
+**NOTE:** There should be only 1 maintainer (one "cre"). But all authors
+get credit for the package.
+
+Interchangeable terminology
 
 *Bioconductor maintainers* <-> *Bioconductor developers* <-> *Package developer* <-> *developer*
 
 
 ## Why maintain your package
 
-1. It's good practice that users appreciate.
+1. Changes in underlying code (upstream dependencies of your package)
+   might break your package.
 
-1. It'll lead to wide spread usage of your package.
+1. Packages using web resources might fail because of change of
+   location of these resources.
 
-1. It's **required**.
+1. Bug fixes reported or discovered due to usage.
+
+1. Feature requests from users.
+
+1. Improvements in the science behind your package, which lead to
+   updates.
+
+1. It leads to wide spread usage of your package.
+
+1. It's **required**, also a good practice that users appreciate.
 
 1. Poorly maintained packages get deprecated if they fail build and
-   check on Bioconductor during RELEASE cycles. (Bioconductor is
+   check on Bioconductor during release cycles. (Bioconductor is
    fairly serious about this)
 
 ## Infrastructure used for maintenance
 
 **Build machines** are dedicated towards building your package
-*daily*. As a maintianer it's useful to check your package build
+*daily*. As a maintainer it's useful to check your package build
 report once a week, both in the current RELEASE and DEVEL cycle.
 
 http://bioconductor.org/checkResults/
@@ -104,15 +127,26 @@ control system.
 
 ## Outline how to use infrastructure
 
-Link with most important resources,
+Everything you need is on the Bioconductor website. As a developer the link
+with most important resources,
 
 http://bioconductor.org/developers/
 
 ###	Build report
 
-Bioconductor RELEASE version http://bioconductor.org/checkResults/release/bioc-LATEST/
+Report of the build status of your package. It posts at around 11AM
+EST (can change sometimes) and is located on the time stamp at the top
+of the page.
 
-Bioconductor development version http://bioconductor.org/checkResults/devel/bioc-LATEST/
+Two versions of the build report.
+
+* Bioconductor RELEASE version
+
+	http://bioconductor.org/checkResults/release/bioc-LATEST/
+
+* Bioconductor development version
+
+	http://bioconductor.org/checkResults/devel/bioc-LATEST/
 
 Six build machines in total at Bioconductor.
 
@@ -122,7 +156,7 @@ DEVEL (3 for devel)
 2. Windows (tokay1)
 3. OS X (merida1)
 
-![Build machines on DEVEL](Turaga-MaintainBioc/build-machines-devel.png)
+![Build machines on DEVEL](./Turaga_MaintainBioc/build-machines-devel.png)
 
 RELEASE (3 for release)
 
@@ -130,17 +164,62 @@ RELEASE (3 for release)
 2. Windows (tokay2)
 3. OS X (merida2)
 
-What is running on these machines?
-
-1. BUILD -- `R CMD build`
-
-1. INSTALL -- `R CMD INSTALL`
-
-1. CHECK -- `R CMD check`
+![Build machines on RELEASE](./Turaga_MaintainBioc/build-machines-release.png)
 
 
-![Build machines on DEVEL](Turaga-MaintainBioc/build-machines-release.png)
+#### What is running on these machines?
 
+##### INSTALL
+
+  Command:
+
+	  /home/biocbuild/bbs-3.7-bioc/R/bin/R CMD INSTALL a4
+
+  http://bioconductor.org/checkResults/release/bioc-LATEST/a4/malbec2-install.html
+
+
+  ![a4 R CMD INSTALL](Turaga_MaintainBioc/r-cmd-install.png)
+
+##### BUILD
+
+  Command:
+
+	/home/biocbuild/bbs-3.7-bioc/R/bin/R CMD build --keep-empty-dirs --no-resave-data a4
+
+  Options:
+
+	--keep-empty-dirs     do not remove empty dirs
+	--no-resave-data=        don't re-save data files as compactly as possible
+
+  http://bioconductor.org/checkResults/release/bioc-LATEST/a4/malbec2-buildsrc.html
+
+  ![a4 R CMD build](Turaga_MaintainBioc/r-cmd-build.png)
+
+##### CHECK
+
+  Command:
+
+	/home/biocbuild/bbs-3.7-bioc/R/bin/R CMD check --install=check:a4.install-out.txt --library=/home/biocbuild/bbs-3.7-bioc/R/library --no-vignettes --timings a4_1.28.0.tar.gz
+
+  Options:
+
+	R CMD check --help
+
+  http://bioconductor.org/checkResults/release/bioc-LATEST/a4/malbec2-checksrc.html
+
+  ![a4 R CMD check](Turaga_MaintainBioc/r-cmd-check.png)
+
+##### BUILD BIN
+
+This makes the tar ball which is specific to the platform and propagates it to
+main repository.
+
+  Command:
+
+	rm -rf a4.buildbin-libdir && mkdir a4.buildbin-libdir && C:\Users\biocbuild\bbs-3.8-bioc\R\bin\R.exe CMD INSTALL --merge-multiarch --build --library=a4.buildbin-libdir a4_1.29.0.tar.gz
+
+![a4 buildbin](Turaga_MaintainBioc/r-buildbin.png)
+![Lights next to the build-bin](Turaga_MaintainBioc/package-propagation.png)
 The build machines display a status for each package. They indicate different things.
 
  *TIMEOUT* - INSTALL, BUILD, CHECK or BUILD BIN of package took more than 40 minutes
@@ -162,7 +241,12 @@ The build machines display a status for each package. They indicate different th
 
 What are badges?
 
-![BiocGenerics badges](Turaga-MaintainBioc/Badges.png)
+Badges can indicate the `HEALTH` and `realiability` of a package. A reason
+users look at the badges is to get a sense of which packages to use in their
+analysis. Active maintainers, useful posts and how long the package is in
+Bioconductor sway users towards packages.
+
+![BiocGenerics badges](Turaga_MaintainBioc/Badges.png)
 
 Badges indicate the following:
 
@@ -170,7 +254,8 @@ Badges indicate the following:
 
 1. **downloads** statistics
 
-1. **posts** on support.bioconductor.org which are related to that package based on the `tag`.
+1. **posts** on support.bioconductor.org which are related to that package
+based on the `tag`.
 
 1. **in Bioc** how long the package has been in Bioconductor.
 
@@ -186,6 +271,23 @@ Where can I find these badges?
 
 	bioconductor.org/packages/devel/BiocGenerics
 
+###	Download statistics
+
+The number reported next to each package name is the download score,
+that is, the average number of distinct IPs that `hit` the package
+each month for the last 12 months (not counting the current month).
+
+   http://bioconductor.org/packages/stats/
+
+Top 75 packages as of July 17th 3:15pm EST,
+
+![Top 75](Turaga_MaintainBioc/top75.png)
+
+BiocGenerics Download statistics,
+
+![BiocGenerics Download Statistics](Turaga_MaintainBioc/BiocGenerics-download-stats.png)
+
+
 ###	RSS feeds
 
 RSS feeds help developers keep track of the development going on in
@@ -197,7 +299,7 @@ the feeds.
 
 Links for RSS feeds,
 
-http://bioconductor.org/developers/rss-feeds/
+   http://bioconductor.org/developers/rss-feeds/
 
 Git log published on the website. The git log hosts the last 500
 commits to bioconductor across all packages in the development branch
@@ -205,28 +307,16 @@ of Bioconductor.
 
 http://bioconductor.org/developers/gitlog/
 
-![Git log on Jul 16th 2018 at 10:30 AM EST](Turaga-MaintainBioc/gitlog.png)
+![Git log on Jul 16th 2018 at 10:30 AM EST](Turaga_MaintainBioc/gitlog.png)
 
-###	Download statistics
-
-The number reported next to each package name is the download score,
-that is, the average number of distinct IPs that “hit” the package
-each month for the last 12 months (not counting the current month).
-
-http://bioconductor.org/packages/stats/
-
-**Example**
-
-![BiocGenerics Download Statistics](Turaga-MaintainBioc/BiocGenerics-download-stats.png)
-
-###	Support site, Github issues, Bioc-devel mailing list
+###	Support site, Bioc-devel mailing list
 
 Support infrastructure set up for Bioconductor **users** to be in
 touch with maintainers.
 
 #### Mailing list
 
-Mailing list for `bioc-devel` for all questions related package
+The mailing list `bioc-devel` is for all questions related package
 development, infrastructure, package support. If a question is
 misplaced, the author will be pointed to the correct location to ask
 the question.
@@ -236,14 +326,32 @@ https://stat.ethz.ch/mailman/listinfo/bioc-devel
 #### Support site
 
 Public support site, with easy to use interface to ask questions among
-the broader community. Any and all questions are welcome here.
+the broader community. Any and all end-user questions are welcome here.
 
 http://support.bioconductor.org/
+
+
+### GitHub
+
+Optional, but recommended.
+
+#### Sync package with Github / Bioconductor before every change
+
+Do this every time there is an update on your package from your end, or,
+before you start developing.
+
+Help with Git (most canonical location),
+
+	http://bioconductor.org/developers/how-to/git/
+
+Sync package from Bioconductor repository  to Github repository
+
+http://bioconductor.org/developers/how-to/git/sync-existing-repositories/
 
 #### Github issues
 
 Github issues are more developer centric than mailing list and support
-site quetsions. This needs to be posted directly on the development
+site questions. This needs to be posted directly on the development
 repositories of individual packages. Each package maintainer can
 choose to do their development on Github giving an interface for
 issues.
@@ -255,21 +363,39 @@ The packages maintained by Bioconductor core follow the structure
 
 	https://github.com/Bioconductor/<PACKAGE_NAME>/issues
 
-Eg: https://github.com/Bioconductor/GenomicRanges/issues
-
-## Sync package with Github / Bioconductor before every change
-
-Do this everytime there is an update on your package from your end, or, before you start developing.
-
-Help with Git.
-
-http://bioconductor.org/developers/how-to/git/
-
-Sync package from Bioconductor repo to Github repo
-
-http://bioconductor.org/developers/how-to/git/sync-existing-repositories/
-
-### GitHub + webhooks
-
+Example: https://github.com/Bioconductor/GenomicRanges/issues
 
 ## Round up of resources available
+
+A lot of material was covered for this workshop very briefly, highlighting
+
+1. Build machines, what commands the build machines run and what information
+is displayed on the build reports.
+
+1. How to check the `HEALTH` of your package with badges on the landing pages.
+
+1. Download statistics of packages.
+
+1. RSS feeds and subscribing to them, checking package development across
+bioconductor with GIT logs.
+
+1. Support sites, mailing lists and where to get specific support as a maintainer.
+
+1. Github and social coding with issues.
+
+
+There is plenty of infrastructure not covered in this short workshop,
+
+1. Docker containers.
+
+1. BiocCredentials Application for SSH key processing for developers.
+
+1. Git + Bioconductor private git server.
+
+1. Single package builder during package contribution.
+
+1. Github and webhooks for continuous integration.
+
+## Acknowledgements
+
+The [Bioconductor core team](https://www.bioconductor.org/about/core-team/).

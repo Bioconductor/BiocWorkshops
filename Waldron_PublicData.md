@@ -819,8 +819,8 @@ grep('pro',available_fields('files'),value=TRUE)
 #> [14] "cases.project.program.program_id"                        
 #> [15] "cases.project.project_id"                                
 #> [16] "cases.project.releasable"                                
-#> [17] "cases.project.released"                                  
-#> [18] "cases.project.release_requested"                         
+#> [17] "cases.project.release_requested"                         
+#> [18] "cases.project.released"                                  
 #> [19] "cases.project.request_submission"                        
 #> [20] "cases.project.state"                                     
 #> [21] "cases.project.submission_enabled"                        
@@ -918,14 +918,14 @@ simple as asking for the manifest from the current query.
 manifest_df = qfiles %>% manifest()
 head(manifest_df)
 #> # A tibble: 6 x 5
-#>   id                                   filename      md5        size state
-#>   <chr>                                <chr>         <chr>     <int> <chr>
-#> 1 567ced20-00cf-46f4-8bb8-a8553eba7f4b b2552f6f-dd1… 9af0d99… 258324 live 
-#> 2 05692746-1770-47bd-8faa-f864a37e0084 701b8c71-6c0… 8e9816f… 526537 live 
-#> 3 e2d47640-8565-4383-b2dd-0d3e2762e3da b2552f6f-dd1… e05190e… 543367 live 
-#> 4 bc6dab72-dc5a-4ca6-aef3-f7242fa8e329 a1c4f19e-079… 110d8cd… 253059 live 
-#> 5 0a176c20-f3f3-4bc9-bfe2-b2469e745025 01eac123-1e2… b40921f… 540592 live 
-#> 6 2ae73487-7acf-4282-85d8-927f2ab8f18b 12c8b289-b9d… 4d3c2b9… 549437 live
+#>   id                filename                  md5               size state
+#>   <chr>             <chr>                     <chr>            <int> <chr>
+#> 1 567ced20-00cf-46… b2552f6f-dd15-410f-a621-… 9af0d993c40aec… 258324 live 
+#> 2 05692746-1770-47… 701b8c71-6c05-4e5b-ac10-… 8e9816f4d9b871… 526537 live 
+#> 3 e2d47640-8565-43… b2552f6f-dd15-410f-a621-… e05190ed65c8a8… 543367 live 
+#> 4 bc6dab72-dc5a-4c… a1c4f19e-079e-47e7-8939-… 110d8cda0ccdf6… 253059 live 
+#> 5 0a176c20-f3f3-4b… 01eac123-1e21-440d-9495-… b40921f17128a9… 540592 live 
+#> 6 2ae73487-7acf-42… 12c8b289-b9d0-4697-b3a6-… 4d3c2b951d94f0… 549437 live
 ```
 
 Note that we might still not be quite there. Looking at filenames, there are
@@ -1191,7 +1191,7 @@ It is not an ExperimentHub package, so downloading and serializing is slightly m
 
 ```r
 download_study(project_info$project)
-#> 2018-07-17 10:28:34 downloading file rse_gene.Rdata to SRP009615
+#> 2018-07-16 15:58:26 downloading file rse_gene.Rdata to SRP009615
 ```
 followed by loading the data
 
@@ -1267,17 +1267,19 @@ oral <- c("BritoIL_2016.metaphlan_bugs_list.oralcavity",
           "Castro-NallarE_2015.metaphlan_bugs_list.oralcavity")
 esl <- curatedMetagenomicData(oral, dryrun = FALSE)
 #> Working on BritoIL_2016.metaphlan_bugs_list.oralcavity
-#> snapshotDate(): 2018-07-17
+#> snapshotDate(): 2018-07-16
 #> see ?curatedMetagenomicData and browseVignettes('curatedMetagenomicData') for documentation
-#> downloading 0 resources
+#> downloading 1 resources
+#> retrieving 1 resource
 #> loading from cache 
-#>     '/home/lwaldron//.ExperimentHub/1179'
+#>     '/home/mramos//.ExperimentHub/1179'
 #> Working on Castro-NallarE_2015.metaphlan_bugs_list.oralcavity
-#> snapshotDate(): 2018-07-17
+#> snapshotDate(): 2018-07-16
 #> see ?curatedMetagenomicData and browseVignettes('curatedMetagenomicData') for documentation
-#> downloading 0 resources
+#> downloading 1 resources
+#> retrieving 1 resource
 #> loading from cache 
-#>     '/home/lwaldron//.ExperimentHub/391'
+#>     '/home/mramos//.ExperimentHub/391'
 ```
 
 
@@ -1306,18 +1308,19 @@ See the documentation of *[phyloseq](http://bioconductor.org/packages/phyloseq)*
 
 ```r
 suppressPackageStartupMessages(library(HMP16SData))
-#> snapshotDate(): 2018-07-17
+#> snapshotDate(): 2018-07-16
 ```
 
 *[HMP16SData](http://bioconductor.org/packages/HMP16SData)*[@Schiffer2018-qy] is a Bioconductor ExperimentData package of the Human Microbiome Project (HMP) 16S rRNA sequencing data. Taxonomic count data files are provided as downloaded from the HMP Data Analysis and Coordination Center from its QIIME pipeline. Processed data is provided as `SummarizedExperiment` class objects via *[ExperimentHub](http://bioconductor.org/packages/ExperimentHub)*. Like other ExperimentHub-based packages, a convenience function does downloading, automatic local caching, and serializing of a Bioconductor data class. This returns taxonomic counts from the V1-3 variable region of the 16S rRNA gene, along with the unrestricted participant data and phylogenetic tree. 
 
 ```r
 V13()
-#> snapshotDate(): 2018-07-17
+#> snapshotDate(): 2018-07-16
 #> see ?HMP16SData and browseVignettes('HMP16SData') for documentation
-#> downloading 0 resources
+#> downloading 1 resources
+#> retrieving 1 resource
 #> loading from cache 
-#>     '/home/lwaldron//.ExperimentHub/1117'
+#>     '/home/mramos//.ExperimentHub/1117'
 #> class: SummarizedExperiment 
 #> dim: 43140 2898 
 #> metadata(2): experimentData phylogeneticTree
