@@ -678,7 +678,7 @@ library(Organism.dplyr)
 # src = src_organism("TxDb.Hsapiens.UCSC.hg19.knownGene")
 src <- src_organism(dbpath = hg38light())
 src
-#> src:  sqlite 3.22.0 [/usr/local/lib/R/site-library/Organism.dplyr/extdata/light.hg38.knownGene.sqlite]
+#> src:  sqlite 3.22.0 [/usr/local/lib/R/R-3.5-bioc-devel/Organism.dplyr/extdata/light.hg38.knownGene.sqlite]
 #> tbls: id, id_accession, id_go, id_go_all, id_omim_pm, id_protein,
 #>   id_transcript, ranges_cds, ranges_exon, ranges_gene, ranges_tx
 ```
@@ -1108,7 +1108,7 @@ GRCh38TxDb
 #> # exon_nrow: 675836
 #> # cds_nrow: 270225
 #> # Db created by: GenomicFeatures package from Bioconductor
-#> # Creation time: 2018-07-16 15:54:15 +0000 (Mon, 16 Jul 2018)
+#> # Creation time: 2018-07-17 10:25:23 -0400 (Tue, 17 Jul 2018)
 #> # GenomicFeatures version at creation time: 1.33.0
 #> # RSQLite version at creation time: 2.1.1
 #> # DBSCHEMAVERSION: 1.2
@@ -1132,10 +1132,10 @@ can see the choices of servers that we can use:
 library(biomaRt)
 listMarts()
 #>                biomart               version
-#> 1 ENSEMBL_MART_ENSEMBL      Ensembl Genes 92
-#> 2   ENSEMBL_MART_MOUSE      Mouse strains 92
-#> 3     ENSEMBL_MART_SNP  Ensembl Variation 92
-#> 4 ENSEMBL_MART_FUNCGEN Ensembl Regulation 92
+#> 1 ENSEMBL_MART_ENSEMBL      Ensembl Genes 93
+#> 2   ENSEMBL_MART_MOUSE      Mouse strains 93
+#> 3     ENSEMBL_MART_SNP  Ensembl Variation 93
+#> 4 ENSEMBL_MART_FUNCGEN Ensembl Regulation 93
 ```
 ### biomaRt data sets
 

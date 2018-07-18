@@ -97,55 +97,6 @@ library(limma)
 library(Glimma)
 library(edgeR)
 library(Mus.musculus)
-#> Loading required package: AnnotationDbi
-#> Loading required package: stats4
-#> Loading required package: BiocGenerics
-#> Loading required package: parallel
-#> 
-#> Attaching package: 'BiocGenerics'
-#> The following objects are masked from 'package:parallel':
-#> 
-#>     clusterApply, clusterApplyLB, clusterCall, clusterEvalQ,
-#>     clusterExport, clusterMap, parApply, parCapply, parLapply,
-#>     parLapplyLB, parRapply, parSapply, parSapplyLB
-#> The following object is masked from 'package:limma':
-#> 
-#>     plotMA
-#> The following objects are masked from 'package:stats':
-#> 
-#>     IQR, mad, sd, var, xtabs
-#> The following objects are masked from 'package:base':
-#> 
-#>     anyDuplicated, append, as.data.frame, basename, cbind,
-#>     colMeans, colnames, colSums, dirname, do.call, duplicated,
-#>     eval, evalq, Filter, Find, get, grep, grepl, intersect,
-#>     is.unsorted, lapply, lengths, Map, mapply, match, mget, order,
-#>     paste, pmax, pmax.int, pmin, pmin.int, Position, rank, rbind,
-#>     Reduce, rowMeans, rownames, rowSums, sapply, setdiff, sort,
-#>     table, tapply, union, unique, unsplit, which, which.max,
-#>     which.min
-#> Loading required package: Biobase
-#> Welcome to Bioconductor
-#> 
-#>     Vignettes contain introductory material; view with
-#>     'browseVignettes()'. To cite Bioconductor, see
-#>     'citation("Biobase")', and for packages 'citation("pkgname")'.
-#> Loading required package: IRanges
-#> Loading required package: S4Vectors
-#> 
-#> Attaching package: 'S4Vectors'
-#> The following object is masked from 'package:base':
-#> 
-#>     expand.grid
-#> Loading required package: OrganismDbi
-#> Loading required package: GenomicFeatures
-#> Loading required package: GenomeInfoDb
-#> Loading required package: GenomicRanges
-#> Loading required package: GO.db
-#> 
-#> Loading required package: org.Mm.eg.db
-#> 
-#> Loading required package: TxDb.Mmusculus.UCSC.mm10.knownGene
 ```
 
 ## Data packaging
@@ -153,6 +104,7 @@ library(Mus.musculus)
 
 ```r
 dir.create("Law_RNAseq123")
+#> Warning in dir.create("Law_RNAseq123"): 'Law_RNAseq123' already exists
 setwd("Law_RNAseq123")
 
 url <- "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE63310&format=file"

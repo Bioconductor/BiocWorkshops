@@ -93,7 +93,7 @@ Load *PharamacoGx* into your current workspace:
 
 ```r
 library(PharmacoGx, verbose=FALSE)
-#> Warning in fun(libname, pkgname): couldn't connect to display ":0"
+#> Warning: no DISPLAY variable so Tk is not available
 library(mCI, verbose=FALSE)
 library(PharmacoGxML, verbose=FALSE)
 library(Biobase, verbose=FALSE)
@@ -529,18 +529,18 @@ This document was generated with the following R version and packages loaded:
 
 ```r
   sessionInfo()
-#> R version 3.5.0 (2018-04-23)
+#> R version 3.5.1 (2018-07-02)
 #> Platform: x86_64-pc-linux-gnu (64-bit)
-#> Running under: Debian GNU/Linux 9 (stretch)
+#> Running under: Ubuntu 16.04.4 LTS
 #> 
 #> Matrix products: default
-#> BLAS: /usr/lib/openblas-base/libblas.so.3
-#> LAPACK: /usr/lib/libopenblasp-r0.2.19.so
+#> BLAS: /usr/lib/atlas-base/atlas/libblas.so.3.0
+#> LAPACK: /usr/lib/atlas-base/atlas/liblapack.so.3.0
 #> 
 #> locale:
 #>  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
 #>  [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
-#>  [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=C             
+#>  [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
 #>  [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
 #>  [9] LC_ADDRESS=C               LC_TELEPHONE=C            
 #> [11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
@@ -563,14 +563,14 @@ This document was generated with the following R version and packages loaded:
 #>   [4] rprojroot_1.3-2     htmlTable_1.12      lsa_0.73.1         
 #>   [7] pls_2.6-0           base64enc_0.1-3     rstudioapi_0.7     
 #>  [10] DRR_0.0.3           SnowballC_0.5.1     lubridate_1.7.4    
-#>  [13] prodlim_2018.04.18  codetools_0.2-15    splines_3.5.0      
+#>  [13] prodlim_2018.04.18  codetools_0.2-15    splines_3.5.1      
 #>  [16] mnormt_1.5-5        robustbase_0.93-1   knitr_1.20         
 #>  [19] RcppRoll_0.3.0      magicaxis_2.0.3     broom_0.4.5        
 #>  [22] ddalpha_1.3.4       kernlab_0.9-26      cluster_2.0.7-1    
-#>  [25] sfsmisc_1.1-2       mapproj_1.2.6       compiler_3.5.0     
+#>  [25] sfsmisc_1.1-2       mapproj_1.2.6       compiler_3.5.1     
 #>  [28] backports_1.1.2     assertthat_0.2.0    lazyeval_0.2.1     
 #>  [31] limma_3.37.3        acepack_1.4.1       htmltools_0.3.6    
-#>  [34] tools_3.5.0         bindrcpp_0.2.2      gtable_0.2.0       
+#>  [34] tools_3.5.1         bindrcpp_0.2.2      gtable_0.2.0       
 #>  [37] glue_1.2.0          RANN_2.5.1          dplyr_0.7.6        
 #>  [40] maps_3.3.0          fastmatch_1.1-0     Rcpp_0.12.17       
 #>  [43] slam_0.1-43         gdata_2.18.0        nlme_3.1-137       
@@ -588,15 +588,15 @@ This document was generated with the following R version and packages loaded:
 #>  [79] purrr_0.2.5         bindr_0.1.1         recipes_0.1.3      
 #>  [82] htmlwidgets_1.2     labeling_0.3        CVST_0.2-2         
 #>  [85] tidyselect_0.2.4    plyr_1.8.4          magrittr_1.5       
-#>  [88] bookdown_0.7        R6_2.2.2            gplots_3.0.1       
-#>  [91] dimRed_0.1.0        sm_2.2-5.5          pillar_1.3.0       
+#>  [88] bookdown_0.7.14     R6_2.2.2            gplots_3.0.1       
+#>  [91] dimRed_0.1.0        sm_2.2-5.5          pillar_1.2.3       
 #>  [94] foreign_0.8-70      withr_2.1.2         abind_1.4-5        
-#>  [97] nnet_7.3-12         tibble_1.4.2        crayon_1.3.4       
-#> [100] KernSmooth_2.23-15  rmarkdown_1.10      grid_3.5.0         
-#> [103] data.table_1.11.4   marray_1.59.0       piano_1.21.0       
-#> [106] ModelMetrics_1.1.0  digest_0.6.15       tidyr_0.8.1        
-#> [109] stats4_3.5.0        munsell_0.5.0       celestial_1.4.1    
-#> [112] magic_1.5-8         tcltk_3.5.0
+#>  [97] nnet_7.3-12         tibble_1.4.2        KernSmooth_2.23-15 
+#> [100] rmarkdown_1.10      grid_3.5.1          data.table_1.11.4  
+#> [103] marray_1.59.0       piano_1.21.0        ModelMetrics_1.1.0 
+#> [106] digest_0.6.15       tidyr_0.8.1         stats4_3.5.1       
+#> [109] munsell_0.5.0       celestial_1.4.1     magic_1.5-8        
+#> [112] tcltk_3.5.1
 ```
 
 

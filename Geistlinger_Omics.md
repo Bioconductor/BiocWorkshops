@@ -500,17 +500,17 @@ rowData(allSE, use.names=TRUE)
 #> DataFrame with 9010 rows and 3 columns
 #>                        FC          ADJ.PVAL         limma.STAT
 #>                 <numeric>         <numeric>          <numeric>
-#> 5595   0.0429698599842595 0.899246817310775  0.734679177472013
-#> 7075   0.0320835027449625 0.949001013642671    0.4546910829318
-#> 1557  -0.0439401425131442 0.818330132411339  -1.06578261967549
-#> 643   -0.0277543539240438 0.929148567589577 -0.567394394416651
-#> 1843   -0.427302534257363 0.566034751753148  -1.75050227190017
+#> 5595   0.0429698599842595 0.899246817310772  0.734679177472014
+#> 7075   0.0320835027449623 0.949001013642673  0.454691082931797
+#> 1557  -0.0439401425131444 0.818330132411332  -1.06578261967549
+#> 643   -0.0277543539240436 0.929148567589568 -0.567394394416646
+#> 1843   -0.427302534257363 0.566034751753147  -1.75050227190017
 #> ...                   ...               ...                ...
-#> 6300   -0.026651766164237 0.922828548631225 -0.608608859328046
-#> 7297   -0.124257678078831 0.804578494190681  -1.11279493778184
-#> 2246   0.0522428857778935 0.748021044717352   1.27408420746691
-#> 7850 -0.00908229596065303 0.991826450687159 -0.102406339091096
-#> 1593 -0.00747713820802068 0.989532971314233 -0.145650256847251
+#> 6300  -0.0266517661642372  0.92282854863123 -0.608608859328051
+#> 7297   -0.124257678078831 0.804578494190689  -1.11279493778184
+#> 2246   0.0522428857778933  0.74802104471735   1.27408420746691
+#> 7850 -0.00908229596065259 0.991826450687169 -0.102406339091091
+#> 1593 -0.00747713820801982 0.989532971314229 -0.145650256847234
 ```
 
 Nominal *p*-values are already corrected for multiple testing (`ADJ.PVAL`)
@@ -534,32 +534,32 @@ airSE <- deAna(airSE, de.method="edgeR")
 ```r
 rowData(airSE, use.names=TRUE)
 #> DataFrame with 12937 rows and 3 columns
-#>                                  FC            ADJ.PVAL
-#>                           <numeric>           <numeric>
-#> ENSG00000000003  -0.404945626610932 0.00213458295385943
-#> ENSG00000000419   0.182985434777532  0.0915691945172958
-#> ENSG00000000457  0.0143477674070903   0.922279475399443
-#> ENSG00000000460  -0.141173372957311   0.619013213521635
-#> ENSG00000000971   0.402240426474172 0.00403820532305827
-#> ...                             ...                 ...
-#> ENSG00000273270  -0.129793853337261   0.495892935815041
-#> ENSG00000273290   0.505580471641003 0.00639218387702899
-#> ENSG00000273311 0.00161557580855148   0.996356136956657
-#> ENSG00000273329  -0.222817127090519   0.388294594068803
-#> ENSG00000273344  0.0151704005097403   0.962777106053257
+#>                                 FC            ADJ.PVAL
+#>                          <numeric>           <numeric>
+#> ENSG00000000003 -0.404945626610931 0.00213458295385007
+#> ENSG00000000419   0.18298543477753  0.0915691945173614
+#> ENSG00000000457 0.0143477674070893   0.922279475399294
+#> ENSG00000000460 -0.141173372957312   0.619013213521536
+#> ENSG00000000971  0.402240426474172 0.00403820532305448
+#> ...                            ...                 ...
+#> ENSG00000273270  -0.12979385333726   0.495892935815026
+#> ENSG00000273290  0.505580471641002 0.00639218387702242
+#> ENSG00000273311 0.0016155758085508   0.996356136958881
+#> ENSG00000273329 -0.222817127090519   0.388294594068891
+#> ENSG00000273344 0.0151704005097394    0.96277710605396
 #>                           edgeR.STAT
 #>                            <numeric>
-#> ENSG00000000003     35.8743710016552
-#> ENSG00000000419     5.90960619951737
-#> ENSG00000000457   0.0233923316990905
-#> ENSG00000000460    0.492929955080604
-#> ENSG00000000971     27.8509962017407
+#> ENSG00000000003     35.8743710016236
+#> ENSG00000000419     5.90960619951264
+#> ENSG00000000457   0.0233923316991457
+#> ENSG00000000460     0.49292995508074
+#> ENSG00000000971     27.8509962017059
 #> ...                              ...
-#> ENSG00000273270    0.901598359265205
-#> ENSG00000273290     23.0905678847871
-#> ENSG00000273311 8.04821152029429e-05
-#> ENSG00000273329     1.42723325850597
-#> ENSG00000273344  0.00543503273765429
+#> ENSG00000273270    0.901598359264895
+#> ENSG00000273290     23.0905678847694
+#> ENSG00000273311 8.04821151516408e-05
+#> ENSG00000273329     1.42723325850534
+#> ENSG00000273344  0.00543503273752271
 ```
 
 *Exercise:* Compare the number of differentially expressed genes as obtained on the `airSE` with `limma/voom`, `edgeR`, and `DESeq2`. 
@@ -718,70 +718,6 @@ eaBrowse(ora.all)
 #> Creating set view ...
 #> Creating kegg view ...
 #> Loading required package: pathview
-#> Info: Downloading xml files for hsa05202, 1/1 pathways..
-#> Info: Downloading png files for hsa05202, 1/1 pathways..
-#> 'select()' returned 1:1 mapping between keys and columns
-#> Info: Working in directory /home/mramos/Source/github/BiocWorkshops
-#> Info: Writing image file hsa05202.kpath.png
-#> Warning in file.rename(from = pv.out, to = img.file): cannot rename file
-#> '/home/mramos/Source/github/BiocWorkshops/hsa05202.kpath.png' to '/home/
-#> mramos/.local/share/EnrichmentBrowser/results/reports/hsa05202_kpath.png',
-#> reason 'Invalid cross-device link'
-#> Info: Downloading xml files for hsa05412, 1/1 pathways..
-#> Info: Downloading png files for hsa05412, 1/1 pathways..
-#> 'select()' returned 1:1 mapping between keys and columns
-#> Info: Working in directory /home/mramos/Source/github/BiocWorkshops
-#> Info: Writing image file hsa05412.kpath.png
-#> Warning in file.rename(from = pv.out, to = img.file): cannot rename file
-#> '/home/mramos/Source/github/BiocWorkshops/hsa05412.kpath.png' to '/home/
-#> mramos/.local/share/EnrichmentBrowser/results/reports/hsa05412_kpath.png',
-#> reason 'Invalid cross-device link'
-#> Info: Downloading xml files for hsa05144, 1/1 pathways..
-#> Info: Downloading png files for hsa05144, 1/1 pathways..
-#> 'select()' returned 1:1 mapping between keys and columns
-#> Info: Working in directory /home/mramos/Source/github/BiocWorkshops
-#> Info: Writing image file hsa05144.kpath.png
-#> Warning in file.rename(from = pv.out, to = img.file): cannot rename file
-#> '/home/mramos/Source/github/BiocWorkshops/hsa05144.kpath.png' to '/home/
-#> mramos/.local/share/EnrichmentBrowser/results/reports/hsa05144_kpath.png',
-#> reason 'Invalid cross-device link'
-#> Info: Downloading xml files for hsa04670, 1/1 pathways..
-#> Info: Downloading png files for hsa04670, 1/1 pathways..
-#> 'select()' returned 1:1 mapping between keys and columns
-#> Info: Working in directory /home/mramos/Source/github/BiocWorkshops
-#> Info: Writing image file hsa04670.kpath.png
-#> Warning in file.rename(from = pv.out, to = img.file): cannot rename file
-#> '/home/mramos/Source/github/BiocWorkshops/hsa04670.kpath.png' to '/home/
-#> mramos/.local/share/EnrichmentBrowser/results/reports/hsa04670_kpath.png',
-#> reason 'Invalid cross-device link'
-#> Info: Downloading xml files for hsa05100, 1/1 pathways..
-#> Info: Downloading png files for hsa05100, 1/1 pathways..
-#> 'select()' returned 1:1 mapping between keys and columns
-#> Info: Working in directory /home/mramos/Source/github/BiocWorkshops
-#> Info: Writing image file hsa05100.kpath.png
-#> Info: some node width is different from others, and hence adjusted!
-#> Warning in file.rename(from = pv.out, to = img.file): cannot rename file
-#> '/home/mramos/Source/github/BiocWorkshops/hsa05100.kpath.png' to '/home/
-#> mramos/.local/share/EnrichmentBrowser/results/reports/hsa05100_kpath.png',
-#> reason 'Invalid cross-device link'
-#> Info: Downloading xml files for hsa04622, 1/1 pathways..
-#> Info: Downloading png files for hsa04622, 1/1 pathways..
-#> 'select()' returned 1:1 mapping between keys and columns
-#> Info: Working in directory /home/mramos/Source/github/BiocWorkshops
-#> Info: Writing image file hsa04622.kpath.png
-#> Warning in file.rename(from = pv.out, to = img.file): cannot rename file
-#> '/home/mramos/Source/github/BiocWorkshops/hsa04622.kpath.png' to '/home/
-#> mramos/.local/share/EnrichmentBrowser/results/reports/hsa04622_kpath.png',
-#> reason 'Invalid cross-device link'
-#> Info: Downloading xml files for hsa05130, 1/1 pathways..
-#> Info: Downloading png files for hsa05130, 1/1 pathways..
-#> 'select()' returned 1:1 mapping between keys and columns
-#> Info: Working in directory /home/mramos/Source/github/BiocWorkshops
-#> Info: Writing image file hsa05130.kpath.png
-#> Warning in file.rename(from = pv.out, to = img.file): cannot rename file
-#> '/home/mramos/Source/github/BiocWorkshops/hsa05130.kpath.png' to '/home/
-#> mramos/.local/share/EnrichmentBrowser/results/reports/hsa05130_kpath.png',
-#> reason 'Invalid cross-device link'
 ```
 
 The resulting summary page includes for each significant gene set
@@ -1427,7 +1363,7 @@ pt <- overlapPermTest(cpg, prom, genome="hg19", ntimes=100, per.chromosome=TRUE,
 pt
 #> $numOverlaps
 #> P-value: 0.0099009900990099
-#> Z-score: 47.2232
+#> Z-score: 39.7296
 #> Number of iterations: 100
 #> Alternative: greater
 #> Evaluation of the original region set: 719
@@ -1442,7 +1378,7 @@ pt
 ```r
 summary(pt[[1]]$permuted)
 #>    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-#>   145.0   161.0   170.0   168.9   177.0   194.0
+#>   132.0   163.0   170.0   171.2   180.0   213.0
 ```
 
 The resulting permutation *p*-value indicates a significant enrichment. Out of
