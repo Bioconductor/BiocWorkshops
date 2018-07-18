@@ -10,6 +10,7 @@ Imports:
   AnnotationFilter,
   AnnotationHub, 
   apeglm,
+  aroma.light,
   beachmat,
   Biobase,
   BiocParallel,
@@ -118,6 +119,5 @@ Remotes:
   seandavi/BiocPkgTools,
   npcooley/FindHomology,
   drisso/fletcher2017data,
-  HenrikBengtsson/aroma.light,
   bhklab/mCI,
   bhklab/PharmacoGxML
