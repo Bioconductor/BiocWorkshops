@@ -355,7 +355,7 @@ lost, unlike in the `sparseAssay` result.
 
 #### disjoinAssay
 
-This function is similar to `compactAssay` except the rows are _disjoint_[^1] ranges. Elements of the matrix are summarized by applying the `simplifyDisjoin` functional
+This function is similar to `compactAssay` except the rows are _disjoint_[^9] ranges. Elements of the matrix are summarized by applying the `simplifyDisjoin` functional
 argument to assay values of overlapping ranges.
 
 
@@ -368,7 +368,7 @@ disjoinAssay(ragexp, simplifyDisjoin = mean)
 #> chr1:1-10:-        3      11
 ```
 
-[^1]: A _disjoint_ set of ranges has no overlap between any ranges of the set.
+[^9]: A _disjoint_ set of ranges has no overlap between any ranges of the set.
 
 #### qreduceAssay
 
