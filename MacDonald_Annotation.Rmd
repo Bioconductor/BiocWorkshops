@@ -512,7 +512,7 @@ head(genes(Homo.sapiens, columns = c("ENTREZID","ALIAS","UNIPROT")),4)
 * Allows for filtering and display of combined TxDb and Org.Db information
   through `dplyr` functions.
 
-```{r, warning = FALSE}
+```{r, warning = FALSE, cache=FALSE}
 library(Organism.dplyr)
 
 # src = src_organism("TxDb.Hsapiens.UCSC.hg19.knownGene")
@@ -524,7 +524,7 @@ src
 
 Get promoters from a TxDb object (we use a small version)
 
-```{r, warning = FALSE}
+```{r, warning = FALSE, cache=FALSE}
 
 options(width = 120)
 promoters(src)
@@ -534,7 +534,7 @@ promoters(src)
 
 Extract a table from the underlying database
 
-```{r, warning = FALSE}
+```{r, warning = FALSE, cache=FALSE}
 
 tbl(src, "id")
 
@@ -544,7 +544,7 @@ tbl(src, "id")
 ### Organism.dplyr
 Make a complex query between tables in the underlying database
 
-```{r, warning = FALSE}
+```{r, warning = FALSE, cache=FALSE}
 
 inner_join(tbl(src, "id"), tbl(src, "ranges_gene")) %>%
 		    filter(symbol %in% c("ADA", "NAT2")) %>%
