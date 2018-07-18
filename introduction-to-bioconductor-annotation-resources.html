@@ -702,17 +702,17 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div id="what-do-we-mean-by-annotation" class="section level3">
 <h3><span class="header-section-number">12.4.2</span> What do we mean by annotation?</h3>
 <p>Map a known ID to other functional or positional information</p>
-<p><img src=".MacDonald_Annotation/mapping.png" width="640" /></p>
+<p><img src="MacDonald_Annotation/mapping.png" width="640" /></p>
 </div>
 <div id="specific-goal" class="section level3">
 <h3><span class="header-section-number">12.4.3</span> Specific goal</h3>
 <p>We have data and statistics, and we want to add other useful information</p>
-<p><img src=".MacDonald_Annotation/boxes.png" width="75%" /></p>
+<p><img src="MacDonald_Annotation/boxes.png" width="75%" /></p>
 <p>The end result might be as simple as a data.frame or HTML table, or as complex as a <code>RangedSummarizedExperiment</code></p>
 </div>
 <div id="data-containers" class="section level3">
 <h3><span class="header-section-number">12.4.4</span> Data containers</h3>
-<p><img src=".MacDonald_Annotation/eset.png" width="75%" /></p>
+<p><img src="MacDonald_Annotation/eset.png" width="75%" /></p>
 </div>
 <div id="expressionset" class="section level3">
 <h3><span class="header-section-number">12.4.5</span> ExpressionSet</h3>
@@ -1120,7 +1120,7 @@ txs[txs <span class="op">%over%</span><span class="st"> </span>gns[<span class="
 <div id="summarizedexperiment-objects" class="section level3">
 <h3><span class="header-section-number">12.4.27</span> SummarizedExperiment objects</h3>
 <p>SummarizedExperiment objects are like ExpressionSets, but the row-wise annotations are GRanges, so you can subset by genomic locations:</p>
-<p><img src=".MacDonald_Annotation/subset.png" width="75%" /></p>
+<p><img src="MacDonald_Annotation/subset.png" width="75%" /></p>
 <p>SummarizedExperiment objects are popular objects for representing expression data and other rectangular data (feature x sample data). Incoming packages are now strongly recommended to use this class representation instead of ExpressionSet.</p>
 </div>
 <div id="txdb-exercises" class="section level3">
@@ -1199,6 +1199,16 @@ Homo.sapiens
 <li><p>Allows for filtering and display of combined TxDb and Org.Db information through <code>dplyr</code> functions.</p></li>
 </ul>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(Organism.dplyr)
+<span class="co">#&gt; Loading required package: dplyr</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Attaching package: &#39;dplyr&#39;</span>
+<span class="co">#&gt; The following objects are masked from &#39;package:stats&#39;:</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;     filter, lag</span>
+<span class="co">#&gt; The following objects are masked from &#39;package:base&#39;:</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;     intersect, setdiff, setequal, union</span>
+<span class="co">#&gt; Loading required package: AnnotationFilter</span>
 
 <span class="co"># src = src_organism(&quot;TxDb.Hsapiens.UCSC.hg19.knownGene&quot;)</span>
 src &lt;-<span class="st"> </span><span class="kw">src_organism</span>(<span class="dt">dbpath =</span> <span class="kw">hg38light</span>())

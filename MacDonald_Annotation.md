@@ -100,7 +100,7 @@ to a Biologist.
 
 Map a known ID to other functional or positional information
 
-<img src="./.MacDonald_Annotation/mapping.png" width="640" />
+<img src="./MacDonald_Annotation/mapping.png" width="640" />
 
 
 ### Specific goal
@@ -108,14 +108,14 @@ Map a known ID to other functional or positional information
 We have data and statistics, and we want to add other useful
 information
 
-<img src="./.MacDonald_Annotation/boxes.png" width="75%" />
+<img src="./MacDonald_Annotation/boxes.png" width="75%" />
 
 The end result might be as simple as a data.frame or HTML table, or as complex as a
 `RangedSummarizedExperiment`
 
 ### Data containers
 
-<img src="./.MacDonald_Annotation/eset.png" width="75%" />
+<img src="./MacDonald_Annotation/eset.png" width="75%" />
 
 ### ExpressionSet
 
@@ -575,7 +575,7 @@ txs[txs %over% gns[1:2,]]
 SummarizedExperiment objects are like ExpressionSets, but the row-wise
 annotations are GRanges, so you can subset by genomic locations:
 
-<img src="./.MacDonald_Annotation/subset.png" width="75%" />
+<img src="./MacDonald_Annotation/subset.png" width="75%" />
 
 SummarizedExperiment objects are popular objects for representing expression
 data and other rectangular data (feature x sample data). Incoming packages are
@@ -672,6 +672,16 @@ head(genes(Homo.sapiens, columns = c("ENTREZID","ALIAS","UNIPROT")),4)
 
 ```r
 library(Organism.dplyr)
+#> Loading required package: dplyr
+#> 
+#> Attaching package: 'dplyr'
+#> The following objects are masked from 'package:stats':
+#> 
+#>     filter, lag
+#> The following objects are masked from 'package:base':
+#> 
+#>     intersect, setdiff, setequal, union
+#> Loading required package: AnnotationFilter
 
 # src = src_organism("TxDb.Hsapiens.UCSC.hg19.knownGene")
 src <- src_organism(dbpath = hg38light())
