@@ -289,7 +289,7 @@ initial_network_png_file_name <- file.path(getwd(),"230_Isserlin_RCy3_intro", "i
 
 ```{r eval=evalcytoscape}
 if(file.exists(initial_network_png_file_name)){
-  #cytoscape hangs waiting for user response if file alreayd exists.  Remove it first
+  #cytoscape hangs waiting for user response if file already exists.  Remove it first
   file.remove(initial_network_png_file_name)
   } 
 
@@ -345,6 +345,7 @@ Thankfully we don't have to query each independent ally.  In addition to many sp
  * [PSICQUIC](https://psicquic.github.io/)[@psicquic] - a REST-ful service that is the responsibility of the database provider to set up and maintain.  PSICQUIC is an additional interface that allows users to search all available databases (that support this REST-ful service).  The databases are required to represent their interaction data in Proteomic Standards Initiative - molecular interaction (PSI-MI) format. To see a list of all the available data source see [here](http://www.ebi.ac.uk/Tools/webservices/psicquic/registry/registry?action=STATUS)
  * [nDex](http://home.ndexbio.org/index/)[@ndex] - a network data exchange repository. 
  * [GeneMANIA](http://genemania.org/)[@genemania] - contains multiple networks (shared domains, physical interactions, pathways, predicted, co-expression, genetic interactions and co-localized network).  Given a set of genes GeneMANIA selects and weights networks that optimize the connectivity between the query genes.  GeneMANIA will also return additional genes that are highly related to your query set.
+ * [PathwayCommons](http://www.pathwaycommons.org/) - (access the data through the [CyPath2App](http://apps.cytoscape.org/apps/cypath2)) is a pathway and interaction data source.  Data is collated from a large set of resources (list [here](http://www.pathwaycommons.org/pc2/datasources) ) and stored in the BioPAX[@biopax] format.  BioPAX is a data standard that allows for detailed representation of pathway mechanistic details as opposed to collapsing it to the set of interactions between molecules.  BioPAX pathways from Pathway commons can also be loaded directly into R using the [PaxToolsR](http://bioconductor.org/packages/release/bioc/html/paxtoolsr.html)[@paxtoolsr] Bioconductor package.   
 
 Get a subset of genes of interest from our scored data:
 ```{r}
@@ -390,7 +391,7 @@ initial_string_network_png_file_name <- file.path(getwd(),"230_Isserlin_RCy3_int
 
 ```{r eval=evalcytoscape}
 if(file.exists(initial_string_network_png_file_name)){
-  #cytoscape hangs waiting for user response if file alreayd exists.  Remove it first
+  #cytoscape hangs waiting for user response if file already exists.  Remove it first
   response <- file.remove(initial_string_network_png_file_name)
 } 
 
@@ -439,7 +440,7 @@ relayout_string_network_png_file_name <- file.path(getwd(),"230_Isserlin_RCy3_in
 
 ```{r eval=evalcytoscape}
 if(file.exists(relayout_string_network_png_file_name)){
-  #cytoscape hangs waiting for user response if file alreayd exists.  Remove it first
+  #cytoscape hangs waiting for user response if file already exists.  Remove it first
   response<- file.remove(relayout_string_network_png_file_name)
   } 
 response <- exportImage(relayout_string_network_png_file_name, type = "png")
@@ -565,7 +566,7 @@ mesen_string_network_png_file_name <- file.path(getwd(),"230_Isserlin_RCy3_intro
 
 ```{r eval=evalcytoscape}
 if(file.exists(mesen_string_network_png_file_name)){
-  #cytoscape hangs waiting for user response if file alreayd exists.  Remove it first
+  #cytoscape hangs waiting for user response if file already exists.  Remove it first
   response<- file.remove(mesen_string_network_png_file_name)
   } 
 response <- exportImage(mesen_string_network_png_file_name, type = "png")
@@ -702,7 +703,7 @@ correlation_network_png_file_name <- file.path(getwd(),"230_Isserlin_RCy3_intro"
 
 ```{r eval=evalcytoscape}
 if(file.exists(correlation_network_png_file_name)){
-  #cytoscape hangs waiting for user response if file alreayd exists.  Remove it first
+  #cytoscape hangs waiting for user response if file already exists.  Remove it first
   file.remove(correlation_network_png_file_name)
   } 
 
@@ -825,7 +826,7 @@ cluster1em_png_file_name <- file.path(getwd(),"230_Isserlin_RCy3_intro", "images
 
 ```{r eval=evalcytoscape}
 if(file.exists(cluster1em_png_file_name)){
-  #cytoscape hangs waiting for user response if file alreayd exists.  Remove it first
+  #cytoscape hangs waiting for user response if file already exists.  Remove it first
   file.remove(cluster1em_png_file_name)
   } 
 
@@ -860,7 +861,7 @@ cluster1em_annot_png_file_name <- file.path(getwd(),"230_Isserlin_RCy3_intro", "
 
 ```{r eval=evalcytoscape}
 if(file.exists(cluster1em_annot_png_file_name)){
-  #cytoscape hangs waiting for user response if file alreayd exists.  Remove it first
+  #cytoscape hangs waiting for user response if file already exists.  Remove it first
   file.remove(cluster1em_annot_png_file_name)
   } 
 
@@ -1044,7 +1045,7 @@ mesenem_png_file_name <- file.path(getwd(),"230_Isserlin_RCy3_intro", "images","
 
 ```{r eval=evalcytoscape}
 if(file.exists(mesenem_png_file_name)){
-  #cytoscape hangs waiting for user response if file alreayd exists.  Remove it first
+  #cytoscape hangs waiting for user response if file already exists.  Remove it first
   file.remove(mesenem_png_file_name)
   } 
 
@@ -1099,7 +1100,7 @@ mesenem_summary_png_file_name <- file.path(getwd(),"230_Isserlin_RCy3_intro","im
 
 ```{r eval=evalcytoscape}
 if(file.exists(mesenem_summary_png_file_name)){
-  #cytoscape hangs waiting for user response if file alreayd exists.  Remove it first
+  #cytoscape hangs waiting for user response if file already exists.  Remove it first
   file.remove(mesenem_summary_png_file_name)
   } 
 
