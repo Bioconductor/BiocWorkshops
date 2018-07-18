@@ -804,17 +804,24 @@ ACCse
 
 `r BiocStyle::Biocpkg("curatedTCGAData")` does not interface with the Genomic Data Commons, but downloads data from Bioconductor's `r BiocStyle::Biocpkg("ExperimentHub")`.
 
-```{r, cache=FALSE, echo=FALSE}
+```{r, echo=FALSE}
 suppressPackageStartupMessages({
     library(curatedTCGAData)
     library(MultiAssayExperiment)
 })
 ```
 
-By default, the `curatedTCGAData()` function will only show available datasets, and not download anything. The arguments are shown here only for demonstration, the same result is obtained with no arguments:
-```{r}
+```{r, eval=FALSE}
 library(curatedTCGAData)
 library(MultiAssayExperiment)
+```
+
+
+By default, the `curatedTCGAData()` function will only show available datasets,
+and not download anything. The arguments are shown here only for demonstration,
+the same result is obtained with no arguments:
+
+```{r}
 curatedTCGAData(diseaseCode = "*", assays = "*")
 ```
 

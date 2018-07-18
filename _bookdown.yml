@@ -20,7 +20,7 @@ rmd_files: [
   "Law_RNAseq123.Rmd",
   "Lawrence_GenomicRanges.Rmd",
   "Lee_Plyranges.Rmd",
-#  "MacDonald_Annotation.Rmd",
+  "MacDonald_Annotation.Rmd",
   "Ramos_MultiAssayExperiment.Rmd",
   "Safikhani_Pharmacogenomics.Rmd",
   "Turaga_MaintainBioc.Rmd",
