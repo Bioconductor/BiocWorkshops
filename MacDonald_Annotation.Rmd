@@ -520,7 +520,7 @@ src <- src_organism(dbpath = hg38light())
 src
 ```
 
-## Organism.dplyr 
+### Organism.dplyr
 
 Get promoters from a TxDb object (we use a small version)
 
@@ -530,7 +530,7 @@ options(width = 120)
 promoters(src)
 
 ```
-## Organism.dplyr 
+### Organism.dplyr
 
 Extract a table from the underlying database
 
@@ -541,7 +541,7 @@ tbl(src, "id")
 
 ```
 
-## Organism.dplyr
+### Organism.dplyr
 Make a complex query between tables in the underlying database
 
 ```{r, warning = FALSE}
