@@ -141,7 +141,7 @@ knitr::include_graphics(file.path(getwd(),"230_Isserlin_RCy3_intro","images","Cy
 
 There are multiple ways to communicate with Cytoscape programmatically.  There are two main complementary portals,**cyRest**[@cyrest] and **Commands**, that form the foundation.  cyRest transforms Cytoscape in to a REST (Representational State Transfer) enabled service where it essentially listens for events through a predefined port (by default port 1234).  The cyRest functionality started as an app add in but has now been incorporated into the main release. Commands, on the other hand, offer a mechanism whereby app developers can expose their functionality to other apps or to user through the command interface.  Prior to the implementation of cyRest many of the basic network functions were first available as commands so there is some overlap between the two different methods.  \@ref(fig:cytoscapeRcy3) shows the different ways you can call Cytoscape.
 
-### Set up
+## Set up
 ```{r include=FALSE}
 evalcytoscape = FALSE
 ```
@@ -248,7 +248,7 @@ commandsHelp("help")
 knitr::include_graphics(file.path(getwd(),"230_Isserlin_RCy3_intro","images","screenshot_availablecommands.png"))
 ```
 
-### Cytoscape Basics
+## Cytoscape Basics
 Create a Cytoscape network from some basic R objects
 ```{r}
 nodes <- data.frame(id=c("node 0","node 1","node 2","node 3"),
@@ -301,7 +301,7 @@ exportImage(initial_network_png_file_name, type = "png")
 knitr::include_graphics(initial_network_png_file_name)
 ```
 
-### Example Data Set
+## Example Data Set
 We downloaded gene expression data from the Ovarian Serous Cystadenocarcinoma project of The Cancer Genome Atlas (TCGA)[@TCGA], http://cancergenome.nih.gov via the Genomic Data Commons (GDC) portal[@GDC] on 2017-06-14 using TCGABiolinks R package[@TCGABiolinks]. The data includes 300 samples available as RNA-seq data, with reads mapped to a reference genome using MapSplice[@MapSplice] and read counts per transcript determined using the RSEM method[@RSEM]. RNA-seq data are labeled as ‘RNA-Seq V2’, see details at: https://wiki.nci.nih.gov/display/TCGA/RNASeq+Version+2). The RNA-SeqV2 data consists of raw counts similar to regular RNA-seq but RSEM (RNA-Seq by Expectation Maximization) data can be used with the edgeR method. The expression dataset of 300 tumours, with 79 classified as Immunoreactive, 72 classified as Mesenchymal, 69 classified as Differentiated, and 80 classified as Proliferative samples(class definitions were obtained from Verhaak et al.[@OV] Supplementary Table 1, third column). RNA-seq read counts were converted to CPM values and genes with CPM > 1 in at least 50 of the samples are retained for further study (50 is the minimal sample size in the classes).  The data was normalized and differential expression was calculated for each cancer class relative to the rest of the samples. 
 
 There are two data files:
@@ -318,7 +318,7 @@ RNASeq_gene_scores <- read.table(
    file.path(getwd(),"230_Isserlin_RCy3_intro","data","TCGA_OV_RNAseq_All_edgeR_scores.txt"),  
   header = TRUE, sep = "\t", quote="\"", stringsAsFactors = FALSE)
 ```
-### Finding Network Data
+## Finding Network Data
 How do I represent *my* data as a network?
 
 Unfortunately, there is not a simple answer.  **It depends on your biological question!**   
@@ -329,7 +329,7 @@ Example use cases:
  1. Coexpression data - I have a dataset that represents relationships.  How do I represent it as a network. 
  1. Omics data - I have a *fill in the blank* (microarray, RNASeq, Proteomics, ATACseq, MicroRNA, GWAS ...) dataset.  I have normalized and scored my data.  I have run my data through a functional enrichment tool and now have a set of enriched terms associated with my dataset. How do I represent my functional enrichments as a network?
 
-### Use Case 1 - How are my top genes related?
+## Use Case 1 - How are my top genes related?
 
 Omics data - I have a *fill in the blank* (microarray, RNASeq, Proteomics, ATACseq, MicroRNA, GWAS ...) dataset.  I have normalized and scored my data. How do I overlay my data on existing interaction data? 
 
@@ -575,7 +575,7 @@ response <- exportImage(mesen_string_network_png_file_name, type = "png")
 knitr::include_graphics(mesen_string_network_png_file_name)
 ```
 
-### Use Case 2 - Which genes have similar expression.
+## Use Case 2 - Which genes have similar expression.
 
 Instead of querying existing resources look for correlations in your own dataset to find out which genes have similar expression.  There are many tools that can analyze your data for correlation.  A popular tool is Weighted Gene Correlation Network Analysis (WGCNA)[@wgcna] which takes expression data and calculates functional modules.  As a simple example we can transform our expression dataset into a correlation matrix.  
 
@@ -879,7 +879,7 @@ cluster1em_annot_man_png_file_name <- file.path(getwd(),"230_Isserlin_RCy3_intro
 knitr::include_graphics(cluster1em_annot_man_png_file_name)
 ```
 
-### Use Case 3 - Functional Enrichment of Omics set.
+## Use Case 3 - Functional Enrichment of Omics set.
 
 Reducing our large OMICs expression set to a simple list of genes eliminates the majority of the signals present in the data.  Thresholding will only highlight the strong signals neglecting the often more interesting subtle signals. In order to capitalize on the wealth of data present in the data we need to perform pathway enrichment analysis on the entire expression set. There are many tools in R or as standalone apps that perform this type of analysis.  
 
