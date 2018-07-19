@@ -1,7 +1,7 @@
 
 
 processing file: Lawrence_GenomicRanges.Rmd
-Quitting from lines 785-788 (Lawrence_GenomicRanges.Rmd) 
+Quitting from lines 812-815 (Lawrence_GenomicRanges.Rmd) 
 Error in library(EnsDb.Hsapiens.v75) : 
   there is no package called 'EnsDb.Hsapiens.v75'
 Calls: <Anonymous> ... withCallingHandlers -> withVisible -> eval -> eval -> library

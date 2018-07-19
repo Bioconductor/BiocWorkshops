@@ -544,9 +544,8 @@ gr[IRanges(start=c(2,7), end=c(3,9))]
 
 ## Splitting and combining *GRanges* objects
 
-*GRanges* objects can be divided into groups using the
-`split()` function. This produces a *GRangesList* object,
-a class that will be discussed in detail in the next section.
+THe `split()` function divides a *GRanges* into groups, returning a
+*GRangesList*, a class that we will describe and demonstrate later.
  
 
 ```r
@@ -615,8 +614,8 @@ split(gr, ~ strand)
 ## seqinfo: 455 sequences (1 circular) from hg38 genome
 ```
 
-Separate *GRanges* instances can be concatenated by using the
-`c()` and `append()` functions.
+The `c()` and `append()` functions combine two (or more in the case of
+`c()`) *GRanges* objects.
  
 
 ```r
@@ -637,6 +636,32 @@ c(sp[[1]], sp[[2]])
 ##   h     chr3   160-166      + |         8 0.222222222222222
 ##   i     chr3   166-171      - |         9 0.111111111111111
 ##   j     chr3   170-190      - |        10                 0
+##   -------
+##   seqinfo: 455 sequences (1 circular) from hg38 genome
+```
+
+The `stack()` function stacks the elements of a *GRangesList* into a
+single *GRanges* and adds a column indicating the origin of each
+element,
+
+```r
+stack(sp, index.var="group")
+```
+
+```
+## GRanges object with 10 ranges and 3 metadata columns:
+##     seqnames    ranges strand | group     score                GC
+##        <Rle> <IRanges>  <Rle> | <Rle> <integer>         <numeric>
+##   a     chr1   101-104      - |     1         1                 1
+##   b     chr2   105-120      + |     1         2 0.888888888888889
+##   c     chr2   125-133      + |     1         3 0.777777777777778
+##   d     chr2       132      * |     1         4 0.666666666666667
+##   e     chr1   134-155      * |     1         5 0.555555555555556
+##   f     chr1   152-154      + |     2         6 0.444444444444444
+##   g     chr3   153-159      + |     2         7 0.333333333333333
+##   h     chr3   160-166      + |     2         8 0.222222222222222
+##   i     chr3   166-171      - |     2         9 0.111111111111111
+##   j     chr3   170-190      - |     2        10                 0
 ##   -------
 ##   seqinfo: 455 sequences (1 circular) from hg38 genome
 ```
@@ -732,22 +757,54 @@ flank(g, 10, start=FALSE)
 ##   -------
 ##   seqinfo: 455 sequences (1 circular) from hg38 genome
 ```
- 
-To ignore strand/transcription and assume the orientation of left to
-right use `unstrand()`,
+
+A common use case for `flank()` is generating promoter regions based
+on the transcript ranges. There is a convenience function that by
+default generates a region starting 2000bp upstream and 200bp
+downstream of the TSS,
+
 
 ```r
-unstrand(g)
+promoters(g)
+```
+
+```
+## Warning in valid.GenomicRanges.seqinfo(x, suggest.trim = TRUE): GRanges object contains 4 out-of-bound ranges located on sequences
+##   chr1, chr2, and chr3. Note that ranges located on a sequence whose
+##   length is unknown (NA) or on a circular sequence are not
+##   considered out-of-bound (use seqlengths() and isCircular() to get
+##   the lengths and circularity flags of the underlying sequences).
+##   You can use trim() to trim these ranges. See
+##   ?`trim,GenomicRanges-method` for more information.
 ```
 
 ```
 ## GRanges object with 4 ranges and 2 metadata columns:
 ##     seqnames    ranges strand |     score                GC
 ##        <Rle> <IRanges>  <Rle> | <integer>         <numeric>
-##   a     chr1   101-104      * |         1                 1
-##   b     chr2   105-120      * |         2 0.888888888888889
-##   c     chr2   125-133      * |         3 0.777777777777778
-##   j     chr3   170-190      * |        10                 0
+##   a     chr1  -95-2104      - |         1                 1
+##   b     chr2 -1895-304      + |         2 0.888888888888889
+##   c     chr2 -1875-324      + |         3 0.777777777777778
+##   j     chr3   -9-2190      - |        10                 0
+##   -------
+##   seqinfo: 455 sequences (1 circular) from hg38 genome
+```
+
+To ignore strand/transcription and assume the orientation of left to
+right use `unstrand()`,
+
+```r
+flank(unstrand(g), 10)
+```
+
+```
+## GRanges object with 4 ranges and 2 metadata columns:
+##     seqnames    ranges strand |     score                GC
+##        <Rle> <IRanges>  <Rle> | <integer>         <numeric>
+##   a     chr1    91-100      * |         1                 1
+##   b     chr2    95-104      * |         2 0.888888888888889
+##   c     chr2   115-124      * |         3 0.777777777777778
+##   j     chr3   160-169      * |        10                 0
 ##   -------
 ##   seqinfo: 455 sequences (1 circular) from hg38 genome
 ```
@@ -839,9 +896,9 @@ reduce(gr, ignore.strand=TRUE)
 ##   seqinfo: 455 sequences (1 circular) from hg38 genome
 ```
  
-Rarely, it useful to complement the ranges. Note that the universe is
-taken as the entire sequence span in all three strands (+, -, *),
-which is often surprising when working with unstranded ranges. 
+Rarely, it useful to complement the (reduced) ranges. Note that the
+universe is taken as the entire sequence span in all three strands (+,
+-, *), which is often surprising when working with unstranded ranges.
 
 ```r
 gaps(g)
@@ -866,8 +923,8 @@ gaps(g)
 ##   seqinfo: 455 sequences (1 circular) from hg38 genome
 ```
  
-The `disjoin` function represents a *GRanges* object as a collection
-of non-overlapping ranges:
+The `disjoin` function breaks up the ranges so that they do not
+overlap but still cover the same regions:
  
 
 ```r
@@ -886,8 +943,8 @@ disjoin(g)
 ##   seqinfo: 455 sequences (1 circular) from hg38 genome
 ```
  
-The `coverage` function quantifies the degree of overlap for all
-the ranges in a *GRanges* object.
+The `coverage` function counts how many ranges overlap each position
+in the sequence universe of a *GRanges* object.
  
 
 ```r
@@ -912,6 +969,43 @@ cov[1:3]
 ##   Lengths:       169        21 198295369
 ##   Values :         0         1         0
 ```
+The coverage is stored compactly as an *RleList*, with one *Rle*
+vector per sequence. We can convert it to a *GRanges*,
+
+```r
+cov_gr <- GRanges(cov)
+cov_gr
+```
+
+```
+## GRanges object with 463 ranges and 1 metadata column:
+##                 seqnames        ranges strand |     score
+##                    <Rle>     <IRanges>  <Rle> | <integer>
+##     [1]             chr1         1-100      * |         0
+##     [2]             chr1       101-104      * |         1
+##     [3]             chr1 105-248956422      * |         0
+##     [4]             chr2         1-104      * |         0
+##     [5]             chr2       105-120      * |         1
+##     ...              ...           ...    ... .       ...
+##   [459] chrUn_KI270753v1       1-62944      * |         0
+##   [460] chrUn_KI270754v1       1-40191      * |         0
+##   [461] chrUn_KI270755v1       1-36723      * |         0
+##   [462] chrUn_KI270756v1       1-79590      * |         0
+##   [463] chrUn_KI270757v1       1-71251      * |         0
+##   -------
+##   seqinfo: 455 sequences from an unspecified genome
+```
+and even convert the *GRanges* form back to an *RleList* by computing
+a weighted coverage,
+
+```r
+cov <- coverage(cov_gr, weight="score")
+```
+
+The *GRanges* derivative *GPos*, a compact representation of width 1
+ranges, is useful for representing coverage, although it cannot yet
+represent the coverage for the entire human genome (or any genome with
+over ~ 2 billion bp).
 
 ```r
 GPos(cov[1:3])
@@ -935,18 +1029,14 @@ GPos(cov[1:3])
 ##   -------
 ##   seqinfo: 3 sequences from an unspecified genome
 ```
-The *GRanges* derivative *GPos*, a compact representation of width 1
-ranges, is useful for representing coverage, although it cannot yet
-represent the coverage for the entire human genome (or any genome with
-over ~ 2 billion bp).
 
-These inter-range functions all aggregate the ranges in different
-ways. The resulting ranges are left unannotated, since there is no
-obvious way to carry the metadata across the aggregation. The user is
-left to aggregate the metadata. Functions like `reduce()` and
-`disjoin()` facilitate this by optionally including in the returned
-metadata a one-to-many reverse mapping from the aggregate ranges to
-input ranges. For example, to average the score over a range
+These inter-range functions all generate entirely new sets of
+ranges. The return value is left unannotated, since there is no
+obvious way to carry the metadata across the operation. The user is
+left to map the metadata to the new ranges. Functions like `reduce()`
+and `disjoin()` facilitate this by optionally including in the
+returned metadata a one-to-many reverse mapping from the aggregate
+ranges to input ranges. For example, to average the score over a
 reduction,
 
 ```r
@@ -1103,47 +1193,45 @@ annoyingly differing ways of naming the columns defining the ranges,
 ```r
 set.seed(66+105+111+99+49+56)
 
-pos <- sample(1:1000, size = 100L)
-size <- sample(1:3, size = 100L, replace = TRUE)
+pos <- sample(1:200, size = 30L)
+size <- 10L
 end <- size + pos - 1L
-chrom <- sample(paste0("chr", 1:3), size = 100L, replace=TRUE)
-int1 <- data.frame(chr = chrom, 
-                   pos = pos,
-                   end = end)
-int2 <- data.frame(ch = chrom, 
-                   st = pos,
-                   stop = end)
-int3 <- data.frame(chromosome = chrom, 
-                   start = pos,
-                   last = end)
+chrom <- sample(paste0("chr", 1:3), size = 30L, replace = TRUE)
+query_df <- data.frame(chrom = chrom, 
+                       start = pos,
+                       end = end)
+query_dfs <- split(query_df, 1:3)
+q1 <- rename(query_dfs[[1L]], start = "pos")
+q2 <- rename(query_dfs[[2L]], chrom = "ch", start = "st")
+q3 <- rename(query_dfs[[3L]], end = "last")
 ```
 The `makeGRangesFromDataFrame()` function can guess some of these, but
 not all of them, so we help it out,
 
 ```r
-int1 <- makeGRangesFromDataFrame(int1, start.field = "pos")
-int2 <- makeGRangesFromDataFrame(int2, seqnames.field = "ch",
+q1 <- makeGRangesFromDataFrame(q1, start.field = "pos")
+q2 <- makeGRangesFromDataFrame(q2, seqnames.field = "ch",
                                  start.field = "st")
-int3 <- makeGRangesFromDataFrame(int3, end.field = "last")
-query <- mstack(int1, int2, int3, .index.var="replicate")
+q3 <- makeGRangesFromDataFrame(q3, end.field = "last")
+query <- mstack(q1, q2, q3, .index.var="replicate")
 sort(query, by = ~ start)
 ```
 
 ```
-## GRanges object with 300 ranges and 1 metadata column:
-##         seqnames    ranges strand | replicate
-##            <Rle> <IRanges>  <Rle> |     <Rle>
-##     [1]     chr2     10-11      * |         1
-##     [2]     chr2     10-11      * |         2
-##     [3]     chr2     10-11      * |         3
-##     [4]     chr1     11-12      * |         1
-##     [5]     chr1     11-12      * |         2
-##     ...      ...       ...    ... .       ...
-##   [296]     chr1   954-956      * |         2
-##   [297]     chr1   954-956      * |         3
-##   [298]     chr2   983-984      * |         1
-##   [299]     chr2   983-984      * |         2
-##   [300]     chr2   983-984      * |         3
+## GRanges object with 30 ranges and 1 metadata column:
+##      seqnames    ranges strand | replicate
+##         <Rle> <IRanges>  <Rle> |     <Rle>
+##   25     chr1     11-20      * |         1
+##   22     chr1     16-25      * |         1
+##    2     chr2     21-30      * |         2
+##   30     chr3     50-59      * |         3
+##    6     chr2     51-60      * |         3
+##   ..      ...       ...    ... .       ...
+##   26     chr3   160-169      * |         2
+##   13     chr1   169-178      * |         1
+##   29     chr2   183-192      * |         2
+##   27     chr3   190-199      * |         3
+##   24     chr3   197-206      * |         3
 ##   -------
 ##   seqinfo: 3 sequences from an unspecified genome; no seqlengths
 ```
@@ -1163,17 +1251,17 @@ subsetByOverlaps(query, subject, ignore.strand=TRUE)
 
 ```
 ## GRanges object with 9 ranges and 1 metadata column:
-##       seqnames    ranges strand | replicate
-##          <Rle> <IRanges>  <Rle> |     <Rle>
-##   [1]     chr3       172      * |         1
-##   [2]     chr1   137-139      * |         1
-##   [3]     chr1   151-152      * |         1
-##   [4]     chr3       172      * |         2
-##   [5]     chr1   137-139      * |         2
-##   [6]     chr1   151-152      * |         2
-##   [7]     chr3       172      * |         3
-##   [8]     chr1   137-139      * |         3
-##   [9]     chr1   151-152      * |         3
+##      seqnames    ranges strand | replicate
+##         <Rle> <IRanges>  <Rle> |     <Rle>
+##   10     chr2   120-129      * |         1
+##   28     chr1   151-160      * |         1
+##    5     chr2   128-137      * |         2
+##   14     chr1   149-158      * |         2
+##   23     chr3   153-162      * |         2
+##   26     chr3   160-169      * |         2
+##    9     chr1    92-101      * |         3
+##   21     chr1   148-157      * |         3
+##   27     chr3   190-199      * |         3
 ##   -------
 ##   seqinfo: 3 sequences from an unspecified genome; no seqlengths
 ```
@@ -1232,6 +1320,11 @@ or even shorter and more efficient,
 
 ```r
 counts <- countOverlaps(query, subject, ignore.strand=TRUE)
+unname(counts)
+```
+
+```
+##  [1] 0 0 0 2 0 0 0 0 0 2 0 2 0 0 2 0 0 2 2 0 0 0 1 0 0 0 2 0 1 0
 ```
 
 Often, we want to combine joins and aggregations. For example, we may
@@ -1245,17 +1338,17 @@ subset(query, maxScore > 0)
 
 ```
 ## GRanges object with 9 ranges and 2 metadata columns:
-##       seqnames    ranges strand | replicate  maxScore
-##          <Rle> <IRanges>  <Rle> |     <Rle> <integer>
-##   [1]     chr3       172      * |         1        10
-##   [2]     chr1   137-139      * |         1         5
-##   [3]     chr1   151-152      * |         1         6
-##   [4]     chr3       172      * |         2        10
-##   [5]     chr1   137-139      * |         2         5
-##   [6]     chr1   151-152      * |         2         6
-##   [7]     chr3       172      * |         3        10
-##   [8]     chr1   137-139      * |         3         5
-##   [9]     chr1   151-152      * |         3         6
+##      seqnames    ranges strand | replicate  maxScore
+##         <Rle> <IRanges>  <Rle> |     <Rle> <integer>
+##   10     chr2   120-129      * |         1         3
+##   28     chr1   151-160      * |         1         6
+##    5     chr2   128-137      * |         2         4
+##   14     chr1   149-158      * |         2         6
+##   23     chr3   153-162      * |         2         8
+##   26     chr3   160-169      * |         2         9
+##    9     chr1    92-101      * |         3         1
+##   21     chr1   148-157      * |         3         6
+##   27     chr3   190-199      * |         3        10
 ##   -------
 ##   seqinfo: 3 sequences from an unspecified genome; no seqlengths
 ```
@@ -1268,11 +1361,12 @@ range,
 ```r
 hits <- findOverlaps(query, subject, select="first", ignore.strand=TRUE)
 hits <- findOverlaps(query, subject, select="arbitrary", ignore.strand=TRUE)
-which(!is.na(hits))
+hits
 ```
 
 ```
-## [1]  38  44  75 138 144 175 238 244 275
+##  [1] NA NA NA  2 NA NA NA NA NA  5 NA  3 NA NA  5 NA NA  7  8 NA NA NA  1
+## [24] NA NA NA  5 NA 10 NA
 ```
 
 ## Exercises
@@ -1537,6 +1631,8 @@ was prepared):
 
 ```r
 library(tools)
+bams <- list_files_with_exts(system.file("extdata", package = "airway"), "bam")
+names(bams) <- sub("_[^_]+$", "", basename(bams))
 library(Rsamtools)
 ```
 
@@ -1560,9 +1656,6 @@ library(Rsamtools)
 ```
 
 ```r
-bams <- list_files_with_exts(system.file("extdata", package = "airway"), "bam")
-names(bams) <- sub("_[^_]+$", "", basename(bams))
-library(Rsamtools)
 bams <- BamFileList(bams)
 ```
 Casting the vector of filenames to a formal *BamFileList* is critical
@@ -1583,66 +1676,12 @@ The result is a list of *Rle* objects, one per chromosome. Like other
 compute the coverage histogram by chromosome,
 
 ```r
-table(first_bam_cvg)[1L,]
+head(table(first_bam_cvg)[1L,])
 ```
 
 ```
-##         0         1         2         3         4         5         6 
-## 249202844     15607      5247      3055      2030      1280       929 
-##         7         8         9        10        11        12        13 
-##       791       766       642       471       471       369       356 
-##        14        15        16        17        18        19        20 
-##       363       405       541       618       555       546       687 
-##        21        22        23        24        25        26        27 
-##       656       601       540       443       468       448       353 
-##        28        29        30        31        32        33        34 
-##       305       324       308       200       225       180       160 
-##        35        36        37        38        39        40        41 
-##       143       170       191       173       131       128       114 
-##        42        43        44        45        46        47        48 
-##        76        56        57        85        69        91        70 
-##        49        50        51        52        53        54        55 
-##        77        73        80        78       101        73        89 
-##        56        57        58        59        60        61        62 
-##        84        87        87        84        87       103        75 
-##        63        64        65        66        67        68        69 
-##        70        80        59        62        36        38        40 
-##        70        71        72        73        74        75        76 
-##        42        51        35        47        41        30        34 
-##        77        78        79        80        81        82        83 
-##        32        35        26        18        26        15        25 
-##        84        85        86        87        88        89        90 
-##        21        10        16        12        12        28        23 
-##        91        92        93        94        95        96        97 
-##        33        28        23        29        34        37        40 
-##        98        99       100       101       102       103       104 
-##        43        34        35        33        32        31        51 
-##       105       106       107       108       109       110       111 
-##        44        36        49        52        45        51        42 
-##       112       113       114       115       116       117       118 
-##        33        44        46        51        48        63        53 
-##       119       120       121       122       123       124       125 
-##        59        50        43        47        46        54        50 
-##       126       127       128       129       130       131       132 
-##        50        50        51        47        46        61        67 
-##       133       134       135       136       137       138       139 
-##        37        46        52        46        28        33        36 
-##       140       141       142       143       144       145       146 
-##        35        26        33        49        42        35        29 
-##       147       148       149       150       151       152       153 
-##        30        38        24        31        15        28        20 
-##       154       155       156       157       158       159       160 
-##        19        31        25        34        23        19        25 
-##       161       162       163       164       165       166       167 
-##        27        27        14        27        11        16        18 
-##       168       169       170       171       172       173       174 
-##        16        12        10        10        14        17        15 
-##       175       176       177       178       179       180       181 
-##        17         8        17        18         9         5         8 
-##       182       183       184       185       186       187       188 
-##         8        11         9        16         8         6         5 
-##       189       191       192       193       194 
-##         3         3         3         2         1
+##         0         1         2         3         4         5 
+## 249202844     15607      5247      3055      2030      1280
 ```
 
 For RNA-seq experiments we are often interested in splitting up

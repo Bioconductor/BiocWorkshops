@@ -63,10 +63,10 @@ An example for a 45-minute workshop:
 * Assess whether known biomarkers are reproduced within these datasets 
 * Predict new biomarkers by applying different machine learning methods
 
-\section{Abstract}
+# Abstract}
 This course will focus on the challenges encountered when applying machine learning techniques in complex, high dimensional biological data. In particular, we will focus on biomarker discovery from pharmacogenomic data, which consists of developing predictors of response of cancer cell lines to chemical compounds based on their genomic features. From a methodological viewpoint, biomarker discovery is strongly linked to variable selection, through methods such as Supervised Learning with sparsity inducing norms (e.g., ElasticNet) or techniques accounting for the complex correlation structure of biological features (e.g., mRMR). Yet, the main focus of this talk will be on sound use of such methods in a pharmacogenomics context, their validation and correct interpretation of the produced results. We will discuss how to assess the quality of both the input and output data. We will illustrate the importance of unified analytical platforms, data and code sharing in bioinformatics and biomedical research, as the data generation process becomes increasingly complex and requires high level of replication to achieve robust results. This is particularly relevant as our portfolio of machine learning techniques is ever enlarging, with its set of hyperparameters that can be tuning in a multitude of ways, increasing the risk of overfitting when developing multivariate predictors of drug response.
 
-\section{Introduction}
+# Introduction
 
 Pharmacogenomics holds much potential to aid in discovering drug response
 biomarkers and developing novel targeted therapies, leading to development of
@@ -152,7 +152,7 @@ library(Biobase, verbose=FALSE)
 ##     'citation("Biobase")', and for packages 'citation("pkgname")'.
 ```
 
-\subsection{Downloading PharmacoSet objects}
+## Downloading PharmacoSet objects}
 We have made the PharmacoSet objects of the curated datasets available for download using functions provided in the package. A table of available PharmacoSet objects can be obtained by using the *availablePSets* function. Any of the PharmacoSets in the table can then be downloaded by calling *downloadPSet*, which saves the datasets into a directory of the users choice, and returns the data into the R session. 
 
 ```r
@@ -161,7 +161,7 @@ We have made the PharmacoSet objects of the curated datasets available for downl
   CCLE <- downloadPSet("CCLE", saveDir=file.path(".", "Safikhani_Pharmacogenomics"))
 ```
 
-\section{Reproducibility}
+# Reproducibility}
 *PharmacoGx* can be used to process pharmacogenomic datasets. First we want to check the heterogenity of cell lines in one of the available psets, CCLE.
 
 
@@ -182,7 +182,8 @@ pie(table(CCLE@cell[,"tissueid"]),
 <p class="caption">(\#fig:pie_chart)Tissue of origin of cell lines in CCLE study</p>
 </div>
 
-\subsection{Plotting Drug-Dose Response Data}
+## Plotting Drug-Dose Response Data
+
 Drug-Dose response data included in the PharmacoSet objects can be conviniently plotted using the *drugDoseResponseCurve* function. Given a list of PharmacoSets, a drug name and a cell name, it will plot the drug dose response curves for the given cell-drug combination in each dataset, allowing direct comparisons of data between datasets. 
 
 
@@ -215,7 +216,7 @@ drugDoseResponseCurve(drug="lapatinib", cellline=cells[3],
 <p class="caption">(\#fig:curves)Cells response to lapatinib in CCLE</p>
 </div>
 
-\subsection{Pharmacological profiles}
+## Pharmacological profiles}
 In pharmacogenomic studies Cells were also tested for their response to increasing concentrations of various compounds, and form this the IC50 and AUC were computed. These pharmacological profiles are available for all the psets in *PharmacoGx*.
 
 
@@ -242,7 +243,7 @@ ggplot(melted_data, aes(x=Var1,y=value)) +
 #     col="gray", main="")
 ```
 
-\section{Replication}
+# Replication 
 In this section we will investigate the consistency between the GDSC and CCLE datasets. In both CCLE and GDSC, the transcriptome of cells was profiled using an Affymatrix microarray chip. Cells were also tested for their response to increasing concentrations of various compounds, and form this the IC50 and AUC were computed. However, the cell and drugs names used between the two datasets were not consistent. Furthermore, two different microarray platforms were used. However, *PharmacoGx* allows us to overcome these differences to do a comparative study between these two datasets. 
 
 GDSC was profiled using the hgu133a platform, while CCLE was profiled with the expanded hgu133plus2 platform. While in this case the hgu133a is almost a strict subset of hgu133plus2 platform, the expression information in *PharmacoSet* objects is summarized by Ensemble Gene Ids, allowing datasets with different platforms to be directly compared. The probe to gene mapping is done using the BrainArray customCDF for each platform \cite{sabatti_thresholding_2002}.
@@ -288,7 +289,7 @@ for (i in 1:nrow(cases)) {
 <p class="caption">(\#fig:Replication_curves)Consistency of drug response curves across studies</p>
 </div>
 
-\subsection{Consistency of pharmacological profiles}
+## Consistency of pharmacological profiles}
 
 ```r
   ##AAC scatter plot 
@@ -351,7 +352,7 @@ legend("topright",
 <p class="caption">(\#fig:sensitivity_scatter_plots)Concordance of AAC values</p>
 </div>
 
-\subsection{consistency assessment improved by Modified Concordance Index}
+## consistency assessment improved by Modified Concordance Index}
 To better assess the concordance of multiple pharmacogenomic studies we introduced the modified concordance index (mCI). Recognizing that the noise in the drug screening assays is high and may yield to inaccurate sensitive-based ranking of cell lines with close AAC values, the mCI only considers cell line pairs with drug sensitivity (AAC) difference greater than $\delta$ .
 
 
@@ -370,7 +371,7 @@ abline(h=.7, lty=2)
 
 <img src="Safikhani_Pharmacogenomics_files/figure-html/mci-1.png" width="672" />
 
-\subsection{Known Biomarkers}
+## Known Biomarkers 
 The association between molecular features and response to a given drug is modelled using a linear regression model adjusted for tissue source: 
 $$Y = \beta_{0} + \beta_{i}G_i + \beta_{t}T + \beta_{b}B$$
 where $Y$ denotes the drug sensitivity variable, $G_i$, $T$ and $B$ denote the expression of gene $i$, the tissue source and the experimental batch respectively, and $\beta$s are the regression coefficients. The strength of gene-drug association is quantified by $\beta_i$, above and beyond the relationship between drug sensitivity and tissue source. The variables $Y$ and $G$ are scaled (standard deviation equals to 1) to estimate standardized coefficients from the linear model. Significance of the gene-drug association is estimated by the statistical significance of $\beta_i$ (two-sided t test). P-values are then corrected for multiple testing using the false discovery rate (FDR) approach.
@@ -456,7 +457,7 @@ boxplot(GDSC.aac["PD-0325901", GDSC_cells]~ GDSC_mut[GDSC_cells, "BRAF"], col="g
 
 <img src="Safikhani_Pharmacogenomics_files/figure-html/biomarker_discovery-1.png" width="672" />
 
-\subsection{Machine Learning and Biomarker Discovery}
+## Machine Learning and Biomarker Discovery
 Some of the widely used multivariate machine learning methods such as elastic net, Random Forest (RF) and Support Vector Machine (SVM) have been already implemented in the MLWorkshop. It optimizes hyperparameters of these methods in the training phase. To assess the performance of the predictive models, it implements *m* number of sampling with *n-fold* cross validations (CV). The performance will then be assessed by multiple metrics including pearson correlation coefficient, concordance index and modified concordance index. 
 
 
@@ -654,9 +655,10 @@ for(method in c("ridge", "lasso", "random_forest", "svm")){
 ```
 
 <img src="Safikhani_Pharmacogenomics_files/figure-html/machine_learning-1.png" width="672" /><img src="Safikhani_Pharmacogenomics_files/figure-html/machine_learning-2.png" width="672" /><img src="Safikhani_Pharmacogenomics_files/figure-html/machine_learning-3.png" width="672" /><img src="Safikhani_Pharmacogenomics_files/figure-html/machine_learning-4.png" width="672" />
-\section{Limitations and Future direction}
+# Limitations and Future direction
 
-\section{Session Info}
+# Session Info
+
 This document was generated with the following R version and packages loaded:
 
 ```r

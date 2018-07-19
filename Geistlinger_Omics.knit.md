@@ -1539,7 +1539,7 @@ pt
 ```
 ## $numOverlaps
 ## P-value: 0.0099009900990099
-## Z-score: 40.8038
+## Z-score: 43.3361
 ## Number of iterations: 100
 ## Alternative: greater
 ## Evaluation of the original region set: 719
@@ -1557,7 +1557,7 @@ summary(pt[[1]]$permuted)
 
 ```
 ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-##   138.0   159.0   168.0   168.8   179.0   211.0
+##   138.0   159.8   167.5   167.7   175.2   209.0
 ```
 
 The resulting permutation *p*-value indicates a significant enrichment. Out of
