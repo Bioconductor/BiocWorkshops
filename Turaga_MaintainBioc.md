@@ -388,6 +388,8 @@ There is plenty of infrastructure not covered in this short workshop,
 
 1. Docker containers.
 
+1. AWS - Amazon Machine images(AMIs).
+
 1. BiocCredentials Application for SSH key processing for developers.
 
 1. Git + Bioconductor private git server.

@@ -20,7 +20,7 @@ accessing, and using large-scale public data resources including the
 Gene Expression Omnibus [GEO](https://www.ncbi.nlm.nih.gov/geo), Sequence
 Read Archive [SRA](https://www.ncbi.nlm.nih.gov/sra), the Genomic Data
 Commons [GDC](https://portal.gdc.cancer.gov/), and Bioconductor-hosted 
-curated data resources for metagenomics, pharmacogenomics, and The Cancer 
+curated data resources for metagenomics, pharmacogenomics [PharmacoDB](http://pharmacodb.ca/), and The Cancer 
 Genome Atlas.
 
 ### Pre-requisites
@@ -41,11 +41,11 @@ Each component will include runnable examples of typical usage that students are
 
 * *[GEOquery](http://bioconductor.org/packages/GEOquery)*: Access to the NCBI Gene Expression Omnibus (GEO), a public repository of gene expression (primarily microarray) data.
 * *[GenomicDataCommons](http://bioconductor.org/packages/GenomicDataCommons)*: Access to the NIH / NCI Genomic Data Commons RESTful service.
-* *[SRAdb](http://bioconductor.org/packages/SRAdb)*: A compilation of metadata from the NCBI Sequence Read Archive, the largest public repository of sequencing data from the next generation of sequencing platforms, and tools
+* *[SRAdbV2](https://github.com/seandavi/SRAdbV2)*: A compilation of metadata from the NCBI Sequence Read Archive, the largest public repository of sequencing data from the next generation of sequencing platforms, and tools
 * *[curatedTCGAData](http://bioconductor.org/packages/curatedTCGAData)*: Curated data from The Cancer Genome Atlas (TCGA) as MultiAssayExperiment Objects
 * *[curatedMetagenomicData](http://bioconductor.org/packages/curatedMetagenomicData)*: Curated metagenomic data of the human microbiome
 * *[HMP16SData](http://bioconductor.org/packages/HMP16SData)*: Curated metagenomic data of the human microbiome
-* *[PharmacoGx](http://bioconductor.org/packages/PharmacoGx)*: Analysis of large-scale pharmacogenomic data
+* *[PharmacoGx](http://bioconductor.org/packages/PharmacoGx)*: Curated large-scale preclinical pharmacogenomic data and basic analysis tools
 
 
 ### Time outline
@@ -62,7 +62,7 @@ This is a 1h45m workshop.
 | curatedMetagenomicData and HMP16SData | 15m |
 | PharmacoGx | 20m |
 
-### workshop goals and objectives
+### Workshop goals and objectives
 
 Bioconductor provides access to significant amounts of publicly available 
 experimental  data. This workshop introduces students to Bioconductor
@@ -100,7 +100,16 @@ required_pkgs = c(
   "recount",
   "curatedMetagenomicData",
   "phyloseq",
-  "HMP16SData")
+  "HMP16SData",
+  "caTools",
+  "piano",
+  "isa",
+  "VennDiagram",
+  "downloader",
+	"gdata",
+	"AnnotationDbi",
+	"hgu133a.db",
+  "PharmacoGx")
 BiocManager::install(required_pkgs)
 ```
 
@@ -1040,7 +1049,9 @@ We summarize two approaches to accessing TCGA data:
 
 ### TCGAbiolinks
 
-We demonstrate here generating a `RangedSummarizedExperiment` for RNA-seq data from adrenocortical carcinoma (ACC). For additional information and options, see the TCGAbiolinks vignettes[^13].
+We demonstrate here generating a `RangedSummarizedExperiment` for RNA-seq data
+from adrenocortical carcinoma (ACC). For additional information and options, see
+the TCGAbiolinks vignettes[^13].
 
 Load packages:
 
@@ -1183,7 +1194,12 @@ head(metadata(colData(ACCmae))[["subtypes"]])
 
 ## recount: Reproducible RNA-seq Analysis Using recount2
 
-The *[recount](http://bioconductor.org/packages/recount)*[@Collado-Torres2017-ww] package provides uniformly processed `RangedSummarizedExperiment` objects at the gene, exon, or exon-exon junctions level, the raw counts, the phenotype metadata used, the urls to sample coverage bigWig files and mean coverage bigWig file, for every study available. The `RangedSummarizedExperiment` objects can be used for differential expression analysis. These are also accessible through a web interface [^14].
+The *[recount](http://bioconductor.org/packages/recount)*[@Collado-Torres2017-ww] package provides
+uniformly processed `RangedSummarizedExperiment` objects at the gene, exon, or
+exon-exon junctions level, the raw counts, the phenotype metadata used, the urls
+to sample coverage bigWig files and mean coverage bigWig file, for every study
+available. The `RangedSummarizedExperiment` objects can be used for differential
+expression analysis. These are also accessible through a web interface [^14].
 
 
 ```
@@ -1340,5 +1356,135 @@ V13()
 This can also be converted to *[phyloseq](http://bioconductor.org/packages/phyloseq)* for ecological and differential abundance analysis; see the *[HMP16SData](http://bioconductor.org/packages/HMP16SData)* vignette for details.
     
 ## Pharmacogenomics
+
+Pharmacogenomics holds great promise for the development of biomarkers of drug response and the design of new therapeutic options, which are key challenges in precision medicine. However, such data are scattered and lack standards for efficient access and analysis, consequently preventing the realization of the full potential of pharmacogenomics. To address these issues, we implemented PharmacoGx, an easy-to-use, open source package for integrative analysis of multiple pharmacogenomic datasets. We  demonstrate here the utility of our package in comparing large drug sensitivity datasets, such as the Genomics of Drug Sensitivity in Cancer [GDSC](https://www.cancerrxgene.org/) and the Cancer Cell Line Encyclopedia [CCLE](https://portals.broadinstitute.org/ccle), or use large drug perturbation data from the Connectivity Map [CAMP](https://clue.io/cmap)for drug repurposing.
+
+These case studies were published in Smirnov, Petr, et al. [PharmacoGx: an R package for analysis of large pharmacogenomic datasets." Bioinformatics 32.8 (2015): 1244-1246](https://academic.oup.com/bioinformatics/article/32/8/1244/1744214/PharmacoGx-an-R-package-for-analysis-of-large).
+
+### Getting started 
+
+Let us first load the `PharmacoGx`library.
+
+
+```r
+library(PharmacoGx)
+#> Warning in fun(libname, pkgname): couldn't connect to display ":0"
+```
+
+We can now access large-scale preclinical pharmacogenomic datasets that have been fully curated for ease of use.
+
+### Overview of PharmacoGx datasets (PharmacoSets)
+
+To efficiently store and analyze large pharmacogenomic datasets, we developed the `PharmacoSet` class (also referred to as `PSet`), which acts as a data container storing pharmacological and molecular data along with experimental metadata (detailed structure provided in Supplementary materials). This class enables efficient implementation of curated annotations for cell lines, drug compounds and molecular features, which facilitates comparisons between different datasets stored as `PharmacoSet` objects.
+
+[Structure of the PharmacoSet class](Waldron_PublicData/PharmacoSet_structure.png)
+
+To get a list of all the available `PharmacoSets` in PharmacoGx, we can use the àvailablePSets` function, which returns a table providing key information for each dataset.
+
+
+```r
+availablePSets()
+#>                       PSet.Name Dataset.Type Available.Molecular.Profiles
+#> CCLE_2013             CCLE_2013  sensitivity                 rna/mutation
+#> CCLE                       CCLE  sensitivity      rna/rnaseq/mutation/cnv
+#> GDSC_2013             GDSC_2013  sensitivity                 rna/mutation
+#> GDSC                       GDSC  sensitivity rna/rna2/mutation/fusion/cnv
+#> GDSC1000               GDSC1000  sensitivity                          rna
+#> gCSI                       gCSI  sensitivity                   rnaseq/cnv
+#> FIMM                       FIMM  sensitivity                             
+#> CTRPv2                   CTRPv2  sensitivity                             
+#> CMAP                       CMAP perturbation                          rna
+#> L1000_compounds L1000_compounds perturbation                          rna
+#> L1000_genetic     L1000_genetic perturbation                          rna
+#>                             Date.Updated
+#> CCLE_2013       Tue Sep 15 18:50:07 2015
+#> CCLE            Thu Dec 10 18:17:14 2015
+#> GDSC_2013       Mon Oct  5 16:07:54 2015
+#> GDSC            Wed Dec 30 10:44:21 2015
+#> GDSC1000        Thu Aug 25 11:13:00 2016
+#> gCSI            Mon Jun 13 18:50:12 2016
+#> FIMM             Mon Oct 3 17:14:00 2016
+#> CTRPv2          Thu Aug 25 11:15:00 2016
+#> CMAP            Mon Sep 21 02:38:45 2015
+#> L1000_compounds Mon Jan 25 12:51:00 2016
+#> L1000_genetic   Mon Jan 25 12:51:00 2016
+#>                                                                                                  URL
+#> CCLE_2013       https://www.pmgenomics.ca/bhklab/sites/default/files/downloads/CCLE_Nature2013.RData
+#> CCLE                       https://www.pmgenomics.ca/bhklab/sites/default/files/downloads/CCLE.RData
+#> GDSC_2013        https://www.pmgenomics.ca/bhklab/sites/default/files/downloads/CGP_Nature2013.RData
+#> GDSC                       https://www.pmgenomics.ca/bhklab/sites/default/files/downloads/GDSC.RData
+#> GDSC1000               https://www.pmgenomics.ca/bhklab/sites/default/files/downloads/GDSC1000.RData
+#> gCSI                       https://www.pmgenomics.ca/bhklab/sites/default/files/downloads/gCSI.RData
+#> FIMM                       https://www.pmgenomics.ca/bhklab/sites/default/files/downloads/FIMM.RData
+#> CTRPv2                   https://www.pmgenomics.ca/bhklab/sites/default/files/downloads/CTRPv2.RData
+#> CMAP                       https://www.pmgenomics.ca/bhklab/sites/default/files/downloads/CMAP.RData
+#> L1000_compounds https://www.pmgenomics.ca/bhklab/sites/default/files/downloads/L1000_compounds.RData
+#> L1000_genetic     https://www.pmgenomics.ca/bhklab/sites/default/files/downloads/L1000_genetic.RData
+```
+There are currently 11 datasets available in PharmacoGx, including 8 sensitivity datasets and 3 perturbation datasets (see below).
+
+#### Drug Sensitivity Datasets
+
+Drug sensitivity datasets refer to pharmacogenomic data where cancer cells are molecularly profiled at baseline (before drug treatment), and the effect of drug treatment on cell viability is measured using a pharmacological assay (e.g., Cell Titer-Glo). These datasets can be used for biomarker discovery by correlating the molecular features of cancer cells to their response to drugs of interest.
+
+[Schematic view of the drug sensitivity datasets.](Waldron_PublicData/Drug_sensitivity.png)
+
+
+```r
+psets <- availablePSets()
+psets[psets[ , "Dataset.Type"] == "sensitivity", ]
+#>           PSet.Name Dataset.Type Available.Molecular.Profiles
+#> CCLE_2013 CCLE_2013  sensitivity                 rna/mutation
+#> CCLE           CCLE  sensitivity      rna/rnaseq/mutation/cnv
+#> GDSC_2013 GDSC_2013  sensitivity                 rna/mutation
+#> GDSC           GDSC  sensitivity rna/rna2/mutation/fusion/cnv
+#> GDSC1000   GDSC1000  sensitivity                          rna
+#> gCSI           gCSI  sensitivity                   rnaseq/cnv
+#> FIMM           FIMM  sensitivity                             
+#> CTRPv2       CTRPv2  sensitivity                             
+#>                       Date.Updated
+#> CCLE_2013 Tue Sep 15 18:50:07 2015
+#> CCLE      Thu Dec 10 18:17:14 2015
+#> GDSC_2013 Mon Oct  5 16:07:54 2015
+#> GDSC      Wed Dec 30 10:44:21 2015
+#> GDSC1000  Thu Aug 25 11:13:00 2016
+#> gCSI      Mon Jun 13 18:50:12 2016
+#> FIMM       Mon Oct 3 17:14:00 2016
+#> CTRPv2    Thu Aug 25 11:15:00 2016
+#>                                                                                            URL
+#> CCLE_2013 https://www.pmgenomics.ca/bhklab/sites/default/files/downloads/CCLE_Nature2013.RData
+#> CCLE                 https://www.pmgenomics.ca/bhklab/sites/default/files/downloads/CCLE.RData
+#> GDSC_2013  https://www.pmgenomics.ca/bhklab/sites/default/files/downloads/CGP_Nature2013.RData
+#> GDSC                 https://www.pmgenomics.ca/bhklab/sites/default/files/downloads/GDSC.RData
+#> GDSC1000         https://www.pmgenomics.ca/bhklab/sites/default/files/downloads/GDSC1000.RData
+#> gCSI                 https://www.pmgenomics.ca/bhklab/sites/default/files/downloads/gCSI.RData
+#> FIMM                 https://www.pmgenomics.ca/bhklab/sites/default/files/downloads/FIMM.RData
+#> CTRPv2             https://www.pmgenomics.ca/bhklab/sites/default/files/downloads/CTRPv2.RData
+```
+
+#### Drug Perturbation Datasets
+
+Drug perturbation datasets refer to pharmacogenomic data where gene expression profiles are measured before and after short-term (e.g., 6h) drug treatment to identify genes that are up- and down-regulated due to the drug treatment. These datasets can be to classify drug (drug taxonomy), infer their mechanism of action, or find drugs with similar effects (drug repurposing).
+
+[Schematic view of drug perturbation datasets](Waldron_PublicData/Drug_perturbation.png)
+
+
+```r
+psets <- availablePSets()
+psets[psets[ , "Dataset.Type"] == "perturbation", ]
+#>                       PSet.Name Dataset.Type Available.Molecular.Profiles
+#> CMAP                       CMAP perturbation                          rna
+#> L1000_compounds L1000_compounds perturbation                          rna
+#> L1000_genetic     L1000_genetic perturbation                          rna
+#>                             Date.Updated
+#> CMAP            Mon Sep 21 02:38:45 2015
+#> L1000_compounds Mon Jan 25 12:51:00 2016
+#> L1000_genetic   Mon Jan 25 12:51:00 2016
+#>                                                                                                  URL
+#> CMAP                       https://www.pmgenomics.ca/bhklab/sites/default/files/downloads/CMAP.RData
+#> L1000_compounds https://www.pmgenomics.ca/bhklab/sites/default/files/downloads/L1000_compounds.RData
+#> L1000_genetic     https://www.pmgenomics.ca/bhklab/sites/default/files/downloads/L1000_genetic.RData
+```
+
 
 ## Bibliography

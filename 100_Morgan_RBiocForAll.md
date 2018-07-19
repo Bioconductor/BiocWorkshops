@@ -7,8 +7,6 @@ Authors:
     <br/>
 Last modified: 17 July 2018
 
-
-
 ## Overview
 
 ### Description
@@ -532,7 +530,7 @@ To get a sense of the use of formulas in _R_, and the ease with which one can ex
 boxplot(age ~ mol.biol, bcrabl)
 ```
 
-<img src="100_Morgan_RBiocForAll_files/figure-html/unnamed-chunk-32-1.png" width="672" />
+<img src="100_Morgan_RBiocForAll_files/figure-html/unnamed-chunk-31-1.png" width="672" />
 
 Consult the help page `?boxplot` to figure out how to add "Age" as the y-axis label.
 
@@ -608,7 +606,7 @@ ggplot(bcrabl, aes(x = mol.biol, y = age)) + geom_boxplot()
 #> Warning: Removed 4 rows containing non-finite values (stat_boxplot).
 ```
 
-<img src="100_Morgan_RBiocForAll_files/figure-html/unnamed-chunk-37-1.png" width="672" />
+<img src="100_Morgan_RBiocForAll_files/figure-html/unnamed-chunk-36-1.png" width="672" />
 
 Use `xlab()` and `ylab()` to enhance the plot with more meaning x and y labels; see the help page `?xlab`, especially the example section, for hints on how to modify the graph.
 
@@ -813,7 +811,7 @@ Use the `width()` accessor function to extract a vector of widths of each CpG is
 hist(log10(width(cpg)))
 ```
 
-<img src="100_Morgan_RBiocForAll_files/figure-html/unnamed-chunk-50-1.png" width="672" />
+<img src="100_Morgan_RBiocForAll_files/figure-html/unnamed-chunk-49-1.png" width="672" />
 
 Use `subset()` to select the CpG islands on chromosomes 1 and 2.
 

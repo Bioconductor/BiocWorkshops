@@ -1236,4 +1236,3 @@ exportImage(mesenem_summary_png_file_name, type = "png")
 <p class="caption">(\#fig:cmesenem_annot_fig)Example Annotated Enrichment Map created when running an enrichment analysis using EnrichmentBrowser ORA with the genes that differential in mesenchymal OV</p>
 </div>
 
-## References
