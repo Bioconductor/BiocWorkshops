@@ -1069,7 +1069,7 @@ str(da_hdf5)
 ```
 ## Formal class 'HDF5Matrix' [package "HDF5Array"] with 1 slot
 ##   ..@ seed:Formal class 'HDF5ArraySeed' [package "HDF5Array"] with 5 slots
-##   .. .. ..@ filepath : chr "/tmp/tmp.W2XD8DRs51/BiocWorkshops/500_Effectively_Using_the_DelayedArray_Framework/hdf5_mat.h5"
+##   .. .. ..@ filepath : chr "/tmp/tmp.pfSj4eR2dX/BiocWorkshops/500_Effectively_Using_the_DelayedArray_Framework/hdf5_mat.h5"
 ##   .. .. ..@ name     : chr "hdf5_mat"
 ##   .. .. ..@ dim      : int [1:2] 105 2
 ##   .. .. ..@ first_val: int 1
@@ -1221,14 +1221,520 @@ showtree(-da_hdf5)
 To further illustrate the idea, let's perform some delayed operations on a large *HDF5Array* and compare them to performing the operations on the equivalent *array*.
 
 
+```r
+library(h5vcData)
+
+tally_file <- system.file("extdata", "example.tally.hfs5", package = "h5vcData")
+x_h5 <- HDF5Array(tally_file, "/ExampleStudy/16/Coverages")
+x_h5
+```
+
+```
+## <6 x 2 x 90354753> HDF5Array object of type "integer":
+## ,,1
+##      [,1] [,2]
+## [1,]    0    0
+## [2,]    0    0
+##  ...    .    .
+## [5,]    0    0
+## [6,]    0    0
+## 
+## ...
+## 
+## ,,90354753
+##      [,1] [,2]
+## [1,]    0    0
+## [2,]    0    0
+##  ...    .    .
+## [5,]    0    0
+## [6,]    0    0
+```
+
+```r
+x <- as.array(x_h5)
+
+# Delayed operations are fast compared to ordinary operations! 
+system.time(x_h5 + 100L) 
+```
+
+```
+##    user  system elapsed 
+##   0.004   0.000   0.004
+```
+
+```r
+system.time(x + 100L) 
+```
+
+```
+##    user  system elapsed 
+##   2.420   1.584   4.005
+```
+
+```r
+# Delayed operations can be chained
+system.time(t(x_h5[1, , 1:100] + 100L))
+```
+
+```
+##    user  system elapsed 
+##   0.016   0.000   0.015
+```
+
+Rather than modifying the data stored in the HDF5 file, which can be costly for large datasets, we've recorded the 'idea' of these operations as a tree of *DelayedOp* objects.
+Each node in the tree is represented by a *DelayedOp* object, of which there are 6 concrete subclasses:
+
+| Node type           | Out-degree | Operation                                                 |
+|---------------------|------------|-----------------------------------------------------------|
+| *DelayedSubset*     | 1          | Multi-dimensional single bracket subsetting               |
+| *DelayedAperm*      | 1          | Extended `aperm()` (can drop dimensions)                  |
+| *DelayedUnaryIsoOp* | 1          | Unary op that preserves the geometry (e.g., `-`, `log()`) |
+| *DelayedDimnames*   | 1          | Set dimnames                                              |
+| *DelayedNaryIsoOp*  | N          | N-ary op that preserves the geometry                      |
+| *DelayedAbind*      | N          | `abind()`                                                 |                                            |
+
+#### Block-processing
+
+Block-processing allows you to iterate over blocks of a *DelayedArray* in a manner that abstracts over the backend.
+
+The following cartoon illustrates the basic idea of block-processing:
+
+![](500_Effectively_Using_the_DelayedArray_Framework/block_processing/Slide1.png)
+
+![](500_Effectively_Using_the_DelayedArray_Framework/block_processing/Slide2.png)
+
+![](500_Effectively_Using_the_DelayedArray_Framework/block_processing/Slide3.png)
+
+![](500_Effectively_Using_the_DelayedArray_Framework/block_processing/Slide4.png)
+
+![](500_Effectively_Using_the_DelayedArray_Framework/block_processing/Slide5.png)
+
+![](500_Effectively_Using_the_DelayedArray_Framework/block_processing/Slide6.png)
+
+![](500_Effectively_Using_the_DelayedArray_Framework/block_processing/Slide7.png)
+
+To implement block-processing, we first construct an *ArrayGrid* over the *DelayedArray*.
+Each element of the *ArrayGrid* is called an *ArrayViewport*.
+We iterate over the *ArrayGrid*, extract the corresponding *ArrayViewport*, and load the data for that block into memory as an ordinary R *array* where it can be processed using ordinary R functions.
+
+In pseudocode, we might implement block processing as follows:
 
 
+```r
+# Construct an ArrayGrid over 'x'. 
+# NOTE: blockGrid() is explained below.
+grid <- blockGrid(x)
+for (b in seq_along(grid)) {
+    # Construct an ArrayViewPort using the b-th element of the ArrayGrid.
+    viewport <- grid[[b]]
+    # Read the block of data using the current 'viewport' applied to 'x'.
+    block <- read_block(x, viewport)
+    # Apply our function to 'block' (which is an ordinary R array).
+    FUN(block)
+}
+```
+
+In practice, when constructing the *ArrayGrid* for a particular operation, we need to consider a few issues:
+
+1. Constraints on how much data we can bring into memory (the 'maximum block length').
+2. The geometry of the *ArrayGrid*, which will control the order in which we access elements.
+3. How the data are physically stored ('chunking' of the data on disk).
+
+##### Maximum block length
+
+There is a global option `getOption("DelayedArray.block.size")` for controlling how much data is brough into memory with default value corresponding to each block containing a maximum of 45 Mb of data.
+It's good practice to respect this value, however, some algorithms may require this be ignored (e.g., if you require a full column's worth of data for each block).
+
+##### Chunking and data structure
+
+Regardless of the backend, the data will be stored with a particular structure. 
+For example, ordinary R arrays store the data in column-major order.
+The geometry of the data structure is especially relevant for HDF5 files.
+
+The HDF5 format supports 'chunking' of data to maximize data access performance.
+From [https://support.hdfgroup.org/HDF5/doc/Advanced/Chunking/index.html](https://support.hdfgroup.org/HDF5/doc/Advanced/Chunking/index.html):
+
+> Datasets in HDF5 can represent arrays with any number of dimensions (up to 32). However, in the file this dataset must be stored as part of the 1-dimensional stream of data that is the low-level file. The way in which the multidimensional dataset is mapped to the serial file is called the layout. The most obvious way to accomplish this is to simply flatten the dataset in a way similar to how arrays are stored in memory, serializing the entire dataset into a monolithic block on disk, which maps directly to a memory buffer the size of the dataset. This is called a contiguous layout.
+
+> An alternative to the contiguous layout is the chunked layout. Whereas contiguous datasets are stored in a single block in the file, chunked datasets are split into multiple chunks which are all stored separately in the file. The chunks can be stored in any order and any position within the HDF5 file. Chunks can then be read and written individually, improving performance when operating on a subset of the dataset.
+
+Although this sounds similar to the blocks used in block-processing, the two are distinct.
+
+**Chunks are used to determine how the data are stored, blocks are used to determine how the data are accessed via the *ArrayGrid*.**
+That is, you can use a different *ArrayGrid* geometry to the chunk geometry, but performance may be suboptimal.
+
+##### Geometry of the *ArrayGrid*
+
+The *ArrayGrid* could be a regularly spaced grid (a *RegularArrayGrid*) or a grid with arbitrary spacing (an *ArbitraryArrayGrid*).
+
+The **DelayedArray** package includes some helper functions for setting up *ArrayGrid* instances with particular geometries and other properties.
+
+The `blockGrid()` function returns the "optimal" *ArrayGrid* for block-processing. 
+The grid is "optimal" in the sense that:
+
+- It's "compatible" with the chunk grid (i.e. with `chunkGrid(x)` or with the chunk grid supplied via the `chunk.grid` argument). That is, the chunks are contained in the blocks. In other words, chunks never cross block boundaries.
+- Its "resolution" is such that the blocks have a length that is as close as possible to (but does not exceed) `block.maxlength`. An exception is when some chunks are already >= `block.maxlength`, in which case the returned grid is the same as the chunk grid.
+
+##### Block-processing in practice
+
+In practice, most block-processing algorithms can be implemented by constructing an *ArrayGrid* with a suitable geometry and then using `DelayedArray::blockApply()` or `DelayedArray::blockReduce()`.
+
+As an example, let's compute row and column medians of `da_hdf5`. 
+We'll start by constructing *ArrayGrid* instances over the rows and columns of `da_hdf5`.
 
 
+```r
+# NOTE: Making block-processing verbose to show what's going on under the hood.
+DelayedArray:::set_verbose_block_processing(TRUE)
+```
+
+```
+## [1] FALSE
+```
+
+```r
+system.time(
+    row_medians <- blockApply(
+        x = da_hdf5, 
+        FUN = median, 
+        grid = RegularArrayGrid(
+            refdim = dim(da_hdf5),
+            spacings = c(1L, ncol(da_hdf5)))))
+```
+
+```
+##    user  system elapsed 
+##   0.092   1.092   1.461
+```
+
+```r
+head(row_medians)
+```
+
+```
+## [[1]]
+## [1] 8
+## 
+## [[2]]
+## [1] 8.5
+## 
+## [[3]]
+## [1] 8.5
+## 
+## [[4]]
+## [1] 9
+## 
+## [[5]]
+## [1] 9
+## 
+## [[6]]
+## [1] 9
+```
+
+```r
+system.time(
+    col_medians <- blockApply(
+        x = da_hdf5, 
+        FUN = median, 
+        grid = RegularArrayGrid(
+            refdim = dim(da_hdf5),
+            spacings = c(nrow(da_hdf5), 1L))))
+```
+
+```
+##    user  system elapsed 
+##   0.052   0.104   0.234
+```
+
+```r
+head(col_medians)
+```
+
+```
+## [[1]]
+## [1] 10
+## 
+## [[2]]
+## [1] 18
+```
+
+That works, but is somewhat slow for computing row maximums because we read from the HDF5 file `nrow(da_hdf5)` ( 105) times.
+We would be better off loading multiple rows of data per block.
+There are several ways to do this; here, we'll use `DelayedArray::blockGrid()` to construct an optimal *ArrayGrid* and `matrixStats::rowMedians()` and `matrixStats::colMedians()` to compute the row and column maximums.
 
 
+```r
+system.time(
+    row_medians <- blockApply(
+        x = da_hdf5, 
+        FUN = matrixStats::rowMedians, 
+        grid = blockGrid(
+            x = da_hdf5,
+            block.shape = "first-dim-grows-first")))
+```
+
+```
+## Processing block 1/1 ... OK
+```
+
+```
+##    user  system elapsed 
+##   0.020   0.000   0.019
+```
+
+```r
+head(row_medians)
+```
+
+```
+## [[1]]
+##   [1]  8.0  8.5  8.5  9.0  9.0  9.0  9.5  9.5  9.5  9.5 10.0 10.0 10.0 10.0
+##  [15] 10.0 11.0 11.0 11.0 11.0 11.0 11.0 11.5 11.5 11.5 11.5 11.5 11.5 11.5
+##  [29] 12.0 12.0 12.0 12.5 12.5 12.5 12.5 12.5 13.0 13.0 13.0 13.0 13.0 13.0
+##  [43] 13.0 13.0 13.0 13.5 13.5 13.5 14.0 14.0 14.0 14.0 14.0 14.0 14.0 14.5
+##  [57] 14.5 14.5 14.5 14.5 14.5 14.5 14.5 14.5 14.5 14.5 15.5 15.5 15.5 15.5
+##  [71] 15.5 15.5 15.5 15.5 15.5 15.5 15.5 15.5 16.0 16.0 16.0 16.0 16.0 16.0
+##  [85] 16.0 16.5 16.5 16.5 16.5 16.5 16.5 17.0 17.0 17.0 17.0 17.0 17.0 17.0
+##  [99] 17.0 17.0 17.0 17.0 17.0 17.0 17.0
+```
+
+```r
+system.time(
+    col_medians <- blockApply(
+        x = da_hdf5, 
+        FUN = matrixStats::colMedians, 
+        grid = blockGrid(
+            x = da_hdf5,
+            block.shape = "last-dim-grows-first")))
+```
+
+```
+## Processing block 1/1 ... OK
+```
+
+```
+##    user  system elapsed 
+##   0.016   0.000   0.016
+```
+
+```r
+head(col_medians)
+```
+
+```
+## [[1]]
+## [1] 10 18
+```
+
+For larger problems, we can improve performance by processing blocks in parallel by passing an appropriate *BiocParallelParam* object via the `bpparam` argument of `blockApply()` and `blockReduce()`.
+
+Although `blockApply()` and `blockReduce()` cover most of the block-processing tasks, sometimes you may need to implement the block-processing at a lower level.
+For example, you may need to iterate over multiple *DelayedArray* objects or your `FUN` returns an object equally large (or larger) than the `block`.
+The details of these abstractions are still being worked out, but some likely candidates include methods that conceptually do:
+
+- `blockMapply()`
+- `blockApplyWithRealization()`
+- `blockMapplyWithRealization()`
+
+#### Realization
+
+Realization is the process of taking a *DelayedArray*, executing any delayed operations, and returning the result as a new *DelayedArray* with the appropriate backend. 
+
+Returning to our earlier example with data from the **h5vcData** package:
 
 
+```r
+x_h5
+```
+
+```
+## <6 x 2 x 90354753> HDF5Array object of type "integer":
+## ,,1
+##      [,1] [,2]
+## [1,]    0    0
+## [2,]    0    0
+##  ...    .    .
+## [5,]    0    0
+## [6,]    0    0
+## 
+## ...
+## 
+## ,,90354753
+##      [,1] [,2]
+## [1,]    0    0
+## [2,]    0    0
+##  ...    .    .
+## [5,]    0    0
+## [6,]    0    0
+```
+
+```r
+showtree(x_h5)
+```
+
+```
+## 6x2x90354753 integer: HDF5Array object
+## └─ 6x2x90354753 integer: [seed] HDF5ArraySeed object
+```
+
+```r
+y <- t(x_h5[1, , 1:10000000] + 100L)
+showtree(y)
+```
+
+```
+## 10000000x2 integer: DelayedMatrix object
+## └─ 10000000x2 integer: Unary iso op
+##    └─ 10000000x2 integer: Aperm (perm=c(3,2))
+##       └─ 1x2x10000000 integer: Subset
+##          └─ 6x2x90354753 integer: [seed] HDF5ArraySeed object
+```
+
+```r
+# Realize the result in-memory
+z <- realize(y, BACKEND = NULL)
+# NOTE: 'z' does not carry any delayed operations.
+showtree(z)
+```
+
+```
+## 10000000x2 integer: DelayedMatrix object
+## └─ 10000000x2 integer: [seed] matrix object
+```
+
+```r
+# Realize the result on-disk in an autogenerated HDF5 file
+z_h5 <- realize(y, BACKEND = "HDF5Array")
+```
+
+```
+## Processing block 1/2 ... OK
+## Processing block 2/2 ... OK
+```
+
+```r
+# NOTE: 'z_h5' does not carry any delayed operations.
+showtree(z_h5)
+```
+
+```
+## 10000000x2 integer: HDF5Matrix object
+## └─ 10000000x2 integer: [seed] HDF5ArraySeed object
+```
+
+```r
+path(z_h5)
+```
+
+```
+## [1] "/tmp/RtmpcUvBIM/HDF5Array_dump/auto00001.h5"
+```
+
+```r
+# NOTE: The show() method performs realization on the first few and last few 
+#       elements in order to preview the result
+y
+```
+
+```
+## <10000000 x 2> DelayedMatrix object of type "integer":
+##             [,1] [,2]
+##        [1,]  100  100
+##        [2,]  100  100
+##        [3,]  100  100
+##        [4,]  100  100
+##        [5,]  100  100
+##         ...    .    .
+##  [9999996,]  100  100
+##  [9999997,]  100  100
+##  [9999998,]  100  100
+##  [9999999,]  100  100
+## [10000000,]  100  100
+```
+
+Realization uses block-processing under the hood:
 
 
+```r
+DelayedArray:::set_verbose_block_processing(TRUE)
+```
 
+```
+## [1] TRUE
+```
+
+```r
+realize(y, BACKEND = "HDF5Array")
+```
+
+```
+## Processing block 1/2 ... OK
+## Processing block 2/2 ... OK
+```
+
+```
+## <10000000 x 2> HDF5Matrix object of type "integer":
+##             [,1] [,2]
+##        [1,]  100  100
+##        [2,]  100  100
+##        [3,]  100  100
+##        [4,]  100  100
+##        [5,]  100  100
+##         ...    .    .
+##  [9999996,]  100  100
+##  [9999997,]  100  100
+##  [9999998,]  100  100
+##  [9999999,]  100  100
+## [10000000,]  100  100
+```
+
+```r
+DelayedArray:::set_verbose_block_processing(FALSE)
+```
+
+```
+## [1] TRUE
+```
+
+## What's out there already?
+
+**UP TO HERE**
+
+- **DelayedMatrixStats**
+- **beachmat**
+
+#### Learning goal
+
+* Learn of existing functions and packages for constructing and computing on DelayedArray objects, avoiding the need to re-invent the wheel.
+
+## Incoporating DelayedArray into a package
+
+### Writing algorithms to process *DelayedArray* instances
+
+#### Learning goals
+
+* Learn common design patterns for writing performant code that operates on a DelayedArray.
+* Evaluate whether an existing function that operates on an ordinary array can be readily adapted to work on a DelayedArray.
+* Reason about potential bottlenecks in algorithms operating on DelayedArray objects.
+
+#### Learning objectives
+
+* Take a function that operates on rows or columns of a matrix and apply it to a DelayedMatrix.
+* Use block-processing on a *DelayedArray* to compute:
+    * A univariate (scalar) summary statistic (e.g., `max()`).
+    * A multivariate (vector) summary statistic (e.g., `colSum()` or `rowMean()`).
+    * A multivariate (array-like) summary statistic (e.g., `rowRanks()`).
+    * Design an algorithm that imports data into a DelayedArray.
+
+## Questions and discussion
+
+This section will be updated to address questions and to summarise the discussion from the presentation of this workshop at BioC2018. 
+
+## TODOs
+
+- Use **BiocStyle**?
+-  Show packages depend on one another, with HDF5Array as the root (i.e. explain the HDF5 stack)
+- Use `suppressPackageStartupMessages()` or equivalent.
+- Note that we'll be focusing on numerical array-like data, i.e. no real discussion of **GDSArray**.
+- Remove **memuse** dependency
+- Link to my useR talk and slides
