@@ -1112,4 +1112,3 @@ exportImage(mesenem_summary_png_file_name, type = "png")
 knitr::include_graphics(mesenem_summary_png_file_name)
 ```
 
-## References
