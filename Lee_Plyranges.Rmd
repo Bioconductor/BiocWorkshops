@@ -666,7 +666,7 @@ first_bam_cvg
 
 Here the coverage is computed without the entire BAM file being read into
 memory. Notice that the score here is the count of the number of alignments
-that coverage a range. To compute a coverage histogram, that is the number
+that cover a given range. To compute a coverage histogram, that is the number
 of number of bases that have a given coverage score for each contig we can
 simply use `summarise()`:
 
@@ -710,9 +710,9 @@ Finally, we can split our alignments using the `chop_by_introns()`:
 split_bam <- split_bam %>% 
     chop_by_introns()
 split_bam
-# look at the junction reads 
+# look at all the junction reads 
 split_bam %>% 
-    filter(n() > 2)
+    filter(n() >= 2)
 ```
 
 
