@@ -66,7 +66,7 @@ Learning objectives
   * Check out some of the tasks you can do with Cytoscape in our online tutorial guide - tutorials.cytoscape.org
 
 <div class="figure">
-<img src="/tmp/tmp.sy5Z6WYuNX/BiocWorkshops/230_Isserlin_RCy3_intro/images/Apps-4.png" alt="Available Cytoscape Apps" width="1554" />
+<img src="/tmp/tmp.i7oQN4kKK4/BiocWorkshops/230_Isserlin_RCy3_intro/images/Apps-4.png" alt="Available Cytoscape Apps" width="1554" />
 <p class="caption">(\#fig:cytoapps)Available Cytoscape Apps</p>
 </div>
 
@@ -92,7 +92,7 @@ Often data in our pipelines are represented as data.frames, tables, matrices, ve
 
 
 <div class="figure">
-<img src="/tmp/tmp.sy5Z6WYuNX/BiocWorkshops/230_Isserlin_RCy3_intro/images/tables2networks.png" alt="Translating data to networks" width="792" />
+<img src="/tmp/tmp.i7oQN4kKK4/BiocWorkshops/230_Isserlin_RCy3_intro/images/tables2networks.png" alt="Translating data to networks" width="792" />
 <p class="caption">(\#fig:table2network)Translating data to networks</p>
 </div>
 
@@ -130,13 +130,13 @@ Networks can be used for two main purposes but often go hand in hand.
 Networks offer us a useful way to represent our biological data.  But how do we seamlessly translate our data from R into Cytoscape?
 
 <div class="figure">
-<img src="/tmp/tmp.sy5Z6WYuNX/BiocWorkshops/230_Isserlin_RCy3_intro/images/CytoscapeAutomation_3.png" alt="Different ways to communicate with Cytoscape" width="500" />
+<img src="/tmp/tmp.i7oQN4kKK4/BiocWorkshops/230_Isserlin_RCy3_intro/images/CytoscapeAutomation_3.png" alt="Different ways to communicate with Cytoscape" width="500" />
 <p class="caption">(\#fig:cytoscapeRcy3)Different ways to communicate with Cytoscape</p>
 </div>
 
 There are multiple ways to communicate with Cytoscape programmatically.  There are two main complementary portals,**cyRest**[@cyrest] and **Commands**, that form the foundation.  cyRest transforms Cytoscape in to a REST (Representational State Transfer) enabled service where it essentially listens for events through a predefined port (by default port 1234).  The cyRest functionality started as an app add in but has now been incorporated into the main release. Commands, on the other hand, offer a mechanism whereby app developers can expose their functionality to other apps or to user through the command interface.  Prior to the implementation of cyRest many of the basic network functions were first available as commands so there is some overlap between the two different methods.  \@ref(fig:cytoscapeRcy3) shows the different ways you can call Cytoscape.
 
-### Set up
+## Set up
 
 
 
@@ -198,7 +198,7 @@ if(length(cytoscape_version) == 3 && as.numeric(cytoscape_version[1]>=3)
 ```
 
 
-<img src="/tmp/tmp.sy5Z6WYuNX/BiocWorkshops/230_Isserlin_RCy3_intro/images/screenshot_cytoscapeping.png" width="918" />
+<img src="/tmp/tmp.i7oQN4kKK4/BiocWorkshops/230_Isserlin_RCy3_intro/images/screenshot_cytoscapeping.png" width="918" />
 
 ### Getting started
 ####Confirm that Cytoscape is installed and opened
@@ -208,7 +208,7 @@ if(length(cytoscape_version) == 3 && as.numeric(cytoscape_version[1]>=3)
 ```
 
 
-<img src="/tmp/tmp.sy5Z6WYuNX/BiocWorkshops/230_Isserlin_RCy3_intro/images/screenshot_cytoscapeversion.png" width="920" />
+<img src="/tmp/tmp.i7oQN4kKK4/BiocWorkshops/230_Isserlin_RCy3_intro/images/screenshot_cytoscapeversion.png" width="920" />
 
 ####Browse available functions, commands and arguments
 Depending on what apps you have installed there is different functionality available.  
@@ -238,9 +238,9 @@ commandsHelp("help")
 ```
 
 
-<img src="/tmp/tmp.sy5Z6WYuNX/BiocWorkshops/230_Isserlin_RCy3_intro/images/screenshot_availablecommands.png" width="920" />
+<img src="/tmp/tmp.i7oQN4kKK4/BiocWorkshops/230_Isserlin_RCy3_intro/images/screenshot_availablecommands.png" width="920" />
 
-### Cytoscape Basics
+## Cytoscape Basics
 Create a Cytoscape network from some basic R objects
 
 ```r
@@ -291,7 +291,7 @@ createNetworkFromDataFrames(nodes,edges, title="my first network", collection="D
 ```
 
 
-<img src="/tmp/tmp.sy5Z6WYuNX/BiocWorkshops/230_Isserlin_RCy3_intro/images/screenshot_networkload_1.png" width="921" />
+<img src="/tmp/tmp.i7oQN4kKK4/BiocWorkshops/230_Isserlin_RCy3_intro/images/screenshot_networkload_1.png" width="921" />
 
 Remember. All networks we make are created in Cytoscape so get an image of the resulting network and include it in your current analysis if desired.
 
@@ -303,7 +303,7 @@ initial_network_png_file_name <- file.path(getwd(),"230_Isserlin_RCy3_intro", "i
 
 ```r
 if(file.exists(initial_network_png_file_name)){
-  #cytoscape hangs waiting for user response if file alreayd exists.  Remove it first
+  #cytoscape hangs waiting for user response if file already exists.  Remove it first
   file.remove(initial_network_png_file_name)
   } 
 
@@ -312,11 +312,11 @@ exportImage(initial_network_png_file_name, type = "png")
 ```
 
 <div class="figure">
-<img src="/tmp/tmp.sy5Z6WYuNX/BiocWorkshops/230_Isserlin_RCy3_intro/images/initial_example_network.png" alt="Example network created from dataframe" width="444" />
+<img src="/tmp/tmp.i7oQN4kKK4/BiocWorkshops/230_Isserlin_RCy3_intro/images/initial_example_network.png" alt="Example network created from dataframe" width="444" />
 <p class="caption">(\#fig:initialnetwork)Example network created from dataframe</p>
 </div>
 
-### Example Data Set
+## Example Data Set
 We downloaded gene expression data from the Ovarian Serous Cystadenocarcinoma project of The Cancer Genome Atlas (TCGA)[@TCGA], http://cancergenome.nih.gov via the Genomic Data Commons (GDC) portal[@GDC] on 2017-06-14 using TCGABiolinks R package[@TCGABiolinks]. The data includes 300 samples available as RNA-seq data, with reads mapped to a reference genome using MapSplice[@MapSplice] and read counts per transcript determined using the RSEM method[@RSEM]. RNA-seq data are labeled as ‘RNA-Seq V2’, see details at: https://wiki.nci.nih.gov/display/TCGA/RNASeq+Version+2). The RNA-SeqV2 data consists of raw counts similar to regular RNA-seq but RSEM (RNA-Seq by Expectation Maximization) data can be used with the edgeR method. The expression dataset of 300 tumours, with 79 classified as Immunoreactive, 72 classified as Mesenchymal, 69 classified as Differentiated, and 80 classified as Proliferative samples(class definitions were obtained from Verhaak et al.[@OV] Supplementary Table 1, third column). RNA-seq read counts were converted to CPM values and genes with CPM > 1 in at least 50 of the samples are retained for further study (50 is the minimal sample size in the classes).  The data was normalized and differential expression was calculated for each cancer class relative to the rest of the samples. 
 
 There are two data files:
@@ -334,7 +334,7 @@ RNASeq_gene_scores <- read.table(
    file.path(getwd(),"230_Isserlin_RCy3_intro","data","TCGA_OV_RNAseq_All_edgeR_scores.txt"),  
   header = TRUE, sep = "\t", quote="\"", stringsAsFactors = FALSE)
 ```
-### Finding Network Data
+## Finding Network Data
 How do I represent *my* data as a network?
 
 Unfortunately, there is not a simple answer.  **It depends on your biological question!**   
@@ -345,14 +345,14 @@ Example use cases:
  1. Coexpression data - I have a dataset that represents relationships.  How do I represent it as a network. 
  1. Omics data - I have a *fill in the blank* (microarray, RNASeq, Proteomics, ATACseq, MicroRNA, GWAS ...) dataset.  I have normalized and scored my data.  I have run my data through a functional enrichment tool and now have a set of enriched terms associated with my dataset. How do I represent my functional enrichments as a network?
 
-### Use Case 1 - How are my top genes related?
+## Use Case 1 - How are my top genes related?
 
 Omics data - I have a *fill in the blank* (microarray, RNASeq, Proteomics, ATACseq, MicroRNA, GWAS ...) dataset.  I have normalized and scored my data. How do I overlay my data on existing interaction data? 
 
 There are endless amounts of databases storing interaction data. 
 
 <div class="figure">
-<img src="/tmp/tmp.sy5Z6WYuNX/BiocWorkshops/230_Isserlin_RCy3_intro/images/interaction-dbs.png" alt="Info graphic of some of the available pathway databases" width="800" />
+<img src="/tmp/tmp.i7oQN4kKK4/BiocWorkshops/230_Isserlin_RCy3_intro/images/interaction-dbs.png" alt="Info graphic of some of the available pathway databases" width="2776" />
 <p class="caption">(\#fig:ppidb)Info graphic of some of the available pathway databases</p>
 </div>
 
@@ -362,6 +362,7 @@ Thankfully we don't have to query each independent ally.  In addition to many sp
  * [PSICQUIC](https://psicquic.github.io/)[@psicquic] - a REST-ful service that is the responsibility of the database provider to set up and maintain.  PSICQUIC is an additional interface that allows users to search all available databases (that support this REST-ful service).  The databases are required to represent their interaction data in Proteomic Standards Initiative - molecular interaction (PSI-MI) format. To see a list of all the available data source see [here](http://www.ebi.ac.uk/Tools/webservices/psicquic/registry/registry?action=STATUS)
  * [nDex](http://home.ndexbio.org/index/)[@ndex] - a network data exchange repository. 
  * [GeneMANIA](http://genemania.org/)[@genemania] - contains multiple networks (shared domains, physical interactions, pathways, predicted, co-expression, genetic interactions and co-localized network).  Given a set of genes GeneMANIA selects and weights networks that optimize the connectivity between the query genes.  GeneMANIA will also return additional genes that are highly related to your query set.
+ * [PathwayCommons](http://www.pathwaycommons.org/) - (access the data through the [CyPath2App](http://apps.cytoscape.org/apps/cypath2)) is a pathway and interaction data source.  Data is collated from a large set of resources (list [here](http://www.pathwaycommons.org/pc2/datasources) ) and stored in the BioPAX[@biopax] format.  BioPAX is a data standard that allows for detailed representation of pathway mechanistic details as opposed to collapsing it to the set of interactions between molecules.  BioPAX pathways from Pathway commons can also be loaded directly into R using the [PaxToolsR](http://bioconductor.org/packages/release/bioc/html/paxtoolsr.html)[@paxtoolsr] Bioconductor package.   
 
 Get a subset of genes of interest from our scored data:
 
@@ -417,14 +418,14 @@ commandsHelp("help string")
 ```
 
 
-<img src="/tmp/tmp.sy5Z6WYuNX/BiocWorkshops/230_Isserlin_RCy3_intro/images/screenshot_availablestringcommands.png" width="922" />
+<img src="/tmp/tmp.i7oQN4kKK4/BiocWorkshops/230_Isserlin_RCy3_intro/images/screenshot_availablestringcommands.png" width="922" />
 
 
 ```r
 commandsHelp("help string protein query")
 ```
 
-<img src="/tmp/tmp.sy5Z6WYuNX/BiocWorkshops/230_Isserlin_RCy3_intro/images/screenshot_availablestringarguments.png" width="921" />
+<img src="/tmp/tmp.i7oQN4kKK4/BiocWorkshops/230_Isserlin_RCy3_intro/images/screenshot_availablestringarguments.png" width="921" />
 
 
 ```r
@@ -433,7 +434,7 @@ commandsGET(mesen_string_interaction_cmd)
 ```
 
 
-<img src="/tmp/tmp.sy5Z6WYuNX/BiocWorkshops/230_Isserlin_RCy3_intro/images/screenshot_stringnetworkload.png" width="922" />
+<img src="/tmp/tmp.i7oQN4kKK4/BiocWorkshops/230_Isserlin_RCy3_intro/images/screenshot_stringnetworkload.png" width="922" />
 
 Get a screenshot of the initial network
 
@@ -444,7 +445,7 @@ initial_string_network_png_file_name <- file.path(getwd(),"230_Isserlin_RCy3_int
 
 ```r
 if(file.exists(initial_string_network_png_file_name)){
-  #cytoscape hangs waiting for user response if file alreayd exists.  Remove it first
+  #cytoscape hangs waiting for user response if file already exists.  Remove it first
   response <- file.remove(initial_string_network_png_file_name)
 } 
 
@@ -452,7 +453,7 @@ response <- exportImage(initial_string_network_png_file_name, type = "png")
 ```
 
 <div class="figure">
-<img src="/tmp/tmp.sy5Z6WYuNX/BiocWorkshops/230_Isserlin_RCy3_intro/images/initial_string_network.png" alt="Initial network returned by String from our set of Mesenchymal query genes" width="444" />
+<img src="/tmp/tmp.i7oQN4kKK4/BiocWorkshops/230_Isserlin_RCy3_intro/images/initial_string_network.png" alt="Initial network returned by String from our set of Mesenchymal query genes" width="444" />
 <p class="caption">(\#fig:initialstringnetwork)Initial network returned by String from our set of Mesenchymal query genes</p>
 </div>
 
@@ -469,7 +470,7 @@ Check what other layout algorithms are available to try out
 getLayoutNames()
 ```
 
-<img src="/tmp/tmp.sy5Z6WYuNX/BiocWorkshops/230_Isserlin_RCy3_intro/images/screenshot_availablelayouts.png" width="924" />
+<img src="/tmp/tmp.i7oQN4kKK4/BiocWorkshops/230_Isserlin_RCy3_intro/images/screenshot_availablelayouts.png" width="924" />
 Get the parameters for a specific layout
 
 ```r
@@ -477,7 +478,7 @@ getLayoutPropertyNames(layout.name='force-directed')
 ```
 
 
-<img src="/tmp/tmp.sy5Z6WYuNX/BiocWorkshops/230_Isserlin_RCy3_intro/images/screenshot_availablelayoutarguments.png" width="922" />
+<img src="/tmp/tmp.i7oQN4kKK4/BiocWorkshops/230_Isserlin_RCy3_intro/images/screenshot_availablelayoutarguments.png" width="922" />
 
 Re-layout the network using the force directed layout but specify some of the parameters 
 
@@ -495,7 +496,7 @@ relayout_string_network_png_file_name <- file.path(getwd(),"230_Isserlin_RCy3_in
 
 ```r
 if(file.exists(relayout_string_network_png_file_name)){
-  #cytoscape hangs waiting for user response if file alreayd exists.  Remove it first
+  #cytoscape hangs waiting for user response if file already exists.  Remove it first
   response<- file.remove(relayout_string_network_png_file_name)
   } 
 response <- exportImage(relayout_string_network_png_file_name, type = "png")
@@ -503,7 +504,7 @@ response <- exportImage(relayout_string_network_png_file_name, type = "png")
 
 
 <div class="figure">
-<img src="/tmp/tmp.sy5Z6WYuNX/BiocWorkshops/230_Isserlin_RCy3_intro/images/relayout_string_network.png" alt="Initial network returned by String from our set of Mesenchymal query genes" width="444" />
+<img src="/tmp/tmp.i7oQN4kKK4/BiocWorkshops/230_Isserlin_RCy3_intro/images/relayout_string_network.png" alt="Initial network returned by String from our set of Mesenchymal query genes" width="444" />
 <p class="caption">(\#fig:relayoutstringnetwork)Initial network returned by String from our set of Mesenchymal query genes</p>
 </div>
 
@@ -515,7 +516,7 @@ To do this we will be using the loadTableData function from RCy3. It is importan
 getTableColumnNames('node')
 ```
 
-<img src="/tmp/tmp.sy5Z6WYuNX/BiocWorkshops/230_Isserlin_RCy3_intro/images/screenshot_availablenodecolumns.png" width="518" />
+<img src="/tmp/tmp.i7oQN4kKK4/BiocWorkshops/230_Isserlin_RCy3_intro/images/screenshot_availablenodecolumns.png" width="518" />
 
 If you are unsure of what each column is and want to further verify the column to use you can also pull in the entire node attribute table.
 
@@ -525,7 +526,7 @@ head(node_attribute_table_topmesen[,3:7])
 ```
 
 
-<img src="/tmp/tmp.sy5Z6WYuNX/BiocWorkshops/230_Isserlin_RCy3_intro/images/screenshot_nodetable.png" width="926" />
+<img src="/tmp/tmp.i7oQN4kKK4/BiocWorkshops/230_Isserlin_RCy3_intro/images/screenshot_nodetable.png" width="926" />
 
 The column "display name" contains HGNC gene names which are also found in our Ovarian Cancer dataset.
 
@@ -539,7 +540,7 @@ loadTableData(RNASeq_gene_scores,table.key.column = "display name",data.key.colu
 ```
 
 
-<img src="/tmp/tmp.sy5Z6WYuNX/BiocWorkshops/230_Isserlin_RCy3_intro/images/screenshot_nodeattributeload.png" width="928" />
+<img src="/tmp/tmp.i7oQN4kKK4/BiocWorkshops/230_Isserlin_RCy3_intro/images/screenshot_nodeattributeload.png" width="928" />
 
 Modify the Visual Style
 Create your own visual style to visualize your expression data on the String network. 
@@ -558,7 +559,7 @@ setVisualStyle(style.name=style.name)
 ```
 
 
-<img src="/tmp/tmp.sy5Z6WYuNX/BiocWorkshops/230_Isserlin_RCy3_intro/images/screenshot_visualstyleapplied.png" width="927" />
+<img src="/tmp/tmp.i7oQN4kKK4/BiocWorkshops/230_Isserlin_RCy3_intro/images/screenshot_visualstyleapplied.png" width="927" />
 
 Update your created style with a mapping for the Mesenchymal logFC expression. The first step is to grab the column data from Cytoscape (we can reuse the node_attribute table concept from above but we have to call the function again as we have since added our expression data) and pull out the min and max to define our data mapping range of values.
 
@@ -605,7 +606,7 @@ setNodeShapeBypass(node.names = top_mesenchymal_genes$Name, new.shapes = "TRIANG
 ```
 
 
-<img src="/tmp/tmp.sy5Z6WYuNX/BiocWorkshops/230_Isserlin_RCy3_intro/images/screenshot_availablenodeshapes.png" width="920" />
+<img src="/tmp/tmp.i7oQN4kKK4/BiocWorkshops/230_Isserlin_RCy3_intro/images/screenshot_availablenodeshapes.png" width="920" />
 
 Change the size of the node to be correlated with the Mesenchymal p-value. 
 
@@ -627,18 +628,18 @@ mesen_string_network_png_file_name <- file.path(getwd(),"230_Isserlin_RCy3_intro
 
 ```r
 if(file.exists(mesen_string_network_png_file_name)){
-  #cytoscape hangs waiting for user response if file alreayd exists.  Remove it first
+  #cytoscape hangs waiting for user response if file already exists.  Remove it first
   response<- file.remove(mesen_string_network_png_file_name)
   } 
 response <- exportImage(mesen_string_network_png_file_name, type = "png")
 ```
 
 <div class="figure">
-<img src="/tmp/tmp.sy5Z6WYuNX/BiocWorkshops/230_Isserlin_RCy3_intro/images/mesen_string_network.png" alt="Formatted String network from our set of Mesenchymal query genes.  Annotated with our expressin data" width="444" />
+<img src="/tmp/tmp.i7oQN4kKK4/BiocWorkshops/230_Isserlin_RCy3_intro/images/mesen_string_network.png" alt="Formatted String network from our set of Mesenchymal query genes.  Annotated with our expressin data" width="444" />
 <p class="caption">(\#fig:mesenstringnetwork)Formatted String network from our set of Mesenchymal query genes.  Annotated with our expressin data</p>
 </div>
 
-### Use Case 2 - Which genes have similar expression.
+## Use Case 2 - Which genes have similar expression.
 
 Instead of querying existing resources look for correlations in your own dataset to find out which genes have similar expression.  There are many tools that can analyze your data for correlation.  A popular tool is Weighted Gene Correlation Network Analysis (WGCNA)[@wgcna] which takes expression data and calculates functional modules.  As a simple example we can transform our expression dataset into a correlation matrix.  
 
@@ -777,7 +778,7 @@ correlation_network_png_file_name <- file.path(getwd(),"230_Isserlin_RCy3_intro"
 
 ```r
 if(file.exists(correlation_network_png_file_name)){
-  #cytoscape hangs waiting for user response if file alreayd exists.  Remove it first
+  #cytoscape hangs waiting for user response if file already exists.  Remove it first
   file.remove(correlation_network_png_file_name)
   } 
 
@@ -786,7 +787,7 @@ exportImage(correlation_network_png_file_name, type = "png")
 ```
 
 <div class="figure">
-<img src="/tmp/tmp.sy5Z6WYuNX/BiocWorkshops/230_Isserlin_RCy3_intro/images/correlation_network.png" alt="Example correlation network created using aMatReader" width="444" />
+<img src="/tmp/tmp.i7oQN4kKK4/BiocWorkshops/230_Isserlin_RCy3_intro/images/correlation_network.png" alt="Example correlation network created using aMatReader" width="444" />
 <p class="caption">(\#fig:correlation_network2)Example correlation network created using aMatReader</p>
 </div>
 
@@ -875,7 +876,7 @@ Run g:Profiler.  g:Profiler will return a set of pathways and functions that are
  
   head(em_results)
 ```
-<img src="/tmp/tmp.sy5Z6WYuNX/BiocWorkshops/230_Isserlin_RCy3_intro/images/screenshot_gprofiler_emresults.png" width="514" />
+<img src="/tmp/tmp.i7oQN4kKK4/BiocWorkshops/230_Isserlin_RCy3_intro/images/screenshot_gprofiler_emresults.png" width="514" />
 
 
 Create an enrichment map with the returned g:Profiler results.  An enrichment map is a different sort of network.  Instead of nodes representing genes, nodes represent pathways or functions.  Edges between these pathways or functions represent shared genes or pathway crosstalk.  An enrichment map is a way to visualize your enrichment results to help reduce redundancy and uncover main themes.  Pathways can also be explored in detail using the features available through the App in Cytoscape. 
@@ -904,7 +905,7 @@ cluster1em_png_file_name <- file.path(getwd(),"230_Isserlin_RCy3_intro", "images
 
 ```r
 if(file.exists(cluster1em_png_file_name)){
-  #cytoscape hangs waiting for user response if file alreayd exists.  Remove it first
+  #cytoscape hangs waiting for user response if file already exists.  Remove it first
   file.remove(cluster1em_png_file_name)
   } 
 
@@ -913,7 +914,7 @@ exportImage(cluster1em_png_file_name, type = "png")
 ```
 
 <div class="figure">
-<img src="/tmp/tmp.sy5Z6WYuNX/BiocWorkshops/230_Isserlin_RCy3_intro/images/cluster1em.png" alt="Example Enrichment Map created when running an enrichment analysis using g:Profiler with the genes that are part of cluster 1" width="444" />
+<img src="/tmp/tmp.i7oQN4kKK4/BiocWorkshops/230_Isserlin_RCy3_intro/images/cluster1em.png" alt="Example Enrichment Map created when running an enrichment analysis using g:Profiler with the genes that are part of cluster 1" width="444" />
 <p class="caption">(\#fig:cluster1em_fig)Example Enrichment Map created when running an enrichment analysis using g:Profiler with the genes that are part of cluster 1</p>
 </div>
 
@@ -940,7 +941,7 @@ cluster1em_annot_png_file_name <- file.path(getwd(),"230_Isserlin_RCy3_intro", "
 
 ```r
 if(file.exists(cluster1em_annot_png_file_name)){
-  #cytoscape hangs waiting for user response if file alreayd exists.  Remove it first
+  #cytoscape hangs waiting for user response if file already exists.  Remove it first
   file.remove(cluster1em_annot_png_file_name)
   } 
 
@@ -949,18 +950,18 @@ exportImage(cluster1em_annot_png_file_name, type = "png")
 ```
 
 <div class="figure">
-<img src="/tmp/tmp.sy5Z6WYuNX/BiocWorkshops/230_Isserlin_RCy3_intro/images/cluster1em_annot.png" alt="Example Annotated Enrichment Map created when running an enrichment analysis using g:Profiler with the genes that are part of cluster 1" width="339" />
+<img src="/tmp/tmp.i7oQN4kKK4/BiocWorkshops/230_Isserlin_RCy3_intro/images/cluster1em_annot.png" alt="Example Annotated Enrichment Map created when running an enrichment analysis using g:Profiler with the genes that are part of cluster 1" width="339" />
 <p class="caption">(\#fig:cluster1em_annot_fig)Example Annotated Enrichment Map created when running an enrichment analysis using g:Profiler with the genes that are part of cluster 1</p>
 </div>
 
 Dense networks small or large never look like network figures we so often see in journals.  A lot of manual tweaking, reorganization and optimization is involved in getting that perfect figure ready network.  The above network is what the network starts as.  The below figure is what it can look like after a few minutes of manual reorganiazation.  (individual clusters were selected from the auto annotate panel and separated from other clusters)
 
 <div class="figure">
-<img src="/tmp/tmp.sy5Z6WYuNX/BiocWorkshops/230_Isserlin_RCy3_intro/images/cluster1em_annot_man.png" alt="Example Annotated Enrichment Map created when running an enrichment analysis using g:Profiler with the genes that are part of cluster 1 after manual adjusting to generate a cleaner figure" width="329" />
+<img src="/tmp/tmp.i7oQN4kKK4/BiocWorkshops/230_Isserlin_RCy3_intro/images/cluster1em_annot_man.png" alt="Example Annotated Enrichment Map created when running an enrichment analysis using g:Profiler with the genes that are part of cluster 1 after manual adjusting to generate a cleaner figure" width="329" />
 <p class="caption">(\#fig:cluster1em_annot_man_fig)Example Annotated Enrichment Map created when running an enrichment analysis using g:Profiler with the genes that are part of cluster 1 after manual adjusting to generate a cleaner figure</p>
 </div>
 
-### Use Case 3 - Functional Enrichment of Omics set.
+## Use Case 3 - Functional Enrichment of Omics set.
 
 Reducing our large OMICs expression set to a simple list of genes eliminates the majority of the signals present in the data.  Thresholding will only highlight the strong signals neglecting the often more interesting subtle signals. In order to capitalize on the wealth of data present in the data we need to perform pathway enrichment analysis on the entire expression set. There are many tools in R or as standalone apps that perform this type of analysis.  
 
@@ -1109,7 +1110,7 @@ gsRanking(ora.all)
 ## 967       213          103    0.0499
 ```
 
-<img src="/tmp/tmp.sy5Z6WYuNX/BiocWorkshops/230_Isserlin_RCy3_intro/images/screenshot_ora_results.png" width="518" />
+<img src="/tmp/tmp.i7oQN4kKK4/BiocWorkshops/230_Isserlin_RCy3_intro/images/screenshot_ora_results.png" width="518" />
 
 Take the enrichment results and create a generic enrichment map input file so we can create an Enrichment map.  Description of format of the generic input file can be found [here](http://enrichmentmap.readthedocs.io/en/latest/FileFormats.html#generic-results-files) and example generic enrichment map files can be found [here](http://enrichmentmap.readthedocs.io/en/latest/FileFormats.html#examples-of-generic-enrichment-result-files)
 
@@ -1158,7 +1159,7 @@ mesenem_png_file_name <- file.path(getwd(),"230_Isserlin_RCy3_intro", "images","
 
 ```r
 if(file.exists(mesenem_png_file_name)){
-  #cytoscape hangs waiting for user response if file alreayd exists.  Remove it first
+  #cytoscape hangs waiting for user response if file already exists.  Remove it first
   file.remove(mesenem_png_file_name)
   } 
 
@@ -1167,7 +1168,7 @@ exportImage(mesenem_png_file_name, type = "png")
 ```
 
 <div class="figure">
-<img src="/tmp/tmp.sy5Z6WYuNX/BiocWorkshops/230_Isserlin_RCy3_intro/images/mesenem.png" alt="Example Enrichment Map created when running an enrichment analysis using EnrichmentBrowser ORA with the genes differential in Mesenchymal OV" width="339" />
+<img src="/tmp/tmp.i7oQN4kKK4/BiocWorkshops/230_Isserlin_RCy3_intro/images/mesenem.png" alt="Example Enrichment Map created when running an enrichment analysis using EnrichmentBrowser ORA with the genes differential in Mesenchymal OV" width="339" />
 <p class="caption">(\#fig:mesenem_fig)Example Enrichment Map created when running an enrichment analysis using EnrichmentBrowser ORA with the genes differential in Mesenchymal OV</p>
 </div>
 
@@ -1214,7 +1215,7 @@ mesenem_summary_png_file_name <- file.path(getwd(),"230_Isserlin_RCy3_intro","im
 
 ```r
 if(file.exists(mesenem_summary_png_file_name)){
-  #cytoscape hangs waiting for user response if file alreayd exists.  Remove it first
+  #cytoscape hangs waiting for user response if file already exists.  Remove it first
   file.remove(mesenem_summary_png_file_name)
   } 
 
@@ -1223,7 +1224,7 @@ exportImage(mesenem_summary_png_file_name, type = "png")
 ```
 
 <div class="figure">
-<img src="/tmp/tmp.sy5Z6WYuNX/BiocWorkshops/230_Isserlin_RCy3_intro/images/mesenem_summary_network.png" alt="Example Annotated Enrichment Map created when running an enrichment analysis using EnrichmentBrowser ORA with the genes that differential in mesenchymal OV" width="339" />
+<img src="/tmp/tmp.i7oQN4kKK4/BiocWorkshops/230_Isserlin_RCy3_intro/images/mesenem_summary_network.png" alt="Example Annotated Enrichment Map created when running an enrichment analysis using EnrichmentBrowser ORA with the genes that differential in mesenchymal OV" width="339" />
 <p class="caption">(\#fig:cmesenem_annot_fig)Example Annotated Enrichment Map created when running an enrichment analysis using EnrichmentBrowser ORA with the genes that differential in mesenchymal OV</p>
 </div>
 

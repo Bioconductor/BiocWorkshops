@@ -1069,7 +1069,7 @@ str(da_hdf5)
 ```
 ## Formal class 'HDF5Matrix' [package "HDF5Array"] with 1 slot
 ##   ..@ seed:Formal class 'HDF5ArraySeed' [package "HDF5Array"] with 5 slots
-##   .. .. ..@ filepath : chr "/tmp/tmp.sy5Z6WYuNX/BiocWorkshops/500_Effectively_Using_the_DelayedArray_Framework/hdf5_mat.h5"
+##   .. .. ..@ filepath : chr "/tmp/tmp.i7oQN4kKK4/BiocWorkshops/500_Effectively_Using_the_DelayedArray_Framework/hdf5_mat.h5"
 ##   .. .. ..@ name     : chr "hdf5_mat"
 ##   .. .. ..@ dim      : int [1:2] 105 2
 ##   .. .. ..@ first_val: int 1

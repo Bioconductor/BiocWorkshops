@@ -438,7 +438,7 @@ endomorphism)
 
 In addition, there are exhiliary functions for asking the GDC API for
 information about available and default fields, slicing BAM files, and
-downloading actual data files.  Here is an overview of functionality[^1].
+downloading actual data files.  Here is an overview of functionality[^10].
 
 
 - Creating a query
@@ -473,7 +473,7 @@ downloading actual data files.  Here is an overview of functionality[^1].
 - BAM file slicing
     - `slicing()`
 
-[^1]: See individual function and methods documentation for specific details.
+[^10]: See individual function and methods documentation for specific details.
 
 
 ### Usage
@@ -1124,19 +1124,23 @@ fnames = gdcdata(manifest_df$id[3:10], access_method = 'client')
 We summarize two approaches to accessing TCGA data:
 1. *[TCGAbiolinks](http://bioconductor.org/packages/TCGAbiolinks)*:
     a. data access through *[GenomicDataCommons](http://bioconductor.org/packages/GenomicDataCommons)*
-    b. provides data both from the legacy Firehose pipeline used by the TCGA publications (alignments based on hg18 and hg19 builds[^1]), and the GDC harmonized GRCh38 pipeline[^2].
+    b. provides data both from the legacy Firehose pipeline used by the TCGA
+    publications (alignments based on hg18 and hg19 builds[^11]), and the GDC
+    harmonized GRCh38 pipeline[^12].
     c. downloads files from the Genomic Data Commons, and provides conversion to `(Ranged)SummarizedExperiment` where possible
 2. *[curatedTCGAData](http://bioconductor.org/packages/curatedTCGAData)*: 
     a. data access through *[ExperimentHub](http://bioconductor.org/packages/ExperimentHub)*
-    b. provides data from the legacy Firehose pipeline[^1]
+    b. provides data from the legacy Firehose pipeline[^11]
     c. provides individual assays as `(Ranged)SummarizedExperiment` and `RaggedExperiment`, integrates multiple assays within and across cancer types using `MultiAssayExperiment`
 
-[^1]: https://confluence.broadinstitute.org/display/GDAC/FAQ#FAQ-Q%C2%A0Whatreferencegenomebuildareyouusing
-[^2]: https://gdc.cancer.gov/about-data/data-harmonization-and-generation/genomic-data-harmonization-0
+[^11]: https://confluence.broadinstitute.org/display/GDAC/FAQ#FAQ-Q%C2%A0Whatreferencegenomebuildareyouusing
+[^12]: https://gdc.cancer.gov/about-data/data-harmonization-and-generation/genomic-data-harmonization-0
 
 ### TCGAbiolinks
 
-We demonstrate here generating a `RangedSummarizedExperiment` for RNA-seq data from adrenocortical carcinoma (ACC). For additional information and options, see the TCGAbiolinks vignettes[^3].
+We demonstrate here generating a `RangedSummarizedExperiment` for RNA-seq data
+from adrenocortical carcinoma (ACC). For additional information and options, see
+the TCGAbiolinks vignettes[^13].
 
 Load packages:
 
@@ -1165,7 +1169,7 @@ ACCse <- GDCprepare(query, directory = gdcdir)
 ACCse
 ```
 
-[^3]: https://bioconductor.org/packages/release/bioc/vignettes/TCGAbiolinks/inst/doc/download_prepare.html
+[^13]: https://bioconductor.org/packages/release/bioc/vignettes/TCGAbiolinks/inst/doc/download_prepare.html
 
 ### curatedTCGAData: Curated Data From The Cancer Genome Atlas as MultiAssayExperiment Objects
 
@@ -1173,11 +1177,19 @@ ACCse
 
 
 
-By default, the `curatedTCGAData()` function will only show available datasets, and not download anything. The arguments are shown here only for demonstration, the same result is obtained with no arguments:
 
 ```r
 library(curatedTCGAData)
 library(MultiAssayExperiment)
+```
+
+
+By default, the `curatedTCGAData()` function will only show available datasets,
+and not download anything. The arguments are shown here only for demonstration,
+the same result is obtained with no arguments:
+
+
+```r
 curatedTCGAData(diseaseCode = "*", assays = "*")
 ```
 
@@ -1295,7 +1307,12 @@ head(metadata(colData(ACCmae))[["subtypes"]])
 
 ## recount: Reproducible RNA-seq Analysis Using recount2
 
-The *[recount](http://bioconductor.org/packages/recount)*[@Collado-Torres2017-ww] package provides uniformly processed `RangedSummarizedExperiment` objects at the gene, exon, or exon-exon junctions level, the raw counts, the phenotype metadata used, the urls to sample coverage bigWig files and mean coverage bigWig file, for every study available. The `RangedSummarizedExperiment` objects can be used for differential expression analysis. These are also accessible through a web interface [^4].
+The *[recount](http://bioconductor.org/packages/recount)*[@Collado-Torres2017-ww] package provides
+uniformly processed `RangedSummarizedExperiment` objects at the gene, exon, or
+exon-exon junctions level, the raw counts, the phenotype metadata used, the urls
+to sample coverage bigWig files and mean coverage bigWig file, for every study
+available. The `RangedSummarizedExperiment` objects can be used for differential
+expression analysis. These are also accessible through a web interface [^14].
 
 
 ```
@@ -1316,7 +1333,7 @@ download_study(project_info$project)
 ```
 
 ```
-## 2018-07-17 16:59:36 downloading file rse_gene.Rdata to SRP009615
+## 2018-07-18 20:05:33 downloading file rse_gene.Rdata to SRP009615
 ```
 followed by loading the data
 
@@ -1325,7 +1342,7 @@ load(file.path(project_info$project, 'rse_gene.Rdata'))
 ```
 
 
-[^4]: https://jhubiostatistics.shinyapps.io/recount/
+[^14]: https://jhubiostatistics.shinyapps.io/recount/
 
 ## curated*Data packages for standardized cancer transcriptomes
 
