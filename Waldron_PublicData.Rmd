@@ -19,7 +19,7 @@ accessing, and using large-scale public data resources including the
 Gene Expression Omnibus [GEO](https://www.ncbi.nlm.nih.gov/geo), Sequence
 Read Archive [SRA](https://www.ncbi.nlm.nih.gov/sra), the Genomic Data
 Commons [GDC](https://portal.gdc.cancer.gov/), and Bioconductor-hosted 
-curated data resources for metagenomics, pharmacogenomics, and The Cancer 
+curated data resources for metagenomics, pharmacogenomics [PharmacoDB](http://pharmacodb.ca/), and The Cancer 
 Genome Atlas.
 
 ### Pre-requisites
@@ -44,7 +44,7 @@ Each component will include runnable examples of typical usage that students are
 * `r BiocStyle::Biocpkg("curatedTCGAData")`: Curated data from The Cancer Genome Atlas (TCGA) as MultiAssayExperiment Objects
 * `r BiocStyle::Biocpkg("curatedMetagenomicData")`: Curated metagenomic data of the human microbiome
 * `r BiocStyle::Biocpkg("HMP16SData")`: Curated metagenomic data of the human microbiome
-* `r BiocStyle::Biocpkg("PharmacoGx")`: Analysis of large-scale pharmacogenomic data
+* `r BiocStyle::Biocpkg("PharmacoGx")`: Curated large-scale preclinical pharmacogenomic data and basic analysis tools
 
 
 ### Time outline
@@ -61,7 +61,7 @@ This is a 1h45m workshop.
 | curatedMetagenomicData and HMP16SData | 15m |
 | PharmacoGx | 20m |
 
-### workshop goals and objectives
+### Workshop goals and objectives
 
 Bioconductor provides access to significant amounts of publicly available 
 experimental  data. This workshop introduces students to Bioconductor
@@ -98,7 +98,16 @@ required_pkgs = c(
   "recount",
   "curatedMetagenomicData",
   "phyloseq",
-  "HMP16SData")
+  "HMP16SData",
+  "caTools",
+  "piano",
+  "isa",
+  "VennDiagram",
+  "downloader",
+	"gdata",
+	"AnnotationDbi",
+	"hgu133a.db",
+  "PharmacoGx")
 BiocManager::install(required_pkgs)
 ```
 
@@ -970,5 +979,165 @@ V13()
 This can also be converted to `r BiocStyle::Biocpkg("phyloseq")` for ecological and differential abundance analysis; see the `r BiocStyle::Biocpkg("HMP16SData")` vignette for details.
     
 ## Pharmacogenomics
+
+Pharmacogenomics holds great promise for the development of biomarkers of drug response and the design of new therapeutic options, which are key challenges in precision medicine. However, such data are scattered and lack standards for efficient access and analysis, consequently preventing the realization of the full potential of pharmacogenomics. To address these issues, we implemented PharmacoGx, an easy-to-use, open source package for integrative analysis of multiple pharmacogenomic datasets. We  demonstrate here the utility of our package in comparing large drug sensitivity datasets, such as the Genomics of Drug Sensitivity in Cancer [GDSC](https://www.cancerrxgene.org/) and the Cancer Cell Line Encyclopedia [CCLE](https://portals.broadinstitute.org/ccle), or use large drug perturbation data from the Connectivity Map [CAMP](https://clue.io/cmap)for drug repurposing.
+
+These case studies were published in Smirnov, Petr, et al. [PharmacoGx: an R package for analysis of large pharmacogenomic datasets." Bioinformatics 32.8 (2015): 1244-1246](https://academic.oup.com/bioinformatics/article/32/8/1244/1744214/PharmacoGx-an-R-package-for-analysis-of-large).
+
+### Getting started 
+
+Let us first load the `PharmacoGx`library.
+
+```{r loadLibrary, message=FALSE}
+library(PharmacoGx)
+```
+
+We can now access large-scale preclinical pharmacogenomic datasets that have been fully curated for ease of use.
+
+### Overview of PharmacoGx datasets (PharmacoSets)
+
+To efficiently store and analyze large pharmacogenomic datasets, we developed the `PharmacoSet` class (also referred to as `PSet`), which acts as a data container storing pharmacological and molecular data along with experimental metadata (detailed structure provided in Supplementary materials). This class enables efficient implementation of curated annotations for cell lines, drug compounds and molecular features, which facilitates comparisons between different datasets stored as `PharmacoSet` objects.
+
+[Structure of the PharmacoSet class](Waldron_PublicData/PharmacoSet_structure.png)
+
+To get a list of all the available `PharmacoSets` in PharmacoGx, we can use the àvailablePSets` function, which returns a table providing key information for each dataset.
+
+```{r availablePSets, message=FALSE}
+availablePSets()
+```
+There are currently 11 datasets available in PharmacoGx, including 8 sensitivity datasets and 3 perturbation datasets (see below).
+
+#### Drug Sensitivity Datasets
+
+Drug sensitivity datasets refer to pharmacogenomic data where cancer cells are molecularly profiled at baseline (before drug treatment), and the effect of drug treatment on cell viability is measured using a pharmacological assay (e.g., Cell Titer-Glo). These datasets can be used for biomarker discovery by correlating the molecular features of cancer cells to their response to drugs of interest.
+
+[Schematic view of the drug sensitivity datasets.](Waldron_PublicData/Drug_sensitivity.png)
+
+```{r availableSensitivityPSets, message=FALSE}
+psets <- availablePSets()
+psets[psets[ , "Dataset.Type"] == "sensitivity", ]
+```
+
+#### Drug Perturbation Datasets
+
+Drug perturbation datasets refer to pharmacogenomic data where gene expression profiles are measured before and after short-term (e.g., 6h) drug treatment to identify genes that are up- and down-regulated due to the drug treatment. These datasets can be to classify drug (drug taxonomy), infer their mechanism of action, or find drugs with similar effects (drug repurposing).
+
+[Schematic view of drug perturbation datasets](Waldron_PublicData/Drug_perturbation.png)
+
+```{r availablePerturbationPSets, message=FALSE}
+psets <- availablePSets()
+psets[psets[ , "Dataset.Type"] == "perturbation", ]
+```
+
+#### Comparing drug sensitivity datasets
+
+Intersecting two independent pharmacogenomic datasets is challenging due to the lack of standard cell line and drug identifiers. Thanks to the curation process involved in the generation of PSets, it is now easy to extract the overlap at the level of drugs, cell lines, and molecular features.
+
+Let's use the GDSC and CCLE data.
+
+```{r downloadPSets, message=FALSE}
+GDSC <- PharmacoGx::downloadPSet("GDSC")
+CCLE <- PharmacoGx::downloadPSet("CCLE")
+```
+We can easily build PSets composed only of the overlapping cell lines, and drugs.
+
+```{r intersectPSets, message=FALSE}
+gdsc.ccle.common <- intersectPSet(pSets = list("CCLE"=CCLE, "GDSC"=GDSC), intersectOn = c("cell.lines", "drugs", "concentrations"))
+```
+
+And see how many drugs and cell lines have been profiled in both datasets.
+
+```{r intersectDrugs, message=FALSE}
+mycol <- RColorBrewer::brewer.pal(n=7, name="Set1")
+venn.plot <- VennDiagram::draw.pairwise.venn(area1 = nrow(CCLE@drug), area2 = nrow(GDSC@drug), cross.area = nrow(gdsc.ccle.common$CCLE@drug), fill = c(mycol[1], mycol[2]),lty = "blank",cex = 1.5,cat.cex = .8,cat.col = c("black", "black"))
+```
+```{r intersectCells, message=FALSE}
+venn.plot <- VennDiagram::draw.pairwise.venn(area1 = nrow(CCLE@cell), area2 = nrow(GDSC@cell), cross.area = nrow(gdsc.ccle.common$CCLE@cell), fill = c(mycol[1], mycol[2]),lty = "blank",cex = 1.5,cat.cex = 1,cat.col = c("black", "black"))
+```
+
+```{r intersectDRC, message=FALSE}
+## Three highlighted cases
+cases <- rbind(
+  c("HT-29", "PLX4720"),
+  c("COLO-320-HSR", "AZD6244"),
+  c("HT-1080", "PD-0332991"))
+
+gdsc.auc <- t(PharmacoGx::summarizeSensitivityProfiles(pSet=gdsc.ccle.common$GDSC, sensitivity.measure="auc_published", summary="median"))
+ccle.auc <- t(PharmacoGx::summarizeSensitivityProfiles(pSet=gdsc.ccle.common$CCLE, sensitivity.measure="auc_published", summary="median"))
+
+plot(x=gdsc.auc, y=ccle.auc, col=blues9[7], xlab="AUC (GDSC)", ylab="AUC (CCLE)", ylim=c(0, 1), xlim=c(0, 1))
+abline(coef=c(0, 1), col="lightgrey")
+points(x = gdsc.auc[cases[1,1], cases[1,2]], y= ccle.auc[cases[1,1], cases[1,2]], col = "red", pch=16)
+points(x = gdsc.auc[cases[2,1], cases[2,2]], y= ccle.auc[cases[2,1], cases[2,2]], col = "red", pch=16)
+points(x = gdsc.auc[cases[3,1], cases[3,2]], y= ccle.auc[cases[3,1], cases[3,2]], col = "red", pch=16)
+
+drugDoseResponseCurve(drug = cases[1,2], cellline = cases[1,1], pSets = gdsc.ccle.common)
+drugDoseResponseCurve(drug = cases[2,2], cellline = cases[2,1], pSets = gdsc.ccle.common)
+drugDoseResponseCurve(drug = cases[3,2], cellline = cases[3,1], pSets = gdsc.ccle.common)
+```
+
+#### Biomarker discovery
+
+
+```{r intersectDRC, message=FALSE}
+known.biomarker <- c("Drug"="lapatinib", "Gene"="ERBB2", "Type"="cnv")
+known.biomarker <- c(known.biomarker, "GDSC effect size"=NA, "GDSC pvalue"=NA, "CCLE effect size"=NA, "CCLE pvalue"=NA, "Reproducible"=NA)
+
+feature <- rownames(PharmacoGx::featureInfo(CCLE, known.biomarker["Type"]))[which(PharmacoGx::featureInfo(CCLE, known.biomarker["Type"])$Symbol == known.biomarker["Gene"])]
+known.biomarker[c("GDSC effect size", "GDSC pvalue")] <- drugSensitivitySig(pSet=GDSC, mDataType=known.biomarker["Type"], drugs=known.biomarker["Drug"], features=feature, sensitivity.measure="auc_published", molecular.summary.stat="median", sensitivity.summary.stat="median")[1, 1, c("estimate", "pvalue")]
+known.biomarker[c("CCLE effect size", "CCLE pvalue")] <- drugSensitivitySig(pSet=CCLE, mDataType=known.biomarker["Type"], drugs=known.biomarker["Drug"], features=feature, sensitivity.measure="auc_published", molecular.summary.stat="median", sensitivity.summary.stat="median")[1, 1, c("estimate", "pvalue")]
+known.biomarker["Reproducible"] <- ifelse(as.numeric(known.biomarker["CCLE pvalue"]) < 0.05 & as.numeric(known.biomarker["GDSC pvalue"]) <  .05 & sign(as.numeric(known.biomarker["CCLE effect size"])) == sign(as.numeric(known.biomarker["GDSC effect size"])), "YES", "NO")
+
+print(known.biomarker)
+```
+
+#### Drug repurposing
+
+```{r runCMAP, message=FALSE}
+## download and process the HDAC signature
+mydir <- "1132939s"
+downloader::download(paste("http://www.sciencemag.org/content/suppl/2006/09/29/313.5795.1929.DC1/", mydir, ".zip", sep=""), destfile=paste(mydir,".zip",sep=""))
+unzip(paste(mydir,".zip", sep=""))
+
+HDAC_up <- gdata::read.xls(paste(mydir, paste(mydir, "sigS1.xls", sep="_"),sep="/"), sheet=1, header=FALSE, as.is=TRUE)
+HDAC_down <- gdata::read.xls(paste(mydir, paste(mydir, "sigS1.xls", sep="_"),sep="/"), sheet=2, header=FALSE, as.is=TRUE)
+HDAC <- as.data.frame(matrix(NA, nrow=nrow(HDAC_down)+nrow(HDAC_up), ncol=2))
+annot <- AnnotationDbi::select(hgu133a.db, keys = c(HDAC_up[[1]], HDAC_down[[1]]), columns=c("ENSEMBL"), keytype="PROBEID")
+gene_up <- unique(annot[match(HDAC_up[[1]], annot[,1]),2])
+gene_down <- na.omit(unique(annot[match(HDAC_down[[1]], annot[,1]),2]))
+HDAC_genes <- as.data.frame(matrix(NA, nrow=length(gene_down)+length(gene_up), ncol=2))
+
+
+HDAC_genes[ , 2] <- c(rep(1, times=length(gene_up)), rep(-1, times=length(gene_down)))
+HDAC_genes[ , 1] <- c(gene_up, gene_down)
+rownames(HDAC_genes) <- HDAC_genes[ , 1]
+HDAC <- HDAC_genes[ , 2]
+names(HDAC) <- rownames(HDAC_genes)
+
+drug.perturbation <- PharmacoGx::downloadPertSig("CMAP")
+dimnames(drug.perturbation)[[1]] <- gsub("_at", "", dimnames(drug.perturbation)[[1]])
+
+message("Be aware that computing sensitivity will take some time...")
+cl <- parallel::makeCluster(2)
+res <- parApply(drug.perturbation[ , , c("tstat", "fdr")], 2, function(x, HDAC){ 
+	return(connectivityScore(x=x, y=HDAC, method="gsea", nperm=10))
+}, cl=cl, HDAC=HDAC)
+stopCluster(cl)
+rownames(res) <- c("Connectivity", "P Value")
+res <- t(res)
+
+
+res <- apply(drug.perturbation[ , , c("tstat", "fdr")], 2, function(x, HDAC){ 
+	return(connectivityScore(x=x, y=HDAC, method="gsea", nperm=100))
+}, HDAC=HDAC)
+rownames(res) <- c("Connectivity", "P Value")
+res <- t(res)
+
+
+HDAC_inhibitors <- c("vorinostat", "trichostatin A", "HC toxin", "valproic acid")
+res <- res[order(res[,1], decreasing=T), ]
+HDAC_ranks <- which(rownames(res) %in% HDAC_inhibitors)
+```
+
 
 ## Bibliography
