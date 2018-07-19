@@ -147,7 +147,7 @@ GeneCalls <- FindHomology::GFFParser(GFFAddress = GeneCallAdds,
 
 ```
 ## ===========================================================================
-## Time difference of 5.339252 secs
+## Time difference of 5.797648 secs
 ```
 
 If you choose to mimic this work on your own, there are a few ways to get gene calls(the gene boundaries, and strandedness), and annotations, such as Prodigal[^7] (for gene calls) and Prokka[^8] (for annotations). Using the NCBI annotations is simple and conducive for this workshop. However if you are working on sequence data that you have generated or collected yourself, NCBI annotations will not be available. Additionally, a Gene Caller within the DECIPHER package is currently under construction.
@@ -229,7 +229,7 @@ SyntenyObject <- FindSynteny(dbFile = DBPath,
 ```
 ## ===========================================================================
 ## 
-## Time difference of 63.48 secs
+## Time difference of 59.34 secs
 ```
 
 There are multiple ways to view objects of class `synteny`. It has default view options for `plot()`. By default, colors are assigned as a ramp from the first nucleotide position, to the last nucleotide position of the *query* genome, or the first genome selected, and wherever syntenic hits are observed, the bar representing the *subject* genome is marked with the section of the color ramp indicating the syntenic hit in the *query*.
@@ -319,7 +319,7 @@ MatrixObject <- NucleotideOverlap(SyntenyObject = SyntenyObject,
 
 ```
 ## ===========================================================================
-## Time difference of 1.09574 mins
+## Time difference of 57.69353 secs
 ```
 
 The function `Catalog` takes in the output of `NucleotideOverlap` and returns a list of matrices. These matrices represent agglomerated sets of pairs. The idea being, if gene **A** in genome **1** was paired by nucleotide overlap to genes **B** and **C** in genomes **2** and **3** respectively by `NucleotideOverLap`, and additionally gene **B** in genome **2** was similarly paired with gene **C** in genome **3**. With the assumption that these linkages indicate homology, gene **A** is predicted to be homologous to genes **B** and **C**, and gene **B** is predicted to be homologous to gene **C**. 
@@ -340,7 +340,7 @@ Homologs <- Catalog(MatrixObject,
 
 ```
 ## ===========================================================================
-## Time difference of 1.947715 mins
+## Time difference of 1.868099 mins
 ```
 
 We can visualize this object as a histogram of the size of these agglomerations, by the number of pairs included in each agglomerated group. Where **1** represents pairs of genes where neither gene is linked to any other gene, *from other genomes*. Where **28** *in this case* represents fully linked sets of pairs, where each gene in the set is predicted to be a homolog of *every other gene in the set*.
@@ -381,7 +381,7 @@ CoreGenome <- CoreAligner(Homologs[CoreSet],
 
 ```
 ## ===========================================================================
-## Time difference of 32.99321 secs
+## Time difference of 32.25782 secs
 ```
 
 ```r
@@ -417,7 +417,7 @@ PanGenomeMatrix <- LogicalPan(HomologList = Homologs,
 
 ```
 ## ===========================================================================
-## Time difference of 0.9745855 secs
+## Time difference of 0.9505224 secs
 ```
 
 We can visualize this matrix if we so choose.

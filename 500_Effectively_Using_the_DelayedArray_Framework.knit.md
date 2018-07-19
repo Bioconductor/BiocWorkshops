@@ -1,3 +1,4 @@
+
 # Effectively using the DelayedArray framework to support the analysis of large datasets
 
 Authors:
@@ -97,30 +98,16 @@ tenx <- TENxBrainData()
 # The data are stored in a SingleCellExperiment, an extension of the 
 # SummarizedExperiment class.
 class(tenx)
-```
-
-```
-## [1] "SingleCellExperiment"
-## attr(,"package")
-## [1] "SingleCellExperiment"
-```
-
-```r
+#> [1] "SingleCellExperiment"
+#> attr(,"package")
+#> [1] "SingleCellExperiment"
 dim(tenx)
-```
+#> [1]   27998 1306127
 
-```
-## [1]   27998 1306127
-```
-
-```r
 # How big much memory do the counts data use?
 counts <- assay(tenx, "counts", withDimnames = FALSE)
 print(object.size(counts))
-```
-
-```
-## 2144 bytes
+#> 2144 bytes
 ```
 
 The counts data only require a tiny amount of RAM despite it having 27998 rows and 1306127 columns.
@@ -131,73 +118,60 @@ And the `counts` object still "feels" like an ordinary R matrix:
 ```r
 # Oooh, pretty-printing.
 counts
-```
+#> <27998 x 1306127> HDF5Matrix object of type "integer":
+#>                [,1]       [,2]       [,3]       [,4] ... [,1306124]
+#>     [1,]          0          0          0          0   .          0
+#>     [2,]          0          0          0          0   .          0
+#>     [3,]          0          0          0          0   .          0
+#>     [4,]          0          0          0          0   .          0
+#>     [5,]          0          0          0          0   .          0
+#>      ...          .          .          .          .   .          .
+#> [27994,]          0          0          0          0   .          0
+#> [27995,]          1          0          0          2   .          0
+#> [27996,]          0          0          0          0   .          0
+#> [27997,]          0          0          0          0   .          0
+#> [27998,]          0          0          0          0   .          0
+#>          [,1306125] [,1306126] [,1306127]
+#>     [1,]          0          0          0
+#>     [2,]          0          0          0
+#>     [3,]          0          0          0
+#>     [4,]          0          0          0
+#>     [5,]          0          0          0
+#>      ...          .          .          .
+#> [27994,]          0          0          0
+#> [27995,]          1          0          0
+#> [27996,]          0          0          0
+#> [27997,]          0          0          0
+#> [27998,]          0          0          0
 
-```
-## <27998 x 1306127> HDF5Matrix object of type "integer":
-##                [,1]       [,2]       [,3]       [,4] ... [,1306124]
-##     [1,]          0          0          0          0   .          0
-##     [2,]          0          0          0          0   .          0
-##     [3,]          0          0          0          0   .          0
-##     [4,]          0          0          0          0   .          0
-##     [5,]          0          0          0          0   .          0
-##      ...          .          .          .          .   .          .
-## [27994,]          0          0          0          0   .          0
-## [27995,]          1          0          0          2   .          0
-## [27996,]          0          0          0          0   .          0
-## [27997,]          0          0          0          0   .          0
-## [27998,]          0          0          0          0   .          0
-##          [,1306125] [,1306126] [,1306127]
-##     [1,]          0          0          0
-##     [2,]          0          0          0
-##     [3,]          0          0          0
-##     [4,]          0          0          0
-##     [5,]          0          0          0
-##      ...          .          .          .
-## [27994,]          0          0          0
-## [27995,]          1          0          0
-## [27996,]          0          0          0
-## [27997,]          0          0          0
-## [27998,]          0          0          0
-```
-
-```r
 # Let's take a subset of the data
 counts[1:10, 1:10]
-```
+#> <10 x 10> DelayedMatrix object of type "integer":
+#>        [,1]  [,2]  [,3]  [,4] ...  [,7]  [,8]  [,9] [,10]
+#>  [1,]     0     0     0     0   .     0     0     0     0
+#>  [2,]     0     0     0     0   .     0     0     0     0
+#>  [3,]     0     0     0     0   .     0     0     0     0
+#>  [4,]     0     0     0     0   .     0     0     0     0
+#>  [5,]     0     0     0     0   .     0     0     0     0
+#>  [6,]     0     0     0     0   .     0     0     0     0
+#>  [7,]     0     0     0     0   .     0     0     0     0
+#>  [8,]     0     0     0     0   .     2     0     1     1
+#>  [9,]     0     0     1     0   .     0     0     0     0
+#> [10,]     0     0     0     0   .     0     0     0     0
 
-```
-## <10 x 10> DelayedMatrix object of type "integer":
-##        [,1]  [,2]  [,3]  [,4] ...  [,7]  [,8]  [,9] [,10]
-##  [1,]     0     0     0     0   .     0     0     0     0
-##  [2,]     0     0     0     0   .     0     0     0     0
-##  [3,]     0     0     0     0   .     0     0     0     0
-##  [4,]     0     0     0     0   .     0     0     0     0
-##  [5,]     0     0     0     0   .     0     0     0     0
-##  [6,]     0     0     0     0   .     0     0     0     0
-##  [7,]     0     0     0     0   .     0     0     0     0
-##  [8,]     0     0     0     0   .     2     0     1     1
-##  [9,]     0     0     1     0   .     0     0     0     0
-## [10,]     0     0     0     0   .     0     0     0     0
-```
-
-```r
 # Let's compute column sums (crude library sizes) for the first 100 samples.
 # TODO: DelayedArray:: prefix shouldn't be necessary
 DelayedArray::colSums(counts[, 1:100])
-```
-
-```
-##   [1]  4046  2087  4654  3193  8444 11178  2375  3672  3115  4592  7899
-##  [12]  5474  2894  5887  8349  7310  3340 23410  7326  3446  4601  5921
-##  [23]  4746  3063  3879  3582  2854  4053  6987  9155  3747  1534  6632
-##  [34]  4099  2846  5025  6688  3742  2982  1998  1808  3121 10561  3874
-##  [45]  4143  1500  2280  3060  4325  3161  2522  1979  6033  3721  2546
-##  [56]  6317  2756  3896  4475  5580  1879  8746  4873  2202  4517  2815
-##  [67]  3809  2580  4655  3523  4717  6436  2434  5704  2962 11654  4848
-##  [78]  5288  6689  5761 11539 15745  2986  2736  3666  2476  2251  3052
-##  [89]  5480  1721  4166  4451  1893  5606  2551  2810  1555  1840  2972
-## [100]  2404
+#>   [1]  4046  2087  4654  3193  8444 11178  2375  3672  3115  4592  7899
+#>  [12]  5474  2894  5887  8349  7310  3340 23410  7326  3446  4601  5921
+#>  [23]  4746  3063  3879  3582  2854  4053  6987  9155  3747  1534  6632
+#>  [34]  4099  2846  5025  6688  3742  2982  1998  1808  3121 10561  3874
+#>  [45]  4143  1500  2280  3060  4325  3161  2522  1979  6033  3721  2546
+#>  [56]  6317  2756  3896  4475  5580  1879  8746  4873  2202  4517  2815
+#>  [67]  3809  2580  4655  3523  4717  6436  2434  5704  2962 11654  4848
+#>  [78]  5288  6689  5761 11539 15745  2986  2736  3666  2476  2251  3052
+#>  [89]  5480  1721  4166  4451  1893  5606  2551  2810  1555  1840  2972
+#> [100]  2404
 ```
 
 The reason for the small memory footprint and matrix-like "feel" of the `counts` object is because the counts data are in fact stored on-disk in a Hierarchical Data Format (**HDF5**) file and we are interacting with the data via the DelayedArray framework.
@@ -270,7 +244,7 @@ The **DelayedArray** package defines the key classes, generics, and methods^[The
 
 The reverse dependencies of **DelayedArray** are shown below:
 
-<img src="500_Effectively_Using_the_DelayedArray_Framework_files/figure-html/unnamed-chunk-4-1.png" width="672" />
+<img src="500_Effectively_Using_the_DelayedArray_Framework_files/figure-html/unnamed-chunk-5-1.png" width="672" />
 
 The above figures includes packages that extend the DelayedArray framework in various ways, as well as those that simply use the DelayedArray framework to analyse specific types of 'omics data. We briefly discuss some of these:
 
@@ -312,48 +286,39 @@ A package developer may create a subclass of *DelayedArray*; we will make extens
 #       a. with DelayedArray as the root
 #       b. With DelayedArray as the leaf
 showClass(getClass("DelayedArray", where = "DelayedArray"))
-```
-
-```
-## Class "DelayedArray" [package "DelayedArray"]
-## 
-## Slots:
-##            
-## Name:  seed
-## Class:  ANY
-## 
-## Extends: 
-## Class "DelayedUnaryOp", directly
-## Class "DelayedOp", by class "DelayedUnaryOp", distance 2
-## Class "Array", by class "DelayedUnaryOp", distance 3
-## 
-## Known Subclasses: 
-## Class "DelayedMatrix", directly, with explicit coerce
-## Class "DelayedArray1", directly
-## Class "RleArray", directly
-## Class "RleMatrix", by class "DelayedMatrix", distance 2
-```
-
-```r
+#> Class "DelayedArray" [package "DelayedArray"]
+#> 
+#> Slots:
+#>            
+#> Name:  seed
+#> Class:  ANY
+#> 
+#> Extends: 
+#> Class "DelayedUnaryOp", directly
+#> Class "DelayedOp", by class "DelayedUnaryOp", distance 2
+#> Class "Array", by class "DelayedUnaryOp", distance 3
+#> 
+#> Known Subclasses: 
+#> Class "DelayedMatrix", directly, with explicit coerce
+#> Class "DelayedArray1", directly
+#> Class "RleArray", directly
+#> Class "RleMatrix", by class "DelayedMatrix", distance 2
 showClass(getClass("HDF5Array", where = "HDF5Array"))
-```
-
-```
-## Class "HDF5Array" [package "HDF5Array"]
-## 
-## Slots:
-##            
-## Name:  seed
-## Class:  ANY
-## 
-## Extends: 
-## Class "DelayedArray", directly
-## Class "DelayedUnaryOp", by class "DelayedArray", distance 2
-## Class "DelayedOp", by class "DelayedArray", distance 3
-## Class "Array", by class "DelayedArray", distance 4
-## 
-## Known Subclasses: 
-## Class "HDF5Matrix", directly, with explicit coerce
+#> Class "HDF5Array" [package "HDF5Array"]
+#> 
+#> Slots:
+#>            
+#> Name:  seed
+#> Class:  ANY
+#> 
+#> Extends: 
+#> Class "DelayedArray", directly
+#> Class "DelayedUnaryOp", by class "DelayedArray", distance 2
+#> Class "DelayedOp", by class "DelayedArray", distance 3
+#> Class "Array", by class "DelayedArray", distance 4
+#> 
+#> Known Subclasses: 
+#> Class "HDF5Matrix", directly, with explicit coerce
 ```
 
 #### Learning objectives
@@ -400,31 +365,22 @@ library(DelayedArray)
 mat <- matrix(rep(1:20, 1:20), ncol = 2)
 da_mat <- DelayedArray(seed = mat) 
 da_mat
-```
-
-```
-## <105 x 2> DelayedMatrix object of type "integer":
-##        [,1] [,2]
-##   [1,]    1   15
-##   [2,]    2   15
-##   [3,]    2   15
-##   [4,]    3   15
-##   [5,]    3   15
-##    ...    .    .
-## [101,]   14   20
-## [102,]   14   20
-## [103,]   14   20
-## [104,]   14   20
-## [105,]   14   20
-```
-
-```r
+#> <105 x 2> DelayedMatrix object of type "integer":
+#>        [,1] [,2]
+#>   [1,]    1   15
+#>   [2,]    2   15
+#>   [3,]    2   15
+#>   [4,]    3   15
+#>   [5,]    3   15
+#>    ...    .    .
+#> [101,]   14   20
+#> [102,]   14   20
+#> [103,]   14   20
+#> [104,]   14   20
+#> [105,]   14   20
 str(da_mat)
-```
-
-```
-## Formal class 'DelayedMatrix' [package "DelayedArray"] with 1 slot
-##   ..@ seed: int [1:105, 1:2] 1 2 2 3 3 3 4 4 4 4 ...
+#> Formal class 'DelayedMatrix' [package "DelayedArray"] with 1 slot
+#>   ..@ seed: int [1:105, 1:2] 1 2 2 3 3 3 4 4 4 4 ...
 ```
 
 We can use other, more complex, array-like objects as the *seed*, such as *Matrix* objects from the **Matrix** package:
@@ -432,55 +388,37 @@ We can use other, more complex, array-like objects as the *seed*, such as *Matri
 
 ```r
 library(Matrix)
-```
-
-```
-## 
-## Attaching package: 'Matrix'
-```
-
-```
-## The following object is masked from 'package:S4Vectors':
-## 
-##     expand
-```
-
-```r
+#> 
+#> Attaching package: 'Matrix'
+#> The following object is masked from 'package:S4Vectors':
+#> 
+#>     expand
 Mat <- Matrix(mat)
 da_Mat <- DelayedArray(seed = Mat)
 # NOTE: The type is "double" because of how the Matrix package stores the data.
 da_Mat
-```
-
-```
-## <105 x 2> DelayedMatrix object of type "double":
-##        [,1] [,2]
-##   [1,]    1   15
-##   [2,]    2   15
-##   [3,]    2   15
-##   [4,]    3   15
-##   [5,]    3   15
-##    ...    .    .
-## [101,]   14   20
-## [102,]   14   20
-## [103,]   14   20
-## [104,]   14   20
-## [105,]   14   20
-```
-
-```r
+#> <105 x 2> DelayedMatrix object of type "double":
+#>        [,1] [,2]
+#>   [1,]    1   15
+#>   [2,]    2   15
+#>   [3,]    2   15
+#>   [4,]    3   15
+#>   [5,]    3   15
+#>    ...    .    .
+#> [101,]   14   20
+#> [102,]   14   20
+#> [103,]   14   20
+#> [104,]   14   20
+#> [105,]   14   20
 str(da_Mat)
-```
-
-```
-## Formal class 'DelayedMatrix' [package "DelayedArray"] with 1 slot
-##   ..@ seed:Formal class 'dgeMatrix' [package "Matrix"] with 4 slots
-##   .. .. ..@ x       : num [1:210] 1 2 2 3 3 3 4 4 4 4 ...
-##   .. .. ..@ Dim     : int [1:2] 105 2
-##   .. .. ..@ Dimnames:List of 2
-##   .. .. .. ..$ : NULL
-##   .. .. .. ..$ : NULL
-##   .. .. ..@ factors : list()
+#> Formal class 'DelayedMatrix' [package "DelayedArray"] with 1 slot
+#>   ..@ seed:Formal class 'dgeMatrix' [package "Matrix"] with 4 slots
+#>   .. .. ..@ x       : num [1:210] 1 2 2 3 3 3 4 4 4 4 ...
+#>   .. .. ..@ Dim     : int [1:2] 105 2
+#>   .. .. ..@ Dimnames:List of 2
+#>   .. .. .. ..$ : NULL
+#>   .. .. .. ..$ : NULL
+#>   .. .. ..@ factors : list()
 ```
 
 We can even use data frames as the *seed* of a two-dimensional *DelayedArray*.
@@ -491,108 +429,77 @@ df <- as.data.frame(mat)
 da_df <- DelayedArray(seed = df)
 # NOTE: This inherits the (default) column names of the data.frame.
 da_df
-```
-
-```
-## <105 x 2> DelayedMatrix object of type "integer":
-##     V1 V2
-##   1  1 15
-##   2  2 15
-##   3  2 15
-##   4  3 15
-##   5  3 15
-## ...  .  .
-## 101 14 20
-## 102 14 20
-## 103 14 20
-## 104 14 20
-## 105 14 20
-```
-
-```r
+#> <105 x 2> DelayedMatrix object of type "integer":
+#>     V1 V2
+#>   1  1 15
+#>   2  2 15
+#>   3  2 15
+#>   4  3 15
+#>   5  3 15
+#> ...  .  .
+#> 101 14 20
+#> 102 14 20
+#> 103 14 20
+#> 104 14 20
+#> 105 14 20
 str(da_df)
-```
+#> Formal class 'DelayedMatrix' [package "DelayedArray"] with 1 slot
+#>   ..@ seed:'data.frame':	105 obs. of  2 variables:
+#>   .. ..$ V1: int [1:105] 1 2 2 3 3 3 4 4 4 4 ...
+#>   .. ..$ V2: int [1:105] 15 15 15 15 15 15 15 15 15 15 ...
 
-```
-## Formal class 'DelayedMatrix' [package "DelayedArray"] with 1 slot
-##   ..@ seed:'data.frame':	105 obs. of  2 variables:
-##   .. ..$ V1: int [1:105] 1 2 2 3 3 3 4 4 4 4 ...
-##   .. ..$ V2: int [1:105] 15 15 15 15 15 15 15 15 15 15 ...
-```
-
-```r
 library(tibble)
 tbl <- as_tibble(mat)
 da_tbl <- DelayedArray(seed = tbl)
 # NOTE: This inherits the (default) column names of the tibble.
 da_tbl
-```
-
-```
-## <105 x 2> DelayedMatrix object of type "integer":
-##     V1 V2
-##   1  1 15
-##   2  2 15
-##   3  2 15
-##   4  3 15
-##   5  3 15
-## ...  .  .
-## 101 14 20
-## 102 14 20
-## 103 14 20
-## 104 14 20
-## 105 14 20
-```
-
-```r
+#> <105 x 2> DelayedMatrix object of type "integer":
+#>     V1 V2
+#>   1  1 15
+#>   2  2 15
+#>   3  2 15
+#>   4  3 15
+#>   5  3 15
+#> ...  .  .
+#> 101 14 20
+#> 102 14 20
+#> 103 14 20
+#> 104 14 20
+#> 105 14 20
 str(da_tbl)
-```
+#> Formal class 'DelayedMatrix' [package "DelayedArray"] with 1 slot
+#>   ..@ seed:Classes 'tbl_df', 'tbl' and 'data.frame':	105 obs. of  2 variables:
+#>   .. ..$ V1: int [1:105] 1 2 2 3 3 3 4 4 4 4 ...
+#>   .. ..$ V2: int [1:105] 15 15 15 15 15 15 15 15 15 15 ...
 
-```
-## Formal class 'DelayedMatrix' [package "DelayedArray"] with 1 slot
-##   ..@ seed:Classes 'tbl_df', 'tbl' and 'data.frame':	105 obs. of  2 variables:
-##   .. ..$ V1: int [1:105] 1 2 2 3 3 3 4 4 4 4 ...
-##   .. ..$ V2: int [1:105] 15 15 15 15 15 15 15 15 15 15 ...
-```
-
-```r
 DF <- as(mat, "DataFrame")
 da_DF <- DelayedArray(seed = DF)
 # NOTE: This inherits the (default) column names of the DataFrame.
 da_DF
-```
-
-```
-## <105 x 2> DelayedMatrix object of type "integer":
-##        V1 V2
-##   [1,]  1 15
-##   [2,]  2 15
-##   [3,]  2 15
-##   [4,]  3 15
-##   [5,]  3 15
-##    ...  .  .
-## [101,] 14 20
-## [102,] 14 20
-## [103,] 14 20
-## [104,] 14 20
-## [105,] 14 20
-```
-
-```r
+#> <105 x 2> DelayedMatrix object of type "integer":
+#>        V1 V2
+#>   [1,]  1 15
+#>   [2,]  2 15
+#>   [3,]  2 15
+#>   [4,]  3 15
+#>   [5,]  3 15
+#>    ...  .  .
+#> [101,] 14 20
+#> [102,] 14 20
+#> [103,] 14 20
+#> [104,] 14 20
+#> [105,] 14 20
 str(da_DF)
-```
-
-```
-## Formal class 'DelayedMatrix' [package "DelayedArray"] with 1 slot
-##   ..@ seed:Formal class 'DataFrame' [package "S4Vectors"] with 6 slots
-##   .. .. ..@ rownames       : NULL
-##   .. .. ..@ nrows          : int 105
-##   .. .. ..@ listData       :List of 2
-##   .. .. .. ..$ V1: int [1:105] 1 2 2 3 3 3 4 4 4 4 ...
-##   .. .. .. ..$ V2: int [1:105] 15 15 15 15 15 15 15 15 15 15 ...
-##   .. .. ..@ elementType    : chr "ANY"
-##   .. .. ..@ elementMetadata: NULL
-##   .. .. ..@ metadata       : list()
+#> Formal class 'DelayedMatrix' [package "DelayedArray"] with 1 slot
+#>   ..@ seed:Formal class 'DataFrame' [package "S4Vectors"] with 6 slots
+#>   .. .. ..@ rownames       : NULL
+#>   .. .. ..@ nrows          : int 105
+#>   .. .. ..@ listData       :List of 2
+#>   .. .. .. ..$ V1: int [1:105] 1 2 2 3 3 3 4 4 4 4 ...
+#>   .. .. .. ..$ V2: int [1:105] 15 15 15 15 15 15 15 15 15 15 ...
+#>   .. .. ..@ elementType    : chr "ANY"
+#>   .. .. ..@ elementMetadata: NULL
+#>   .. .. ..@ metadata       : list()
 ```
 
 A package developer can also implement a novel in-memory seed.
@@ -606,40 +513,31 @@ This can be used as the seed of an *RleArray*, a *DelayedArray* subclass for sto
 #       encoded data.
 da_Rle <- RleArray(rle = Rle(mat), dim = dim(mat))
 da_Rle
-```
-
-```
-## <105 x 2> RleMatrix object of type "integer":
-##        [,1] [,2]
-##   [1,]    1   15
-##   [2,]    2   15
-##   [3,]    2   15
-##   [4,]    3   15
-##   [5,]    3   15
-##    ...    .    .
-## [101,]   14   20
-## [102,]   14   20
-## [103,]   14   20
-## [104,]   14   20
-## [105,]   14   20
-```
-
-```r
+#> <105 x 2> RleMatrix object of type "integer":
+#>        [,1] [,2]
+#>   [1,]    1   15
+#>   [2,]    2   15
+#>   [3,]    2   15
+#>   [4,]    3   15
+#>   [5,]    3   15
+#>    ...    .    .
+#> [101,]   14   20
+#> [102,]   14   20
+#> [103,]   14   20
+#> [104,]   14   20
+#> [105,]   14   20
 str(da_Rle)
-```
-
-```
-## Formal class 'RleMatrix' [package "DelayedArray"] with 1 slot
-##   ..@ seed:Formal class 'SolidRleArraySeed' [package "DelayedArray"] with 3 slots
-##   .. .. ..@ rle     :Formal class 'Rle' [package "S4Vectors"] with 4 slots
-##   .. .. .. .. ..@ values         : int [1:20] 1 2 3 4 5 6 7 8 9 10 ...
-##   .. .. .. .. ..@ lengths        : int [1:20] 1 2 3 4 5 6 7 8 9 10 ...
-##   .. .. .. .. ..@ elementMetadata: NULL
-##   .. .. .. .. ..@ metadata       : list()
-##   .. .. ..@ DIM     : int [1:2] 105 2
-##   .. .. ..@ DIMNAMES:List of 2
-##   .. .. .. ..$ : NULL
-##   .. .. .. ..$ : NULL
+#> Formal class 'RleMatrix' [package "DelayedArray"] with 1 slot
+#>   ..@ seed:Formal class 'SolidRleArraySeed' [package "DelayedArray"] with 3 slots
+#>   .. .. ..@ rle     :Formal class 'Rle' [package "S4Vectors"] with 4 slots
+#>   .. .. .. .. ..@ values         : int [1:20] 1 2 3 4 5 6 7 8 9 10 ...
+#>   .. .. .. .. ..@ lengths        : int [1:20] 1 2 3 4 5 6 7 8 9 10 ...
+#>   .. .. .. .. ..@ elementMetadata: NULL
+#>   .. .. .. .. ..@ metadata       : list()
+#>   .. .. ..@ DIM     : int [1:2] 105 2
+#>   .. .. ..@ DIMNAMES:List of 2
+#>   .. .. .. ..$ : NULL
+#>   .. .. .. ..$ : NULL
 ```
 
 The *RleArray* examples illustrates some important concepts in the DelayedArray class hierarchy that warrants reiteration and expansion.
@@ -653,53 +551,38 @@ As such, in accordance with properties of S4 class inheritance, **an *RleMatrix*
 
 ```r
 da_Rle
-```
-
-```
-## <105 x 2> RleMatrix object of type "integer":
-##        [,1] [,2]
-##   [1,]    1   15
-##   [2,]    2   15
-##   [3,]    2   15
-##   [4,]    3   15
-##   [5,]    3   15
-##    ...    .    .
-## [101,]   14   20
-## [102,]   14   20
-## [103,]   14   20
-## [104,]   14   20
-## [105,]   14   20
-```
-
-```r
+#> <105 x 2> RleMatrix object of type "integer":
+#>        [,1] [,2]
+#>   [1,]    1   15
+#>   [2,]    2   15
+#>   [3,]    2   15
+#>   [4,]    3   15
+#>   [5,]    3   15
+#>    ...    .    .
+#> [101,]   14   20
+#> [102,]   14   20
+#> [103,]   14   20
+#> [104,]   14   20
+#> [105,]   14   20
 is(da_Rle, "DelayedArray")
-```
-
-```
-## [1] TRUE
-```
-
-```r
+#> [1] TRUE
 showClass(getClass("RleMatrix", where = "DelayedArray"))
-```
-
-```
-## Class "RleMatrix" [package "DelayedArray"]
-## 
-## Slots:
-##            
-## Name:  seed
-## Class:  ANY
-## 
-## Extends: 
-## Class "DelayedMatrix", directly
-## Class "RleArray", directly
-## Class "DelayedArray", by class "DelayedMatrix", distance 2
-## Class "DelayedUnaryOp", by class "DelayedMatrix", distance 2
-## Class "DelayedOp", by class "DelayedMatrix", distance 2
-## Class "Array", by class "DelayedMatrix", distance 2
-## Class "DataTable", by class "DelayedMatrix", distance 2
-## Class "DataTable_OR_NULL", by class "DelayedMatrix", distance 3
+#> Class "RleMatrix" [package "DelayedArray"]
+#> 
+#> Slots:
+#>            
+#> Name:  seed
+#> Class:  ANY
+#> 
+#> Extends: 
+#> Class "DelayedMatrix", directly
+#> Class "RleArray", directly
+#> Class "DelayedArray", by class "DelayedMatrix", distance 2
+#> Class "DelayedUnaryOp", by class "DelayedMatrix", distance 2
+#> Class "DelayedOp", by class "DelayedMatrix", distance 2
+#> Class "Array", by class "DelayedMatrix", distance 2
+#> Class "DataTable", by class "DelayedMatrix", distance 2
+#> Class "DataTable_OR_NULL", by class "DelayedMatrix", distance 3
 ```
 
 However, if we do (almost) anything to the *RleMatrix*, the result is 'degraded' to a *DelayedMatrix*.
@@ -709,130 +592,83 @@ This 'degradation' isn't an issue in and of itself, but it can be surprising and
 ```r
 # NOTE: Adding one to each element will 'degrade' the result.
 da_Rle + 1L
-```
-
-```
-## <105 x 2> DelayedMatrix object of type "integer":
-##        [,1] [,2]
-##   [1,]    2   16
-##   [2,]    3   16
-##   [3,]    3   16
-##   [4,]    4   16
-##   [5,]    4   16
-##    ...    .    .
-## [101,]   15   21
-## [102,]   15   21
-## [103,]   15   21
-## [104,]   15   21
-## [105,]   15   21
-```
-
-```r
+#> <105 x 2> DelayedMatrix object of type "integer":
+#>        [,1] [,2]
+#>   [1,]    2   16
+#>   [2,]    3   16
+#>   [3,]    3   16
+#>   [4,]    4   16
+#>   [5,]    4   16
+#>    ...    .    .
+#> [101,]   15   21
+#> [102,]   15   21
+#> [103,]   15   21
+#> [104,]   15   21
+#> [105,]   15   21
 is(da_Rle + 1L, "RleMatrix")
-```
+#> [1] FALSE
 
-```
-## [1] FALSE
-```
-
-```r
 # NOTE: Subsetting will 'degrade' the result.
 da_Rle[1:10, ]
-```
-
-```
-## <10 x 2> DelayedMatrix object of type "integer":
-##       [,1] [,2]
-##  [1,]    1   15
-##  [2,]    2   15
-##  [3,]    2   15
-##  [4,]    3   15
-##  [5,]    3   15
-##  [6,]    3   15
-##  [7,]    4   15
-##  [8,]    4   15
-##  [9,]    4   15
-## [10,]    4   15
-```
-
-```r
+#> <10 x 2> DelayedMatrix object of type "integer":
+#>       [,1] [,2]
+#>  [1,]    1   15
+#>  [2,]    2   15
+#>  [3,]    2   15
+#>  [4,]    3   15
+#>  [5,]    3   15
+#>  [6,]    3   15
+#>  [7,]    4   15
+#>  [8,]    4   15
+#>  [9,]    4   15
+#> [10,]    4   15
 is(da_Rle[1:10, ], "RleMatrix")
-```
+#> [1] FALSE
 
-```
-## [1] FALSE
-```
-
-```r
 # NOTE: Changing the dimnames will 'degrade' the result.
 da_Rle_with_dimnames <- da_Rle
 colnames(da_Rle_with_dimnames) <- c("A", "B")
 da_Rle_with_dimnames
-```
-
-```
-## <105 x 2> DelayedMatrix object of type "integer":
-##         A  B
-##   [1,]  1 15
-##   [2,]  2 15
-##   [3,]  2 15
-##   [4,]  3 15
-##   [5,]  3 15
-##    ...  .  .
-## [101,] 14 20
-## [102,] 14 20
-## [103,] 14 20
-## [104,] 14 20
-## [105,] 14 20
-```
-
-```r
+#> <105 x 2> DelayedMatrix object of type "integer":
+#>         A  B
+#>   [1,]  1 15
+#>   [2,]  2 15
+#>   [3,]  2 15
+#>   [4,]  3 15
+#>   [5,]  3 15
+#>    ...  .  .
+#> [101,] 14 20
+#> [102,] 14 20
+#> [103,] 14 20
+#> [104,] 14 20
+#> [105,] 14 20
 is(da_Rle_with_dimnames, "RleMatrix")
-```
+#> [1] FALSE
 
-```
-## [1] FALSE
-```
-
-```r
 # NOTE: Transposing will 'degrade' the result.
 t(da_Rle)
-```
-
-```
-## <2 x 105> DelayedMatrix object of type "integer":
-##        [,1]   [,2]   [,3]   [,4] ... [,102] [,103] [,104] [,105]
-## [1,]      1      2      2      3   .     14     14     14     14
-## [2,]     15     15     15     15   .     20     20     20     20
-```
-
-```r
+#> <2 x 105> DelayedMatrix object of type "integer":
+#>        [,1]   [,2]   [,3]   [,4] ... [,102] [,103] [,104] [,105]
+#> [1,]      1      2      2      3   .     14     14     14     14
+#> [2,]     15     15     15     15   .     20     20     20     20
 is(t(da_Rle), "RleMatrix")
-```
+#> [1] FALSE
 
-```
-## [1] FALSE
-```
-
-```r
 # NOTE: Even adding zero (conceptually a no-op) will 'degrade' the result.
 da_Rle + 0L
-```
-
-```
-## <105 x 2> DelayedMatrix object of type "integer":
-##        [,1] [,2]
-##   [1,]    1   15
-##   [2,]    2   15
-##   [3,]    2   15
-##   [4,]    3   15
-##   [5,]    3   15
-##    ...    .    .
-## [101,]   14   20
-## [102,]   14   20
-## [103,]   14   20
-## [104,]   14   20
-## [105,]   14   20
+#> <105 x 2> DelayedMatrix object of type "integer":
+#>        [,1] [,2]
+#>   [1,]    1   15
+#>   [2,]    2   15
+#>   [3,]    2   15
+#>   [4,]    3   15
+#>   [5,]    3   15
+#>    ...    .    .
+#> [101,]   14   20
+#> [102,]   14   20
+#> [103,]   14   20
+#> [104,]   14   20
+#> [105,]   14   20
 ```
 
 There are some exceptions to this rule, when the DelayedArray framework can recognise/guarantee that the operation is a no-op that will leave the object in its current state:
@@ -841,59 +677,39 @@ There are some exceptions to this rule, when the DelayedArray framework can reco
 ```r
 # NOTE: Subsetting to select the entire object does not 'degrade' the result.
 da_Rle[seq_len(nrow(da_Rle)), seq_len(ncol(da_Rle))]
-```
-
-```
-## <105 x 2> RleMatrix object of type "integer":
-##        [,1] [,2]
-##   [1,]    1   15
-##   [2,]    2   15
-##   [3,]    2   15
-##   [4,]    3   15
-##   [5,]    3   15
-##    ...    .    .
-## [101,]   14   20
-## [102,]   14   20
-## [103,]   14   20
-## [104,]   14   20
-## [105,]   14   20
-```
-
-```r
+#> <105 x 2> RleMatrix object of type "integer":
+#>        [,1] [,2]
+#>   [1,]    1   15
+#>   [2,]    2   15
+#>   [3,]    2   15
+#>   [4,]    3   15
+#>   [5,]    3   15
+#>    ...    .    .
+#> [101,]   14   20
+#> [102,]   14   20
+#> [103,]   14   20
+#> [104,]   14   20
+#> [105,]   14   20
 is(da_Rle[seq_len(nrow(da_Rle)), seq_len(ncol(da_Rle))], "RleMatrix")
-```
+#> [1] TRUE
 
-```
-## [1] TRUE
-```
-
-```r
 # NOTE: Transposing and transposing back does not 'degrade' the result.
 t(t(da_Rle))
-```
-
-```
-## <105 x 2> RleMatrix object of type "integer":
-##        [,1] [,2]
-##   [1,]    1   15
-##   [2,]    2   15
-##   [3,]    2   15
-##   [4,]    3   15
-##   [5,]    3   15
-##    ...    .    .
-## [101,]   14   20
-## [102,]   14   20
-## [103,]   14   20
-## [104,]   14   20
-## [105,]   14   20
-```
-
-```r
+#> <105 x 2> RleMatrix object of type "integer":
+#>        [,1] [,2]
+#>   [1,]    1   15
+#>   [2,]    2   15
+#>   [3,]    2   15
+#>   [4,]    3   15
+#>   [5,]    3   15
+#>    ...    .    .
+#> [101,]   14   20
+#> [102,]   14   20
+#> [103,]   14   20
+#> [104,]   14   20
+#> [105,]   14   20
 is(t(t(da_Rle)), "RleMatrix")
-```
-
-```
-## [1] TRUE
+#> [1] TRUE
 ```
 
 A particularly important example of this 'degrading' to be aware of is when accessing the assays of a *SummarizedExperiment* via the `assay()` and `assays()` getters.
@@ -907,75 +723,50 @@ library(SummarizedExperiment)
 # the assay data.
 se <- SummarizedExperiment(da_Rle, colData = DataFrame(row.names = c("A", "B")))
 se
-```
+#> class: SummarizedExperiment 
+#> dim: 105 2 
+#> metadata(0):
+#> assays(1): ''
+#> rownames: NULL
+#> rowData names(0):
+#> colnames(2): A B
+#> colData names(0):
 
-```
-## class: SummarizedExperiment 
-## dim: 105 2 
-## metadata(0):
-## assays(1): ''
-## rownames: NULL
-## rowData names(0):
-## colnames(2): A B
-## colData names(0):
-```
-
-```r
 # NOTE: dimnames are copied, so the result is 'degraded'.
 assay(se)
-```
-
-```
-## <105 x 2> DelayedMatrix object of type "integer":
-##         A  B
-##   [1,]  1 15
-##   [2,]  2 15
-##   [3,]  2 15
-##   [4,]  3 15
-##   [5,]  3 15
-##    ...  .  .
-## [101,] 14 20
-## [102,] 14 20
-## [103,] 14 20
-## [104,] 14 20
-## [105,] 14 20
-```
-
-```r
+#> <105 x 2> DelayedMatrix object of type "integer":
+#>         A  B
+#>   [1,]  1 15
+#>   [2,]  2 15
+#>   [3,]  2 15
+#>   [4,]  3 15
+#>   [5,]  3 15
+#>    ...  .  .
+#> [101,] 14 20
+#> [102,] 14 20
+#> [103,] 14 20
+#> [104,] 14 20
+#> [105,] 14 20
 is(assay(se), "RleMatrix")
-```
+#> [1] FALSE
 
-```
-## [1] FALSE
-```
-
-```r
 # NOTE: dimnames are not copied, so the result is not 'degraded'.
 assay(se, withDimnames = FALSE)
-```
-
-```
-## <105 x 2> RleMatrix object of type "integer":
-##        [,1] [,2]
-##   [1,]    1   15
-##   [2,]    2   15
-##   [3,]    2   15
-##   [4,]    3   15
-##   [5,]    3   15
-##    ...    .    .
-## [101,]   14   20
-## [102,]   14   20
-## [103,]   14   20
-## [104,]   14   20
-## [105,]   14   20
-```
-
-```r
+#> <105 x 2> RleMatrix object of type "integer":
+#>        [,1] [,2]
+#>   [1,]    1   15
+#>   [2,]    2   15
+#>   [3,]    2   15
+#>   [4,]    3   15
+#>   [5,]    3   15
+#>    ...    .    .
+#> [101,]   14   20
+#> [102,]   14   20
+#> [103,]   14   20
+#> [104,]   14   20
+#> [105,]   14   20
 is(assay(se, withDimnames = FALSE), "RleMatrix")
-```
-
-```
-## [1] TRUE
+#> [1] TRUE
 ```
 
 As noted up front, the degradation isn't in and of itself a problem.
@@ -1009,71 +800,52 @@ hdf5_file <- file.path(
 # NOTE: We can use rhdf5::h5ls() to take a look what is in the HDF5 file.
 #       This is very useful when working interactively!
 rhdf5::h5ls(hdf5_file)
-```
+#>   group     name       otype  dclass     dim
+#> 0     / hdf5_mat H5I_DATASET INTEGER 105 x 2
 
-```
-##   group     name       otype  dclass     dim
-## 0     / hdf5_mat H5I_DATASET INTEGER 105 x 2
-```
-
-```r
 # We can create the HDF5Array by first creating a HDF5ArraySeed and then 
 # creating the HDF5Array.
 hdf5_seed <- HDF5ArraySeed(filepath = hdf5_file, name = "hdf5_mat")
 da_hdf5 <- DelayedArray(seed = hdf5_seed)
 da_hdf5
-```
+#> <105 x 2> HDF5Matrix object of type "integer":
+#>        [,1] [,2]
+#>   [1,]    1   15
+#>   [2,]    2   15
+#>   [3,]    2   15
+#>   [4,]    3   15
+#>   [5,]    3   15
+#>    ...    .    .
+#> [101,]   14   20
+#> [102,]   14   20
+#> [103,]   14   20
+#> [104,]   14   20
+#> [105,]   14   20
 
-```
-## <105 x 2> HDF5Matrix object of type "integer":
-##        [,1] [,2]
-##   [1,]    1   15
-##   [2,]    2   15
-##   [3,]    2   15
-##   [4,]    3   15
-##   [5,]    3   15
-##    ...    .    .
-## [101,]   14   20
-## [102,]   14   20
-## [103,]   14   20
-## [104,]   14   20
-## [105,]   14   20
-```
-
-```r
 # Alternatively, we can create this in one go using the HDF5Array() constructor.    
 da_hdf5 <- HDF5Array(filepath = hdf5_file, name = "hdf5_mat")
 da_hdf5
-```
-
-```
-## <105 x 2> HDF5Matrix object of type "integer":
-##        [,1] [,2]
-##   [1,]    1   15
-##   [2,]    2   15
-##   [3,]    2   15
-##   [4,]    3   15
-##   [5,]    3   15
-##    ...    .    .
-## [101,]   14   20
-## [102,]   14   20
-## [103,]   14   20
-## [104,]   14   20
-## [105,]   14   20
-```
-
-```r
+#> <105 x 2> HDF5Matrix object of type "integer":
+#>        [,1] [,2]
+#>   [1,]    1   15
+#>   [2,]    2   15
+#>   [3,]    2   15
+#>   [4,]    3   15
+#>   [5,]    3   15
+#>    ...    .    .
+#> [101,]   14   20
+#> [102,]   14   20
+#> [103,]   14   20
+#> [104,]   14   20
+#> [105,]   14   20
 str(da_hdf5)
-```
-
-```
-## Formal class 'HDF5Matrix' [package "HDF5Array"] with 1 slot
-##   ..@ seed:Formal class 'HDF5ArraySeed' [package "HDF5Array"] with 5 slots
-##   .. .. ..@ filepath : chr "/home/lwaldron/Source/BiocWorkshops/500_Effectively_Using_the_DelayedArray_Framework/hdf5_mat.h5"
-##   .. .. ..@ name     : chr "hdf5_mat"
-##   .. .. ..@ dim      : int [1:2] 105 2
-##   .. .. ..@ first_val: int 1
-##   .. .. ..@ chunkdim : int [1:2] 105 2
+#> Formal class 'HDF5Matrix' [package "HDF5Array"] with 1 slot
+#>   ..@ seed:Formal class 'HDF5ArraySeed' [package "HDF5Array"] with 5 slots
+#>   .. .. ..@ filepath : chr "/home/lwaldron/Source/BiocWorkshops/500_Effectively_Using_the_DelayedArray_Framework/hdf5_mat.h5"
+#>   .. .. ..@ name     : chr "hdf5_mat"
+#>   .. .. ..@ dim      : int [1:2] 105 2
+#>   .. .. ..@ first_val: int 1
+#>   .. .. ..@ chunkdim : int [1:2] 105 2
 ```
 
 Other on-disk seeds are possible such as **fst**, **bigmemory**, **ff**, or **matter**.
@@ -1156,42 +928,33 @@ Here's a simple example of a delayed operations: taking the negative of every el
 
 ```r
 da_hdf5
-```
-
-```
-## <105 x 2> HDF5Matrix object of type "integer":
-##        [,1] [,2]
-##   [1,]    1   15
-##   [2,]    2   15
-##   [3,]    2   15
-##   [4,]    3   15
-##   [5,]    3   15
-##    ...    .    .
-## [101,]   14   20
-## [102,]   14   20
-## [103,]   14   20
-## [104,]   14   20
-## [105,]   14   20
-```
-
-```r
+#> <105 x 2> HDF5Matrix object of type "integer":
+#>        [,1] [,2]
+#>   [1,]    1   15
+#>   [2,]    2   15
+#>   [3,]    2   15
+#>   [4,]    3   15
+#>   [5,]    3   15
+#>    ...    .    .
+#> [101,]   14   20
+#> [102,]   14   20
+#> [103,]   14   20
+#> [104,]   14   20
+#> [105,]   14   20
 -da_hdf5
-```
-
-```
-## <105 x 2> DelayedMatrix object of type "integer":
-##        [,1] [,2]
-##   [1,]   -1  -15
-##   [2,]   -2  -15
-##   [3,]   -2  -15
-##   [4,]   -3  -15
-##   [5,]   -3  -15
-##    ...    .    .
-## [101,]  -14  -20
-## [102,]  -14  -20
-## [103,]  -14  -20
-## [104,]  -14  -20
-## [105,]  -14  -20
+#> <105 x 2> DelayedMatrix object of type "integer":
+#>        [,1] [,2]
+#>   [1,]   -1  -15
+#>   [2,]   -2  -15
+#>   [3,]   -2  -15
+#>   [4,]   -3  -15
+#>   [5,]   -3  -15
+#>    ...    .    .
+#> [101,]  -14  -20
+#> [102,]  -14  -20
+#> [103,]  -14  -20
+#> [104,]  -14  -20
+#> [105,]  -14  -20
 ```
 
 It may look like running `-da_hdf5` has taken the negative of every element.
@@ -1200,22 +963,14 @@ However, we can see this is in fact not the case by using the `showtree()` funct
 
 ```r
 showtree(da_hdf5)
-```
+#> 105x2 integer: HDF5Matrix object
+#> └─ 105x2 integer: [seed] HDF5ArraySeed object
 
-```
-## 105x2 integer: HDF5Matrix object
-## └─ 105x2 integer: [seed] HDF5ArraySeed object
-```
-
-```r
 # NOTE: The "Unary iso op" line is 'recording' the `-` as a delayed operation.
 showtree(-da_hdf5)
-```
-
-```
-## 105x2 integer: DelayedMatrix object
-## └─ 105x2 integer: Unary iso op
-##    └─ 105x2 integer: [seed] HDF5ArraySeed object
+#> 105x2 integer: DelayedMatrix object
+#> └─ 105x2 integer: Unary iso op
+#>    └─ 105x2 integer: [seed] HDF5ArraySeed object
 ```
 
 To further illustrate the idea, let's perform some delayed operations on a large *HDF5Array* and compare them to performing the operations on the equivalent *array*.
@@ -1227,58 +982,38 @@ library(h5vcData)
 tally_file <- system.file("extdata", "example.tally.hfs5", package = "h5vcData")
 x_h5 <- HDF5Array::HDF5Array(tally_file, "/ExampleStudy/16/Coverages")
 x_h5
-```
-
-```
-## <6 x 2 x 90354753> HDF5Array object of type "integer":
-## ,,1
-##      [,1] [,2]
-## [1,]    0    0
-## [2,]    0    0
-##  ...    .    .
-## [5,]    0    0
-## [6,]    0    0
-## 
-## ...
-## 
-## ,,90354753
-##      [,1] [,2]
-## [1,]    0    0
-## [2,]    0    0
-##  ...    .    .
-## [5,]    0    0
-## [6,]    0    0
-```
-
-```r
+#> <6 x 2 x 90354753> HDF5Array object of type "integer":
+#> ,,1
+#>      [,1] [,2]
+#> [1,]    0    0
+#> [2,]    0    0
+#>  ...    .    .
+#> [5,]    0    0
+#> [6,]    0    0
+#> 
+#> ...
+#> 
+#> ,,90354753
+#>      [,1] [,2]
+#> [1,]    0    0
+#> [2,]    0    0
+#>  ...    .    .
+#> [5,]    0    0
+#> [6,]    0    0
 x <- as.array(x_h5)
 
 # Delayed operations are fast compared to ordinary operations! 
 system.time(x_h5 + 100L) 
-```
-
-```
-##    user  system elapsed 
-##   0.004   0.000   0.004
-```
-
-```r
+#>    user  system elapsed 
+#>   0.004   0.000   0.004
 system.time(x + 100L) 
-```
+#>    user  system elapsed 
+#>   2.708   2.360   5.071
 
-```
-##    user  system elapsed 
-##   2.672   1.760   4.432
-```
-
-```r
 # Delayed operations can be chained
 system.time(t(x_h5[1, , 1:100] + 100L))
-```
-
-```
-##    user  system elapsed 
-##   0.016   0.000   0.015
+#>    user  system elapsed 
+#>   0.016   0.000   0.015
 ```
 
 Rather than modifying the data stored in the HDF5 file, which can be costly for large datasets, we've recorded the 'idea' of these operations as a tree of *DelayedOp* objects.
@@ -1386,13 +1121,7 @@ We'll start by constructing *ArrayGrid* instances over the rows and columns of `
 ```r
 # NOTE: Making block-processing verbose to show what's going on under the hood.
 DelayedArray:::set_verbose_block_processing(TRUE)
-```
-
-```
-## [1] FALSE
-```
-
-```r
+#> [1] FALSE
 system.time(
     row_medians <- blockApply(
         x = da_hdf5, 
@@ -1400,38 +1129,26 @@ system.time(
         grid = RegularArrayGrid(
             refdim = dim(da_hdf5),
             spacings = c(1L, ncol(da_hdf5)))))
-```
-
-```
-##    user  system elapsed 
-##   0.128   1.188   1.641
-```
-
-```r
+#>    user  system elapsed 
+#>   0.128   1.480   1.892
 head(row_medians)
-```
-
-```
-## [[1]]
-## [1] 8
-## 
-## [[2]]
-## [1] 8.5
-## 
-## [[3]]
-## [1] 8.5
-## 
-## [[4]]
-## [1] 9
-## 
-## [[5]]
-## [1] 9
-## 
-## [[6]]
-## [1] 9
-```
-
-```r
+#> [[1]]
+#> [1] 8
+#> 
+#> [[2]]
+#> [1] 8.5
+#> 
+#> [[3]]
+#> [1] 8.5
+#> 
+#> [[4]]
+#> [1] 9
+#> 
+#> [[5]]
+#> [1] 9
+#> 
+#> [[6]]
+#> [1] 9
 system.time(
     col_medians <- blockApply(
         x = da_hdf5, 
@@ -1439,23 +1156,14 @@ system.time(
         grid = RegularArrayGrid(
             refdim = dim(da_hdf5),
             spacings = c(nrow(da_hdf5), 1L))))
-```
-
-```
-##    user  system elapsed 
-##   0.064   0.108   0.251
-```
-
-```r
+#>    user  system elapsed 
+#>   0.056   0.144   0.297
 head(col_medians)
-```
-
-```
-## [[1]]
-## [1] 10
-## 
-## [[2]]
-## [1] 18
+#> [[1]]
+#> [1] 10
+#> 
+#> [[2]]
+#> [1] 18
 ```
 
 That works, but is somewhat slow for computing row maximums because we read from the HDF5 file `nrow(da_hdf5)` ( 105) times.
@@ -1471,34 +1179,19 @@ system.time(
         grid = blockGrid(
             x = da_hdf5,
             block.shape = "first-dim-grows-first")))
-```
-
-```
-## Processing block 1/1 ... OK
-```
-
-```
-##    user  system elapsed 
-##   0.020   0.000   0.019
-```
-
-```r
+#> Processing block 1/1 ... OK
+#>    user  system elapsed 
+#>   0.020   0.000   0.019
 head(row_medians)
-```
-
-```
-## [[1]]
-##   [1]  8.0  8.5  8.5  9.0  9.0  9.0  9.5  9.5  9.5  9.5 10.0 10.0 10.0 10.0
-##  [15] 10.0 11.0 11.0 11.0 11.0 11.0 11.0 11.5 11.5 11.5 11.5 11.5 11.5 11.5
-##  [29] 12.0 12.0 12.0 12.5 12.5 12.5 12.5 12.5 13.0 13.0 13.0 13.0 13.0 13.0
-##  [43] 13.0 13.0 13.0 13.5 13.5 13.5 14.0 14.0 14.0 14.0 14.0 14.0 14.0 14.5
-##  [57] 14.5 14.5 14.5 14.5 14.5 14.5 14.5 14.5 14.5 14.5 15.5 15.5 15.5 15.5
-##  [71] 15.5 15.5 15.5 15.5 15.5 15.5 15.5 15.5 16.0 16.0 16.0 16.0 16.0 16.0
-##  [85] 16.0 16.5 16.5 16.5 16.5 16.5 16.5 17.0 17.0 17.0 17.0 17.0 17.0 17.0
-##  [99] 17.0 17.0 17.0 17.0 17.0 17.0 17.0
-```
-
-```r
+#> [[1]]
+#>   [1]  8.0  8.5  8.5  9.0  9.0  9.0  9.5  9.5  9.5  9.5 10.0 10.0 10.0 10.0
+#>  [15] 10.0 11.0 11.0 11.0 11.0 11.0 11.0 11.5 11.5 11.5 11.5 11.5 11.5 11.5
+#>  [29] 12.0 12.0 12.0 12.5 12.5 12.5 12.5 12.5 13.0 13.0 13.0 13.0 13.0 13.0
+#>  [43] 13.0 13.0 13.0 13.5 13.5 13.5 14.0 14.0 14.0 14.0 14.0 14.0 14.0 14.5
+#>  [57] 14.5 14.5 14.5 14.5 14.5 14.5 14.5 14.5 14.5 14.5 15.5 15.5 15.5 15.5
+#>  [71] 15.5 15.5 15.5 15.5 15.5 15.5 15.5 15.5 16.0 16.0 16.0 16.0 16.0 16.0
+#>  [85] 16.0 16.5 16.5 16.5 16.5 16.5 16.5 17.0 17.0 17.0 17.0 17.0 17.0 17.0
+#>  [99] 17.0 17.0 17.0 17.0 17.0 17.0 17.0
 system.time(
     col_medians <- blockApply(
         x = da_hdf5, 
@@ -1506,24 +1199,12 @@ system.time(
         grid = blockGrid(
             x = da_hdf5,
             block.shape = "last-dim-grows-first")))
-```
-
-```
-## Processing block 1/1 ... OK
-```
-
-```
-##    user  system elapsed 
-##   0.016   0.000   0.017
-```
-
-```r
+#> Processing block 1/1 ... OK
+#>    user  system elapsed 
+#>   0.016   0.000   0.017
 head(col_medians)
-```
-
-```
-## [[1]]
-## [1] 10 18
+#> [[1]]
+#> [1] 10 18
 ```
 
 For larger problems, we can improve performance by processing blocks in parallel by passing an appropriate *BiocParallelParam* object via the `bpparam` argument of `blockApply()` and `blockReduce()`.
@@ -1545,111 +1226,69 @@ Returning to our earlier example with data from the **h5vcData** package:
 
 ```r
 x_h5
-```
-
-```
-## <6 x 2 x 90354753> HDF5Array object of type "integer":
-## ,,1
-##      [,1] [,2]
-## [1,]    0    0
-## [2,]    0    0
-##  ...    .    .
-## [5,]    0    0
-## [6,]    0    0
-## 
-## ...
-## 
-## ,,90354753
-##      [,1] [,2]
-## [1,]    0    0
-## [2,]    0    0
-##  ...    .    .
-## [5,]    0    0
-## [6,]    0    0
-```
-
-```r
+#> <6 x 2 x 90354753> HDF5Array object of type "integer":
+#> ,,1
+#>      [,1] [,2]
+#> [1,]    0    0
+#> [2,]    0    0
+#>  ...    .    .
+#> [5,]    0    0
+#> [6,]    0    0
+#> 
+#> ...
+#> 
+#> ,,90354753
+#>      [,1] [,2]
+#> [1,]    0    0
+#> [2,]    0    0
+#>  ...    .    .
+#> [5,]    0    0
+#> [6,]    0    0
 showtree(x_h5)
-```
-
-```
-## 6x2x90354753 integer: HDF5Array object
-## └─ 6x2x90354753 integer: [seed] HDF5ArraySeed object
-```
-
-```r
+#> 6x2x90354753 integer: HDF5Array object
+#> └─ 6x2x90354753 integer: [seed] HDF5ArraySeed object
 y <- t(x_h5[1, , 1:10000000] + 100L)
 showtree(y)
-```
+#> 10000000x2 integer: DelayedMatrix object
+#> └─ 10000000x2 integer: Unary iso op
+#>    └─ 10000000x2 integer: Aperm (perm=c(3,2))
+#>       └─ 1x2x10000000 integer: Subset
+#>          └─ 6x2x90354753 integer: [seed] HDF5ArraySeed object
 
-```
-## 10000000x2 integer: DelayedMatrix object
-## └─ 10000000x2 integer: Unary iso op
-##    └─ 10000000x2 integer: Aperm (perm=c(3,2))
-##       └─ 1x2x10000000 integer: Subset
-##          └─ 6x2x90354753 integer: [seed] HDF5ArraySeed object
-```
-
-```r
 # Realize the result in-memory
 z <- realize(y, BACKEND = NULL)
 # NOTE: 'z' does not carry any delayed operations.
 showtree(z)
-```
+#> 10000000x2 integer: DelayedMatrix object
+#> └─ 10000000x2 integer: [seed] matrix object
 
-```
-## 10000000x2 integer: DelayedMatrix object
-## └─ 10000000x2 integer: [seed] matrix object
-```
-
-```r
 # Realize the result on-disk in an autogenerated HDF5 file
 z_h5 <- realize(y, BACKEND = "HDF5Array")
-```
-
-```
-## Processing block 1/2 ... OK
-## Processing block 2/2 ... OK
-```
-
-```r
+#> Processing block 1/2 ... OK
+#> Processing block 2/2 ... OK
 # NOTE: 'z_h5' does not carry any delayed operations.
 showtree(z_h5)
-```
-
-```
-## 10000000x2 integer: HDF5Matrix object
-## └─ 10000000x2 integer: [seed] HDF5ArraySeed object
-```
-
-```r
+#> 10000000x2 integer: HDF5Matrix object
+#> └─ 10000000x2 integer: [seed] HDF5ArraySeed object
 path(z_h5)
-```
+#> [1] "/tmp/Rtmp8uBz8o/HDF5Array_dump/auto00001.h5"
 
-```
-## [1] "/tmp/RtmpuegpHz/HDF5Array_dump/auto00001.h5"
-```
-
-```r
 # NOTE: The show() method performs realization on the first few and last few 
 #       elements in order to preview the result
 y
-```
-
-```
-## <10000000 x 2> DelayedMatrix object of type "integer":
-##             [,1] [,2]
-##        [1,]  100  100
-##        [2,]  100  100
-##        [3,]  100  100
-##        [4,]  100  100
-##        [5,]  100  100
-##         ...    .    .
-##  [9999996,]  100  100
-##  [9999997,]  100  100
-##  [9999998,]  100  100
-##  [9999999,]  100  100
-## [10000000,]  100  100
+#> <10000000 x 2> DelayedMatrix object of type "integer":
+#>             [,1] [,2]
+#>        [1,]  100  100
+#>        [2,]  100  100
+#>        [3,]  100  100
+#>        [4,]  100  100
+#>        [5,]  100  100
+#>         ...    .    .
+#>  [9999996,]  100  100
+#>  [9999997,]  100  100
+#>  [9999998,]  100  100
+#>  [9999999,]  100  100
+#> [10000000,]  100  100
 ```
 
 Realization uses block-processing under the hood:
@@ -1657,43 +1296,25 @@ Realization uses block-processing under the hood:
 
 ```r
 DelayedArray:::set_verbose_block_processing(TRUE)
-```
-
-```
-## [1] TRUE
-```
-
-```r
+#> [1] TRUE
 realize(y, BACKEND = "HDF5Array")
-```
-
-```
-## Processing block 1/2 ... OK
-## Processing block 2/2 ... OK
-```
-
-```
-## <10000000 x 2> HDF5Matrix object of type "integer":
-##             [,1] [,2]
-##        [1,]  100  100
-##        [2,]  100  100
-##        [3,]  100  100
-##        [4,]  100  100
-##        [5,]  100  100
-##         ...    .    .
-##  [9999996,]  100  100
-##  [9999997,]  100  100
-##  [9999998,]  100  100
-##  [9999999,]  100  100
-## [10000000,]  100  100
-```
-
-```r
+#> Processing block 1/2 ... OK
+#> Processing block 2/2 ... OK
+#> <10000000 x 2> HDF5Matrix object of type "integer":
+#>             [,1] [,2]
+#>        [1,]  100  100
+#>        [2,]  100  100
+#>        [3,]  100  100
+#>        [4,]  100  100
+#>        [5,]  100  100
+#>         ...    .    .
+#>  [9999996,]  100  100
+#>  [9999997,]  100  100
+#>  [9999998,]  100  100
+#>  [9999999,]  100  100
+#> [10000000,]  100  100
 DelayedArray:::set_verbose_block_processing(FALSE)
-```
-
-```
-## [1] TRUE
+#> [1] TRUE
 ```
 
 ## What's out there already?
