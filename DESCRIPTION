@@ -10,6 +10,7 @@ Imports:
   AnnotationFilter,
   AnnotationHub, 
   apeglm,
+  aroma.light,
   beachmat,
   Biobase,
   BiocParallel,
@@ -43,6 +44,7 @@ Imports:
   ggraph,
   Glimma,
   glmnet,
+  h5vcData,
   HDF5Array,
   HMP16SData,
   hgu95av2.db,
@@ -85,6 +87,7 @@ Imports:
   ReportingTools,
   reshape2,
   rex,
+  rhdf5,
   rhdf5client,
   Rtsne,
   rvest,
@@ -92,6 +95,7 @@ Imports:
   SingleCellExperiment,
   slingshot,
   splatter,
+  SRAdb,
   statmod,
   stringr,
   SummarizedExperiment,
@@ -114,10 +118,10 @@ Imports:
   zinbwave
 Remotes:
   rstudio/bookdown,
+  seandavi/SRAdbV2,
   jmacdon/Bioc2018Anno,
   seandavi/BiocPkgTools,
   npcooley/FindHomology,
   drisso/fletcher2017data,
-  HenrikBengtsson/aroma.light,
   bhklab/mCI,
   bhklab/PharmacoGxML

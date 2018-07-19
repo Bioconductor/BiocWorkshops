@@ -1,9 +1,9 @@
 # Effectively using the DelayedArray framework to support the analysis of large datasets
 
 Authors:
-    Peter Francis Hickey^[Department of Biostatistics, Johns Hopkins University],
-    <br/>
-Last modified: 12 June, 2018.
+Peter Francis Hickey^[Department of Biostatistics, Johns Hopkins University],
+<br/>
+Last modified: 19 June, 2018.
 
 ## Overview
 
@@ -65,14 +65,14 @@ Students will be expected to be able to follow and reason about example R code.
 * Understand the differences between a *DelayedArray* instance and an instance of a subclass (e.g., *HDF5Array*, *RleArray*).
 * Know what types of operations 'degrade' an instance of a *DelayedArray* subclass to a *DelayedArray*, as well as when and why this matters.
 * Construct a *DelayedArray*:
-  * From an in-memory array-like object.
-  * From an on-disk data store (e.g., HDF5).
-  * From scratch by writing data to a *RealizationSink*.
+* From an in-memory array-like object.
+* From an on-disk data store (e.g., HDF5).
+* From scratch by writing data to a *RealizationSink*.
 * Take a function that operates on rows or columns of a matrix and apply it to a DelayedMatrix.
 * Use block-processing on a *DelayedArray* to compute:
-  * A univariate (scalar) summary statistic (e.g., `max()`).
-  * A multivariate (vector) summary statistic (e.g., `colSum()` or `rowMean()`).
-  * A multivariate (array-like) summary statistic (e.g., `rowRanks()`).
+* A univariate (scalar) summary statistic (e.g., `max()`).
+* A multivariate (vector) summary statistic (e.g., `colSums()` or `rowMeans()`).
+* A multivariate (array-like) summary statistic (e.g., `rowRanks()`).
 * Design an algorithm that imports data into a DelayedArray.
 
 ## Introductory material
@@ -208,8 +208,6 @@ The **DelayedArray** package defines the key classes, generics, and methods^[The
 The reverse dependencies of **DelayedArray** are shown below:
 
 ```{r, echo = FALSE, message = FALSE}
-# TODO: This is a GitHub only package, 
-#       `BiocManager::install("seandavi/BiocPkgTools")`
 library(BiocPkgTools)
 library(tidygraph)
 library(ggraph)
@@ -319,7 +317,7 @@ ggraph(graph, layout = "fr") +
 
 The above figures includes packages that extend the DelayedArray framework in various ways, as well as those that simply use the DelayedArray framework to analyse specific types of 'omics data. We briefly discuss some of these:
 
-### Packages that extend **DelayedArray**
+#### Packages that extend **DelayedArray**
 
 There are two ways a package may extend the DelayedArray framework. 
 The first kind of package adds support for a new _realization backend_ (**TODO** Define?). Examples of this are:
@@ -335,7 +333,7 @@ The second kind of package adds methods for computing on _DelayedArray_ instance
 - The **kmknn** package provides methods for performing k-means for k-nearest neighbours of data stored in a *DelayedArray*.
 - Packages for performing matrix factorizations, (generalized) linear regression, , etc. (work in progress)
 
-### Packages that use **DelayedArray**
+#### Packages that use **DelayedArray**
 
 - The **bsseq** package uses the DelayedArray framework to support the analysis of large whole-genome bisulfite methylation sequencing experiments.
 - **TODO**: minfi, scater, scran, others
@@ -378,14 +376,14 @@ From an end user's perspective, there are a two broad categories of seed:
 
 1. In-memory seeds
 2. Out-of-memory seeds
-    a. Local, on-disk seeds
-    b. Remote (in-memory or on-disk) seeds
+a. Local, on-disk seeds
+b. Remote (in-memory or on-disk) seeds
 
 **TODO:** Box this out as an aside
 
 > For a developer's perspective, there's a third category of seed that is defined by the *DelayedOp* class. 
 Instances of the *DelayedOp* class are not intended to be manipulated directly by the end user, but they are central to the concept of delayed operations, which we will learn about later (**TODO:** Link to section).
-    
+
 A seed must implement the "seed contract"^[For further details, see the vignette in the **DelayedArray** package (available via `vignette("02-Implementing_a_backend", "DelayedArray")`)]:
 
 - `dim(x)`: Return the dimensions of the seed.
@@ -471,8 +469,8 @@ This 'degradation' isn't an issue in and of itself, but it can be surprising and
 
 ```{r}
 # NOTE: Adding one to each element will 'degrade' the result.
-da_Rle + 1
-is(da_Rle + 1, "RleMatrix")
+da_Rle + 1L
+is(da_Rle + 1L, "RleMatrix")
 
 # NOTE: Subsetting will 'degrade' the result.
 da_Rle[1:10, ]
@@ -525,13 +523,13 @@ is(assay(se, withDimnames = FALSE), "RleMatrix")
 ```
 
 As noted up front, the degradation isn't in and of itself a problem.
-However, if you are passing an object to a function that expects an *RleMatrix*, for example, some care needs to be taken to ensure that the object isn't accidentally 'degraded' along the way to a *DelayedArray*.
+However, if you are passing an object to a function that expects an *RleMatrix*, for example, some care needs to be taken to ensure that the object isn't accidentally 'degraded' along the way to a *DelayedMatrix*.
 
 To summarise, the lessons here are:
 
 - Modifying an instance of a *DelayedArray* subclass will almost always 'degrade' it to a *DelayedArray*.
 - It is very easy to accidentally trigger this 'degradation'.
-- This degradation can complicate method dispatch.
+- This 'degradation' can complicate method dispatch.
 
 #### Out-of-memory seeds
 
@@ -576,10 +574,11 @@ The *seed* of an *H5S_Array* is a *H5S_ArraySeed*.
 It is important to note that creating a *H5S_Array* does not read the data into memory!
 The data remain on the server until requested.
 
-```{r}
+```{r, eval = FALSE}
+# TODO: Test at home
 library(rhdf5client)
-
-# TODO: Ask Vince to host the file?
+# TODO: Use H5S_Array rather than HSDS_Matrix()
+da_h5s <- HSDS_Matrix(URL_hsds(), "/home/stvjc/hdf5_mat.h5")
 ```
 
 #### So what seed should I use?
@@ -619,49 +618,63 @@ However, more recently I added support for the DelayedArray framework in **minfi
 I've found that as the DelayedArray framework matures and expands, it is increasingly common that the same code "just works" for both *array* and *DelayedArray* objects.
 Maintaining support for ordinary arrays can also be critical for popular Bioconductor packages, although this can be handled by having functions that accept an *array* as input simply wrapping them in a *DelayedArray* for internal computations.
 
-### Fundamental concepts
+### Operating on *DelayedArray* objects
 
-**UP TO HERE**
+Now that we know what a *DelayedArray* is, it's various subclasses, and how to construct these, we will discuss how to use operate on *DelayedArray* objects. 
 
-- delayed ops
-- realization
-- block-processing
-    - array grid
-    - array viewport
+We'll cover three fundamental concepts:
+
+1. Delayed operations
+2. Block-processing
+3. Realization
+
+These three concepts work hand-in-hand.
+Delayed operations are exactly that, the operation is recorded but performing the operation is delayed until the result is required; *realization* is the process of executing the delayed operations; and *block-processing* is used to perform operations, including *realization*, on blocks of the *DelayedArray*.
 
 #### Learning goals 
 
 * Become familiar with the fundamental concepts of delayed operations, block-processing, and realization.
-* Construct a *DelayedArray*:
-  * From scratch by writing data to a *RealizationSink*.
-  
+* **TODO** Construct a *DelayedArray* from scratch by writing data to a *RealizationSink*.
+
 #### Delayed operations
 
-##### The *DelayedOp* class
-
-The final type of seed is a *DelayedOp*, used to 'record' delayed operations.
-*DelayedOp* objects are not intended to be manipulated directly by the user but are used inside *DelayedArray* objects.
-A 'delayed operation' is one that is not actually performed until the result is required.
-Here's a simple example of a delayed operations: taking the negative of every element of a *HDF5Matrix*:
+A delayed operation is one that is not actually performed until the result is required.
+Here's a simple example of a delayed operations: taking the negative of every element of a *HDF5Matrix*.
 
 ```{r}
 da_hdf5
 -da_hdf5
 ```
 
-It may look like constructing  `-da_hdf5` has taken the negative of every value.
-However, we can use the `showtree()` function to inspect the internal state of these objects and see this is not the case^[You may like to use the `str()` function for more detailed and verbose output]:
+It may look like running `-da_hdf5` has taken the negative of every element.
+However, we can see this is in fact not the case by using the `showtree()` function to inspect the internal state of these objects^[You may like to use the `str()` function for more detailed and verbose output]:
 
 ```{r}
 showtree(da_hdf5)
 
-# NOTE: See the "Unary iso op" line, below.
+# NOTE: The "Unary iso op" line is 'recording' the `-` as a delayed operation.
 showtree(-da_hdf5)
 ```
 
-Rather than modifying the data stored in the HDF5 file, which can be costly for large datasets, we've recorded the 'idea' of this operation as a *DelayedOp*.
+To further illustrate the idea, let's perform some delayed operations on a large *HDF5Array* and compare them to performing the operations on the equivalent *array*.
 
-In a *DelayedArray* object the delayed operations are stored as a tree of *DelayedOp* objects.
+```{r}
+library(h5vcData)
+
+tally_file <- system.file("extdata", "example.tally.hfs5", package = "h5vcData")
+x_h5 <- HDF5Array(tally_file, "/ExampleStudy/16/Coverages")
+x_h5
+x <- as.array(x_h5)
+
+# Delayed operations are fast compared to ordinary operations! 
+system.time(x_h5 + 100L) 
+system.time(x + 100L) 
+
+# Delayed operations can be chained
+system.time(t(x_h5[1, , 1:100] + 100L))
+```
+
+Rather than modifying the data stored in the HDF5 file, which can be costly for large datasets, we've recorded the 'idea' of these operations as a tree of *DelayedOp* objects.
 Each node in the tree is represented by a *DelayedOp* object, of which there are 6 concrete subclasses:
 
 | Node type           | Out-degree | Operation                                                 |
@@ -673,9 +686,190 @@ Each node in the tree is represented by a *DelayedOp* object, of which there are
 | *DelayedNaryIsoOp*  | N          | N-ary op that preserves the geometry                      |
 | *DelayedAbind*      | N          | `abind()`                                                 |                                            |
 
-We'll discuss delayed operations more, shortly.
+#### Block-processing
 
-### What's out there already?
+Block-processing allows you to iterate over blocks of a *DelayedArray* in a manner that abstracts over the backend.
+
+The following cartoon illustrates the basic idea of block-processing:
+
+![](500_Effectively_Using_the_DelayedArray_Framework/block_processing/Slide1.png)
+
+![](500_Effectively_Using_the_DelayedArray_Framework/block_processing/Slide2.png)
+
+![](500_Effectively_Using_the_DelayedArray_Framework/block_processing/Slide3.png)
+
+![](500_Effectively_Using_the_DelayedArray_Framework/block_processing/Slide4.png)
+
+![](500_Effectively_Using_the_DelayedArray_Framework/block_processing/Slide5.png)
+
+![](500_Effectively_Using_the_DelayedArray_Framework/block_processing/Slide6.png)
+
+![](500_Effectively_Using_the_DelayedArray_Framework/block_processing/Slide7.png)
+
+To implement block-processing, we first construct an *ArrayGrid* over the *DelayedArray*.
+Each element of the *ArrayGrid* is called an *ArrayViewport*.
+We iterate over the *ArrayGrid*, extract the corresponding *ArrayViewport*, and load the data for that block into memory as an ordinary R *array* where it can be processed using ordinary R functions.
+
+In pseudocode, we might implement block processing as follows:
+
+```{r, eval = FALSE}
+# Construct an ArrayGrid over 'x'. 
+# NOTE: blockGrid() is explained below.
+grid <- blockGrid(x)
+for (b in seq_along(grid)) {
+    # Construct an ArrayViewPort using the b-th element of the ArrayGrid.
+    viewport <- grid[[b]]
+    # Read the block of data using the current 'viewport' applied to 'x'.
+    block <- read_block(x, viewport)
+    # Apply our function to 'block' (which is an ordinary R array).
+    FUN(block)
+}
+```
+
+In practice, when constructing the *ArrayGrid* for a particular operation, we need to consider a few issues:
+
+1. Constraints on how much data we can bring into memory (the 'maximum block length').
+2. The geometry of the *ArrayGrid*, which will control the order in which we access elements.
+3. How the data are physically stored ('chunking' of the data on disk).
+
+##### Maximum block length
+
+There is a global option `getOption("DelayedArray.block.size")` for controlling how much data is brough into memory with default value corresponding to each block containing a maximum of `r getOption("DelayedArray.block.size") / 10 ^ 6` Mb of data.
+It's good practice to respect this value, however, some algorithms may require this be ignored (e.g., if you require a full column's worth of data for each block).
+
+##### Chunking and data structure
+
+Regardless of the backend, the data will be stored with a particular structure. 
+For example, ordinary R arrays store the data in column-major order.
+The geometry of the data structure is especially relevant for HDF5 files.
+
+The HDF5 format supports 'chunking' of data to maximize data access performance.
+From [https://support.hdfgroup.org/HDF5/doc/Advanced/Chunking/index.html](https://support.hdfgroup.org/HDF5/doc/Advanced/Chunking/index.html):
+
+> Datasets in HDF5 can represent arrays with any number of dimensions (up to 32). However, in the file this dataset must be stored as part of the 1-dimensional stream of data that is the low-level file. The way in which the multidimensional dataset is mapped to the serial file is called the layout. The most obvious way to accomplish this is to simply flatten the dataset in a way similar to how arrays are stored in memory, serializing the entire dataset into a monolithic block on disk, which maps directly to a memory buffer the size of the dataset. This is called a contiguous layout.
+
+> An alternative to the contiguous layout is the chunked layout. Whereas contiguous datasets are stored in a single block in the file, chunked datasets are split into multiple chunks which are all stored separately in the file. The chunks can be stored in any order and any position within the HDF5 file. Chunks can then be read and written individually, improving performance when operating on a subset of the dataset.
+
+Although this sounds similar to the blocks used in block-processing, the two are distinct.
+
+**Chunks are used to determine how the data are stored, blocks are used to determine how the data are accessed via the *ArrayGrid*.**
+That is, you can use a different *ArrayGrid* geometry to the chunk geometry, but performance may be suboptimal.
+
+##### Geometry of the *ArrayGrid*
+
+The *ArrayGrid* could be a regularly spaced grid (a *RegularArrayGrid*) or a grid with arbitrary spacing (an *ArbitraryArrayGrid*).
+
+The **DelayedArray** package includes some helper functions for setting up *ArrayGrid* instances with particular geometries and other properties.
+
+The `blockGrid()` function returns the "optimal" *ArrayGrid* for block-processing. 
+The grid is "optimal" in the sense that:
+
+- It's "compatible" with the chunk grid (i.e. with `chunkGrid(x)` or with the chunk grid supplied via the `chunk.grid` argument). That is, the chunks are contained in the blocks. In other words, chunks never cross block boundaries.
+- Its "resolution" is such that the blocks have a length that is as close as possible to (but does not exceed) `block.maxlength`. An exception is when some chunks are already >= `block.maxlength`, in which case the returned grid is the same as the chunk grid.
+
+##### Block-processing in practice
+
+In practice, most block-processing algorithms can be implemented by constructing an *ArrayGrid* with a suitable geometry and then using `DelayedArray::blockApply()` or `DelayedArray::blockReduce()`.
+
+As an example, let's compute row and column medians of `da_hdf5`. 
+We'll start by constructing *ArrayGrid* instances over the rows and columns of `da_hdf5`.
+
+```{r}
+# NOTE: Making block-processing verbose to show what's going on under the hood.
+DelayedArray:::set_verbose_block_processing(TRUE)
+system.time(
+    row_medians <- blockApply(
+        x = da_hdf5, 
+        FUN = median, 
+        grid = RegularArrayGrid(
+            refdim = dim(da_hdf5),
+            spacings = c(1L, ncol(da_hdf5)))))
+head(row_medians)
+system.time(
+    col_medians <- blockApply(
+        x = da_hdf5, 
+        FUN = median, 
+        grid = RegularArrayGrid(
+            refdim = dim(da_hdf5),
+            spacings = c(nrow(da_hdf5), 1L))))
+head(col_medians)
+```
+
+That works, but is somewhat slow for computing row maximums because we read from the HDF5 file `nrow(da_hdf5)` ( `r nrow(da_hdf5)`) times.
+We would be better off loading multiple rows of data per block.
+There are several ways to do this; here, we'll use `DelayedArray::blockGrid()` to construct an optimal *ArrayGrid* and `matrixStats::rowMedians()` and `matrixStats::colMedians()` to compute the row and column maximums.
+
+```{r}
+system.time(
+    row_medians <- blockApply(
+        x = da_hdf5, 
+        FUN = matrixStats::rowMedians, 
+        grid = blockGrid(
+            x = da_hdf5,
+            block.shape = "first-dim-grows-first")))
+head(row_medians)
+system.time(
+    col_medians <- blockApply(
+        x = da_hdf5, 
+        FUN = matrixStats::colMedians, 
+        grid = blockGrid(
+            x = da_hdf5,
+            block.shape = "last-dim-grows-first")))
+head(col_medians)
+```
+
+For larger problems, we can improve performance by processing blocks in parallel by passing an appropriate *BiocParallelParam* object via the `bpparam` argument of `blockApply()` and `blockReduce()`.
+
+Although `blockApply()` and `blockReduce()` cover most of the block-processing tasks, sometimes you may need to implement the block-processing at a lower level.
+For example, you may need to iterate over multiple *DelayedArray* objects or your `FUN` returns an object equally large (or larger) than the `block`.
+The details of these abstractions are still being worked out, but some likely candidates include methods that conceptually do:
+
+- `blockMapply()`
+- `blockApplyWithRealization()`
+- `blockMapplyWithRealization()`
+
+#### Realization
+
+Realization is the process of taking a *DelayedArray*, executing any delayed operations, and returning the result as a new *DelayedArray* with the appropriate backend. 
+
+Returning to our earlier example with data from the **h5vcData** package:
+
+```{r}
+x_h5
+showtree(x_h5)
+y <- t(x_h5[1, , 1:10000000] + 100L)
+showtree(y)
+
+# Realize the result in-memory
+z <- realize(y, BACKEND = NULL)
+# NOTE: 'z' does not carry any delayed operations.
+showtree(z)
+
+# Realize the result on-disk in an autogenerated HDF5 file
+z_h5 <- realize(y, BACKEND = "HDF5Array")
+# NOTE: 'z_h5' does not carry any delayed operations.
+showtree(z_h5)
+path(z_h5)
+
+# NOTE: The show() method performs realization on the first few and last few 
+#       elements in order to preview the result
+y
+```
+
+Realization uses block-processing under the hood:
+
+```{r}
+DelayedArray:::set_verbose_block_processing(TRUE)
+realize(y, BACKEND = "HDF5Array")
+DelayedArray:::set_verbose_block_processing(FALSE)
+```
+
+## What's out there already?
+
+**UP TO HERE**
+
+- **DelayedMatrixStats**
+- **beachmat**
 
 #### Learning goal
 
@@ -695,10 +889,10 @@ We'll discuss delayed operations more, shortly.
 
 * Take a function that operates on rows or columns of a matrix and apply it to a DelayedMatrix.
 * Use block-processing on a *DelayedArray* to compute:
-  * A univariate (scalar) summary statistic (e.g., `max()`).
-  * A multivariate (vector) summary statistic (e.g., `colSum()` or `rowMean()`).
-  * A multivariate (array-like) summary statistic (e.g., `rowRanks()`).
-* Design an algorithm that imports data into a DelayedArray.
+    * A univariate (scalar) summary statistic (e.g., `max()`).
+    * A multivariate (vector) summary statistic (e.g., `colSum()` or `rowMean()`).
+    * A multivariate (array-like) summary statistic (e.g., `rowRanks()`).
+    * Design an algorithm that imports data into a DelayedArray.
 
 ## Questions and discussion
 
@@ -711,3 +905,4 @@ This section will be updated to address questions and to summarise the discussio
 - Use `suppressPackageStartupMessages()` or equivalent.
 - Note that we'll be focusing on numerical array-like data, i.e. no real discussion of **GDSArray**.
 - Remove **memuse** dependency
+- Link to my useR talk and slides

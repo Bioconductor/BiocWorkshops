@@ -11,9 +11,9 @@ rmd_files: [
   "index.Rmd",
   "100_Morgan_RBiocForAll.Rmd",
   "201_Love_DESeq2.Rmd",
-#  "220_Das_SingleCellRNASeq.Rmd", # missing refs Peer2017 Pierson2015 Tseng2005
+  "220_Das_SingleCellRNASeq.Rmd", # missing refs Peer2017 Pierson2015 Tseng2005
   "230_Isserlin_RCy3_intro.Rmd",
-#  "500_Effectively_Using_the_DelayedArray_Framework.Rmd", # Error in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y,  :  #  invalid font type
+  "500_Effectively_Using_the_DelayedArray_Framework.Rmd",
   "Coetzee_StatePaintR.Rmd",
 #  "Cooley_DECIPHER.Rmd", # ERROR: cannot open the connection
   "Geistlinger_Omics.Rmd",
