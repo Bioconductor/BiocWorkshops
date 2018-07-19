@@ -745,6 +745,7 @@ library(tools)
 library(Rsamtools)
 bams <- list_files_with_exts(system.file("extdata", package = "airway"), "bam")
 names(bams) <- sub("_[^_]+$", "", basename(bams))
+library(Rsamtools)
 bams <- BamFileList(bams)
 ```
 Casting the vector of filenames to a formal *BamFileList* is critical
