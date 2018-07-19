@@ -95,6 +95,7 @@ Imports:
   SingleCellExperiment,
   slingshot,
   splatter,
+  SRAdb,
   statmod,
   stringr,
   SummarizedExperiment,
@@ -117,6 +118,7 @@ Imports:
   zinbwave
 Remotes:
   rstudio/bookdown,
+  seandavi/SRAdbV2,
   jmacdon/Bioc2018Anno,
   seandavi/BiocPkgTools,
   npcooley/FindHomology,
