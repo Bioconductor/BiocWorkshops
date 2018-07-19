@@ -136,8 +136,8 @@ We have now loaded in a character vector for ftp addresses for genomic fasta fil
 FindHomology contains a simple parser function for GFF files that allows us to grab gene boundaries and annotations.
 
 ```{r}
-GeneCalls <- GFFParser(GFFAddress = GeneCallAdds,
-                       Verbose = TRUE)
+GeneCalls <- FindHomology::GFFParser(GFFAddress = GeneCallAdds,
+                                     Verbose = TRUE)
 ```
 
 If you choose to mimic this work on your own, there are a few ways to get gene calls(the gene boundaries, and strandedness), and annotations, such as Prodigal[^7] (for gene calls) and Prokka[^8] (for annotations). Using the NCBI annotations is simple and conducive for this workshop. However if you are working on sequence data that you have generated or collected yourself, NCBI annotations will not be available. Additionally, a Gene Caller within the DECIPHER package is currently under construction.
