@@ -1,7 +1,8 @@
 
 
 processing file: Cooley_DECIPHER.Rmd
-Quitting from lines 80-86 (Cooley_DECIPHER.Rmd) 
-Error in readChar(con, 5L, useBytes = TRUE) : cannot open the connection
-Calls: <Anonymous> ... withCallingHandlers -> withVisible -> eval -> eval -> load -> readChar
+Quitting from lines 135-137 (Cooley_DECIPHER.Rmd) 
+Error in GFFParser(GFFAddress = GeneCallAdds, Verbose = TRUE) : 
+  could not find function "GFFParser"
+Calls: <Anonymous> ... handle -> withCallingHandlers -> withVisible -> eval -> eval
 Execution halted
