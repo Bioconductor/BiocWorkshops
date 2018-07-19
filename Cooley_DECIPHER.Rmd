@@ -19,7 +19,7 @@ sequence data in R using the Biostrings and DECIPHER packages. We will cover:
 * Construction of sequence databases for organizing genomes
 * Mapping syntenic regions between genomes with the FindSynteny function
 * Understanding, accessing, and viewing objects of class Synteny
-* Using syntenic information to predict orthologous genes
+* Using syntenic information to predict homologous genes
 * Alignment of sequences and genomes with DECIPHER
 * Downstream analyses enabled by syntenic mapping
 
@@ -74,7 +74,7 @@ This will be a lab where participants follow along on their computers.
 * Select core and pan genomes from predicted orthologs
 * Construct and interpret phylogenetic trees
 
-#### Introduction
+## Introduction
 
 In this worshop we will be walking through a comparative genomics pipeline using functions within the R package DECIPHER, and within a package that is currently under construction under the name FindHomology.
 
@@ -117,7 +117,7 @@ library(FindHomology)
 library(stringr)
 ```
 
-#### Genomes, and DECIPHER databases
+## Genomes, and DECIPHER databases
 
 The first step in this process is selecting the genomes we want to work with. There are several ways to do this, especially when accessing publically available genomes through the NCBI. Entrez Direct[^5] provides powerful unix command line tools, if that's your flavor, but the NCBI Genome List, and other search tools are easily accessible, and have a lower barrier to to entry.
 
@@ -184,7 +184,7 @@ dbDisconnect(DBConn)
 
 Identifying details of the database can be viewed in your default browser: `BrowseDB(DBPath)`
 
-#### Comparison of genomes
+## Comparison of genomes
 
 Comparison of genomes will be accomplished with Synteny. Generically when regions in a genome are the same, they are syntenic matches. Often observing this phenomenon is accomplished through matching runs of reciprocal best blast hits. If in genome 1, genes A-B-C are reciprocal best blast hits to genes Z-Y-X in genome 2, the region encompassing those genes would be considered syntenic.
 
@@ -257,7 +257,7 @@ pairs(SyntenyObject,
       labels = GenomeIDs)
 ```
 
-#### Predict homology between genes that are linked by syntenic hits
+## Predict homology between genes that are linked by syntenic hits
 
 The FindHomology package contains 5 functions, the second of which is below. `NucleotideOverlap` takes in an object of class `Synteny`, and a list of gene calls. We previously generated the object `SyntenyObject`, using DECIPHER's function `FindSynteny`, and a list of gene calls and annotations using `GFFParser`. Here we will use these two objects to build what is functionally a list of pairs of genes that are linked by syntenic hits. These linking of hits are used as  predictions of homology. A single position in the object of class `Synteny` represents a pairwise comparison between two genomes. The corresponding position in `NucleotideOverlap`'s output object, is generated from that pairwise comparison, and the gene calls for each genome involved.
 
