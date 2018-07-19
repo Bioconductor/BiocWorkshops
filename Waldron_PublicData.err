@@ -2,6 +2,6 @@
 
 processing file: Waldron_PublicData.Rmd
 Error in parse_block(g[-1], g[1], params.src) : 
-  duplicate label 'loadLibrary'
+  duplicate label 'intersectDRC'
 Calls: <Anonymous> ... process_file -> split_file -> lapply -> FUN -> parse_block
 Execution halted
