@@ -3,7 +3,7 @@
 Authors:
 Peter Francis Hickey^[Department of Biostatistics, Johns Hopkins University],
 <br/>
-Last modified: 12 June, 2018.
+Last modified: 19 June, 2018.
 
 ## Overview
 
