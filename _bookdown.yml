@@ -15,7 +15,7 @@ rmd_files: [
   "230_Isserlin_RCy3_intro.Rmd",
   "500_Effectively_Using_the_DelayedArray_Framework.Rmd",
   "Coetzee_StatePaintR.Rmd",
-#  "Cooley_DECIPHER.Rmd", # ERROR: cannot open the connection
+  "Cooley_DECIPHER.Rmd",
   "Geistlinger_Omics.Rmd",
   "Law_RNAseq123.Rmd",
   "Lawrence_GenomicRanges.Rmd",

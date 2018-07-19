@@ -1,14 +1,3 @@
-
-```{r include=FALSE, cache=FALSE}
-# to avoid error: Error in lazyLoadDBinsertVariable(vars[i], from, datafile, ascii, compress,  :
-# long vectors not supported yet: connections.c
-knitr::opts_chunk$set(
-    comment = "#>",
-    collapse = TRUE,
-    cache = TRUE,
-    cache.lazy = FALSE
-)
-```
 # Effectively using the DelayedArray framework to support the analysis of large datasets
 
 Authors:
@@ -669,11 +658,11 @@ showtree(-da_hdf5)
 
 To further illustrate the idea, let's perform some delayed operations on a large *HDF5Array* and compare them to performing the operations on the equivalent *array*.
 
-```{r}
+```{r, cache.lazy=FALSE}
 library(h5vcData)
 
 tally_file <- system.file("extdata", "example.tally.hfs5", package = "h5vcData")
-x_h5 <- HDF5Array(tally_file, "/ExampleStudy/16/Coverages")
+x_h5 <- HDF5Array::HDF5Array(tally_file, "/ExampleStudy/16/Coverages")
 x_h5
 x <- as.array(x_h5)
 
