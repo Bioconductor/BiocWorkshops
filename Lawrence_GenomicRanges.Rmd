@@ -1,3 +1,10 @@
+```{r include=FALSE, cache=FALSE}
+knitr::opts_chunk$set(
+    comment = "#>",
+    collapse = TRUE,
+    cache = TRUE
+)
+```
 # Solving common bioinformatic challenges using GenomicRanges
 
 ## Instructor(s) name(s) and contact information
@@ -731,6 +738,7 @@ was prepared):
 
 ```{r}
 library(tools)
+library(Rsamtools)
 bams <- list_files_with_exts(system.file("extdata", package = "airway"), "bam")
 names(bams) <- sub("_[^_]+$", "", basename(bams))
 bams <- BamFileList(bams)
