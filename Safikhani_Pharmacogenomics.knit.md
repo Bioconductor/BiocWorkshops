@@ -689,7 +689,7 @@ This document was generated with the following R version and packages loaded:
 ##  [4] foreach_1.4.4       Matrix_1.2-14       Hmisc_4.1-1        
 ##  [7] Formula_1.2-3       lattice_0.20-35     mRMRe_2.0.7        
 ## [10] igraph_1.2.1        survival_2.42-6     xtable_1.8-2       
-## [13] reshape2_1.4.3      ggplot2_3.0.0       Biobase_2.41.1     
+## [13] reshape2_1.4.3      ggplot2_3.0.0       Biobase_2.41.2     
 ## [16] BiocGenerics_0.27.1 PharmacoGxML_0.1.0  mCI_0.1.0          
 ## [19] PharmacoGx_1.11.0  
 ## 

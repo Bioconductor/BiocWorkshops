@@ -1069,7 +1069,7 @@ str(da_hdf5)
 ```
 ## Formal class 'HDF5Matrix' [package "HDF5Array"] with 1 slot
 ##   ..@ seed:Formal class 'HDF5ArraySeed' [package "HDF5Array"] with 5 slots
-##   .. .. ..@ filepath : chr "/tmp/tmp.Ct1rlgBbBe/BiocWorkshops/500_Effectively_Using_the_DelayedArray_Framework/hdf5_mat.h5"
+##   .. .. ..@ filepath : chr "/home/lwaldron/Source/BiocWorkshops/500_Effectively_Using_the_DelayedArray_Framework/hdf5_mat.h5"
 ##   .. .. ..@ name     : chr "hdf5_mat"
 ##   .. .. ..@ dim      : int [1:2] 105 2
 ##   .. .. ..@ first_val: int 1
@@ -1225,7 +1225,7 @@ To further illustrate the idea, let's perform some delayed operations on a large
 library(h5vcData)
 
 tally_file <- system.file("extdata", "example.tally.hfs5", package = "h5vcData")
-x_h5 <- HDF5Array(tally_file, "/ExampleStudy/16/Coverages")
+x_h5 <- HDF5Array::HDF5Array(tally_file, "/ExampleStudy/16/Coverages")
 x_h5
 ```
 
@@ -1259,7 +1259,7 @@ system.time(x_h5 + 100L)
 
 ```
 ##    user  system elapsed 
-##   0.008   0.000   0.005
+##   0.004   0.000   0.004
 ```
 
 ```r
@@ -1268,7 +1268,7 @@ system.time(x + 100L)
 
 ```
 ##    user  system elapsed 
-##   2.584   1.864   4.449
+##   2.672   1.760   4.432
 ```
 
 ```r
@@ -1404,7 +1404,7 @@ system.time(
 
 ```
 ##    user  system elapsed 
-##   0.124   1.088   1.493
+##   0.128   1.188   1.641
 ```
 
 ```r
@@ -1443,7 +1443,7 @@ system.time(
 
 ```
 ##    user  system elapsed 
-##   0.052   0.104   0.234
+##   0.064   0.108   0.251
 ```
 
 ```r
@@ -1479,7 +1479,7 @@ system.time(
 
 ```
 ##    user  system elapsed 
-##   0.016   0.000   0.018
+##   0.020   0.000   0.019
 ```
 
 ```r
@@ -1627,7 +1627,7 @@ path(z_h5)
 ```
 
 ```
-## [1] "/tmp/RtmpOpEaDu/HDF5Array_dump/auto00001.h5"
+## [1] "/tmp/RtmpuegpHz/HDF5Array_dump/auto00001.h5"
 ```
 
 ```r
