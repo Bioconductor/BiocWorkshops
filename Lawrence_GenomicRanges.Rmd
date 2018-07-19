@@ -79,20 +79,19 @@ Describe how students will be expected to participate in the workshop.
 ### What is the Ranges infrastructure?
 
 The Ranges framework of packages provide data structures and
-algorithms for analyzing genomic data. This includes generic genomic
+algorithms for analyzing genomic data. This includes standard genomic
 data containers like GRanges and SummarizedExperiment, optimized data
-representations like Rle, and fast algorithms for computing overlaps
-and other range manipulations.
+representations like Rle, and fast algorithms for computing overlaps,
+finding nearest neighbors, summarizing ranges and metadata, etc.
 
 ### Why use the Ranges infrastructure?
 
 Hundreds of Bioconductor packages operate on Ranges data structures,
 enabling the construction of complex workflows integrating multiple
 packages and data types. The API directly supports data analysis as
-well as it provides building blocks for constructing new genomic
-software. Code evolves easily from analysis script, to method
-prototype, and finally to generalized package extending the
-Bioconductor ecosystem.
+well the construction of new genomic software. Code evolves easily
+from analysis script to generalized package extending the Bioconductor
+ecosystem.
 
 ### Who is this workshop for?
 
@@ -125,13 +124,15 @@ knitr:::include_graphics("Lawrence_GenomicRanges/granges.pdf")
 The central genomic data structure is the *GRanges* class, 
 which represents a collection of genomic ranges
 that each have a single start and end location on the genome. It can be
-used to store the location of genomic features such as contiguous binding
-sites, transcripts, and exons. 
+used to store the location of genomic features such as binding
+sites, read alignments and transcripts. 
+
+## Constructing a *GRanges* object from data.frame
 
 If we have a data.frame containing scores on a set of genomic
 ranges, we can call `makeGRangesFromDataFrame()` to promote the
 data.frame to a GRanges, thus adding semantics, formal constraints,
-and a wealth of functionality. For example,
+and range-specific functionality. For example,
 
 ```{r}
 suppressPackageStartupMessages({
@@ -153,44 +154,53 @@ gr <- makeGRangesFromDataFrame(df, keep.extra.columns=TRUE)
 ```
 
 creates a *GRanges* object with 10 genomic ranges.
-The output of the *GRanges* `show` method separates the
+The output of the *GRanges* `show()` method separates the
 information into a left and right hand region that are separated by
 `|` symbols. The genomic coordinates (seqnames, ranges, and strand)
 are located on the left-hand side and the metadata columns (annotation)
 are located on the right. For this example, the metadata is
-comprised of `score` and `GC` information, but almost
+comprised of `"score"` and `"GC"` information, but almost
 anything can be stored in the metadata portion of a *GRanges*
 object.
 
-The components of the genomic coordinates within a *GRanges*
-object can be extracted using the `seqnames`, `ranges`,
-and `strand` accessor functions.
+## Loading a *GRanges* object from a standard file format
+
+We often obtain data on genomic ranges from standard track formats,
+like BED, GFF and BigWig. The rtracklayer package parses those files
+directly into GRanges objects. The GenomicAlignments package parses
+BAM files into GAlignments objects, which behave much like GRanges,
+and it is easy to convert a GAlignments to a GRanges. We will see some
+examples of loading data from files later in the tutorial.
+
+The `seqnames()`, `ranges()`, and `strand()` accessor functions
+extract the components of the genomic coordinates,
  
+ 
+## Basic manipulation of *GRanges* objects
+
 ```{r GRanges-location-accessors}
 seqnames(gr)
 ranges(gr)
 strand(gr)
 ```
 
-The genomic ranges can be extracted without corresponding metadata
-with `granges`
- 
+The `granges()` function extracts genomic ranges without corresponding
+metadata,
+
 ```{r granges-accessor}
 granges(gr)
 ``` 
 
-Basic interval characteristics of *GRanges* objects can
-be extracted using the `start`, `end`, `width`,
-and `range` functions.
- 
+The `start()`, `end()`, `width()`, and `range` functions extract basic
+interval characteristics,
+
 ```{r IRangesStuff}
 start(gr)
 end(gr)
 width(gr)
 ```
 
-Annotations for these coordinates can be extracted as a
-*DataFrame* object using the `mcols` accessor.
+The `mcols()` accessor extracts the metadata as a *DataFrame*,
  
 ```{r metadataAccess}
 mcols(gr)
@@ -198,13 +208,18 @@ mcols(gr)$score
 score(gr)
 ```
 
-Information about the lengths of the various sequences that the ranges
-are aligned to can also be stored in the *GRanges* object. So
-if this is data from *Homo sapiens*, we can set the values as:
+The lengths and other properties of the sequences containing the
+ranges can (and should) be stored in the *GRanges* object. Formal
+tracking of the sequence universe, typically the genome build, ensures
+data integrity and prevents accidental mixing of ranges from
+incompatible contexts. Assuming these data are of *Homo sapiens*, we
+could add the sequence information like this:
  
 ```{r setSeqLengths}
 seqinfo(gr) <- Seqinfo(genome="hg38")
 ```
+The `Seqinfo()` function automatically loads the sequence information
+for the specified `genome=` by querying the UCSC database.
  
 And then retrieves as:
 ```{r setSeqLengths2}
@@ -219,15 +234,6 @@ names(gr)
 length(gr)
 ```
 
-## Loading a GRanges from a standard file format
-
-We often obtain data on genomic ranges from standard track formats,
-like BED, GFF and BigWig. The rtracklayer package parses those files
-directly into GRanges objects. The GenomicAlignments package parses
-BAM files into GAlignments objects, which behave much like GRanges,
-and it is easy to convert a GAlignments to a GRanges. We will see some
-examples of loading data from files later in the tutorial.
-
 ## Subsetting  *GRanges* objects
 
 *GRanges* objects act like vectors of ranges, with the expected
@@ -237,9 +243,8 @@ vector-like subsetting operations available
 gr[2:3]
 ```
  
-A second argument to the `[` subset operator can be used
-to specify which metadata columns to extract from the
-*GRanges* object. For example,
+A second argument to the `[` subset operator specifies which metadata
+columns to extract from the *GRanges* object. For example,
  
 ```{r subset2}
 gr[2:3, "GC"]
@@ -248,12 +253,12 @@ gr[2:3, "GC"]
 The `subset()` function provides an easy way to subset based on
 attributes of the ranges and columns in the metadata. For example,
 ```{r subset3}
-subset(gr, strand == "+" & score > 5, select=score)
+subset(gr, strand == "+" & score > 5, select = score)
 ```
 
-Elements can also be assigned to the *GRanges* object.  Here is
-an example where the second row of a *GRanges* object is
-replaced with the first row of `gr`.
+Elements can also be assigned to the *GRanges* object.  This example
+replaces the the second row of a *GRanges* object with the first row
+of `gr`.
  
 ```{r assign1}
 grMod <- gr
