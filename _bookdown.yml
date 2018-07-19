@@ -10,18 +10,18 @@ before_chapter_script: "_common.R"
 rmd_files: [
   "index.Rmd",
   "100_Morgan_RBiocForAll.Rmd",
+  "101_MacDonald_Annotation.Rmd",
+  "102_Lawrence_GenomicRanges.Rmd",
+  "103_Waldron_PublicData.Rmd"
+  "200_Law_RNAseq123.Rmd",
   "201_Love_DESeq2.Rmd",
-  "220_Das_SingleCellRNASeq.Rmd", # missing refs Peer2017 Pierson2015 Tseng2005
+  "202_Das_SingleCellRNASeq.Rmd", # missing refs Peer2017 Pierson2015 Tseng2005
+  "210_Geistlinger_Omics.Rmd",
+  "220_Ramos_MultiAssayExperiment.Rmd",
   "230_Isserlin_RCy3_intro.Rmd",
+  "240_Lee_Plyranges.Rmd",
+  "250_Cooley_DECIPHER.Rmd",
+  "270_Safikhani_Pharmacogenomics.Rmd",
   "500_Effectively_Using_the_DelayedArray_Framework.Rmd",
-  "Cooley_DECIPHER.Rmd",
-  "Geistlinger_Omics.Rmd",
-  "Law_RNAseq123.Rmd",
-  "Lawrence_GenomicRanges.Rmd",
-  "Lee_Plyranges.Rmd",
-  "MacDonald_Annotation.Rmd",
-  "Ramos_MultiAssayExperiment.Rmd",
-  "Safikhani_Pharmacogenomics.Rmd",
-  "Turaga_MaintainBioc.Rmd",
-  "Waldron_PublicData.Rmd"
+  "510_Turaga_MaintainBioc.Rmd",
 ]

@@ -1,4 +1,4 @@
-# _R_ and _Bioconductor_ for everyone: an introduction
+# 100: _R_ and _Bioconductor_ for everyone: an introduction
 
 Authors:
     Martin Morgan^[Roswell Park Comprehensive Cancer Center, Buffalo, NY],

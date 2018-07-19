@@ -1,4 +1,4 @@
-# Functional enrichment analysis of high-throughput omics data
+# 210: Functional enrichment analysis of high-throughput omics data
 
 ## Instructor(s) name(s) and contact information
 

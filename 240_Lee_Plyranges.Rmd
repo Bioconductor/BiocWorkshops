@@ -1,4 +1,4 @@
-# Fluent genomic data analysis with plyranges
+# 240: Fluent genomic data analysis with plyranges
 
 ## Instructor(s) name(s) and contact information
 

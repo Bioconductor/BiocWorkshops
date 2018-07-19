@@ -1,4 +1,4 @@
-# Biomarker discovery from large pharmacogenomics datasets
+# 260: Biomarker discovery from large pharmacogenomics datasets
 
 ## Instructors:
 * Zhaleh Safikhani (<zhaleh.safikhani@utoront.ca>)

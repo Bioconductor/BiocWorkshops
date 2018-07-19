@@ -2,7 +2,7 @@
 bibliography: Waldron_PublicData/Waldron_PublicData.bib
 ---
 
-# Public Data Resources and Bioconductor
+# 103: Public Data Resources and Bioconductor
 
 ## Instructor name(s) and contact information
 

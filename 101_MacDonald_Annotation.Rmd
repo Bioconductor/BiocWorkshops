@@ -1,4 +1,4 @@
-# Introduction to Bioconductor annotation resources
+# 101: Introduction to Bioconductor annotation resources
 
 ## Instructors
 

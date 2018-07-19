@@ -1,4 +1,4 @@
-# Solving common bioinformatic challenges using GenomicRanges
+# 102: Solving common bioinformatic challenges using GenomicRanges
 
 ## Instructor(s) name(s) and contact information
 

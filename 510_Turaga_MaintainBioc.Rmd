@@ -1,4 +1,4 @@
-# Maintaining your Bioconductor package
+# 510: Maintaining your Bioconductor package
 
 ## Instructor name and contact information
 

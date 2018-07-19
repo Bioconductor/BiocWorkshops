@@ -1,4 +1,4 @@
-# RNA-seq data analysis with DESeq2
+# 201: RNA-seq data analysis with DESeq2
 
 Authors:
     Michael I. Love^[UNC-Chapel Hill, NC, US],

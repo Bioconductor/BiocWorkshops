@@ -1,4 +1,4 @@
-# RNA-seq analysis is easy as 1-2-3 with limma, Glimma and edgeR
+# 200: RNA-seq analysis is easy as 1-2-3 with limma, Glimma and edgeR
 
 ## Instructor name and contact information
 
