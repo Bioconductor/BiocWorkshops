@@ -1,7 +1,8 @@
 
 
 processing file: Lawrence_GenomicRanges.Rmd
-Quitting from lines 733-737 (Lawrence_GenomicRanges.Rmd) 
-Error in BamFileList(bams) : could not find function "BamFileList"
-Calls: <Anonymous> ... handle -> withCallingHandlers -> withVisible -> eval -> eval
+Quitting from lines 786-789 (Lawrence_GenomicRanges.Rmd) 
+Error in library(EnsDb.Hsapiens.v75) : 
+  there is no package called 'EnsDb.Hsapiens.v75'
+Calls: <Anonymous> ... withCallingHandlers -> withVisible -> eval -> eval -> library
 Execution halted

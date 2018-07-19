@@ -1069,7 +1069,7 @@ str(da_hdf5)
 ```
 ## Formal class 'HDF5Matrix' [package "HDF5Array"] with 1 slot
 ##   ..@ seed:Formal class 'HDF5ArraySeed' [package "HDF5Array"] with 5 slots
-##   .. .. ..@ filepath : chr "/tmp/tmp.LHKt01fKc5/BiocWorkshops/500_Effectively_Using_the_DelayedArray_Framework/hdf5_mat.h5"
+##   .. .. ..@ filepath : chr "/tmp/tmp.Ct1rlgBbBe/BiocWorkshops/500_Effectively_Using_the_DelayedArray_Framework/hdf5_mat.h5"
 ##   .. .. ..@ name     : chr "hdf5_mat"
 ##   .. .. ..@ dim      : int [1:2] 105 2
 ##   .. .. ..@ first_val: int 1
@@ -1259,7 +1259,7 @@ system.time(x_h5 + 100L)
 
 ```
 ##    user  system elapsed 
-##   0.004   0.000   0.004
+##   0.008   0.000   0.005
 ```
 
 ```r
@@ -1268,7 +1268,7 @@ system.time(x + 100L)
 
 ```
 ##    user  system elapsed 
-##   2.484   1.648   4.133
+##   2.584   1.864   4.449
 ```
 
 ```r
@@ -1404,7 +1404,7 @@ system.time(
 
 ```
 ##    user  system elapsed 
-##   0.072   1.152   1.501
+##   0.124   1.088   1.493
 ```
 
 ```r
@@ -1443,7 +1443,7 @@ system.time(
 
 ```
 ##    user  system elapsed 
-##   0.056   0.108   0.235
+##   0.052   0.104   0.234
 ```
 
 ```r
@@ -1479,7 +1479,7 @@ system.time(
 
 ```
 ##    user  system elapsed 
-##   0.020   0.000   0.019
+##   0.016   0.000   0.018
 ```
 
 ```r
@@ -1514,7 +1514,7 @@ system.time(
 
 ```
 ##    user  system elapsed 
-##   0.016   0.000   0.016
+##   0.016   0.000   0.017
 ```
 
 ```r
@@ -1627,7 +1627,7 @@ path(z_h5)
 ```
 
 ```
-## [1] "/tmp/Rtmp2wgvAU/HDF5Array_dump/auto00001.h5"
+## [1] "/tmp/RtmpOpEaDu/HDF5Array_dump/auto00001.h5"
 ```
 
 ```r
