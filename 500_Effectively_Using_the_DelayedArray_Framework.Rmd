@@ -575,7 +575,7 @@ The *seed* of an *H5S_Array* is a *H5S_ArraySeed*.
 It is important to note that creating a *H5S_Array* does not read the data into memory!
 The data remain on the server until requested.
 
-```{r, eval = FALSE}
+```{r}
 library(rhdf5client)
 da_h5s <- HSDS_Matrix(URL_hsds(), "/home/stvjc/hdf5_mat.h5")
 da_h5s
