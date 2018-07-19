@@ -1,3 +1,14 @@
+
+```{r include=FALSE, cache=FALSE}
+# to avoid error: Error in lazyLoadDBinsertVariable(vars[i], from, datafile, ascii, compress,  :
+# long vectors not supported yet: connections.c
+knitr::opts_chunk$set(
+    comment = "#>",
+    collapse = TRUE,
+    cache = TRUE,
+    cache.lazy = FALSE
+)
+```
 # Effectively using the DelayedArray framework to support the analysis of large datasets
 
 Authors:
