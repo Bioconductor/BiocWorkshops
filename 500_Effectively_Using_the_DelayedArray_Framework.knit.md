@@ -1069,7 +1069,7 @@ str(da_hdf5)
 ```
 ## Formal class 'HDF5Matrix' [package "HDF5Array"] with 1 slot
 ##   ..@ seed:Formal class 'HDF5ArraySeed' [package "HDF5Array"] with 5 slots
-##   .. .. ..@ filepath : chr "/tmp/tmp.H4QsVLg5Wu/BiocWorkshops/500_Effectively_Using_the_DelayedArray_Framework/hdf5_mat.h5"
+##   .. .. ..@ filepath : chr "/tmp/tmp.5wTx37Wlnu/BiocWorkshops/500_Effectively_Using_the_DelayedArray_Framework/hdf5_mat.h5"
 ##   .. .. ..@ name     : chr "hdf5_mat"
 ##   .. .. ..@ dim      : int [1:2] 105 2
 ##   .. .. ..@ first_val: int 1
@@ -1259,7 +1259,7 @@ system.time(x_h5 + 100L)
 
 ```
 ##    user  system elapsed 
-##   0.000   0.008   0.005
+##   0.004   0.000   0.004
 ```
 
 ```r
@@ -1268,7 +1268,7 @@ system.time(x + 100L)
 
 ```
 ##    user  system elapsed 
-##   2.940   2.256   5.201
+##   2.652   1.356   4.009
 ```
 
 ```r
@@ -1278,7 +1278,7 @@ system.time(t(x_h5[1, , 1:100] + 100L))
 
 ```
 ##    user  system elapsed 
-##   0.016   0.000   0.018
+##   0.016   0.000   0.015
 ```
 
 Rather than modifying the data stored in the HDF5 file, which can be costly for large datasets, we've recorded the 'idea' of these operations as a tree of *DelayedOp* objects.
@@ -1404,7 +1404,7 @@ system.time(
 
 ```
 ##    user  system elapsed 
-##   0.108   1.216   1.533
+##   0.108   1.136   1.519
 ```
 
 ```r
@@ -1443,7 +1443,7 @@ system.time(
 
 ```
 ##    user  system elapsed 
-##   0.060   0.104   0.259
+##   0.052   0.108   0.262
 ```
 
 ```r
@@ -1479,7 +1479,7 @@ system.time(
 
 ```
 ##    user  system elapsed 
-##    0.02    0.00    0.02
+##   0.020   0.000   0.019
 ```
 
 ```r
@@ -1514,7 +1514,7 @@ system.time(
 
 ```
 ##    user  system elapsed 
-##   0.016   0.004   0.017
+##   0.016   0.000   0.017
 ```
 
 ```r
@@ -1627,7 +1627,7 @@ path(z_h5)
 ```
 
 ```
-## [1] "/tmp/RtmpIeeD4v/HDF5Array_dump/auto00001.h5"
+## [1] "/tmp/RtmpDOerf1/HDF5Array_dump/auto00001.h5"
 ```
 
 ```r
