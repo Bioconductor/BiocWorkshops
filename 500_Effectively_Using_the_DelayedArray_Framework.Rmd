@@ -1,3 +1,11 @@
+```{r include=FALSE, cache=FALSE}
+knitr::opts_chunk$set(
+    comment = "#>",
+    collapse = TRUE,
+    cache = TRUE,
+    cache.lazy = FALSE
+)
+```
 # Effectively using the DelayedArray framework to support the analysis of large datasets
 
 Authors:
@@ -207,7 +215,7 @@ The **DelayedArray** package defines the key classes, generics, and methods^[The
 
 The reverse dependencies of **DelayedArray** are shown below:
 
-```{r, echo = FALSE, message = FALSE}
+```{r, echo = FALSE, message = FALSE, dev = 'png'}
 library(BiocPkgTools)
 library(tidygraph)
 library(ggraph)
