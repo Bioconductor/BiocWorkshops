@@ -734,7 +734,7 @@ First let's gather all the BAM files available to use in airway (see
 `browseVignettes("airway")` for more information about the data and how it 
 was prepared):
 
-```{r}
+```{r, cache.lazy=FALSE}
 library(tools)
 library(Rsamtools)
 bams <- list_files_with_exts(system.file("extdata", package = "airway"), "bam")
