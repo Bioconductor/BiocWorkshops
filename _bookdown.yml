@@ -14,7 +14,6 @@ rmd_files: [
   "220_Das_SingleCellRNASeq.Rmd", # missing refs Peer2017 Pierson2015 Tseng2005
   "230_Isserlin_RCy3_intro.Rmd",
   "500_Effectively_Using_the_DelayedArray_Framework.Rmd",
-  "Coetzee_StatePaintR.Rmd",
   "Cooley_DECIPHER.Rmd",
   "Geistlinger_Omics.Rmd",
   "Law_RNAseq123.Rmd",
