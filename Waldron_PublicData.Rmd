@@ -1004,7 +1004,7 @@ These case studies were published in Smirnov, Petr, et al. [PharmacoGx: an R pac
 
 Let us first load the `PharmacoGx`library.
 
-```{r loadLibrary, message=FALSE}
+```{r loadPharmaco, message=FALSE, results="hide"}
 library(PharmacoGx)
 ```
 
