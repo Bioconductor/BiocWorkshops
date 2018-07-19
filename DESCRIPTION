@@ -81,6 +81,7 @@ Imports:
   Rcpp,
   RCy3,
   RCurl,
+  Rsamtools,
   gProfileR,
   readr,
   recount,
