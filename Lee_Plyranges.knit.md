@@ -3,7 +3,7 @@
 ## Instructor(s) name(s) and contact information
 
 * Stuart Lee (lee.s@wehi.edu.au)
-* Michael Lawrence (lawremi@gmail.com)
+* Michael Lawrence (michafla@gmail.com)
 
 ## Workshop Description
 
@@ -1218,7 +1218,7 @@ first_bam_cvg
 
 Here the coverage is computed without the entire BAM file being read into
 memory. Notice that the score here is the count of the number of alignments
-that coverage a range. To compute a coverage histogram, that is the number
+that cover a given range. To compute a coverage histogram, that is the number
 of number of bases that have a given coverage score for each contig we can
 simply use `summarise()`:
 
@@ -1359,40 +1359,40 @@ split_bam
 ```
 
 ```r
-# look at the junction reads 
+# look at all the junction reads 
 split_bam %>% 
-    filter(n() > 2)
+    filter(n() >= 2)
 ```
 
 ```
-## GRanges object with 27 ranges and 4 metadata columns:
-## Groups: introns [9]
-##        seqnames            ranges strand |            cigar    qwidth
-##           <Rle>         <IRanges>  <Rle> |      <character> <integer>
-##    [1]        1 11137495-11137500      - | 6M157N51M2059N6M        63
-##    [2]        1 11137658-11137708      - | 6M157N51M2059N6M        63
-##    [3]        1 11139768-11139773      - | 6M157N51M2059N6M        63
-##    [4]        1 11137496-11137500      + | 5M157N51M2059N7M        63
-##    [5]        1 11137658-11137708      + | 5M157N51M2059N7M        63
-##    ...      ...               ...    ... .              ...       ...
-##   [23]        1 11140556-11140606      + |  5M676N51M214N7M        63
-##   [24]        1 11140821-11140827      + |  5M676N51M214N7M        63
-##   [25]        1 11139876-11139879      + |  4M676N51M214N8M        63
-##   [26]        1 11140556-11140606      + |  4M676N51M214N8M        63
-##   [27]        1 11140821-11140828      + |  4M676N51M214N8M        63
-##            njunc   introns
-##        <integer> <integer>
-##    [1]         2      8850
-##    [2]         2      8850
-##    [3]         2      8850
-##    [4]         2      8851
-##    [5]         2      8851
-##    ...       ...       ...
-##   [23]         2      9058
-##   [24]         2      9058
-##   [25]         2      9059
-##   [26]         2      9059
-##   [27]         2      9059
+## GRanges object with 7675 ranges and 4 metadata columns:
+## Groups: introns [3833]
+##          seqnames            ranges strand |        cigar    qwidth
+##             <Rle>         <IRanges>  <Rle> |  <character> <integer>
+##      [1]        1 11072744-11072800      + |    57M972N6M        63
+##      [2]        1 11073773-11073778      + |    57M972N6M        63
+##      [3]        1 11072745-11072800      - |    56M972N7M        63
+##      [4]        1 11073773-11073779      - |    56M972N7M        63
+##      [5]        1 11072746-11072800      + |    55M972N8M        63
+##      ...      ...               ...    ... .          ...       ...
+##   [7671]        1 11345701-11345716      + | 47M11583N16M        63
+##   [7672]        1 11334089-11334117      - | 29M11583N34M        63
+##   [7673]        1 11345701-11345734      - | 29M11583N34M        63
+##   [7674]        1 11334109-11334117      - |  9M11583N54M        63
+##   [7675]        1 11345701-11345754      - |  9M11583N54M        63
+##              njunc   introns
+##          <integer> <integer>
+##      [1]         1        11
+##      [2]         1        11
+##      [3]         1        12
+##      [4]         1        12
+##      [5]         1        13
+##      ...       ...       ...
+##   [7671]         1     13913
+##   [7672]         1     13915
+##   [7673]         1     13915
+##   [7674]         1     13916
+##   [7675]         1     13916
 ##   -------
 ##   seqinfo: 84 sequences from an unspecified genome
 ```

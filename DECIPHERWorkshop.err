@@ -1,0 +1,8 @@
+
+
+processing file: DECIPHERWorkshop.Rmd
+Quitting from lines 135-137 (DECIPHERWorkshop.Rmd) 
+Error in GFFParser(GFFAddress = GeneCallAdds, Verbose = TRUE) : 
+  could not find function "GFFParser"
+Calls: <Anonymous> ... handle -> withCallingHandlers -> withVisible -> eval -> eval
+Execution halted

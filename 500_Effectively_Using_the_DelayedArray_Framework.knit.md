@@ -1,9 +1,9 @@
 # Effectively using the DelayedArray framework to support the analysis of large datasets
 
 Authors:
-    Peter Francis Hickey^[Department of Biostatistics, Johns Hopkins University],
-    <br/>
-Last modified: 12 June, 2018.
+Peter Francis Hickey^[Department of Biostatistics, Johns Hopkins University],
+<br/>
+Last modified: 19 June, 2018.
 
 ## Overview
 
@@ -65,14 +65,14 @@ Students will be expected to be able to follow and reason about example R code.
 * Understand the differences between a *DelayedArray* instance and an instance of a subclass (e.g., *HDF5Array*, *RleArray*).
 * Know what types of operations 'degrade' an instance of a *DelayedArray* subclass to a *DelayedArray*, as well as when and why this matters.
 * Construct a *DelayedArray*:
-  * From an in-memory array-like object.
-  * From an on-disk data store (e.g., HDF5).
-  * From scratch by writing data to a *RealizationSink*.
+* From an in-memory array-like object.
+* From an on-disk data store (e.g., HDF5).
+* From scratch by writing data to a *RealizationSink*.
 * Take a function that operates on rows or columns of a matrix and apply it to a DelayedMatrix.
 * Use block-processing on a *DelayedArray* to compute:
-  * A univariate (scalar) summary statistic (e.g., `max()`).
-  * A multivariate (vector) summary statistic (e.g., `colSum()` or `rowMean()`).
-  * A multivariate (array-like) summary statistic (e.g., `rowRanks()`).
+* A univariate (scalar) summary statistic (e.g., `max()`).
+* A multivariate (vector) summary statistic (e.g., `colSums()` or `rowMeans()`).
+* A multivariate (array-like) summary statistic (e.g., `rowRanks()`).
 * Design an algorithm that imports data into a DelayedArray.
 
 ## Introductory material
@@ -274,7 +274,7 @@ The reverse dependencies of **DelayedArray** are shown below:
 
 The above figures includes packages that extend the DelayedArray framework in various ways, as well as those that simply use the DelayedArray framework to analyse specific types of 'omics data. We briefly discuss some of these:
 
-### Packages that extend **DelayedArray**
+#### Packages that extend **DelayedArray**
 
 There are two ways a package may extend the DelayedArray framework. 
 The first kind of package adds support for a new _realization backend_ (**TODO** Define?). Examples of this are:
@@ -290,7 +290,7 @@ The second kind of package adds methods for computing on _DelayedArray_ instance
 - The **kmknn** package provides methods for performing k-means for k-nearest neighbours of data stored in a *DelayedArray*.
 - Packages for performing matrix factorizations, (generalized) linear regression, , etc. (work in progress)
 
-### Packages that use **DelayedArray**
+#### Packages that use **DelayedArray**
 
 - The **bsseq** package uses the DelayedArray framework to support the analysis of large whole-genome bisulfite methylation sequencing experiments.
 - **TODO**: minfi, scater, scran, others
@@ -375,14 +375,14 @@ From an end user's perspective, there are a two broad categories of seed:
 
 1. In-memory seeds
 2. Out-of-memory seeds
-    a. Local, on-disk seeds
-    b. Remote (in-memory or on-disk) seeds
+a. Local, on-disk seeds
+b. Remote (in-memory or on-disk) seeds
 
 **TODO:** Box this out as an aside
 
 > For a developer's perspective, there's a third category of seed that is defined by the *DelayedOp* class. 
 Instances of the *DelayedOp* class are not intended to be manipulated directly by the end user, but they are central to the concept of delayed operations, which we will learn about later (**TODO:** Link to section).
-    
+
 A seed must implement the "seed contract"^[For further details, see the vignette in the **DelayedArray** package (available via `vignette("02-Implementing_a_backend", "DelayedArray")`)]:
 
 - `dim(x)`: Return the dimensions of the seed.
@@ -708,11 +708,11 @@ This 'degradation' isn't an issue in and of itself, but it can be surprising and
 
 ```r
 # NOTE: Adding one to each element will 'degrade' the result.
-da_Rle + 1
+da_Rle + 1L
 ```
 
 ```
-## <105 x 2> DelayedMatrix object of type "double":
+## <105 x 2> DelayedMatrix object of type "integer":
 ##        [,1] [,2]
 ##   [1,]    2   16
 ##   [2,]    3   16
@@ -728,7 +728,7 @@ da_Rle + 1
 ```
 
 ```r
-is(da_Rle + 1, "RleMatrix")
+is(da_Rle + 1L, "RleMatrix")
 ```
 
 ```
@@ -979,13 +979,13 @@ is(assay(se, withDimnames = FALSE), "RleMatrix")
 ```
 
 As noted up front, the degradation isn't in and of itself a problem.
-However, if you are passing an object to a function that expects an *RleMatrix*, for example, some care needs to be taken to ensure that the object isn't accidentally 'degraded' along the way to a *DelayedArray*.
+However, if you are passing an object to a function that expects an *RleMatrix*, for example, some care needs to be taken to ensure that the object isn't accidentally 'degraded' along the way to a *DelayedMatrix*.
 
 To summarise, the lessons here are:
 
 - Modifying an instance of a *DelayedArray* subclass will almost always 'degrade' it to a *DelayedArray*.
 - It is very easy to accidentally trigger this 'degradation'.
-- This degradation can complicate method dispatch.
+- This 'degradation' can complicate method dispatch.
 
 #### Out-of-memory seeds
 
@@ -1069,7 +1069,7 @@ str(da_hdf5)
 ```
 ## Formal class 'HDF5Matrix' [package "HDF5Array"] with 1 slot
 ##   ..@ seed:Formal class 'HDF5ArraySeed' [package "HDF5Array"] with 5 slots
-##   .. .. ..@ filepath : chr "/tmp/tmp.i7oQN4kKK4/BiocWorkshops/500_Effectively_Using_the_DelayedArray_Framework/hdf5_mat.h5"
+##   .. .. ..@ filepath : chr "/tmp/tmp.W2XD8DRs51/BiocWorkshops/500_Effectively_Using_the_DelayedArray_Framework/hdf5_mat.h5"
 ##   .. .. ..@ name     : chr "hdf5_mat"
 ##   .. .. ..@ dim      : int [1:2] 105 2
 ##   .. .. ..@ first_val: int 1
@@ -1087,22 +1087,10 @@ The data remain on the server until requested.
 
 
 ```r
+# TODO: Test at home
 library(rhdf5client)
-```
-
-```
-## 
-## Attaching package: 'rhdf5client'
-```
-
-```
-## The following object is masked from 'package:tidygraph':
-## 
-##     groups
-```
-
-```r
-# TODO: Ask Vince to host the file?
+# TODO: Use H5S_Array rather than HSDS_Matrix()
+da_h5s <- HSDS_Matrix(URL_hsds(), "/home/stvjc/hdf5_mat.h5")
 ```
 
 #### So what seed should I use?
@@ -1142,30 +1130,28 @@ However, more recently I added support for the DelayedArray framework in **minfi
 I've found that as the DelayedArray framework matures and expands, it is increasingly common that the same code "just works" for both *array* and *DelayedArray* objects.
 Maintaining support for ordinary arrays can also be critical for popular Bioconductor packages, although this can be handled by having functions that accept an *array* as input simply wrapping them in a *DelayedArray* for internal computations.
 
-### Fundamental concepts
+### Operating on *DelayedArray* objects
 
-**UP TO HERE**
+Now that we know what a *DelayedArray* is, it's various subclasses, and how to construct these, we will discuss how to use operate on *DelayedArray* objects. 
 
-- delayed ops
-- realization
-- block-processing
-    - array grid
-    - array viewport
+We'll cover three fundamental concepts:
+
+1. Delayed operations
+2. Block-processing
+3. Realization
+
+These three concepts work hand-in-hand.
+Delayed operations are exactly that, the operation is recorded but performing the operation is delayed until the result is required; *realization* is the process of executing the delayed operations; and *block-processing* is used to perform operations, including *realization*, on blocks of the *DelayedArray*.
 
 #### Learning goals 
 
 * Become familiar with the fundamental concepts of delayed operations, block-processing, and realization.
-* Construct a *DelayedArray*:
-  * From scratch by writing data to a *RealizationSink*.
-  
+* **TODO** Construct a *DelayedArray* from scratch by writing data to a *RealizationSink*.
+
 #### Delayed operations
 
-##### The *DelayedOp* class
-
-The final type of seed is a *DelayedOp*, used to 'record' delayed operations.
-*DelayedOp* objects are not intended to be manipulated directly by the user but are used inside *DelayedArray* objects.
-A 'delayed operation' is one that is not actually performed until the result is required.
-Here's a simple example of a delayed operations: taking the negative of every element of a *HDF5Matrix*:
+A delayed operation is one that is not actually performed until the result is required.
+Here's a simple example of a delayed operations: taking the negative of every element of a *HDF5Matrix*.
 
 
 ```r
@@ -1208,8 +1194,8 @@ da_hdf5
 ## [105,]  -14  -20
 ```
 
-It may look like constructing  `-da_hdf5` has taken the negative of every value.
-However, we can use the `showtree()` function to inspect the internal state of these objects and see this is not the case^[You may like to use the `str()` function for more detailed and verbose output]:
+It may look like running `-da_hdf5` has taken the negative of every element.
+However, we can see this is in fact not the case by using the `showtree()` function to inspect the internal state of these objects^[You may like to use the `str()` function for more detailed and verbose output]:
 
 
 ```r
@@ -1222,7 +1208,7 @@ showtree(da_hdf5)
 ```
 
 ```r
-# NOTE: See the "Unary iso op" line, below.
+# NOTE: The "Unary iso op" line is 'recording' the `-` as a delayed operation.
 showtree(-da_hdf5)
 ```
 
@@ -1232,55 +1218,17 @@ showtree(-da_hdf5)
 ##    └─ 105x2 integer: [seed] HDF5ArraySeed object
 ```
 
-Rather than modifying the data stored in the HDF5 file, which can be costly for large datasets, we've recorded the 'idea' of this operation as a *DelayedOp*.
+To further illustrate the idea, let's perform some delayed operations on a large *HDF5Array* and compare them to performing the operations on the equivalent *array*.
 
-In a *DelayedArray* object the delayed operations are stored as a tree of *DelayedOp* objects.
-Each node in the tree is represented by a *DelayedOp* object, of which there are 6 concrete subclasses:
 
-| Node type           | Out-degree | Operation                                                 |
-|---------------------|------------|-----------------------------------------------------------|
-| *DelayedSubset*     | 1          | Multi-dimensional single bracket subsetting               |
-| *DelayedAperm*      | 1          | Extended `aperm()` (can drop dimensions)                  |
-| *DelayedUnaryIsoOp* | 1          | Unary op that preserves the geometry (e.g., `-`, `log()`) |
-| *DelayedDimnames*   | 1          | Set dimnames                                              |
-| *DelayedNaryIsoOp*  | N          | N-ary op that preserves the geometry                      |
-| *DelayedAbind*      | N          | `abind()`                                                 |                                            |
 
-We'll discuss delayed operations more, shortly.
 
-### What's out there already?
 
-#### Learning goal
 
-* Learn of existing functions and packages for constructing and computing on DelayedArray objects, avoiding the need to re-invent the wheel.
 
-## Incoporating DelayedArray into a package
 
-### Writing algorithms to process *DelayedArray* instances
 
-#### Learning goals
 
-* Learn common design patterns for writing performant code that operates on a DelayedArray.
-* Evaluate whether an existing function that operates on an ordinary array can be readily adapted to work on a DelayedArray.
-* Reason about potential bottlenecks in algorithms operating on DelayedArray objects.
 
-#### Learning objectives
 
-* Take a function that operates on rows or columns of a matrix and apply it to a DelayedMatrix.
-* Use block-processing on a *DelayedArray* to compute:
-  * A univariate (scalar) summary statistic (e.g., `max()`).
-  * A multivariate (vector) summary statistic (e.g., `colSum()` or `rowMean()`).
-  * A multivariate (array-like) summary statistic (e.g., `rowRanks()`).
-* Design an algorithm that imports data into a DelayedArray.
 
-## Questions and discussion
-
-This section will be updated to address questions and to summarise the discussion from the presentation of this workshop at BioC2018. 
-
-## TODOs
-
-- Use **BiocStyle**?
--  Show packages depend on one another, with HDF5Array as the root (i.e. explain the HDF5 stack)
-- Use `suppressPackageStartupMessages()` or equivalent.
-- Note that we'll be focusing on numerical array-like data, i.e. no real discussion of **GDSArray**.
-- Remove **memuse** dependency
