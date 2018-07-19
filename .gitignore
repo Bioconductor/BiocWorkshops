@@ -17,36 +17,10 @@ packrat/lib*/
 .DS_Store
 
 *.normalized_results
+*.err
+*.log
 
 MANIFEST.txt
 
 Homo_sapiens_genes__GRCh37_p13_.rda
-201_Love_DESeq2.err
-201_Love_DESeq2.log
-220_Das_SingleCellRNASeq.err
-220_Das_SingleCellRNASeq.log
-230_Isserlin_RCy3_intro.err
-230_Isserlin_RCy3_intro.log
-500_Effectively_Using_the_DelayedArray_Framework.err
-500_Effectively_Using_the_DelayedArray_Framework.log
-Cooley_DECIPHER.err
-Cooley_DECIPHER.log
-Geistlinger_Omics.err
-Geistlinger_Omics.log
-Law_RNAseq123.err
-Law_RNAseq123.log
-Lawrence_GenomicRanges.err
-Lawrence_GenomicRanges.log
-Lee_Plyranges.err
-Lee_Plyranges.log
-MacDonald_Annotation.err
-MacDonald_Annotation.log
-Ramos_MultiAssayExperiment.err
-Ramos_MultiAssayExperiment.log
-Safikhani_Pharmacogenomics.err
-Safikhani_Pharmacogenomics.log
-Turaga_MaintainBioc.err
-Turaga_MaintainBioc.log
-Waldron_PublicData.err
-Waldron_PublicData.log
 Safikhani_Pharmacogenomics/PSets.csv
