@@ -1,4 +1,4 @@
-# 220: Workflow for Multi-omics Analysis with MultiAssayExperiment
+# 220: Workflow for multi-omics analysis with MultiAssayExperiment
 
 ## Instructor names and contact information
 

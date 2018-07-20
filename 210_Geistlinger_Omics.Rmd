@@ -1,6 +1,6 @@
 # 210: Functional enrichment analysis of high-throughput omics data
 
-## Instructor(s) name(s) and contact information
+## Instructor names and contact information
 
 * Ludwig Geistlinger (<Ludwig.Geistlinger@sph.cuny.edu>)
 * Levi Waldron

@@ -1,4 +1,4 @@
-# 250: Working with Genomic Data in R with the DECIPHER package
+# 250: Working with genomic data in R with the DECIPHER package
 
 Authors:
     Nicholas Cooley^[University of Pittsburgh]
