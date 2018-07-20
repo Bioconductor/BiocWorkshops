@@ -1,13 +1,13 @@
 ---
 knit: "bookdown::render_book"
 title: "The Bioconductor 2018 Workshop Compilation"
-description: "This book is a central repository for all the workshops submitted to the Bioconductor 2018 Conference"
+description: "This book contains all the workshops presented at the Bioconductor 2018 Conference"
 site: bookdown::bookdown_site
 github-repo: Bioconductor/BiocWorkshops
 documentclass: book
 bibliography: [
   "201_Love_DESeq2.bib",
-  "220_Das_SingleCellRNASeq.bib",
+  "202_Das_SingleCellRNASeq.bib",
   "230_cyto_automation.bib",
   "Lee_Plyranges/plyranges.bib",
   "Waldron_PublicData/Waldron_PublicData.bib"
@@ -19,11 +19,11 @@ bibliography: [
 Author:
     Martin Morgan^[Roswell Park Comprehensive Cancer Center, Buffalo, NY].
     <br/>
-Last modified: 22 May, 2018.
+Last modified: 19 July, 2018.
 
-The most recently compiled version of the book is available at https://bioconductor.github.io/BiocWorkshops/.
+Welcome to Bioc2018. This year's conference includes a wide array of workshops for audiences ranging from beginner to advance users and developers. Workshop materials are available as a book in html, pdf, and eBook format at https://bioconductor.github.io/BiocWorkshops/. Workshops are organized by level and topic according to numbers, as described below. Every workshop starts with a syllabus that will help you to decide whether it matches your learning goals. 
 
-## For Everyone
+## The Workshops
 
 This book contains workshops used in _R_ / _Bioconductor_
 training. The workshops are divided into 3 sections:
