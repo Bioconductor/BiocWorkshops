@@ -1,4 +1,4 @@
-# 230: Cytoscape Automation in R using Rcy3
+# 230: Cytoscape automation in R using Rcy3
 
 
 

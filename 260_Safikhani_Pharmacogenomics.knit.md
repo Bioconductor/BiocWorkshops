@@ -3,7 +3,7 @@
 ## Instructors:
 * Zhaleh Safikhani (<zhaleh.safikhani@utoront.ca>)
 * Petr Smirnov (<petr.smirnov@mail.utoronto.ca>)
-* Benjamin Haib-Kains (<benjamin.haibe.kains@utoronto.ca>)
+* Benjamin Haibe-Kains (<benjamin.haibe.kains@utoronto.ca>)
 
 ## Workshop Description
 
@@ -25,8 +25,9 @@ Following resources might be useful to read:
 
 Participants expected to have the following required packages installed on their machines to be able to run the commands along with the instructors.
 * PharmacoGx and Biobase from Bioconductor
-* mRMRe, caret, glmnet, randomForest from cran
+* xtable, Hmisc, foreach, devtools, mRMRe, caret, glmnet, randomForest from cran
 * bhklab/mci and bhklab/PharmacoGx-ML from github
+
 
 ### _R_ / _Bioconductor_ packages used
 
@@ -42,7 +43,7 @@ An example for a 45-minute workshop:
 | Introduction                                | 10m  |
 | Basic functionalities of PharmacoGx         | 15m  |
 | Consistency assessment between datasets     | 15m  |
-| Machine learning and biomarker discovery     | 20m  |
+| Machine learning and biomarker discovery    | 20m  |
 
 ## Workshop goals and objectives
 
@@ -57,7 +58,7 @@ An example for a 45-minute workshop:
 ### Learning objectives
 
 * list available standardized pharmacogenomic datasets and download them
-* understand the structure of these darasest and how to access the features and response quantifications
+* understand the structure of these datasets and how to access the features and response quantifications
 * create drug-dose response plots
 * Measure the consistency across multiple datasets and how to improve such measurements
 * Assess whether known biomarkers are reproduced within these datasets 
@@ -217,7 +218,7 @@ drugDoseResponseCurve(drug="lapatinib", cellline=cells[3],
 </div>
 
 ## Pharmacological profiles}
-In pharmacogenomic studies Cells were also tested for their response to increasing concentrations of various compounds, and form this the IC50 and AUC were computed. These pharmacological profiles are available for all the psets in *PharmacoGx*.
+In pharmacogenomic studies, cancer cell lines were also tested for their response to increasing concentrations of various compounds, and form this the IC50 and AAC were computed. These pharmacological profiles are available for all the psets in *PharmacoGx*.
 
 
 ```r
@@ -655,85 +656,12 @@ for(method in c("ridge", "lasso", "random_forest", "svm")){
 ```
 
 <img src="260_Safikhani_Pharmacogenomics_files/figure-html/machine_learning-1.png" width="672" /><img src="260_Safikhani_Pharmacogenomics_files/figure-html/machine_learning-2.png" width="672" /><img src="260_Safikhani_Pharmacogenomics_files/figure-html/machine_learning-3.png" width="672" /><img src="260_Safikhani_Pharmacogenomics_files/figure-html/machine_learning-4.png" width="672" />
-# Limitations and Future direction
 
-# Session Info
+## Bonus: Using the Connectivity Map for drug repurposing
 
-This document was generated with the following R version and packages loaded:
+We show here how to use *PharmacoGx* for linking drug perturbation signatures inferred from CMAP to independent signatures of HDAC inhibitors published in Glaser et al. (2003). We therefore sought to reproduce the HDAC analysis in Lamb et al. (2006) using the latest version of CMAP that can be downloaded using downloadPSet. The connectivityScore function enables the computation of the connectivity scores between the 14-gene HDAC signature from (Glaser et al., 2003) and over 1000 CMAP drugs. This analysis results in the four HDAC inhibitors in CMAP being ranked at the top of the drug list (Fig. 2), therefore concurring with the original CMAP analysis (Lamb et al., 2006).
+ 
 
-```r
-  sessionInfo()
-```
-
-```
-## R version 3.5.1 (2018-07-02)
-## Platform: x86_64-pc-linux-gnu (64-bit)
-## Running under: Ubuntu 16.04.4 LTS
-## 
-## Matrix products: default
-## BLAS: /usr/lib/atlas-base/atlas/libblas.so.3.0
-## LAPACK: /usr/lib/atlas-base/atlas/liblapack.so.3.0
-## 
-## locale:
-##  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
-##  [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
-##  [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
-##  [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
-##  [9] LC_ADDRESS=C               LC_TELEPHONE=C            
-## [11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
-## 
-## attached base packages:
-## [1] parallel  stats     graphics  grDevices utils     datasets  methods  
-## [8] base     
-## 
-## other attached packages:
-##  [1] randomForest_4.6-14 caret_6.0-80        glmnet_2.0-16      
-##  [4] foreach_1.4.4       Matrix_1.2-14       Hmisc_4.1-1        
-##  [7] Formula_1.2-3       lattice_0.20-35     mRMRe_2.0.7        
-## [10] igraph_1.2.1        survival_2.42-6     xtable_1.8-2       
-## [13] reshape2_1.4.3      ggplot2_3.0.0       Biobase_2.41.2     
-## [16] BiocGenerics_0.27.1 PharmacoGxML_0.1.0  mCI_0.1.0          
-## [19] PharmacoGx_1.11.0  
-## 
-## loaded via a namespace (and not attached):
-##   [1] fgsea_1.7.1         colorspace_1.3-2    class_7.3-14       
-##   [4] rprojroot_1.3-2     htmlTable_1.12      lsa_0.73.1         
-##   [7] pls_2.6-0           base64enc_0.1-3     rstudioapi_0.7     
-##  [10] DRR_0.0.3           SnowballC_0.5.1     lubridate_1.7.4    
-##  [13] prodlim_2018.04.18  codetools_0.2-15    splines_3.5.1      
-##  [16] robustbase_0.93-1.1 knitr_1.20          RcppRoll_0.3.0     
-##  [19] magicaxis_2.0.3     broom_0.5.0         ddalpha_1.3.4      
-##  [22] kernlab_0.9-26      cluster_2.0.7-1     sfsmisc_1.1-2      
-##  [25] mapproj_1.2.6       compiler_3.5.1      backports_1.1.2    
-##  [28] assertthat_0.2.0    lazyeval_0.2.1      limma_3.37.3       
-##  [31] acepack_1.4.1       htmltools_0.3.6     tools_3.5.1        
-##  [34] bindrcpp_0.2.2      gtable_0.2.0        glue_1.3.0         
-##  [37] RANN_2.6            dplyr_0.7.6         maps_3.3.0         
-##  [40] fastmatch_1.1-0     Rcpp_0.12.17        slam_0.1-43        
-##  [43] gdata_2.18.0        nlme_3.1-137        iterators_1.0.10   
-##  [46] timeDate_3043.102   gower_0.1.2         xfun_0.3           
-##  [49] stringr_1.3.1       gtools_3.8.1        DEoptimR_1.0-8     
-##  [52] MASS_7.3-50         scales_0.5.0        ipred_0.9-6        
-##  [55] relations_0.6-8     RColorBrewer_1.1-2  sets_1.0-18        
-##  [58] yaml_2.1.19         gridExtra_2.3       downloader_0.4     
-##  [61] rpart_4.1-13        latticeExtra_0.6-28 stringi_1.2.3      
-##  [64] highr_0.7           NISTunits_1.0.1     plotrix_3.7-2      
-##  [67] checkmate_1.8.5     caTools_1.17.1      BiocParallel_1.15.7
-##  [70] lava_1.6.2          geometry_0.3-6      rlang_0.2.1        
-##  [73] pkgconfig_2.0.1     bitops_1.0-6        pracma_2.1.4       
-##  [76] evaluate_0.11       purrr_0.2.5         bindr_0.1.1        
-##  [79] recipes_0.1.3       htmlwidgets_1.2     labeling_0.3       
-##  [82] CVST_0.2-2          tidyselect_0.2.4    plyr_1.8.4         
-##  [85] magrittr_1.5        bookdown_0.7.14     R6_2.2.2           
-##  [88] gplots_3.0.1        dimRed_0.1.0        sm_2.2-5.5         
-##  [91] pillar_1.3.0        foreign_0.8-70      withr_2.1.2        
-##  [94] abind_1.4-5         nnet_7.3-12         tibble_1.4.2       
-##  [97] crayon_1.3.4        KernSmooth_2.23-15  rmarkdown_1.10     
-## [100] grid_3.5.1          data.table_1.11.4   marray_1.59.0      
-## [103] piano_1.21.0        ModelMetrics_1.1.0  digest_0.6.15      
-## [106] tidyr_0.8.1         stats4_3.5.1        munsell_0.5.0      
-## [109] celestial_1.4.1     magic_1.5-8         tcltk_3.5.1
-```
 
 
 

@@ -1,6 +1,6 @@
 # 210: Functional enrichment analysis of high-throughput omics data
 
-## Instructor(s) name(s) and contact information
+## Instructor names and contact information
 
 * Ludwig Geistlinger (<Ludwig.Geistlinger@sph.cuny.edu>)
 * Levi Waldron
@@ -1539,7 +1539,7 @@ pt
 ```
 ## $numOverlaps
 ## P-value: 0.0099009900990099
-## Z-score: 47.4142
+## Z-score: 46.3535
 ## Number of iterations: 100
 ## Alternative: greater
 ## Evaluation of the original region set: 719
@@ -1557,7 +1557,7 @@ summary(pt[[1]]$permuted)
 
 ```
 ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-##   147.0   163.0   171.0   170.9   177.2   202.0
+##   142.0   161.0   170.0   168.8   175.2   208.0
 ```
 
 The resulting permutation *p*-value indicates a significant enrichment. Out of

@@ -36,21 +36,6 @@ Welcome to Bioconductor
 
 Setting options('download.file.method.GEOquery'='auto')
 Setting options('GEOquery.inmemory.gpl'=FALSE)
-Found 1 file(s)
-GSE103512_series_matrix.txt.gz
-trying URL 'https://ftp.ncbi.nlm.nih.gov/geo/series/GSE103nnn/GSE103512/matrix/GSE103512_series_matrix.txt.gz'
-Content type 'application/x-gzip' length 82939292 bytes (79.1 MB)
-==================================================
-downloaded 79.1 MB
-
-Parsed with column specification:
-cols(
-  .default = col_double(),
-  ID_REF = col_character()
-)
-See spec(...) for full column specifications.
-File stored at: 
-/tmp/RtmptXO90H/GPL13158.soft
 Loading required package: GenomicRanges
 Loading required package: stats4
 Loading required package: S4Vectors

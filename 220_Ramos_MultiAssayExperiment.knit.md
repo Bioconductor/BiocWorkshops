@@ -1,4 +1,4 @@
-# 220: Workflow for Multi-omics Analysis with MultiAssayExperiment
+# 220: Workflow for multi-omics analysis with MultiAssayExperiment
 
 ## Instructor names and contact information
 
@@ -16,8 +16,6 @@ operations for representation of copy number and mutation and variant
 data that are represented by different genomic ranges for each specimen.
 
 ### Pre-requisites
-
-List any workshop prerequisites, for example:
 
 * Basic knowledge of R syntax
 * Familiarity with the GRanges and SummarizedExperiment classes

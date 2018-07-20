@@ -16,9 +16,13 @@ Content type 'text/csv' length 1776 bytes
 ==================================================
 downloaded 1776 bytes
 
-output file: 260_Safikhani_Pharmacogenomics.knit.md
+trying URL 'http://www.sciencemag.org/content/suppl/2006/09/29/313.5795.1929.DC1/1132939s.zip'
+Content type 'application/zip' length 167688 bytes (163 KB)
+==================================================
+downloaded 163 KB
 
-Error in yaml.load(readLines(con), error.label = error.label, ...) : 
-  (_bookdown.yml) Parser error: while parsing a flow sequence at line 10, column 12 did not find expected ',' or ']' at line 16, column 3
-Calls: <Anonymous> ... load_config -> <Anonymous> -> resolve -> <Anonymous> -> yaml.load
+Quitting from lines 402-445 (260_Safikhani_Pharmacogenomics.Rmd) 
+Error in AnnotationDbi::select(hgu133a.db, keys = c(HDAC_up[[1]], HDAC_down[[1]]),  : 
+  object 'hgu133a.db' not found
+Calls: <Anonymous> ... withCallingHandlers -> withVisible -> eval -> eval -> <Anonymous>
 Execution halted

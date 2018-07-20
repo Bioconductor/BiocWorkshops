@@ -2,7 +2,7 @@
 bibliography: Waldron_PublicData/Waldron_PublicData.bib
 ---
 
-# 103: Public Data Resources and Bioconductor
+# 103: Public data resources and Bioconductor
 
 ## Instructor name(s) and contact information
 
@@ -1342,7 +1342,7 @@ download_study(project_info$project)
 ```
 
 ```
-## 2018-07-19 20:24:34 downloading file rse_gene.Rdata to SRP009615
+## 2018-07-20 07:47:42 downloading file rse_gene.Rdata to SRP009615
 ```
 followed by loading the data
 
@@ -1680,6 +1680,146 @@ psets[psets[ , "Dataset.Type"] == "perturbation", ]
 ## L1000_compounds https://www.pmgenomics.ca/bhklab/sites/default/files/downloads/L1000_compounds.RData
 ## L1000_genetic     https://www.pmgenomics.ca/bhklab/sites/default/files/downloads/L1000_genetic.RData
 ```
+# Session Info
 
+This document was generated with the following R version and packages loaded:
+
+```r
+  sessionInfo()
+```
+
+```
+## R version 3.5.1 (2018-07-02)
+## Platform: x86_64-pc-linux-gnu (64-bit)
+## Running under: Ubuntu 16.04.5 LTS
+## 
+## Matrix products: default
+## BLAS: /usr/lib/atlas-base/atlas/libblas.so.3.0
+## LAPACK: /usr/lib/atlas-base/atlas/liblapack.so.3.0
+## 
+## locale:
+##  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
+##  [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
+##  [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
+##  [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
+##  [9] LC_ADDRESS=C               LC_TELEPHONE=C            
+## [11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
+## 
+## attached base packages:
+## [1] stats4    parallel  stats     graphics  grDevices utils     datasets 
+## [8] methods   base     
+## 
+## other attached packages:
+##  [1] PharmacoGx_1.11.0             HMP16SData_1.1.0             
+##  [3] curatedMetagenomicData_1.11.3 bindrcpp_0.2.2               
+##  [5] ExperimentHub_1.7.1           AnnotationHub_2.13.1         
+##  [7] dplyr_0.7.6                   recount_1.7.2                
+##  [9] curatedTCGAData_1.3.3         MultiAssayExperiment_1.7.15  
+## [11] TCGAbiolinks_2.9.2            GenomicDataCommons_1.5.4     
+## [13] magrittr_1.5                  ggplot2_3.0.0                
+## [15] SummarizedExperiment_1.11.6   DelayedArray_0.7.19          
+## [17] BiocParallel_1.15.7           matrixStats_0.53.1           
+## [19] GenomicRanges_1.33.9          GenomeInfoDb_1.17.1          
+## [21] IRanges_2.15.16               S4Vectors_0.19.19            
+## [23] GEOquery_2.49.0               Biobase_2.41.2               
+## [25] BiocGenerics_0.27.1          
+## 
+## loaded via a namespace (and not attached):
+##   [1] rappdirs_0.3.1                SnowballC_0.5.1              
+##   [3] rtracklayer_1.41.3            ggthemes_4.0.0               
+##   [5] R.methodsS3_1.7.1             pkgmaker_0.27                
+##   [7] tidyr_0.8.1                   bumphunter_1.23.0            
+##   [9] acepack_1.4.1                 bit64_0.9-7                  
+##  [11] knitr_1.20                    aroma.light_3.11.0           
+##  [13] R.utils_2.6.0                 data.table_1.11.4            
+##  [15] rpart_4.1-13                  hwriter_1.3.2                
+##  [17] RCurl_1.95-4.11               derfinder_1.15.0             
+##  [19] doParallel_1.0.11             GenomicFeatures_1.33.0       
+##  [21] RSQLite_2.1.1                 RANN_2.6                     
+##  [23] bit_1.1-14                    BiocStyle_2.9.3              
+##  [25] xml2_1.2.0                    httpuv_1.4.5                 
+##  [27] assertthat_0.2.0              xfun_0.3                     
+##  [29] hms_0.4.2                     evaluate_0.11                
+##  [31] promises_1.0.1                BiocInstaller_1.31.1         
+##  [33] fansi_0.2.3                   progress_1.2.0               
+##  [35] caTools_1.17.1                km.ci_0.5-2                  
+##  [37] igraph_1.2.1                  DBI_1.0.0                    
+##  [39] geneplotter_1.59.0            htmlwidgets_1.2              
+##  [41] EDASeq_2.15.3                 matlab_1.0.2                 
+##  [43] purrr_0.2.5                   selectr_0.4-1                
+##  [45] ggpubr_0.1.7                  backports_1.1.2              
+##  [47] bookdown_0.7.14               permute_0.9-4                
+##  [49] annotate_1.59.0               biomaRt_2.37.3               
+##  [51] withr_2.1.2                   BSgenome_1.49.2              
+##  [53] checkmate_1.8.5               vegan_2.5-2                  
+##  [55] GenomicAlignments_1.17.3      prettyunits_1.0.2            
+##  [57] cluster_2.0.7-1               ape_5.1                      
+##  [59] lazyeval_0.2.1                crayon_1.3.4                 
+##  [61] relations_0.6-8               genefilter_1.63.0            
+##  [63] slam_0.1-43                   edgeR_3.23.3                 
+##  [65] pkgconfig_2.0.1               labeling_0.3                 
+##  [67] nlme_3.1-137                  nnet_7.3-12                  
+##  [69] bindr_0.1.1                   rlang_0.2.1                  
+##  [71] downloader_0.4                registry_0.5                 
+##  [73] phyloseq_1.25.2               tcltk_3.5.1                  
+##  [75] rprojroot_1.3-2               rngtools_1.3.1               
+##  [77] Matrix_1.2-14                 KMsurv_0.1-5                 
+##  [79] Rhdf5lib_1.3.1                zoo_1.8-3                    
+##  [81] base64enc_0.1-3               GlobalOptions_0.1.0          
+##  [83] viridisLite_0.3.0             rjson_0.2.20                 
+##  [85] bitops_1.0-6                  R.oo_1.22.0                  
+##  [87] KernSmooth_2.23-15            ConsensusClusterPlus_1.45.0  
+##  [89] Biostrings_2.49.0             blob_1.1.1                   
+##  [91] doRNG_1.7.1                   shape_1.4.4                  
+##  [93] stringr_1.3.1                 qvalue_2.13.0                
+##  [95] ShortRead_1.39.0              NISTunits_1.0.1              
+##  [97] readr_1.1.1                   scales_0.5.0                 
+##  [99] memoise_1.1.0                 plyr_1.8.4                   
+## [101] gplots_3.0.1                  derfinderHelper_1.15.0       
+## [103] gdata_2.18.0                  bibtex_0.4.2                 
+## [105] zlibbioc_1.27.0               compiler_3.5.1               
+## [107] kableExtra_0.9.0              RColorBrewer_1.1-2           
+## [109] plotrix_3.7-2                 Rsamtools_1.33.2             
+## [111] cli_1.0.0                     ade4_1.7-11                  
+## [113] XVector_0.21.3                htmlTable_1.12               
+## [115] Formula_1.2-3                 MASS_7.3-50                  
+## [117] mgcv_1.8-24                   tidyselect_0.2.4             
+## [119] stringi_1.2.3                 yaml_2.1.19                  
+## [121] locfit_1.5-9.1                latticeExtra_0.6-28          
+## [123] ggrepel_0.8.0                 survMisc_0.5.5               
+## [125] grid_3.5.1                    VariantAnnotation_1.27.2     
+## [127] fastmatch_1.1-0               tools_3.5.1                  
+## [129] circlize_0.4.4                rstudioapi_0.7               
+## [131] foreach_1.4.4                 foreign_0.8-70               
+## [133] lsa_0.73.1                    gridExtra_2.3                
+## [135] magicaxis_2.0.3               digest_0.6.15                
+## [137] pracma_2.1.4                  shiny_1.1.0                  
+## [139] cmprsk_2.2-7                  Rcpp_0.12.17                 
+## [141] broom_0.5.0                   later_0.7.3                  
+## [143] httr_1.3.1                    survminer_0.4.2              
+## [145] AnnotationDbi_1.43.1          ComplexHeatmap_1.19.1        
+## [147] colorspace_1.3-2              rvest_0.3.2                  
+## [149] XML_3.98-1.12                 splines_3.5.1                
+## [151] sm_2.2-5.5                    multtest_2.37.0              
+## [153] mapproj_1.2.6                 xtable_1.8-2                 
+## [155] jsonlite_1.5                  GenomicFiles_1.17.2          
+## [157] marray_1.59.0                 R6_2.2.2                     
+## [159] sets_1.0-18                   celestial_1.4.1              
+## [161] Hmisc_4.1-1                   pillar_1.3.0                 
+## [163] htmltools_0.3.6               mime_0.5                     
+## [165] glue_1.3.0                    DESeq_1.33.0                 
+## [167] interactiveDisplayBase_1.19.0 codetools_0.2-15             
+## [169] fgsea_1.7.1                   maps_3.3.0                   
+## [171] utf8_1.1.4                    lattice_0.20-35              
+## [173] tibble_1.4.2                  sva_3.29.0                   
+## [175] curl_3.2                      rentrez_1.2.1                
+## [177] gtools_3.8.1                  survival_2.42-6              
+## [179] limma_3.37.3                  rmarkdown_1.10               
+## [181] biomformat_1.9.0              munsell_0.5.0                
+## [183] GetoptLong_0.1.7              rhdf5_2.25.4                 
+## [185] GenomeInfoDbData_1.1.0        piano_1.21.0                 
+## [187] iterators_1.0.10              reshape2_1.4.3               
+## [189] gtable_0.2.0
+```
 
 ## Bibliography
