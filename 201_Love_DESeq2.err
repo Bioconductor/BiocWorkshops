@@ -1,9 +1,0 @@
-
-
-processing file: 201_Love_DESeq2.Rmd
-output file: 201_Love_DESeq2.knit.md
-
-Error in yaml.load(readLines(con), error.label = error.label, ...) : 
-  (_bookdown.yml) Parser error: while parsing a flow sequence at line 10, column 12 did not find expected ',' or ']' at line 16, column 3
-Calls: <Anonymous> ... load_config -> <Anonymous> -> resolve -> <Anonymous> -> yaml.load
-Execution halted

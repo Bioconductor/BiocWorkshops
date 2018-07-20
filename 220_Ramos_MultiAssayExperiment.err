@@ -1,9 +1,0 @@
-
-
-processing file: 220_Ramos_MultiAssayExperiment.Rmd
-output file: 220_Ramos_MultiAssayExperiment.knit.md
-
-Error in yaml.load(readLines(con), error.label = error.label, ...) : 
-  (_bookdown.yml) Parser error: while parsing a flow sequence at line 10, column 12 did not find expected ',' or ']' at line 16, column 3
-Calls: <Anonymous> ... load_config -> <Anonymous> -> resolve -> <Anonymous> -> yaml.load
-Execution halted

@@ -1247,7 +1247,7 @@ head(res)
 ## ENSG00000000003  0.00121584173980214      TSPAN6
 ## ENSG00000000419    0.184546856379151        DPM1
 ## ENSG00000000457    0.903592643033654       SCYL3
-## ENSG00000000460    0.878207188854225    C1orf112
+## ENSG00000000460    0.878207188854229    C1orf112
 ## ENSG00000000971 2.54952585594322e-05         CFH
 ## ENSG00000001036   0.0334768821930288       FUCA2
 ```
@@ -1289,7 +1289,7 @@ finish(rep)
 ```
 
 ```
-## [1] "/tmp/RtmpZVnVXp/report/airway.html"
+## [1] "/tmp/RtmpMrL2AX/report/airway.html"
 ```
 
 This last line, un-evaluated would launch the report in a web browser:
