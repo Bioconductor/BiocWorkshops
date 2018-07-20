@@ -17,8 +17,6 @@ data that are represented by different genomic ranges for each specimen.
 
 ### Pre-requisites
 
-List any workshop prerequisites, for example:
-
 * Basic knowledge of R syntax
 * Familiarity with the GRanges and SummarizedExperiment classes
 * Familiarity with 'omics data types including copy number and gene expression
