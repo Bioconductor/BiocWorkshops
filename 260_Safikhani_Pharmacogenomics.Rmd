@@ -57,7 +57,7 @@ An example for a 45-minute workshop:
 ### Learning objectives
 
 * list available standardized pharmacogenomic datasets and download them
-* understand the structure of these darasest and how to access the features and response quantifications
+* understand the structure of these datasets and how to access the features and response quantifications
 * create drug-dose response plots
 * Measure the consistency across multiple datasets and how to improve such measurements
 * Assess whether known biomarkers are reproduced within these datasets 
@@ -148,7 +148,7 @@ drugDoseResponseCurve(drug="lapatinib", cellline=cells[3],
 ```
 
 ## Pharmacological profiles}
-In pharmacogenomic studies Cells were also tested for their response to increasing concentrations of various compounds, and form this the IC50 and AUC were computed. These pharmacological profiles are available for all the psets in *PharmacoGx*.
+In pharmacogenomic studies, cancer cell lines were also tested for their response to increasing concentrations of various compounds, and form this the IC50 and AAC were computed. These pharmacological profiles are available for all the psets in *PharmacoGx*.
 
 ```{r ccle_auc, fig.cap="Cells response to drugs in CCLE"}
 library(ggplot2, verbose=FALSE)

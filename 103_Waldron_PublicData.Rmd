@@ -1044,6 +1044,11 @@ Drug perturbation datasets refer to pharmacogenomic data where gene expression p
 psets <- availablePSets()
 psets[psets[ , "Dataset.Type"] == "perturbation", ]
 ```
+# Session Info
 
+This document was generated with the following R version and packages loaded:
+```{r sessionInfo}
+  sessionInfo()
+```
 
 ## Bibliography
