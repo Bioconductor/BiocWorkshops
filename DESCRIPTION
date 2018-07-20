@@ -49,6 +49,7 @@ Imports:
   HDF5Array,
   HMP16SData,
   hgu95av2.db,
+  hgu133a.db,
   Hmisc,
   Homo.sapiens,
   htmltools,
