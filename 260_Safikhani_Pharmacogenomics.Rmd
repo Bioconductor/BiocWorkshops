@@ -3,7 +3,7 @@
 ## Instructors:
 * Zhaleh Safikhani (<zhaleh.safikhani@utoront.ca>)
 * Petr Smirnov (<petr.smirnov@mail.utoronto.ca>)
-* Benjamin Haib-Kains (<benjamin.haibe.kains@utoronto.ca>)
+* Benjamin Haibe-Kains (<benjamin.haibe.kains@utoronto.ca>)
 
 ## Workshop Description
 
@@ -25,8 +25,9 @@ Following resources might be useful to read:
 
 Participants expected to have the following required packages installed on their machines to be able to run the commands along with the instructors.
 * PharmacoGx and Biobase from Bioconductor
-* mRMRe, caret, glmnet, randomForest from cran
+* xtable, Hmisc, foreach, devtools, mRMRe, caret, glmnet, randomForest from cran
 * bhklab/mci and bhklab/PharmacoGx-ML from github
+
 
 ### _R_ / _Bioconductor_ packages used
 
@@ -42,7 +43,7 @@ An example for a 45-minute workshop:
 | Introduction                                | 10m  |
 | Basic functionalities of PharmacoGx         | 15m  |
 | Consistency assessment between datasets     | 15m  |
-| Machine learning and biomarker discovery     | 20m  |
+| Machine learning and biomarker discovery    | 20m  |
 
 ## Workshop goals and objectives
 
@@ -391,9 +392,58 @@ for(method in c("ridge", "lasso", "random_forest", "svm")){
                                   assessment="mCI")
 
 }
-
 ```
-# Limitations and Future direction
+
+## Bonus: Using the Connectivity Map for drug repurposing
+
+We show here how to use *PharmacoGx* for linking drug perturbation signatures inferred from CMAP to independent signatures of HDAC inhibitors published in Glaser et al. (2003). We therefore sought to reproduce the HDAC analysis in Lamb et al. (2006) using the latest version of CMAP that can be downloaded using downloadPSet. The connectivityScore function enables the computation of the connectivity scores between the 14-gene HDAC signature from (Glaser et al., 2003) and over 1000 CMAP drugs. This analysis results in the four HDAC inhibitors in CMAP being ranked at the top of the drug list (Fig. 2), therefore concurring with the original CMAP analysis (Lamb et al., 2006).
+ 
+```{r runCMAP, message=FALSE}
+## download and process the HDAC signature
+mydir <- "1132939s"
+downloader::download(paste("http://www.sciencemag.org/content/suppl/2006/09/29/313.5795.1929.DC1/", mydir, ".zip", sep=""), destfile=paste(mydir,".zip",sep=""))
+unzip(paste(mydir,".zip", sep=""))
+
+HDAC_up <- gdata::read.xls(paste(mydir, paste(mydir, "sigS1.xls", sep="_"),sep="/"), sheet=1, header=FALSE, as.is=TRUE)
+HDAC_down <- gdata::read.xls(paste(mydir, paste(mydir, "sigS1.xls", sep="_"),sep="/"), sheet=2, header=FALSE, as.is=TRUE)
+HDAC <- as.data.frame(matrix(NA, nrow=nrow(HDAC_down)+nrow(HDAC_up), ncol=2))
+annot <- AnnotationDbi::select(hgu133a.db, keys = c(HDAC_up[[1]], HDAC_down[[1]]), columns=c("ENSEMBL"), keytype="PROBEID")
+gene_up <- unique(annot[match(HDAC_up[[1]], annot[,1]),2])
+gene_down <- na.omit(unique(annot[match(HDAC_down[[1]], annot[,1]),2]))
+HDAC_genes <- as.data.frame(matrix(NA, nrow=length(gene_down)+length(gene_up), ncol=2))
+
+
+HDAC_genes[ , 2] <- c(rep(1, times=length(gene_up)), rep(-1, times=length(gene_down)))
+HDAC_genes[ , 1] <- c(gene_up, gene_down)
+rownames(HDAC_genes) <- HDAC_genes[ , 1]
+HDAC <- HDAC_genes[ , 2]
+names(HDAC) <- rownames(HDAC_genes)
+
+drug.perturbation <- PharmacoGx::downloadPertSig("CMAP")
+dimnames(drug.perturbation)[[1]] <- gsub("_at", "", dimnames(drug.perturbation)[[1]])
+
+message("Be aware that computing sensitivity will take some time...")
+cl <- parallel::makeCluster(2)
+res <- parApply(drug.perturbation[ , , c("tstat", "fdr")], 2, function(x, HDAC){ 
+	return(connectivityScore(x=x, y=HDAC, method="gsea", nperm=10))
+}, cl=cl, HDAC=HDAC)
+stopCluster(cl)
+rownames(res) <- c("Connectivity", "P Value")
+res <- t(res)
+
+
+res <- apply(drug.perturbation[ , , c("tstat", "fdr")], 2, function(x, HDAC){ 
+	return(connectivityScore(x=x, y=HDAC, method="gsea", nperm=100))
+}, HDAC=HDAC)
+rownames(res) <- c("Connectivity", "P Value")
+res <- t(res)
+
+
+HDAC_inhibitors <- c("vorinostat", "trichostatin A", "HC toxin", "valproic acid")
+res <- res[order(res[,1], decreasing=T), ]
+HDAC_ranks <- which(rownames(res) %in% HDAC_inhibitors)
+```
+
 
 # Session Info
 
