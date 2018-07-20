@@ -404,6 +404,9 @@ mydir <- "1132939s"
 downloader::download(paste("http://www.sciencemag.org/content/suppl/2006/09/29/313.5795.1929.DC1/", mydir, ".zip", sep=""), destfile=paste(mydir,".zip",sep=""))
 unzip(paste(mydir,".zip", sep=""))
 
+library(hgu133a.db)
+library(PharmacoGx)
+
 HDAC_up <- gdata::read.xls(paste(mydir, paste(mydir, "sigS1.xls", sep="_"),sep="/"), sheet=1, header=FALSE, as.is=TRUE)
 HDAC_down <- gdata::read.xls(paste(mydir, paste(mydir, "sigS1.xls", sep="_"),sep="/"), sheet=2, header=FALSE, as.is=TRUE)
 HDAC <- as.data.frame(matrix(NA, nrow=nrow(HDAC_down)+nrow(HDAC_up), ncol=2))
@@ -425,7 +428,7 @@ dimnames(drug.perturbation)[[1]] <- gsub("_at", "", dimnames(drug.perturbation)[
 message("Be aware that computing sensitivity will take some time...")
 cl <- parallel::makeCluster(2)
 res <- parApply(drug.perturbation[ , , c("tstat", "fdr")], 2, function(x, HDAC){ 
-	return(connectivityScore(x=x, y=HDAC, method="gsea", nperm=10))
+	return(PharmacoGx::connectivityScore(x=x, y=HDAC, method="gsea", nperm=100))
 }, cl=cl, HDAC=HDAC)
 stopCluster(cl)
 rownames(res) <- c("Connectivity", "P Value")
@@ -433,7 +436,7 @@ res <- t(res)
 
 
 res <- apply(drug.perturbation[ , , c("tstat", "fdr")], 2, function(x, HDAC){ 
-	return(connectivityScore(x=x, y=HDAC, method="gsea", nperm=100))
+	return(PharmacoGx::connectivityScore(x=x, y=HDAC, method="gsea", nperm=100))
 }, HDAC=HDAC)
 rownames(res) <- c("Connectivity", "P Value")
 res <- t(res)
