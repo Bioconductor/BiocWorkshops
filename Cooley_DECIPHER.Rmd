@@ -100,7 +100,7 @@ The aforementioned unusual lipds[^4] are striking in their differences from thos
 knitr::include_graphics("./Cooley_DECIPHER/ArchaealLipids.png")
 ```
 
-Whereas Lipid construction in eucharyotes and prokaryotes relies on iterative incorporation of malonyl-CoA units, archaea utilize the melvonate pathway to construct their lipids through iterative incorporation of dimethylallyl pyrophosphate. Which is responsible for the iterative methyl groups extant to the lipid chain in **B** above. Archaeal lipids are also notable for their lack of ester linkages between the alkyl chain, and glyerol. Even more interesting, and as yet uncharacterized, Archaea incorporate a range of ring structures into their lipids, and additionally appear to *fuse lipid tails together in the bilayer*, as shown above in **C**. 
+Whereas Lipid construction in eucharyotes and prokaryotes relies on iterative incorporation of malonyl-CoA units, archaea utilize the melvonate pathway to construct their lipids through iterative incorporation of dimethylallyl pyrophosphate. Which is responsible for the iterative methyl groups jutting out from the main lipid chain in **B** above. Archaeal lipids are also notable for their lack of ester linkages between the alkyl chain, and glyerol. Even more interesting, and as yet uncharacterized, Archaea incorporate a range of ring structures into their lipids, and additionally appear to *fuse lipid tails together in the bilayer*, as shown above in **C**. 
 
 #### The above is interesting, but so what?
 

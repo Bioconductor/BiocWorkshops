@@ -1,14 +1,3 @@
-```{r include=FALSE, cache=FALSE}
-# to avoid error: Error in lazyLoadDBinsertVariable(vars[i], from, datafile, ascii, compress,  :
-# long vectors not supported yet: connections.c: cache.lazy=FALSE
-knitr::opts_chunk$set(
-    comment = "#>",
-    collapse = TRUE,
-    cache = TRUE,
-    cache.lazy = FALSE
-)
-```
-
 # Solving common bioinformatic challenges using GenomicRanges
 
 ## Instructor(s) name(s) and contact information
@@ -280,9 +269,8 @@ gr[IRanges(start=c(2,7), end=c(3,9))]
 
 ## Splitting and combining *GRanges* objects
 
-*GRanges* objects can be divided into groups using the
-`split()` function. This produces a *GRangesList* object,
-a class that will be discussed in detail in the next section.
+THe `split()` function divides a *GRanges* into groups, returning a
+*GRangesList*, a class that we will describe and demonstrate later.
  
 ```{r splitAppendGRanges}
 sp <- split(gr, rep(1:2, each=5))
@@ -295,11 +283,18 @@ We can split the ranges by metadata columns, like strand,
 split(gr, ~ strand)
 ```
 
-Separate *GRanges* instances can be concatenated by using the
-`c()` and `append()` functions.
+The `c()` and `append()` functions combine two (or more in the case of
+`c()`) *GRanges* objects.
  
 ```{r combine}
 c(sp[[1]], sp[[2]])
+```
+
+The `stack()` function stacks the elements of a *GRangesList* into a
+single *GRanges* and adds a column indicating the origin of each
+element,
+```{r stack}
+stack(sp, index.var="group")
 ```
 
 ## Aggregating *GRanges* objects
@@ -347,11 +342,20 @@ And to include the downstream bases:
 ```{r flank2}
 flank(g, 10, start=FALSE)
 ```
- 
+
+A common use case for `flank()` is generating promoter regions based
+on the transcript ranges. There is a convenience function that by
+default generates a region starting 2000bp upstream and 200bp
+downstream of the TSS,
+
+```{r promoters}
+promoters(g)
+```
+
 To ignore strand/transcription and assume the orientation of left to
 right use `unstrand()`,
 ```{r unstrand}
-unstrand(g)
+flank(unstrand(g), 10)
 ```
 
 Other examples of intra-range functions include `resize()` and
@@ -380,40 +384,54 @@ reduce(gr)
 reduce(gr, ignore.strand=TRUE)
 ```
  
-Rarely, it useful to complement the ranges. Note that the universe is
-taken as the entire sequence span in all three strands (+, -, *),
-which is often surprising when working with unstranded ranges. 
+Rarely, it useful to complement the (reduced) ranges. Note that the
+universe is taken as the entire sequence span in all three strands (+,
+-, *), which is often surprising when working with unstranded ranges.
 ```{r gaps}
 gaps(g)
 ```
  
-The `disjoin` function represents a *GRanges* object as a collection
-of non-overlapping ranges:
+The `disjoin` function breaks up the ranges so that they do not
+overlap but still cover the same regions:
  
 ```{r disjoin}
 disjoin(g)
 ```
  
-The `coverage` function quantifies the degree of overlap for all
-the ranges in a *GRanges* object.
+The `coverage` function counts how many ranges overlap each position
+in the sequence universe of a *GRanges* object.
  
 ```{r coverage}
 cov <- coverage(g)
 cov[1:3]
-GPos(cov[1:3])
 ```
+The coverage is stored compactly as an *RleList*, with one *Rle*
+vector per sequence. We can convert it to a *GRanges*,
+```{r coverage_to_gr}
+cov_gr <- GRanges(cov)
+cov_gr
+```
+and even convert the *GRanges* form back to an *RleList* by computing
+a weighted coverage,
+```{r coverage_to_rle}
+cov <- coverage(cov_gr, weight="score")
+```
+
 The *GRanges* derivative *GPos*, a compact representation of width 1
 ranges, is useful for representing coverage, although it cannot yet
 represent the coverage for the entire human genome (or any genome with
 over ~ 2 billion bp).
+```{r}
+GPos(cov[1:3])
+```
 
-These inter-range functions all aggregate the ranges in different
-ways. The resulting ranges are left unannotated, since there is no
-obvious way to carry the metadata across the aggregation. The user is
-left to aggregate the metadata. Functions like `reduce()` and
-`disjoin()` facilitate this by optionally including in the returned
-metadata a one-to-many reverse mapping from the aggregate ranges to
-input ranges. For example, to average the score over a range
+These inter-range functions all generate entirely new sets of
+ranges. The return value is left unannotated, since there is no
+obvious way to carry the metadata across the operation. The user is
+left to map the metadata to the new ranges. Functions like `reduce()`
+and `disjoin()` facilitate this by optionally including in the
+returned metadata a one-to-many reverse mapping from the aggregate
+ranges to input ranges. For example, to average the score over a
 reduction,
 ```{r reduce-mapping}
 rg <- reduce(gr, with.revmap=TRUE)
@@ -490,28 +508,26 @@ annoyingly differing ways of naming the columns defining the ranges,
 ```{r reps}
 set.seed(66+105+111+99+49+56)
 
-pos <- sample(1:1000, size = 100L)
-size <- sample(1:3, size = 100L, replace = TRUE)
+pos <- sample(1:200, size = 30L)
+size <- 10L
 end <- size + pos - 1L
-chrom <- sample(paste0("chr", 1:3), size = 100L, replace=TRUE)
-int1 <- data.frame(chr = chrom, 
-                   pos = pos,
-                   end = end)
-int2 <- data.frame(ch = chrom, 
-                   st = pos,
-                   stop = end)
-int3 <- data.frame(chromosome = chrom, 
-                   start = pos,
-                   last = end)
+chrom <- sample(paste0("chr", 1:3), size = 30L, replace = TRUE)
+query_df <- data.frame(chrom = chrom, 
+                       start = pos,
+                       end = end)
+query_dfs <- split(query_df, 1:3)
+q1 <- rename(query_dfs[[1L]], start = "pos")
+q2 <- rename(query_dfs[[2L]], chrom = "ch", start = "st")
+q3 <- rename(query_dfs[[3L]], end = "last")
 ```
 The `makeGRangesFromDataFrame()` function can guess some of these, but
 not all of them, so we help it out,
 ```{r makeGRangesFromDataFrame}
-int1 <- makeGRangesFromDataFrame(int1, start.field = "pos")
-int2 <- makeGRangesFromDataFrame(int2, seqnames.field = "ch",
+q1 <- makeGRangesFromDataFrame(q1, start.field = "pos")
+q2 <- makeGRangesFromDataFrame(q2, seqnames.field = "ch",
                                  start.field = "st")
-int3 <- makeGRangesFromDataFrame(int3, end.field = "last")
-query <- mstack(int1, int2, int3, .index.var="replicate")
+q3 <- makeGRangesFromDataFrame(q3, end.field = "last")
+query <- mstack(q1, q2, q3, .index.var="replicate")
 sort(query, by = ~ start)
 ```
 Above, we use the convenient `mstack()` function, which stacks its
@@ -574,6 +590,7 @@ counts <- countQueryHits(hits)
 or even shorter and more efficient,
 ```{r countOverlaps}
 counts <- countOverlaps(query, subject, ignore.strand=TRUE)
+unname(counts)
 ```
 
 Often, we want to combine joins and aggregations. For example, we may
@@ -591,7 +608,7 @@ range,
 ```{r select-first}
 hits <- findOverlaps(query, subject, select="first", ignore.strand=TRUE)
 hits <- findOverlaps(query, subject, select="arbitrary", ignore.strand=TRUE)
-which(!is.na(hits))
+hits
 ```
 
 ## Exercises
@@ -745,9 +762,8 @@ First let's gather all the BAM files available to use in airway (see
 `browseVignettes("airway")` for more information about the data and how it 
 was prepared):
 
-```{r}
+```{r, cache.lazy=FALSE}
 library(tools)
-library(Rsamtools)
 bams <- list_files_with_exts(system.file("extdata", package = "airway"), "bam")
 names(bams) <- sub("_[^_]+$", "", basename(bams))
 library(Rsamtools)
@@ -769,7 +785,7 @@ The result is a list of *Rle* objects, one per chromosome. Like other
 *AtomicList* objects, we call pass our *RleList* to `table()` to
 compute the coverage histogram by chromosome,
 ```{r}
-table(first_bam_cvg)[1L,]
+head(table(first_bam_cvg)[1L,])
 ```
 
 For RNA-seq experiments we are often interested in splitting up
@@ -800,6 +816,7 @@ tx <- exonsBy(EnsDb.Hsapiens.v75, "gene")
 
 Finally, we count how many reads overlap each transcript,
 ```{r}
+reads <- keepStandardChromosomes(reads)
 counts <- countOverlaps(tx, reads, ignore.strand=TRUE)
 head(counts[counts > 0])
 ```
@@ -810,6 +827,7 @@ convenience function,
 airway <- summarizeOverlaps(features=tx, reads=bams,
                             mode="Union", singleEnd=FALSE,
                             ignore.strand=TRUE, fragments=TRUE)
+airway
 ```
 The `airway` object is a *SummarizedExperiment* object, the central
 Bioconductor data structure for storing results summarized per feature

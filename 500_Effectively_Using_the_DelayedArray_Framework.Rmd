@@ -1,7 +1,4 @@
-
 ```{r include=FALSE, cache=FALSE}
-# to avoid error: Error in lazyLoadDBinsertVariable(vars[i], from, datafile, ascii, compress,  :
-# long vectors not supported yet: connections.c
 knitr::opts_chunk$set(
     comment = "#>",
     collapse = TRUE,
@@ -218,7 +215,7 @@ The **DelayedArray** package defines the key classes, generics, and methods^[The
 
 The reverse dependencies of **DelayedArray** are shown below:
 
-```{r, echo = FALSE, message = FALSE}
+```{r, echo = FALSE, message = FALSE, dev = 'png'}
 library(BiocPkgTools)
 library(tidygraph)
 library(ggraph)
@@ -411,7 +408,6 @@ library(DelayedArray)
 mat <- matrix(rep(1:20, 1:20), ncol = 2)
 da_mat <- DelayedArray(seed = mat) 
 da_mat
-str(da_mat)
 ```
 
 We can use other, more complex, array-like objects as the *seed*, such as *Matrix* objects from the **Matrix** package:
@@ -422,7 +418,6 @@ Mat <- Matrix(mat)
 da_Mat <- DelayedArray(seed = Mat)
 # NOTE: The type is "double" because of how the Matrix package stores the data.
 da_Mat
-str(da_Mat)
 ```
 
 We can even use data frames as the *seed* of a two-dimensional *DelayedArray*.
@@ -432,20 +427,17 @@ df <- as.data.frame(mat)
 da_df <- DelayedArray(seed = df)
 # NOTE: This inherits the (default) column names of the data.frame.
 da_df
-str(da_df)
 
 library(tibble)
 tbl <- as_tibble(mat)
 da_tbl <- DelayedArray(seed = tbl)
 # NOTE: This inherits the (default) column names of the tibble.
 da_tbl
-str(da_tbl)
 
 DF <- as(mat, "DataFrame")
 da_DF <- DelayedArray(seed = DF)
 # NOTE: This inherits the (default) column names of the DataFrame.
 da_DF
-str(da_DF)
 ```
 
 A package developer can also implement a novel in-memory seed.
@@ -458,7 +450,6 @@ This can be used as the seed of an *RleArray*, a *DelayedArray* subclass for sto
 #       encoded data.
 da_Rle <- RleArray(rle = Rle(mat), dim = dim(mat))
 da_Rle
-str(da_Rle)
 ```
 
 The *RleArray* examples illustrates some important concepts in the DelayedArray class hierarchy that warrants reiteration and expansion.
@@ -573,7 +564,6 @@ da_hdf5
 # Alternatively, we can create this in one go using the HDF5Array() constructor.    
 da_hdf5 <- HDF5Array(filepath = hdf5_file, name = "hdf5_mat")
 da_hdf5
-str(da_hdf5)
 ```
 
 Other on-disk seeds are possible such as **fst**, **bigmemory**, **ff**, or **matter**.
@@ -585,11 +575,10 @@ The *seed* of an *H5S_Array* is a *H5S_ArraySeed*.
 It is important to note that creating a *H5S_Array* does not read the data into memory!
 The data remain on the server until requested.
 
-```{r, eval = FALSE}
-# TODO: Test at home
+```{r}
 library(rhdf5client)
-# TODO: Use H5S_Array rather than HSDS_Matrix()
 da_h5s <- HSDS_Matrix(URL_hsds(), "/home/stvjc/hdf5_mat.h5")
+da_h5s
 ```
 
 #### So what seed should I use?
@@ -669,11 +658,11 @@ showtree(-da_hdf5)
 
 To further illustrate the idea, let's perform some delayed operations on a large *HDF5Array* and compare them to performing the operations on the equivalent *array*.
 
-```{r}
+```{r, cache.lazy=FALSE}
 library(h5vcData)
 
 tally_file <- system.file("extdata", "example.tally.hfs5", package = "h5vcData")
-x_h5 <- HDF5Array(tally_file, "/ExampleStudy/16/Coverages")
+x_h5 <- HDF5Array::HDF5Array(tally_file, "/ExampleStudy/16/Coverages")
 x_h5
 x <- as.array(x_h5)
 
