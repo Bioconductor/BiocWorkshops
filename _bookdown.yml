@@ -12,7 +12,7 @@ rmd_files: [
   "100_Morgan_RBiocForAll.Rmd",
   "101_MacDonald_Annotation.Rmd",
   "102_Lawrence_GenomicRanges.Rmd",
-  "103_Waldron_PublicData.Rmd"
+  "103_Waldron_PublicData.Rmd",
   "200_Law_RNAseq123.Rmd",
   "201_Love_DESeq2.Rmd",
   "202_Das_SingleCellRNASeq.Rmd", # missing refs Peer2017 Pierson2015 Tseng2005
@@ -23,5 +23,5 @@ rmd_files: [
   "250_Cooley_DECIPHER.Rmd",
   "270_Safikhani_Pharmacogenomics.Rmd",
   "500_Effectively_Using_the_DelayedArray_Framework.Rmd",
-  "510_Turaga_MaintainBioc.Rmd",
+  "510_Turaga_MaintainBioc.Rmd"
 ]
