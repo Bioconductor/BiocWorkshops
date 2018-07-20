@@ -21,7 +21,7 @@ rmd_files: [
   "230_Isserlin_RCy3_intro.Rmd",
   "240_Lee_Plyranges.Rmd",
   "250_Cooley_DECIPHER.Rmd",
-  "270_Safikhani_Pharmacogenomics.Rmd",
+  "260_Safikhani_Pharmacogenomics.Rmd",
   "500_Effectively_Using_the_DelayedArray_Framework.Rmd",
   "510_Turaga_MaintainBioc.Rmd"
 ]
