@@ -1,0 +1,20 @@
+
+
+processing file: 230_Isserlin_RCy3_intro.Rmd
+Found more than one class "textConnection" in cache; using the first, from namespace 'BiocGenerics'
+Also defined by 'RJSONIO'
+Found more than one class "textConnection" in cache; using the first, from namespace 'BiocGenerics'
+Also defined by 'RJSONIO'
+Found more than one class "textConnection" in cache; using the first, from namespace 'BiocGenerics'
+Also defined by 'RJSONIO'
+trying URL 'http://download.baderlab.org/EM_Genesets/current_release/Human/symbol/Human_GOBP_AllPathways_no_GO_iea_July_01_2018_symbol.gmt'
+Content type 'unknown' length 8012269 bytes (7.6 MB)
+==================================================
+downloaded 7.6 MB
+
+output file: 230_Isserlin_RCy3_intro.knit.md
+
+Error in yaml.load(readLines(con), error.label = error.label, ...) : 
+  (_bookdown.yml) Parser error: while parsing a flow sequence at line 10, column 12 did not find expected ',' or ']' at line 16, column 3
+Calls: <Anonymous> ... load_config -> <Anonymous> -> resolve -> <Anonymous> -> yaml.load
+Execution halted

@@ -1,0 +1,58 @@
+
+
+processing file: 240_Lee_Plyranges.Rmd
+
+Attaching package: 'BiocGenerics'
+
+The following objects are masked from 'package:parallel':
+
+    clusterApply, clusterApplyLB, clusterCall, clusterEvalQ,
+    clusterExport, clusterMap, parApply, parCapply, parLapply,
+    parLapplyLB, parRapply, parSapply, parSapplyLB
+
+The following objects are masked from 'package:stats':
+
+    IQR, mad, sd, var, xtabs
+
+The following objects are masked from 'package:base':
+
+    anyDuplicated, append, as.data.frame, basename, cbind,
+    colMeans, colnames, colSums, dirname, do.call, duplicated,
+    eval, evalq, Filter, Find, get, grep, grepl, intersect,
+    is.unsorted, lapply, lengths, Map, mapply, match, mget, order,
+    paste, pmax, pmax.int, pmin, pmin.int, Position, rank, rbind,
+    Reduce, rowMeans, rownames, rowSums, sapply, setdiff, sort,
+    table, tapply, union, unique, unsplit, which, which.max,
+    which.min
+
+
+Attaching package: 'S4Vectors'
+
+The following object is masked from 'package:base':
+
+    expand.grid
+
+
+Attaching package: 'plyranges'
+
+The following object is masked from 'package:stats':
+
+    filter
+
+snapshotDate(): 2018-06-27
+downloading 0 resources
+loading from cache 
+    '/home/lwaldron//.AnnotationHub/47270'
+require("rtracklayer")
+downloading 0 resources
+loading from cache 
+    '/home/lwaldron//.AnnotationHub/38894'
+downloading 0 resources
+loading from cache 
+    '/home/lwaldron//.AnnotationHub/38895'
+output file: 240_Lee_Plyranges.knit.md
+
+Error in yaml.load(readLines(con), error.label = error.label, ...) : 
+  (_bookdown.yml) Parser error: while parsing a flow sequence at line 10, column 12 did not find expected ',' or ']' at line 16, column 3
+Calls: <Anonymous> ... load_config -> <Anonymous> -> resolve -> <Anonymous> -> yaml.load
+Execution halted

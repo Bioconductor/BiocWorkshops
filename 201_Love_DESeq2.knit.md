@@ -1,4 +1,4 @@
-# RNA-seq data analysis with DESeq2
+# 201: RNA-seq data analysis with DESeq2
 
 Authors:
     Michael I. Love^[UNC-Chapel Hill, NC, US],
@@ -1289,7 +1289,7 @@ finish(rep)
 ```
 
 ```
-## [1] "/tmp/RtmpeZdgJU/report/airway.html"
+## [1] "/tmp/Rtmp3hW7aL/report/airway.html"
 ```
 
 This last line, un-evaluated would launch the report in a web browser:

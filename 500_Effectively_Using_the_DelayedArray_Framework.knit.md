@@ -1,5 +1,5 @@
 
-# Effectively using the DelayedArray framework to support the analysis of large datasets
+# 500: Effectively using the DelayedArray framework to support the analysis of large datasets
 
 Authors:
 Peter Francis Hickey^[Department of Biostatistics, Johns Hopkins University],

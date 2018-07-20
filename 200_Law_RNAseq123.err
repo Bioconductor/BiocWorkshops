@@ -1,0 +1,33 @@
+
+
+processing file: 200_Law_RNAseq123.Rmd
+trying URL 'https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE63310&format=file'
+Content type 'application/x-tar' length 1996800 bytes (1.9 MB)
+==================================================
+downloaded 1.9 MB
+
+'select()' returned 1:many mapping between keys and columns
+
+Attaching package: 'gplots'
+
+The following object is masked from 'package:IRanges':
+
+    space
+
+The following object is masked from 'package:S4Vectors':
+
+    space
+
+The following object is masked from 'package:stats':
+
+    lowess
+
+output file: 200_Law_RNAseq123.knit.md
+
+Error in yaml.load(readLines(con), error.label = error.label, ...) : 
+  (_bookdown.yml) Parser error: while parsing a flow sequence at line 10, column 12 did not find expected ',' or ']' at line 16, column 3
+Calls: <Anonymous> ... load_config -> <Anonymous> -> resolve -> <Anonymous> -> yaml.load
+In addition: Warning message:
+In in_dir(input_dir(), evaluate(code, envir = env, new_device = FALSE,  :
+  You changed the working directory to /home/lwaldron/Source/BiocWorkshops/Law_RNAseq123 (probably via setwd()). It will be restored to /home/lwaldron/Source/BiocWorkshops. See the Note section in ?knitr::knit
+Execution halted
