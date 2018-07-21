@@ -1,24 +1,10 @@
-```{r include=FALSE, cache=FALSE}
-knitr::opts_chunk$set(
-    comment = "#>",
-    collapse = TRUE,
-    cache = TRUE
-)
-```
-```{r include=FALSE, cache=FALSE}
-knitr::opts_chunk$set(
-    comment = "#>",
-    collapse = TRUE,
-    cache = TRUE
-)
-```
 ---
 bibliography: Waldron_PublicData/Waldron_PublicData.bib
 ---
 
 # 103: Public data resources and Bioconductor
 
-## Instructor name(s) and contact information
+## Instructor names and contact information
 
 * Levi Waldron^[City University of New York, New York, NY, USA]
 * Benjamin Haibe-Kain^[Princess Margaret Cancer Center, Toronto, Canada]
