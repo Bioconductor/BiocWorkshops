@@ -1,6 +1,6 @@
 # 240: Fluent genomic data analysis with plyranges
 
-## Instructor(s) name(s) and contact information
+## Instructor names and contact information
 
 * Stuart Lee (lee.s@wehi.edu.au)
 * Michael Lawrence (michafla@gmail.com)

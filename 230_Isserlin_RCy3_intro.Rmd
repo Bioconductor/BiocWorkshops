@@ -12,7 +12,7 @@ suppressPackageStartupMessages({
 
 ##Overview
 
-### Instructor(s) name(s) and contact information
+### Instructor names and contact information
 
 * Ruth Isserlin - ruth dot isserlin (at) utoronto (dot) ca
 * Brendan Innes - brendan (dot) innes (at) mail (dot) utoronto (dot) ca
