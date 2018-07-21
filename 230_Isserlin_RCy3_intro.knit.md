@@ -1,3 +1,4 @@
+
 # 230: Cytoscape automation in R using Rcy3
 
 
@@ -188,6 +189,7 @@ if(length(cytoscape_version) == 3 && as.numeric(cytoscape_version[1]>=3)
   booktabs = TRUE, caption = 'A Summary of automated app installation'
 )
 }
+
 ```
    
 
@@ -223,6 +225,7 @@ Open swagger docs for live instances of CyREST API.  The CyREST  API list all th
 
 ```r
 cyrestAPI()  # CyREST API
+
 ```
 
 As mentioned above, there are two ways to interact with Cytoscape, through the Cyrest API or commands.  To see the available commands in swagger similar to the Cyrest API.
@@ -257,7 +260,7 @@ edges <- data.frame(source=c("node 0","node 0","node 0","node 2"),
 
 
 <table class="kable_wrapper">
-<caption>(\#tab:unnamed-chunk-9)A table of example nodes and edges.</caption>
+<caption>(\#tab:unnamed-chunk-10)A table of example nodes and edges.</caption>
 <tbody>
   <tr>
    <td> 
@@ -369,44 +372,41 @@ Get a subset of genes of interest from our scored data:
 ```r
 top_mesenchymal_genes <- RNASeq_gene_scores[which(RNASeq_gene_scores$FDR.mesen < 0.05 & RNASeq_gene_scores$logFC.mesen > 2),]
 head(top_mesenchymal_genes)
-```
-
-```
-##       Name geneid logFC.mesen logCPM.mesen  LR.mesen PValue.mesen
-## 188   PRG4  10216    2.705305    2.6139056  95.58179     1.42e-22
-## 252  PROK1  84432    2.543381    1.3255202  68.31067     1.40e-16
-## 308  PRRX1   5396    2.077538    4.8570983 123.09925     1.33e-28
-## 434  PTGFR   5737    2.075707   -0.1960881  73.24646     1.14e-17
-## 438  PTGIS   5740    2.094198    5.8279714 165.11038     8.65e-38
-## 1214 BARX1  56033    3.267472    1.7427387 166.30064     4.76e-38
-##      FDR.mesen logFC.diff logCPM.diff   LR.diff  PValue.diff     FDR.diff
-## 188   7.34e-21 -1.2716521   2.6139056 14.107056 1.726950e-04 1.181751e-03
-## 252   4.77e-15  0.7455119   1.3255202  5.105528 2.384972e-02 6.549953e-02
-## 308   1.08e-26 -1.2367108   4.8570983 29.949104 4.440000e-08 1.250000e-06
-## 434   4.30e-16 -0.4233297  -0.1960881  2.318523 1.278413e-01 2.368387e-01
-## 438   1.20e-35 -0.4448761   5.8279714  5.696086 1.700278e-02 5.027140e-02
-## 1214  6.82e-36 -2.4411370   1.7427387 52.224346 4.950000e-13 6.970000e-11
-##      Row.names.y logFC.immuno logCPM.immuno LR.immuno PValue.immuno
-## 188   PRG4|10216   -0.4980017     2.6139056  2.651951   0.103422901
-## 252  PROK1|84432   -1.9692994     1.3255202 27.876348   0.000000129
-## 308   PRRX1|5396   -0.4914091     4.8570983  5.773502   0.016269586
-## 434   PTGFR|5737   -0.6737143    -0.1960881  6.289647   0.012144523
-## 438   PTGIS|5740   -0.6138074     5.8279714 11.708780   0.000622059
-## 1214 BARX1|56033   -0.6063633     1.7427387  4.577141   0.032401228
-##       FDR.immuno logFC.prolif logCPM.prolif  LR.prolif PValue.prolif
-## 188  0.185548905   -0.9356510     2.6139056  8.9562066  0.0027652850
-## 252  0.000001650   -1.3195933     1.3255202 13.7675841  0.0002068750
-## 308  0.042062023   -0.3494185     4.8570983  2.9943819  0.0835537930
-## 434  0.033197211   -0.9786631    -0.1960881 12.9112727  0.0003266090
-## 438  0.002779895   -1.0355143     5.8279714 31.9162051  0.0000000161
-## 1214 0.073565295   -0.2199714     1.7427387  0.6315171  0.4267993850
-##       FDR.prolif
-## 188  0.006372597
-## 252  0.000622057
-## 308  0.128528698
-## 434  0.000932503
-## 438  0.000000107
-## 1214 0.510856262
+#>       Name geneid logFC.mesen logCPM.mesen  LR.mesen PValue.mesen
+#> 188   PRG4  10216    2.705305    2.6139056  95.58179     1.42e-22
+#> 252  PROK1  84432    2.543381    1.3255202  68.31067     1.40e-16
+#> 308  PRRX1   5396    2.077538    4.8570983 123.09925     1.33e-28
+#> 434  PTGFR   5737    2.075707   -0.1960881  73.24646     1.14e-17
+#> 438  PTGIS   5740    2.094198    5.8279714 165.11038     8.65e-38
+#> 1214 BARX1  56033    3.267472    1.7427387 166.30064     4.76e-38
+#>      FDR.mesen logFC.diff logCPM.diff   LR.diff  PValue.diff     FDR.diff
+#> 188   7.34e-21 -1.2716521   2.6139056 14.107056 1.726950e-04 1.181751e-03
+#> 252   4.77e-15  0.7455119   1.3255202  5.105528 2.384972e-02 6.549953e-02
+#> 308   1.08e-26 -1.2367108   4.8570983 29.949104 4.440000e-08 1.250000e-06
+#> 434   4.30e-16 -0.4233297  -0.1960881  2.318523 1.278413e-01 2.368387e-01
+#> 438   1.20e-35 -0.4448761   5.8279714  5.696086 1.700278e-02 5.027140e-02
+#> 1214  6.82e-36 -2.4411370   1.7427387 52.224346 4.950000e-13 6.970000e-11
+#>      Row.names.y logFC.immuno logCPM.immuno LR.immuno PValue.immuno
+#> 188   PRG4|10216   -0.4980017     2.6139056  2.651951   0.103422901
+#> 252  PROK1|84432   -1.9692994     1.3255202 27.876348   0.000000129
+#> 308   PRRX1|5396   -0.4914091     4.8570983  5.773502   0.016269586
+#> 434   PTGFR|5737   -0.6737143    -0.1960881  6.289647   0.012144523
+#> 438   PTGIS|5740   -0.6138074     5.8279714 11.708780   0.000622059
+#> 1214 BARX1|56033   -0.6063633     1.7427387  4.577141   0.032401228
+#>       FDR.immuno logFC.prolif logCPM.prolif  LR.prolif PValue.prolif
+#> 188  0.185548905   -0.9356510     2.6139056  8.9562066  0.0027652850
+#> 252  0.000001650   -1.3195933     1.3255202 13.7675841  0.0002068750
+#> 308  0.042062023   -0.3494185     4.8570983  2.9943819  0.0835537930
+#> 434  0.033197211   -0.9786631    -0.1960881 12.9112727  0.0003266090
+#> 438  0.002779895   -1.0355143     5.8279714 31.9162051  0.0000000161
+#> 1214 0.073565295   -0.2199714     1.7427387  0.6315171  0.4267993850
+#>       FDR.prolif
+#> 188  0.006372597
+#> 252  0.000622057
+#> 308  0.128528698
+#> 434  0.000932503
+#> 438  0.000000107
+#> 1214 0.510856262
 ```
 
 We are going to query the String Database to get all interactions found for our set of top Mesenchymal genes.
@@ -580,7 +580,7 @@ library(RColorBrewer)
 display.brewer.all(length(data.values), colorblindFriendly=TRUE, type="div") # div,qual,seq,all
 ```
 
-<img src="230_Isserlin_RCy3_intro_files/figure-html/unnamed-chunk-28-1.png" width="672" />
+<img src="230_Isserlin_RCy3_intro_files/figure-html/unnamed-chunk-29-1.png" width="672" />
 
 ```r
 node.colors <- c(rev(brewer.pal(length(data.values), "RdBu")))
@@ -647,6 +647,7 @@ Using the Cytoscape App, aMatReader[@amatreader], we transform our adjacency mat
 
 
 ```r
+
 RNASeq_expression <- RNASeq_expression_matrix[,3:ncol(RNASeq_expression_matrix)]
 
 rownames(RNASeq_expression) <- RNASeq_expression_matrix$Name
@@ -689,9 +690,11 @@ current_network_id <- response$data["suid"]
 
 
 ```r
+
 #relayout network
 layoutNetwork('cose',
               network = as.numeric(current_network_id))
+
 ```
 
 
@@ -734,16 +737,13 @@ node_class <- trimws(node_class)
 node_class_df <-data.frame(name=nodes_in_network, node_class,stringsAsFactors = FALSE)
 
 head(node_class_df)
-```
-
-```
-##     name node_class
-## 1  ABCA6      mesen
-## 2  ABCA8      mesen
-## 3   ABI3     immuno
-## 4   ACAN     prolif
-## 5  ACAP1     immuno
-## 6 ADAM12      mesen
+#>     name node_class
+#> 1  ABCA6      mesen
+#> 2  ABCA8      mesen
+#> 3   ABI3     immuno
+#> 4   ACAN     prolif
+#> 5  ACAP1     immuno
+#> 6 ADAM12      mesen
 ```
 
 Map the new node attribute and the all the gene scores to the network.
@@ -752,6 +752,7 @@ Map the new node attribute and the all the gene scores to the network.
 loadTableData(RNASeq_gene_scores,table.key.column = "name",data.key.column = "Name")  #default data.frame key is row.names
 
 loadTableData(node_class_df,table.key.column = "name",data.key.column = "name")  #default data.frame key is row.names
+
 ```
 
 Create a color mapping for the different cancer types.
@@ -921,6 +922,7 @@ exportImage(cluster1em_png_file_name, type = "png")
 Annotate the Enrichment map to get the general themes that are found in the enrichment results of cluster 1
 
 ```r
+
 #get the column from the nodetable and node table
   nodetable_colnames <- getTableColumnNames(table="node",  network =  as.numeric(em_network_suid))
 
@@ -929,6 +931,7 @@ Annotate the Enrichment map to get the general themes that are found in the enri
   #Autoannotate the network
   autoannotate_url <- paste("autoannotate annotate-clusterBoosted labelColumn=", descr_attrib," maxWords=3 ", sep="")
     current_name <-commandsGET(autoannotate_url)
+
 ```
 
 Export image of resulting Annotated Enrichment map.
@@ -974,6 +977,7 @@ if(!"EnrichmentBrowser" %in% installed.packages()){
 }
 
 suppressPackageStartupMessages(library(EnrichmentBrowser))
+
 ```
 
 Download the latest pathway definition file from the [Baderlab download site](http://download.baderlab.org/EM_Genesets/current_release/).  Baderlab genesets are updated on a monthly basis. Detailed information about the sources can be found [here](http://baderlab.org/GeneSets).
@@ -1006,6 +1010,7 @@ download.file(
     paste(gmt_url,gmt_file,sep=""),
     destfile=dest_gmt_file
 )
+
 ```
 
 Load in the gmt file
@@ -1014,20 +1019,18 @@ Load in the gmt file
 ```r
 baderlab.gs <- getGenesets(dest_gmt_file)
 baderlab.gs[1:2]
-```
-
-```
-## $`THIO-MOLYBDENUM COFACTOR BIOSYNTHESIS%HUMANCYC%PWY-5963`
-## [1] "MOCOS"
-## 
-## $`PROLINE BIOSYNTHESIS I%HUMANCYC%PROSYN-PWY`
-## [1] "PYCR2"    "ALDH18A1" "PYCR1"    "PYCRL"
+#> $`THIO-MOLYBDENUM COFACTOR BIOSYNTHESIS%HUMANCYC%PWY-5963`
+#> [1] "MOCOS"
+#> 
+#> $`PROLINE BIOSYNTHESIS I%HUMANCYC%PROSYN-PWY`
+#> [1] "PYCR2"    "ALDH18A1" "PYCR1"    "PYCRL"
 ```
 
 Create the dataset required by EnrichmentBrowser tools
 
 
 ```r
+
 #create the expression file - A tab separated text file containing expression values. Columns = samples/subjects; rows = features/probes/genes; NO headers, row or column names.
 expr <- RNASeq_expression
 
@@ -1060,6 +1063,7 @@ write.table( colData ,  file = sumexpr_cdat_filename , col.names  = FALSE, row.n
 
 #create the Summarize Experiment object
 se_OV <- EnrichmentBrowser::readSE(assay.file = sumexpr_filename , cdat.file = sumexpr_cdat_filename, rdat.file = sumexpr_rdat_filename)
+
 ```
 
 
@@ -1067,8 +1071,10 @@ Put our precomputed p-values and fold change values into the Summarized Experime
 
 
 ```r
+
 #set the Summarized Experiment to our computed p-values and FC
 rowData(se_OV) <- rowData
+
 ```
 
 
@@ -1078,36 +1084,33 @@ Run basic Over representation analysis (ORA) using our ranked genes and our gene
 ```r
 ora.all <- sbea(method="ora", se=se_OV, gs=baderlab.gs, perm=0, alpha=0.05)
 gsRanking(ora.all)
-```
-
-```
-## DataFrame with 967 rows and 4 columns
-##                                                                                            GENE.SET
-##                                                                                         <character>
-## 1                                                 EXTRACELLULAR MATRIX ORGANIZATION%GOBP%GO:0030198
-## 2   HALLMARK_EPITHELIAL_MESENCHYMAL_TRANSITION%MSIGDB_C2%HALLMARK_EPITHELIAL_MESENCHYMAL_TRANSITION
-## 3                                              EXTRACELLULAR STRUCTURE ORGANIZATION%GOBP%GO:0043062
-## 4                                        EXTRACELLULAR MATRIX ORGANIZATION%REACTOME%R-HSA-1474244.2
-## 5                                                 NABA_CORE_MATRISOME%MSIGDB_C2%NABA_CORE_MATRISOME
-## ...                                                                                             ...
-## 963                                                                 OVULATION CYCLE%GOBP%GO:0042698
-## 964                                                NEGATIVE REGULATION OF TRANSPORT%GOBP%GO:0051051
-## 965                                                  PEPTIDYL-TYROSINE MODIFICATION%GOBP%GO:0018212
-## 966                                                        NEUTROPHIL DEGRANULATION%GOBP%GO:0043312
-## 967           PROCESSING OF CAPPED INTRON-CONTAINING PRE-MRNA%REACTOME DATABASE ID RELEASE 65%72203
-##      NR.GENES NR.SIG.GENES   P.VALUE
-##     <numeric>    <numeric> <numeric>
-## 1         195          147  6.42e-21
-## 2         193          145  2.07e-20
-## 3         223          160  5.43e-19
-## 4         239          163   6.1e-16
-## 5         215          145  1.03e-13
-## ...       ...          ...       ...
-## 963        13            9    0.0487
-## 964       246          118    0.0488
-## 965        76           40     0.049
-## 966       416          194    0.0496
-## 967       213          103    0.0499
+#> DataFrame with 967 rows and 4 columns
+#>                                                                                            GENE.SET
+#>                                                                                         <character>
+#> 1                                                 EXTRACELLULAR MATRIX ORGANIZATION%GOBP%GO:0030198
+#> 2   HALLMARK_EPITHELIAL_MESENCHYMAL_TRANSITION%MSIGDB_C2%HALLMARK_EPITHELIAL_MESENCHYMAL_TRANSITION
+#> 3                                              EXTRACELLULAR STRUCTURE ORGANIZATION%GOBP%GO:0043062
+#> 4                                        EXTRACELLULAR MATRIX ORGANIZATION%REACTOME%R-HSA-1474244.2
+#> 5                                                 NABA_CORE_MATRISOME%MSIGDB_C2%NABA_CORE_MATRISOME
+#> ...                                                                                             ...
+#> 963                                                                 OVULATION CYCLE%GOBP%GO:0042698
+#> 964                                                NEGATIVE REGULATION OF TRANSPORT%GOBP%GO:0051051
+#> 965                                                  PEPTIDYL-TYROSINE MODIFICATION%GOBP%GO:0018212
+#> 966                                                        NEUTROPHIL DEGRANULATION%GOBP%GO:0043312
+#> 967           PROCESSING OF CAPPED INTRON-CONTAINING PRE-MRNA%REACTOME DATABASE ID RELEASE 65%72203
+#>      NR.GENES NR.SIG.GENES   P.VALUE
+#>     <numeric>    <numeric> <numeric>
+#> 1         195          147  6.42e-21
+#> 2         193          145  2.07e-20
+#> 3         223          160  5.43e-19
+#> 4         239          163   6.1e-16
+#> 5         215          145  1.03e-13
+#> ...       ...          ...       ...
+#> 963        13            9    0.0487
+#> 964       246          118    0.0488
+#> 965        76           40     0.049
+#> 966       416          194    0.0496
+#> 967       213          103    0.0499
 ```
 
 <img src="/home/lwaldron/Source/BiocWorkshops/230_Isserlin_RCy3_intro/images/screenshot_ora_results.png" width="518" />
@@ -1116,6 +1119,7 @@ Take the enrichment results and create a generic enrichment map input file so we
 
 
 ```r
+
 #manually adjust p-values
 ora.all$res.tbl <- cbind(ora.all$res.tbl, p.adjust(ora.all$res.tbl$P.VALUE, "BH"))
 colnames(ora.all$res.tbl)[ncol(ora.all$res.tbl)] <- "Q.VALUE" 
@@ -1129,6 +1133,8 @@ em_results_mesen <- data.frame(name = ora.all$res.tbl$GENE.SET,descr = ora.all$r
                             "230_Isserlin_RCy3_intro","data","mesen_ora_enr_results.txt")
 
   write.table(em_results_mesen,em_results_mesen_filename,col.name=TRUE,sep="\t",row.names=FALSE,quote=FALSE)
+  
+ 
 ```
 
 Create an enrichment map with the returned ORA results.
@@ -1175,6 +1181,7 @@ exportImage(mesenem_png_file_name, type = "png")
 Annotate the Enrichment map to get the general themes that are found in the enrichment results.  Often for very busy networks annotating the networks doesn't help to reduce the complexity but instead adds to it.  To get rid of some of the pathway redundancy and density in the network create a summary of the underlying network. The summary network collapses each cluster to a summary node.  Each summary node is annotated with a word tag (the top 3 words associated with the nodes of the cluster) that is computed using the Wordcloud app.
 
 ```r
+
 #get the column from the nodetable and node table
   nodetable_colnames <- getTableColumnNames(table="node",  network =  as.numeric(em_mesen_network_suid))
 
@@ -1202,6 +1209,7 @@ Annotate the Enrichment map to get the general themes that are found in the enri
   #relayout network
   layoutNetwork('cose',
               network = as.numeric(summary_network_suid))
+
 ```
 
 Export image of resulting Summarized Annotated Enrichment map.

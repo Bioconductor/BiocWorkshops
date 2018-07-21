@@ -1,0 +1,11 @@
+
+
+processing file: 103_Waldron_PublicData.Rmd
+No methods found in package 'IRanges' for request: 'subset' when loading 'derfinder'
+snapshotDate(): 2018-07-17
+Quitting from lines 854-861 (103_Waldron_PublicData.Rmd) 
+Error in s$collate(limit = 1000) : unused argument (limit = 1000)
+Calls: <Anonymous> ... handle -> withCallingHandlers -> withVisible -> eval -> eval
+In addition: Warning message:
+no DISPLAY variable so Tk is not available 
+Execution halted

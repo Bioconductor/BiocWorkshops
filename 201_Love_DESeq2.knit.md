@@ -1289,7 +1289,7 @@ finish(rep)
 ```
 
 ```
-## [1] "/tmp/RtmpMrL2AX/report/airway.html"
+## [1] "/tmp/Rtmprvo7Oo/report/airway.html"
 ```
 
 This last line, un-evaluated would launch the report in a web browser:

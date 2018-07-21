@@ -1,3 +1,5 @@
+
+
 ---
 bibliography: Waldron_PublicData/Waldron_PublicData.bib
 ---
@@ -189,15 +191,12 @@ Examine two variables of interest, cancer type and tumor/normal status.
 
 ```r
 with(colData(se),table(`cancer.type.ch1`,`normal.ch1`))
-```
-
-```
-##                normal.ch1
-## cancer.type.ch1 no yes
-##           BC    65  10
-##           CRC   57  12
-##           NSCLC 60   9
-##           PCA   60   7
+#>                normal.ch1
+#> cancer.type.ch1 no yes
+#>           BC    65  10
+#>           CRC   57  12
+#>           NSCLC 60   9
+#>           PCA   60   7
 ```
 
 Filter gene expression by variance to find most informative genes.
@@ -218,16 +217,13 @@ mdsvals = as.data.frame(mdsvals)
 mdsvals$Type=factor(colData(se)[,'cancer.type.ch1'])
 mdsvals$Normal = factor(colData(se)[,'normal.ch1'])
 head(mdsvals)
-```
-
-```
-##                   V1        V2 Type Normal
-## GSM2772660  8.531331 -18.57115   BC     no
-## GSM2772661  8.991591 -13.63764   BC     no
-## GSM2772662 10.788973 -13.48403   BC     no
-## GSM2772663  3.127105 -19.13529   BC     no
-## GSM2772664 13.056599 -13.88711   BC     no
-## GSM2772665  7.903717 -13.24731   BC     no
+#>                   V1        V2 Type Normal
+#> GSM2772660  8.531331 -18.57115   BC     no
+#> GSM2772661  8.991591 -13.63764   BC     no
+#> GSM2772662 10.788973 -13.48403   BC     no
+#> GSM2772663  3.127105 -19.13529   BC     no
+#> GSM2772664 13.056599 -13.88711   BC     no
+#> GSM2772665  7.903717 -13.24731   BC     no
 ```
 
 And do the plot.
@@ -327,23 +323,20 @@ connectivity and functionality.
 
 ```r
 GenomicDataCommons::status()
-```
-
-```
-## $commit
-## [1] "e9e20d6f97f2bf6dd3b3261e36ead57c56a4c7cc"
-## 
-## $data_release
-## [1] "Data Release 12.0 - June 13, 2018"
-## 
-## $status
-## [1] "OK"
-## 
-## $tag
-## [1] "1.14.1"
-## 
-## $version
-## [1] 1
+#> $commit
+#> [1] "e9e20d6f97f2bf6dd3b3261e36ead57c56a4c7cc"
+#> 
+#> $data_release
+#> [1] "Data Release 12.0 - June 13, 2018"
+#> 
+#> $status
+#> [1] "OK"
+#> 
+#> $tag
+#> [1] "1.14.1"
+#> 
+#> $version
+#> [1] 1
 ```
 
 #### Find data
@@ -392,44 +385,32 @@ expands = c("diagnoses","annotations",
 projResults = projects() %>%
     results(size=10)
 str(projResults,list.len=5)
-```
-
-```
-## List of 8
-##  $ dbgap_accession_number: chr [1:10] "phs001179" "phs000470" NA NA ...
-##  $ disease_type          :List of 10
-##   ..$ FM-AD    : chr [1:23] "Germ Cell Neoplasms" "Acinar Cell Neoplasms" "Miscellaneous Tumors" "Thymic Epithelial Neoplasms" ...
-##   ..$ TARGET-RT: chr "Rhabdoid Tumor"
-##   ..$ TCGA-UCS : chr "Uterine Carcinosarcoma"
-##   ..$ TCGA-LUSC: chr "Lung Squamous Cell Carcinoma"
-##   ..$ TCGA-BRCA: chr "Breast Invasive Carcinoma"
-##   .. [list output truncated]
-##  $ released              : logi [1:10] TRUE TRUE TRUE TRUE TRUE TRUE ...
-##  $ state                 : chr [1:10] "open" "open" "open" "open" ...
-##  $ primary_site          :List of 10
-##   ..$ FM-AD    : chr [1:42] "Kidney" "Testis" "Unknown" "Other and unspecified parts of biliary tract" ...
-##   ..$ TARGET-RT: chr "Kidney"
-##   ..$ TCGA-UCS : chr "Uterus"
-##   ..$ TCGA-LUSC: chr "Lung"
-##   ..$ TCGA-BRCA: chr "Breast"
-##   .. [list output truncated]
-##   [list output truncated]
-##  - attr(*, "row.names")= int [1:10] 1 2 3 4 5 6 7 8 9 10
-##  - attr(*, "class")= chr [1:3] "GDCprojectsResults" "GDCResults" "list"
-```
-
-```r
+#> List of 8
+#>  $ dbgap_accession_number: chr [1:10] "phs001179" "phs000470" NA NA ...
+#>  $ disease_type          :List of 10
+#>   ..$ FM-AD    : chr [1:23] "Germ Cell Neoplasms" "Acinar Cell Neoplasms" "Miscellaneous Tumors" "Thymic Epithelial Neoplasms" ...
+#>   ..$ TARGET-RT: chr "Rhabdoid Tumor"
+#>   ..$ TCGA-UCS : chr "Uterine Carcinosarcoma"
+#>   ..$ TCGA-LUSC: chr "Lung Squamous Cell Carcinoma"
+#>   ..$ TCGA-BRCA: chr "Breast Invasive Carcinoma"
+#>   .. [list output truncated]
+#>  $ released              : logi [1:10] TRUE TRUE TRUE TRUE TRUE TRUE ...
+#>  $ state                 : chr [1:10] "open" "open" "open" "open" ...
+#>  $ primary_site          :List of 10
+#>   ..$ FM-AD    : chr [1:42] "Kidney" "Testis" "Unknown" "Other and unspecified parts of biliary tract" ...
+#>   ..$ TARGET-RT: chr "Kidney"
+#>   ..$ TCGA-UCS : chr "Uterus"
+#>   ..$ TCGA-LUSC: chr "Lung"
+#>   ..$ TCGA-BRCA: chr "Breast"
+#>   .. [list output truncated]
+#>   [list output truncated]
+#>  - attr(*, "row.names")= int [1:10] 1 2 3 4 5 6 7 8 9 10
+#>  - attr(*, "class")= chr [1:3] "GDCprojectsResults" "GDCResults" "list"
 names(projResults)
-```
-
-```
-## [1] "dbgap_accession_number" "disease_type"          
-## [3] "released"               "state"                 
-## [5] "primary_site"           "project_id"            
-## [7] "id"                     "name"
-```
-
-```r
+#> [1] "dbgap_accession_number" "disease_type"          
+#> [3] "released"               "state"                 
+#> [5] "primary_site"           "project_id"            
+#> [7] "id"                     "name"
 # or listviewer::jsonedit(clinResults)
 ```
 
@@ -566,16 +547,13 @@ contains no results.
 
 ```r
 str(pquery)
-```
-
-```
-## List of 5
-##  $ fields : chr [1:16] "awg_review" "dbgap_accession_number" "disease_type" "in_review" ...
-##  $ filters: NULL
-##  $ facets : NULL
-##  $ legacy : logi FALSE
-##  $ expand : NULL
-##  - attr(*, "class")= chr [1:3] "gdc_projects" "GDCQuery" "list"
+#> List of 5
+#>  $ fields : chr [1:16] "awg_review" "dbgap_accession_number" "disease_type" "in_review" ...
+#>  $ filters: NULL
+#>  $ facets : NULL
+#>  $ legacy : logi FALSE
+#>  $ expand : NULL
+#>  - attr(*, "class")= chr [1:3] "gdc_projects" "GDCQuery" "list"
 ```
 #### Retrieving results
 
@@ -595,10 +573,7 @@ pcount = count(pquery)
 # or
 pcount = pquery %>% count()
 pcount
-```
-
-```
-## [1] 40
+#> [1] 40
 ```
 
 The `results()` method will fetch actual results.
@@ -615,40 +590,37 @@ for taking a quick glimpse of the data.
 
 ```r
 str(presults)
-```
-
-```
-## List of 8
-##  $ dbgap_accession_number: chr [1:10] "phs001179" "phs000470" NA NA ...
-##  $ disease_type          :List of 10
-##   ..$ FM-AD    : chr [1:23] "Germ Cell Neoplasms" "Acinar Cell Neoplasms" "Miscellaneous Tumors" "Thymic Epithelial Neoplasms" ...
-##   ..$ TARGET-RT: chr "Rhabdoid Tumor"
-##   ..$ TCGA-UCS : chr "Uterine Carcinosarcoma"
-##   ..$ TCGA-LUSC: chr "Lung Squamous Cell Carcinoma"
-##   ..$ TCGA-BRCA: chr "Breast Invasive Carcinoma"
-##   ..$ TCGA-SKCM: chr "Skin Cutaneous Melanoma"
-##   ..$ TARGET-OS: chr "Osteosarcoma"
-##   ..$ TCGA-THYM: chr "Thymoma"
-##   ..$ TARGET-WT: chr "High-Risk Wilms Tumor"
-##   ..$ TCGA-ESCA: chr "Esophageal Carcinoma"
-##  $ released              : logi [1:10] TRUE TRUE TRUE TRUE TRUE TRUE ...
-##  $ state                 : chr [1:10] "open" "open" "open" "open" ...
-##  $ primary_site          :List of 10
-##   ..$ FM-AD    : chr [1:42] "Kidney" "Testis" "Unknown" "Other and unspecified parts of biliary tract" ...
-##   ..$ TARGET-RT: chr "Kidney"
-##   ..$ TCGA-UCS : chr "Uterus"
-##   ..$ TCGA-LUSC: chr "Lung"
-##   ..$ TCGA-BRCA: chr "Breast"
-##   ..$ TCGA-SKCM: chr "Skin"
-##   ..$ TARGET-OS: chr "Bone"
-##   ..$ TCGA-THYM: chr "Thymus"
-##   ..$ TARGET-WT: chr "Kidney"
-##   ..$ TCGA-ESCA: chr "Esophagus"
-##  $ project_id            : chr [1:10] "FM-AD" "TARGET-RT" "TCGA-UCS" "TCGA-LUSC" ...
-##  $ id                    : chr [1:10] "FM-AD" "TARGET-RT" "TCGA-UCS" "TCGA-LUSC" ...
-##  $ name                  : chr [1:10] "Foundation Medicine Adult Cancer Clinical Dataset (FM-AD)" "Rhabdoid Tumor" "Uterine Carcinosarcoma" "Lung Squamous Cell Carcinoma" ...
-##  - attr(*, "row.names")= int [1:10] 1 2 3 4 5 6 7 8 9 10
-##  - attr(*, "class")= chr [1:3] "GDCprojectsResults" "GDCResults" "list"
+#> List of 8
+#>  $ dbgap_accession_number: chr [1:10] "phs001179" "phs000470" NA NA ...
+#>  $ disease_type          :List of 10
+#>   ..$ FM-AD    : chr [1:23] "Germ Cell Neoplasms" "Acinar Cell Neoplasms" "Miscellaneous Tumors" "Thymic Epithelial Neoplasms" ...
+#>   ..$ TARGET-RT: chr "Rhabdoid Tumor"
+#>   ..$ TCGA-UCS : chr "Uterine Carcinosarcoma"
+#>   ..$ TCGA-LUSC: chr "Lung Squamous Cell Carcinoma"
+#>   ..$ TCGA-BRCA: chr "Breast Invasive Carcinoma"
+#>   ..$ TCGA-SKCM: chr "Skin Cutaneous Melanoma"
+#>   ..$ TARGET-OS: chr "Osteosarcoma"
+#>   ..$ TCGA-THYM: chr "Thymoma"
+#>   ..$ TARGET-WT: chr "High-Risk Wilms Tumor"
+#>   ..$ TCGA-ESCA: chr "Esophageal Carcinoma"
+#>  $ released              : logi [1:10] TRUE TRUE TRUE TRUE TRUE TRUE ...
+#>  $ state                 : chr [1:10] "open" "open" "open" "open" ...
+#>  $ primary_site          :List of 10
+#>   ..$ FM-AD    : chr [1:42] "Kidney" "Testis" "Unknown" "Other and unspecified parts of biliary tract" ...
+#>   ..$ TARGET-RT: chr "Kidney"
+#>   ..$ TCGA-UCS : chr "Uterus"
+#>   ..$ TCGA-LUSC: chr "Lung"
+#>   ..$ TCGA-BRCA: chr "Breast"
+#>   ..$ TCGA-SKCM: chr "Skin"
+#>   ..$ TARGET-OS: chr "Bone"
+#>   ..$ TCGA-THYM: chr "Thymus"
+#>   ..$ TARGET-WT: chr "Kidney"
+#>   ..$ TCGA-ESCA: chr "Esophagus"
+#>  $ project_id            : chr [1:10] "FM-AD" "TARGET-RT" "TCGA-UCS" "TCGA-LUSC" ...
+#>  $ id                    : chr [1:10] "FM-AD" "TARGET-RT" "TCGA-UCS" "TCGA-LUSC" ...
+#>  $ name                  : chr [1:10] "Foundation Medicine Adult Cancer Clinical Dataset (FM-AD)" "Rhabdoid Tumor" "Uterine Carcinosarcoma" "Lung Squamous Cell Carcinoma" ...
+#>  - attr(*, "row.names")= int [1:10] 1 2 3 4 5 6 7 8 9 10
+#>  - attr(*, "class")= chr [1:3] "GDCprojectsResults" "GDCResults" "list"
 ```
 
 A default of only 10 records are returned. We can use the `size` and `from`
@@ -662,28 +634,13 @@ size is probably warranted before calling `results_all()`
 
 ```r
 length(ids(presults))
-```
-
-```
-## [1] 10
-```
-
-```r
+#> [1] 10
 presults = pquery %>% results_all()
 length(ids(presults))
-```
-
-```
-## [1] 40
-```
-
-```r
+#> [1] 40
 # includes all records
 length(ids(presults)) == count(pquery)
-```
-
-```
-## [1] TRUE
+#> [1] TRUE
 ```
 
 Extracting subsets of
@@ -712,43 +669,28 @@ object.
 
 ```r
 default_fields('files')
-```
-
-```
-##  [1] "access"                "acl"                  
-##  [3] "batch_id"              "created_datetime"     
-##  [5] "data_category"         "data_format"          
-##  [7] "data_type"             "error_type"           
-##  [9] "experimental_strategy" "file_autocomplete"    
-## [11] "file_id"               "file_name"            
-## [13] "file_size"             "file_state"           
-## [15] "imaging_date"          "magnification"        
-## [17] "md5sum"                "origin"               
-## [19] "platform"              "read_pair_number"     
-## [21] "revision"              "state"                
-## [23] "state_comment"         "submitter_id"         
-## [25] "tags"                  "type"                 
-## [27] "updated_datetime"
-```
-
-```r
+#>  [1] "access"                "acl"                  
+#>  [3] "batch_id"              "created_datetime"     
+#>  [5] "data_category"         "data_format"          
+#>  [7] "data_type"             "error_type"           
+#>  [9] "experimental_strategy" "file_autocomplete"    
+#> [11] "file_id"               "file_name"            
+#> [13] "file_size"             "file_state"           
+#> [15] "imaging_date"          "magnification"        
+#> [17] "md5sum"                "origin"               
+#> [19] "platform"              "read_pair_number"     
+#> [21] "revision"              "state"                
+#> [23] "state_comment"         "submitter_id"         
+#> [25] "tags"                  "type"                 
+#> [27] "updated_datetime"
 # The number of fields available for files endpoint
 length(available_fields('files'))
-```
-
-```
-## [1] 703
-```
-
-```r
+#> [1] 703
 # The first few fields available for files endpoint
 head(available_fields('files'))
-```
-
-```
-## [1] "access"                    "acl"                      
-## [3] "analysis.analysis_id"      "analysis.analysis_type"   
-## [5] "analysis.batch_id"         "analysis.created_datetime"
+#> [1] "access"                    "acl"                      
+#> [3] "analysis.analysis_id"      "analysis.analysis_type"   
+#> [5] "analysis.batch_id"         "analysis.created_datetime"
 ```
 
 The fields to be returned by a query can be specified following a similar
@@ -762,34 +704,25 @@ the dplyr `select()` verb that limits from already-present fields. We
 # Default fields here
 qcases = cases()
 qcases$fields
-```
-
-```
-##  [1] "aliquot_ids"              "analyte_ids"             
-##  [3] "batch_id"                 "case_autocomplete"       
-##  [5] "case_id"                  "created_datetime"        
-##  [7] "days_to_index"            "days_to_lost_to_followup"
-##  [9] "disease_type"             "index_date"              
-## [11] "lost_to_followup"         "portion_ids"             
-## [13] "primary_site"             "sample_ids"              
-## [15] "slide_ids"                "state"                   
-## [17] "submitter_aliquot_ids"    "submitter_analyte_ids"   
-## [19] "submitter_id"             "submitter_portion_ids"   
-## [21] "submitter_sample_ids"     "submitter_slide_ids"     
-## [23] "updated_datetime"
-```
-
-```r
+#>  [1] "aliquot_ids"              "analyte_ids"             
+#>  [3] "batch_id"                 "case_autocomplete"       
+#>  [5] "case_id"                  "created_datetime"        
+#>  [7] "days_to_index"            "days_to_lost_to_followup"
+#>  [9] "disease_type"             "index_date"              
+#> [11] "lost_to_followup"         "portion_ids"             
+#> [13] "primary_site"             "sample_ids"              
+#> [15] "slide_ids"                "state"                   
+#> [17] "submitter_aliquot_ids"    "submitter_analyte_ids"   
+#> [19] "submitter_id"             "submitter_portion_ids"   
+#> [21] "submitter_sample_ids"     "submitter_slide_ids"     
+#> [23] "updated_datetime"
 # set up query to use ALL available fields
 # Note that checking of fields is done by select()
 qcases = cases() %>% GenomicDataCommons::select(available_fields('cases'))
 head(qcases$fields)
-```
-
-```
-## [1] "case_id"                   "aliquot_ids"              
-## [3] "analyte_ids"               "annotations.annotation_id"
-## [5] "annotations.batch_id"      "annotations.case_id"
+#> [1] "case_id"                   "aliquot_ids"              
+#> [3] "analyte_ids"               "annotations.annotation_id"
+#> [5] "annotations.batch_id"      "annotations.case_id"
 ```
 
 Finding fields of interest is such a common operation that the
@@ -814,22 +747,19 @@ tibbles).
 # total number of files of a specific type
 res = files() %>% facet(c('type','data_type')) %>% aggregations()
 res$type
-```
-
-```
-##                            key doc_count
-## 1      simple_somatic_mutation     64015
-## 2   annotated_somatic_mutation     63580
-## 3                aligned_reads     45985
-## 4          copy_number_segment     44752
-## 5              gene_expression     34713
-## 6                  slide_image     30036
-## 7       biospecimen_supplement     25151
-## 8             mirna_expression     22976
-## 9          clinical_supplement     12496
-## 10      methylation_beta_value     12359
-## 11 aggregated_somatic_mutation       186
-## 12     masked_somatic_mutation       132
+#>                            key doc_count
+#> 1      simple_somatic_mutation     64015
+#> 2   annotated_somatic_mutation     63580
+#> 3                aligned_reads     45985
+#> 4          copy_number_segment     44752
+#> 5              gene_expression     34713
+#> 6                  slide_image     30036
+#> 7       biospecimen_supplement     25151
+#> 8             mirna_expression     22976
+#> 9          clinical_supplement     12496
+#> 10      methylation_beta_value     12359
+#> 11 aggregated_somatic_mutation       186
+#> 12     masked_somatic_mutation       132
 ```
 
 Using `aggregations()` is an also easy way to learn the contents of individual
@@ -857,10 +787,7 @@ filter expression must begin with a "~".
 ```r
 qfiles = files()
 qfiles %>% count() # all files
-```
-
-```
-## [1] 356381
+#> [1] 356381
 ```
 To limit the file type, we can refer back to the
 [section on faceting](#facets-and-aggregation) to see the possible values for
@@ -872,14 +799,11 @@ the file field "type". For example, to filter file results to only
 qfiles = files() %>% filter(~ type == 'gene_expression')
 # here is what the filter looks like after translation
 str(get_filter(qfiles))
-```
-
-```
-## List of 2
-##  $ op     : 'scalar' chr "="
-##  $ content:List of 2
-##   ..$ field: chr "type"
-##   ..$ value: chr "gene_expression"
+#> List of 2
+#>  $ op     : 'scalar' chr "="
+#>  $ content:List of 2
+#>   ..$ field: chr "type"
+#>   ..$ value: chr "gene_expression"
 ```
 
 What if we want to create a filter based on the project ('TCGA-OVCA', for
@@ -889,34 +813,31 @@ The first is based on base R functionality and some intuition.
 
 ```r
 grep('pro',available_fields('files'),value=TRUE)
-```
-
-```
-##  [1] "cases.diagnoses.progression_free_survival"               
-##  [2] "cases.diagnoses.progression_free_survival_event"         
-##  [3] "cases.diagnoses.progression_or_recurrence"               
-##  [4] "cases.project.awg_review"                                
-##  [5] "cases.project.dbgap_accession_number"                    
-##  [6] "cases.project.disease_type"                              
-##  [7] "cases.project.in_review"                                 
-##  [8] "cases.project.intended_release_date"                     
-##  [9] "cases.project.is_legacy"                                 
-## [10] "cases.project.name"                                      
-## [11] "cases.project.primary_site"                              
-## [12] "cases.project.program.dbgap_accession_number"            
-## [13] "cases.project.program.name"                              
-## [14] "cases.project.program.program_id"                        
-## [15] "cases.project.project_id"                                
-## [16] "cases.project.releasable"                                
-## [17] "cases.project.released"                                  
-## [18] "cases.project.release_requested"                         
-## [19] "cases.project.request_submission"                        
-## [20] "cases.project.state"                                     
-## [21] "cases.project.submission_enabled"                        
-## [22] "cases.samples.days_to_sample_procurement"                
-## [23] "cases.samples.method_of_sample_procurement"              
-## [24] "cases.samples.portions.slides.number_proliferating_cells"
-## [25] "cases.tissue_source_site.project"
+#>  [1] "cases.diagnoses.progression_free_survival"               
+#>  [2] "cases.diagnoses.progression_free_survival_event"         
+#>  [3] "cases.diagnoses.progression_or_recurrence"               
+#>  [4] "cases.project.awg_review"                                
+#>  [5] "cases.project.dbgap_accession_number"                    
+#>  [6] "cases.project.disease_type"                              
+#>  [7] "cases.project.in_review"                                 
+#>  [8] "cases.project.intended_release_date"                     
+#>  [9] "cases.project.is_legacy"                                 
+#> [10] "cases.project.name"                                      
+#> [11] "cases.project.primary_site"                              
+#> [12] "cases.project.program.dbgap_accession_number"            
+#> [13] "cases.project.program.name"                              
+#> [14] "cases.project.program.program_id"                        
+#> [15] "cases.project.project_id"                                
+#> [16] "cases.project.releasable"                                
+#> [17] "cases.project.released"                                  
+#> [18] "cases.project.release_requested"                         
+#> [19] "cases.project.request_submission"                        
+#> [20] "cases.project.state"                                     
+#> [21] "cases.project.submission_enabled"                        
+#> [22] "cases.samples.days_to_sample_procurement"                
+#> [23] "cases.samples.method_of_sample_procurement"              
+#> [24] "cases.samples.portions.slides.number_proliferating_cells"
+#> [25] "cases.tissue_source_site.project"
 ```
 
 Interestingly, the project information is "nested" inside the case. We don't
@@ -927,51 +848,48 @@ know where because we need to construct the appropriate filter.
 
 ```r
 files() %>% facet('cases.project.project_id') %>% aggregations()
-```
-
-```
-## $cases.project.project_id
-##            key doc_count
-## 1        FM-AD     36134
-## 2    TCGA-BRCA     31511
-## 3    TCGA-LUAD     17051
-## 4    TCGA-UCEC     16130
-## 5    TCGA-HNSC     15266
-## 6      TCGA-OV     15057
-## 7    TCGA-THCA     14420
-## 8    TCGA-LUSC     15323
-## 9     TCGA-LGG     14723
-## 10   TCGA-KIRC     15082
-## 11   TCGA-PRAD     14287
-## 12   TCGA-COAD     14270
-## 13    TCGA-GBM     11973
-## 14   TCGA-SKCM     12724
-## 15   TCGA-STAD     12845
-## 16   TCGA-BLCA     11710
-## 17   TCGA-LIHC     10814
-## 18   TCGA-CESC      8593
-## 19   TCGA-KIRP      8506
-## 20   TCGA-SARC      7493
-## 21   TCGA-PAAD      5306
-## 22   TCGA-ESCA      5270
-## 23   TCGA-PCPG      5032
-## 24   TCGA-READ      4918
-## 25   TCGA-TGCT      4217
-## 26   TCGA-THYM      3444
-## 27   TCGA-LAML      3960
-## 28  TARGET-NBL      2795
-## 29    TCGA-ACC      2546
-## 30   TCGA-KICH      2324
-## 31   TCGA-MESO      2330
-## 32  TARGET-AML      2170
-## 33    TCGA-UVM      2179
-## 34    TCGA-UCS      1658
-## 35   TARGET-WT      1406
-## 36   TCGA-DLBC      1330
-## 37   TCGA-CHOL      1348
-## 38   TARGET-OS        47
-## 39   TARGET-RT       174
-## 40 TARGET-CCSK        15
+#> $cases.project.project_id
+#>            key doc_count
+#> 1        FM-AD     36134
+#> 2    TCGA-BRCA     31511
+#> 3    TCGA-LUAD     17051
+#> 4    TCGA-UCEC     16130
+#> 5    TCGA-HNSC     15266
+#> 6      TCGA-OV     15057
+#> 7    TCGA-THCA     14420
+#> 8    TCGA-LUSC     15323
+#> 9     TCGA-LGG     14723
+#> 10   TCGA-KIRC     15082
+#> 11   TCGA-PRAD     14287
+#> 12   TCGA-COAD     14270
+#> 13    TCGA-GBM     11973
+#> 14   TCGA-SKCM     12724
+#> 15   TCGA-STAD     12845
+#> 16   TCGA-BLCA     11710
+#> 17   TCGA-LIHC     10814
+#> 18   TCGA-CESC      8593
+#> 19   TCGA-KIRP      8506
+#> 20   TCGA-SARC      7493
+#> 21   TCGA-PAAD      5306
+#> 22   TCGA-ESCA      5270
+#> 23   TCGA-PCPG      5032
+#> 24   TCGA-READ      4918
+#> 25   TCGA-TGCT      4217
+#> 26   TCGA-THYM      3444
+#> 27   TCGA-LAML      3960
+#> 28  TARGET-NBL      2795
+#> 29    TCGA-ACC      2546
+#> 30   TCGA-KICH      2324
+#> 31   TCGA-MESO      2330
+#> 32  TARGET-AML      2170
+#> 33    TCGA-UVM      2179
+#> 34    TCGA-UCS      1658
+#> 35   TARGET-WT      1406
+#> 36   TCGA-DLBC      1330
+#> 37   TCGA-CHOL      1348
+#> 38   TARGET-OS        47
+#> 39   TARGET-RT       174
+#> 40 TARGET-CCSK        15
 ```
 
 We note that `cases.project.project_id` looks like it is a good fit. We also
@@ -984,30 +902,21 @@ filter and does not build on any previous filters*.
 qfiles = files() %>%
     filter( ~ cases.project.project_id == 'TCGA-OV' & type == 'gene_expression')
 str(get_filter(qfiles))
-```
-
-```
-## List of 2
-##  $ op     : 'scalar' chr "and"
-##  $ content:List of 2
-##   ..$ :List of 2
-##   .. ..$ op     : 'scalar' chr "="
-##   .. ..$ content:List of 2
-##   .. .. ..$ field: chr "cases.project.project_id"
-##   .. .. ..$ value: chr "TCGA-OV"
-##   ..$ :List of 2
-##   .. ..$ op     : 'scalar' chr "="
-##   .. ..$ content:List of 2
-##   .. .. ..$ field: chr "type"
-##   .. .. ..$ value: chr "gene_expression"
-```
-
-```r
+#> List of 2
+#>  $ op     : 'scalar' chr "and"
+#>  $ content:List of 2
+#>   ..$ :List of 2
+#>   .. ..$ op     : 'scalar' chr "="
+#>   .. ..$ content:List of 2
+#>   .. .. ..$ field: chr "cases.project.project_id"
+#>   .. .. ..$ value: chr "TCGA-OV"
+#>   ..$ :List of 2
+#>   .. ..$ op     : 'scalar' chr "="
+#>   .. ..$ content:List of 2
+#>   .. .. ..$ field: chr "type"
+#>   .. .. ..$ value: chr "gene_expression"
 qfiles %>% count()
-```
-
-```
-## [1] 1137
+#> [1] 1137
 ```
 
 Asking for a `count()` of results given these new filter criteria gives `r
@@ -1018,18 +927,15 @@ simple as asking for the manifest from the current query.
 ```r
 manifest_df = qfiles %>% manifest()
 head(manifest_df)
-```
-
-```
-## # A tibble: 6 x 5
-##   id                filename                  md5               size state
-##   <chr>             <chr>                     <chr>            <int> <chr>
-## 1 567ced20-00cf-46… b2552f6f-dd15-410f-a621-… 9af0d993c40aec… 258324 live 
-## 2 05692746-1770-47… 701b8c71-6c05-4e5b-ac10-… 8e9816f4d9b871… 526537 live 
-## 3 e2d47640-8565-43… b2552f6f-dd15-410f-a621-… e05190ed65c8a8… 543367 live 
-## 4 bc6dab72-dc5a-4c… a1c4f19e-079e-47e7-8939-… 110d8cda0ccdf6… 253059 live 
-## 5 0a176c20-f3f3-4b… 01eac123-1e21-440d-9495-… b40921f17128a9… 540592 live 
-## 6 2ae73487-7acf-42… 12c8b289-b9d0-4697-b3a6-… 4d3c2b951d94f0… 549437 live
+#> # A tibble: 6 x 5
+#>   id                filename                  md5               size state
+#>   <chr>             <chr>                     <chr>            <int> <chr>
+#> 1 567ced20-00cf-46… b2552f6f-dd15-410f-a621-… 9af0d993c40aec… 258324 live 
+#> 2 05692746-1770-47… 701b8c71-6c05-4e5b-ac10-… 8e9816f4d9b871… 526537 live 
+#> 3 e2d47640-8565-43… b2552f6f-dd15-410f-a621-… e05190ed65c8a8… 543367 live 
+#> 4 bc6dab72-dc5a-4c… a1c4f19e-079e-47e7-8939-… 110d8cda0ccdf6… 253059 live 
+#> 5 0a176c20-f3f3-4b… 01eac123-1e21-440d-9495-… b40921f17128a9… 540592 live 
+#> 6 2ae73487-7acf-42… 12c8b289-b9d0-4697-b3a6-… 4d3c2b951d94f0… 549437 live
 ```
 
 Note that we might still not be quite there. Looking at filenames, there are
@@ -1044,10 +950,7 @@ qfiles = files() %>% filter( ~ cases.project.project_id == 'TCGA-OV' &
                             analysis.workflow_type == 'HTSeq - Counts')
 manifest_df = qfiles %>% manifest()
 nrow(manifest_df)
-```
-
-```
-## [1] 379
+#> [1] 379
 ```
 
 The GDC Data Transfer Tool can be used (from R, `transfer()` or from the
@@ -1128,698 +1031,163 @@ fnames = gdcdata(manifest_df$id[3:10], access_method = 'client')
 
 ## Sequence Read Archive
 
-## Accessing The Cancer Genome Atlas (TCGA)
 
-We summarize two approaches to accessing TCGA data:
-1. *[TCGAbiolinks](http://bioconductor.org/packages/TCGAbiolinks)*:
-    a. data access through *[GenomicDataCommons](http://bioconductor.org/packages/GenomicDataCommons)*
-    b. provides data both from the legacy Firehose pipeline used by the TCGA
-    publications (alignments based on hg18 and hg19 builds[^11]), and the GDC
-    harmonized GRCh38 pipeline[^12].
-    c. downloads files from the Genomic Data Commons, and provides conversion to `(Ranged)SummarizedExperiment` where possible
-2. *[curatedTCGAData](http://bioconductor.org/packages/curatedTCGAData)*: 
-    a. data access through *[ExperimentHub](http://bioconductor.org/packages/ExperimentHub)*
-    b. provides data from the legacy Firehose pipeline[^11]
-    c. provides individual assays as `(Ranged)SummarizedExperiment` and `RaggedExperiment`, integrates multiple assays within and across cancer types using `MultiAssayExperiment`
-
-[^11]: https://confluence.broadinstitute.org/display/GDAC/FAQ#FAQ-Q%C2%A0Whatreferencegenomebuildareyouusing
-[^12]: https://gdc.cancer.gov/about-data/data-harmonization-and-generation/genomic-data-harmonization-0
-
-### TCGAbiolinks
-
-We demonstrate here generating a `RangedSummarizedExperiment` for RNA-seq data
-from adrenocortical carcinoma (ACC). For additional information and options, see
-the TCGAbiolinks vignettes[^13].
-
-Load packages:
-
-
-Search for matching data:
-
-```r
-library(TCGAbiolinks)
-library(SummarizedExperiment)
-query <- GDCquery(project = "TCGA-ACC",
-                           data.category = "Gene expression",
-                           data.type = "Gene expression quantification",
-                           platform = "Illumina HiSeq", 
-                           file.type  = "normalized_results",
-                           experimental.strategy = "RNA-Seq",
-                           legacy = TRUE)
-```
-
-Download data and convert it to `RangedSummarizedExperiment`:
-
-```r
-gdcdir <- file.path("Waldron_PublicData", "GDCdata")
-GDCdownload(query, method = "api", files.per.chunk = 10,
-            directory = gdcdir)
-ACCse <- GDCprepare(query, directory = gdcdir)
-ACCse
-```
-
-[^13]: https://bioconductor.org/packages/release/bioc/vignettes/TCGAbiolinks/inst/doc/download_prepare.html
-
-### curatedTCGAData: Curated Data From The Cancer Genome Atlas as MultiAssayExperiment Objects
-
-*[curatedTCGAData](http://bioconductor.org/packages/curatedTCGAData)* does not interface with the Genomic Data Commons, but downloads data from Bioconductor's *[ExperimentHub](http://bioconductor.org/packages/ExperimentHub)*.
-
-
+The SRAdbV2 package is currently available from [GitHub] and is under
+active development. Either the *[devtools](https://CRAN.R-project.org/package=devtools)* package or the
+*[BiocManager](https://CRAN.R-project.org/package=BiocManager)* package can be used for easy installation.
 
 
 ```r
-library(curatedTCGAData)
-library(MultiAssayExperiment)
+install.packages('BiocManager')
+BiocManager::install('seandavi/SRAdbV2')
 ```
 
-
-By default, the `curatedTCGAData()` function will only show available datasets,
-and not download anything. The arguments are shown here only for demonstration,
-the same result is obtained with no arguments:
+[GitHub]: https://github.com/seandavi/SRAdbV2
 
 
-```r
-curatedTCGAData(diseaseCode = "*", assays = "*")
-```
+### Usage
 
-```
-## Please see the list below for available cohorts and assays
-```
-
-```
-## Available Cancer codes:
-##  ACC BLCA BRCA CESC CHOL COAD DLBC ESCA GBM HNSC KICH
-##  KIRC KIRP LAML LGG LIHC LUAD LUSC MESO OV PAAD PCPG
-##  PRAD READ SARC SKCM STAD TGCT THCA THYM UCEC UCS UVM 
-## Available Data Types:
-##  CNACGH CNASeq CNASNP CNVSNP GISTICA GISTICT
-##  Methylation miRNAArray miRNASeqGene mRNAArray
-##  Mutation RNASeq2GeneNorm RNASeqGene RPPAArray
-```
-
-Check potential files to be downloaded for adrenocortical carcinoma (ACC):
-
-```r
-curatedTCGAData(diseaseCode = "ACC")
-```
-
-```
-##                                  ACC_CNASNP 
-##                   "ACC_CNASNP-20160128.rda" 
-##                                  ACC_CNVSNP 
-##                   "ACC_CNVSNP-20160128.rda" 
-##                        ACC_GISTIC_AllByGene 
-##         "ACC_GISTIC_AllByGene-20160128.rda" 
-##                ACC_GISTIC_ThresholdedByGene 
-## "ACC_GISTIC_ThresholdedByGene-20160128.rda" 
-##                             ACC_Methylation 
-##              "ACC_Methylation-20160128.rda" 
-##                            ACC_miRNASeqGene 
-##             "ACC_miRNASeqGene-20160128.rda" 
-##                                ACC_Mutation 
-##                 "ACC_Mutation-20160128.rda" 
-##                         ACC_RNASeq2GeneNorm 
-##          "ACC_RNASeq2GeneNorm-20160128.rda" 
-##                               ACC_RPPAArray 
-##                "ACC_RPPAArray-20160128.rda"
-```
-
-Actually download the reverse phase protein array (RPPA) and RNA-seq data for ACC
-
-```r
-ACCmae <- curatedTCGAData("ACC", c("RPPAArray", "RNASeq2GeneNorm"), 
-                          dry.run=FALSE)
-ACCmae
-```
-
-```
-## A MultiAssayExperiment object of 2 listed
-##  experiments with user-defined names and respective classes. 
-##  Containing an ExperimentList class object of length 2: 
-##  [1] ACC_RNASeq2GeneNorm-20160128: SummarizedExperiment with 20501 rows and 79 columns 
-##  [2] ACC_RPPAArray-20160128: SummarizedExperiment with 192 rows and 46 columns 
-## Features: 
-##  experiments() - obtain the ExperimentList instance 
-##  colData() - the primary/phenotype DataFrame 
-##  sampleMap() - the sample availability DataFrame 
-##  `$`, `[`, `[[` - extract colData columns, subset, or experiment 
-##  *Format() - convert into a long or wide DataFrame 
-##  assays() - convert ExperimentList to a SimpleList of matrices
-```
-
-**Note**. Data will be downloaded the first time the above command is run; subsequent times it will be loaded from local cache.
-
-This object contains 822 columns of clinical, pathological, specimen, and subtypes data in its `colData`, merged from all available data levels (1-4) of the Firehose pipeline:
+#### Loading the library
 
 
 ```r
-dim(colData(ACCmae))
+library(SRAdbV2)
+#> Loading required package: R6
 ```
 
-```
-## [1]  79 822
-```
+#### The Omicidx 
 
-```r
-head(colnames(colData(ACCmae)))
-```
+The entrypoint for using the SRAdbV2 system is the `Omicidx`, an [R6 class].
+To start, create a new instance of the class. 
 
-```
-## [1] "patientID"             "years_to_birth"        "vital_status"         
-## [4] "days_to_death"         "days_to_last_followup" "tumor_tissue_site"
-```
-
-See the *[MultiAssayExperiment](http://bioconductor.org/packages/MultiAssayExperiment)* vignette [@Ramos2017-nq] and the *Workflow for Multi-omics Analysis with MultiAssayExperiment* workshop for details on using this object.
-
-#### Subtype information
-
-Some cancer datasets contain associated subtype information within the
-clinical datasets provided. This subtype information is included in the
-metadata of `colData` of the `MultiAssayExperiment` object. To obtain these
-variable names, run the `metadata` function on the `colData` of the object
-such as:
+[R6 class]: https://cran.r-project.org/web/packages/R6/vignettes/Introduction.html
 
 
 ```r
-head(metadata(colData(ACCmae))[["subtypes"]])
+oidx = Omicidx$new()
 ```
 
-```
-##         ACC_annotations   ACC_subtype
-## 1            Patient_ID        SAMPLE
-## 2 histological_subtypes     Histology
-## 3         mrna_subtypes       C1A/C1B
-## 4         mrna_subtypes       mRNA_K4
-## 5                  cimp    MethyLevel
-## 6     microrna_subtypes miRNA cluster
-```
+Typing `oidx$` and then `TAB` will give possible completions. Note the "search" 
+completion. 
 
-## recount: Reproducible RNA-seq Analysis Using recount2
+#### Queries
 
-The *[recount](http://bioconductor.org/packages/recount)*[@Collado-Torres2017-ww] package provides
-uniformly processed `RangedSummarizedExperiment` objects at the gene, exon, or
-exon-exon junctions level, the raw counts, the phenotype metadata used, the urls
-to sample coverage bigWig files and mean coverage bigWig file, for every study
-available. The `RangedSummarizedExperiment` objects can be used for differential
-expression analysis. These are also accessible through a web interface [^14].
-
-
-```
-## No methods found in package 'IRanges' for request: 'subset' when loading 'derfinder'
-```
-
-*[recount](http://bioconductor.org/packages/recount)* provides a search function:
-
-```r
-library(recount)
-project_info <- abstract_search('GSE32465')
-```
-
-It is not an ExperimentHub package, so downloading and serializing is slightly more involved in involves two steps: first, download the gene-level RangedSummarizedExperiment data:
-
-```r
-download_study(project_info$project)
-```
-
-```
-## 2018-07-20 08:02:31 downloading file rse_gene.Rdata to SRP009615
-```
-followed by loading the data
-
-```r
-load(file.path(project_info$project, 'rse_gene.Rdata'))
-```
-
-
-[^14]: https://jhubiostatistics.shinyapps.io/recount/
-
-## curated*Data packages for standardized cancer transcriptomes
-
-There are focused databases of cancer microarray data for several cancer types, which can be useful for researchers of those cancer types or for methodological development:
-* *[curatedOvarianData](http://bioconductor.org/packages/curatedOvarianData)*[@Ganzfried2013-mc]: Clinically Annotated Data for the Ovarian Cancer Transcriptome (data available with additional options through the *[MetaGxOvarian](http://bioconductor.org/packages/MetaGxOvarian)* package).
-* *[curatedBladderData](http://bioconductor.org/packages/curatedBladderData)*: Clinically Annotated Data for the Bladder Cancer Transcriptome
-* *[curatedCRCData](http://bioconductor.org/packages/curatedCRCData)*: Clinically Annotated Data for the Colorectal Cancer Transcriptome
-
-These provide data from the Gene Expression Omnibus and other sources, but use a formally vocabulary for clinicopathological data and use a common pipeline for preprocessing of microarray data (for Affymetrix, other for other platforms the processed data are provided as processed by original study authors), merging probesets, and mapping to gene symbols. The pipeline is described by @Ganzfried2013-mc.
-
-## Microbiome data
-
-Bioconductor provides curated resources of microbiome data.  Most microbiome data are generated either by targeted amplicon sequencing (usually of variable regions of the 16S ribosomal RNA gene) or by metagenomic shotgun sequencing (MGX). These two approaches are analyzed by different sequence analysis tools, but downstream statistical and ecological analysis can involve any of the following types of data:
-* taxonomic abundance at different levels of the taxonomic hierarchy
-* phylogenetic distances and the phylogenetic tree of life
-* metabolic potential of the microbiome
-* abundance of microbial genes and gene families
-
-A review of types and properties of microbiome data is provided by [@Morgan2012-mq].
-
-### curatedMetagenomicData: Curated and processed metagenomic data through ExperimentHub
-
-
-
-`curatedMetagenomicData`[@Pasolli2017-gf] provides 6 types of processed data for >30 publicly available whole-metagenome shotgun sequencing datasets (obtained from the Sequence Read Archive):
-
-1. Species-level taxonomic profiles, expressed as relative abundance from kingdom to strain level
-2. Presence of unique, clade-specific markers
-3. Abundance of unique, clade-specific markers
-4. Abundance of gene families
-5. Metabolic pathway coverage
-6. Metabolic pathway abundance
-
-Types 1-3 are generated by 
-[MetaPhlAn2](http://huttenhower.sph.harvard.edu/metaphlan2); 4-6 are generated by [HUMAnN2](http://huttenhower.sph.harvard.edu/humann2).
-
-Currently, `curatedMetagenomicData` provides:
-
-* 6386 samples from 31 datasets, primarily of the human gut but including body sites profiled in the Human Microbiome Project
-* Processed data from whole-metagenome shotgun metagenomics, with manually-curated metadata, as integrated and documented Bioconductor 
-ExpressionSet objects
-* ~80 fields of specimen metadata from original papers, supplementary files, and websites, with manual curation to standardize annotations
-* Processing of data through the [MetaPhlAn2](http://huttenhower.sph.harvard.edu/metaphlan2) pipeline for taxonomic abundance, and [HUMAnN2](http://huttenhower.sph.harvard.edu/humann2) pipeline for metabolic analysis
-* These represent ~100TB of raw sequencing data, but the processed data provided are much smaller.
-
-These datasets are documented in the 
-[reference manual](https://bioconductor.org/packages/devel/data/experiment/manuals/curatedMetagenomicData/man/curatedMetagenomicData.pdf).
-
-This is an *[ExperimentHub](http://bioconductor.org/packages/ExperimentHub)* package, and its main workhorse function is `curatedMetagenomicData()`:
-
-The manually curated metadata for all available samples are provided in a single table `combined_metadata`:
+Once an instance of `Omicidx` is created (here we will call the instance `oidx`), 
+search capabilities are available via `oidx$search()`. The one interesting
+parameter is the `q` parameter. This parameter takes a string formatted as a Lucene query
+string. See below for [Query syntax]. 
 
 
 ```r
-library(curatedMetagenomicData)
-?combined_metadata
-View(data.frame(combined_metadata))
+query=paste(
+  paste0('sample_taxon_id:', 10116),
+  'AND experiment_library_strategy:"rna seq"',
+  'AND experiment_library_source:transcriptomic',
+  'AND experiment_platform:illumina')
+z = oidx$search(q=query,entity='full',size=100L)
 ```
 
-The main function provides a `list` of `ExpressionSet` objects:
+The `entity` parameter is one of the SRA entity types available via the API. 
+The `size` parameter is the number of records that will be returned in each "chunk".
 
-```r
-oral <- c("BritoIL_2016.metaphlan_bugs_list.oralcavity",
-          "Castro-NallarE_2015.metaphlan_bugs_list.oralcavity")
-esl <- curatedMetagenomicData(oral, dryrun = FALSE)
-```
+#### Fetching results
 
-```
-## Working on BritoIL_2016.metaphlan_bugs_list.oralcavity
-```
-
-```
-## snapshotDate(): 2018-07-17
-```
-
-```
-## see ?curatedMetagenomicData and browseVignettes('curatedMetagenomicData') for documentation
-```
-
-```
-## downloading 0 resources
-```
-
-```
-## loading from cache 
-##     '/home/lwaldron//.ExperimentHub/1179'
-```
-
-```
-## Working on Castro-NallarE_2015.metaphlan_bugs_list.oralcavity
-```
-
-```
-## snapshotDate(): 2018-07-17
-```
-
-```
-## see ?curatedMetagenomicData and browseVignettes('curatedMetagenomicData') for documentation
-```
-
-```
-## downloading 0 resources
-```
-
-```
-## loading from cache 
-##     '/home/lwaldron//.ExperimentHub/391'
-```
+Because result sets can be large, we have a special method that allows us to 
+"scroll" through the results or to simply get them *en bloc*. The first step
+for result retrieval, then, is to get a `Scroller`. 
 
 
 ```r
-esl
+s = z$scroll()
+s
+#> <Scroller>
+#>   Public:
+#>     chunk: function () 
+#>     clone: function (deep = FALSE) 
+#>     collate: function () 
+#>     has_next: function () 
+#>     initialize: function (search) 
+#>     .last: FALSE
+#>     progress: FALSE
+#>     scroll: 1m
+#>     scroll_id: NULL
+#>     search: Searcher, R6
 ```
 
-```
-## List of length 2
-## names(2): BritoIL_2016.metaphlan_bugs_list.oralcavity ...
-```
+Methods such as `s$count` allow introspection into the available number of
+results, in this case,  records.
 
-These `ExpressionSet` objects can also be converted to *[phyloseq](http://bioconductor.org/packages/phyloseq)* object for ecological analysis and differential abundance analysis using the *[DESeq2](http://bioconductor.org/packages/DESeq2)* package, using the `ExpressionSet2phyloseq()` function:
+The `Scroller` provides two different approaches to accessing the resulting data.
 
-```r
-ExpressionSet2phyloseq( esl[[1]], phylogenetictree = TRUE)
-```
+##### Collating entire result sets
 
-```
-## Loading required namespace: phyloseq
-```
-
-```
-## phyloseq-class experiment-level object
-## otu_table()   OTU Table:         [ 535 taxa and 140 samples ]
-## sample_data() Sample Data:       [ 140 samples by 17 sample variables ]
-## tax_table()   Taxonomy Table:    [ 535 taxa by 8 taxonomic ranks ]
-## phy_tree()    Phylogenetic Tree: [ 535 tips and 534 internal nodes ]
-```
-
-See the documentation of *[phyloseq](http://bioconductor.org/packages/phyloseq)* for more on ecological and differential abundance analysis of the microbiome.
-
-### HMP16SData: 16S rRNA Sequencing Data from the Human Microbiome Project
+The first approach to getting results of a query back into R is the
+most convenient, but for large result sets, the entire dataset is
+loaded into memory and may take significant time if network
+connections are slow.
 
 
-```r
-suppressPackageStartupMessages(library(HMP16SData))
-```
-
-```
-## snapshotDate(): 2018-07-17
-```
-
-*[HMP16SData](http://bioconductor.org/packages/HMP16SData)*[@Schiffer2018-qy] is a Bioconductor ExperimentData package of the Human Microbiome Project (HMP) 16S rRNA sequencing data. Taxonomic count data files are provided as downloaded from the HMP Data Analysis and Coordination Center from its QIIME pipeline. Processed data is provided as `SummarizedExperiment` class objects via *[ExperimentHub](http://bioconductor.org/packages/ExperimentHub)*. Like other ExperimentHub-based packages, a convenience function does downloading, automatic local caching, and serializing of a Bioconductor data class. This returns taxonomic counts from the V1-3 variable region of the 16S rRNA gene, along with the unrestricted participant data and phylogenetic tree. 
-
-```r
-V13()
-```
-
-```
-## snapshotDate(): 2018-07-17
-```
-
-```
-## see ?HMP16SData and browseVignettes('HMP16SData') for documentation
-```
-
-```
-## downloading 0 resources
-```
-
-```
-## loading from cache 
-##     '/home/lwaldron//.ExperimentHub/1117'
-```
-
-```
-## class: SummarizedExperiment 
-## dim: 43140 2898 
-## metadata(2): experimentData phylogeneticTree
-## assays(1): 16SrRNA
-## rownames(43140): OTU_97.1 OTU_97.10 ... OTU_97.9997 OTU_97.9999
-## rowData names(7): CONSENSUS_LINEAGE SUPERKINGDOM ... FAMILY GENUS
-## colnames(2898): 700013549 700014386 ... 700114963 700114965
-## colData names(7): RSID VISITNO ... HMP_BODY_SUBSITE SRS_SAMPLE_ID
-```
-
-This can also be converted to *[phyloseq](http://bioconductor.org/packages/phyloseq)* for ecological and differential abundance analysis; see the *[HMP16SData](http://bioconductor.org/packages/HMP16SData)* vignette for details.
-    
-## Pharmacogenomics
-
-Pharmacogenomics holds great promise for the development of biomarkers of drug response and the design of new therapeutic options, which are key challenges in precision medicine. However, such data are scattered and lack standards for efficient access and analysis, consequently preventing the realization of the full potential of pharmacogenomics. To address these issues, we implemented PharmacoGx, an easy-to-use, open source package for integrative analysis of multiple pharmacogenomic datasets. We  demonstrate here the utility of our package in comparing large drug sensitivity datasets, such as the Genomics of Drug Sensitivity in Cancer [GDSC](https://www.cancerrxgene.org/) and the Cancer Cell Line Encyclopedia [CCLE](https://portals.broadinstitute.org/ccle), or use large drug perturbation data from the Connectivity Map [CAMP](https://clue.io/cmap)for drug repurposing.
-
-These case studies were published in Smirnov, Petr, et al. [PharmacoGx: an R package for analysis of large pharmacogenomic datasets." Bioinformatics 32.8 (2015): 1244-1246](https://academic.oup.com/bioinformatics/article/32/8/1244/1744214/PharmacoGx-an-R-package-for-analysis-of-large).
-
-### Getting started 
-
-Let us first load the `PharmacoGx`library.
 
 
-```r
-library(PharmacoGx)
-```
-
-```
-## Warning: no DISPLAY variable so Tk is not available
-```
-
-We can now access large-scale preclinical pharmacogenomic datasets that have been fully curated for ease of use.
-
-### Overview of PharmacoGx datasets (PharmacoSets)
-
-To efficiently store and analyze large pharmacogenomic datasets, we developed the `PharmacoSet` class (also referred to as `PSet`), which acts as a data container storing pharmacological and molecular data along with experimental metadata (detailed structure provided in Supplementary materials). This class enables efficient implementation of curated annotations for cell lines, drug compounds and molecular features, which facilitates comparisons between different datasets stored as `PharmacoSet` objects.
-
-[Structure of the PharmacoSet class](Waldron_PublicData/PharmacoSet_structure.png)
-
-To get a list of all the available `PharmacoSets` in PharmacoGx, we can use the àvailablePSets` function, which returns a table providing key information for each dataset.
 
 
-```r
-availablePSets()
-```
-
-```
-##                       PSet.Name Dataset.Type Available.Molecular.Profiles
-## CCLE_2013             CCLE_2013  sensitivity                 rna/mutation
-## CCLE                       CCLE  sensitivity      rna/rnaseq/mutation/cnv
-## GDSC_2013             GDSC_2013  sensitivity                 rna/mutation
-## GDSC                       GDSC  sensitivity rna/rna2/mutation/fusion/cnv
-## GDSC1000               GDSC1000  sensitivity                          rna
-## gCSI                       gCSI  sensitivity                   rnaseq/cnv
-## FIMM                       FIMM  sensitivity                             
-## CTRPv2                   CTRPv2  sensitivity                             
-## CMAP                       CMAP perturbation                          rna
-## L1000_compounds L1000_compounds perturbation                          rna
-## L1000_genetic     L1000_genetic perturbation                          rna
-##                             Date.Updated
-## CCLE_2013       Tue Sep 15 18:50:07 2015
-## CCLE            Thu Dec 10 18:17:14 2015
-## GDSC_2013       Mon Oct  5 16:07:54 2015
-## GDSC            Wed Dec 30 10:44:21 2015
-## GDSC1000        Thu Aug 25 11:13:00 2016
-## gCSI            Mon Jun 13 18:50:12 2016
-## FIMM             Mon Oct 3 17:14:00 2016
-## CTRPv2          Thu Aug 25 11:15:00 2016
-## CMAP            Mon Sep 21 02:38:45 2015
-## L1000_compounds Mon Jan 25 12:51:00 2016
-## L1000_genetic   Mon Jan 25 12:51:00 2016
-##                                                                                                  URL
-## CCLE_2013       https://www.pmgenomics.ca/bhklab/sites/default/files/downloads/CCLE_Nature2013.RData
-## CCLE                       https://www.pmgenomics.ca/bhklab/sites/default/files/downloads/CCLE.RData
-## GDSC_2013        https://www.pmgenomics.ca/bhklab/sites/default/files/downloads/CGP_Nature2013.RData
-## GDSC                       https://www.pmgenomics.ca/bhklab/sites/default/files/downloads/GDSC.RData
-## GDSC1000               https://www.pmgenomics.ca/bhklab/sites/default/files/downloads/GDSC1000.RData
-## gCSI                       https://www.pmgenomics.ca/bhklab/sites/default/files/downloads/gCSI.RData
-## FIMM                       https://www.pmgenomics.ca/bhklab/sites/default/files/downloads/FIMM.RData
-## CTRPv2                   https://www.pmgenomics.ca/bhklab/sites/default/files/downloads/CTRPv2.RData
-## CMAP                       https://www.pmgenomics.ca/bhklab/sites/default/files/downloads/CMAP.RData
-## L1000_compounds https://www.pmgenomics.ca/bhklab/sites/default/files/downloads/L1000_compounds.RData
-## L1000_genetic     https://www.pmgenomics.ca/bhklab/sites/default/files/downloads/L1000_genetic.RData
-```
-There are currently 11 datasets available in PharmacoGx, including 8 sensitivity datasets and 3 perturbation datasets (see below).
-
-#### Drug Sensitivity Datasets
-
-Drug sensitivity datasets refer to pharmacogenomic data where cancer cells are molecularly profiled at baseline (before drug treatment), and the effect of drug treatment on cell viability is measured using a pharmacological assay (e.g., Cell Titer-Glo). These datasets can be used for biomarker discovery by correlating the molecular features of cancer cells to their response to drugs of interest.
-
-[Schematic view of the drug sensitivity datasets.](Waldron_PublicData/Drug_sensitivity.png)
 
 
-```r
-psets <- availablePSets()
-psets[psets[ , "Dataset.Type"] == "sensitivity", ]
-```
-
-```
-##           PSet.Name Dataset.Type Available.Molecular.Profiles
-## CCLE_2013 CCLE_2013  sensitivity                 rna/mutation
-## CCLE           CCLE  sensitivity      rna/rnaseq/mutation/cnv
-## GDSC_2013 GDSC_2013  sensitivity                 rna/mutation
-## GDSC           GDSC  sensitivity rna/rna2/mutation/fusion/cnv
-## GDSC1000   GDSC1000  sensitivity                          rna
-## gCSI           gCSI  sensitivity                   rnaseq/cnv
-## FIMM           FIMM  sensitivity                             
-## CTRPv2       CTRPv2  sensitivity                             
-##                       Date.Updated
-## CCLE_2013 Tue Sep 15 18:50:07 2015
-## CCLE      Thu Dec 10 18:17:14 2015
-## GDSC_2013 Mon Oct  5 16:07:54 2015
-## GDSC      Wed Dec 30 10:44:21 2015
-## GDSC1000  Thu Aug 25 11:13:00 2016
-## gCSI      Mon Jun 13 18:50:12 2016
-## FIMM       Mon Oct 3 17:14:00 2016
-## CTRPv2    Thu Aug 25 11:15:00 2016
-##                                                                                            URL
-## CCLE_2013 https://www.pmgenomics.ca/bhklab/sites/default/files/downloads/CCLE_Nature2013.RData
-## CCLE                 https://www.pmgenomics.ca/bhklab/sites/default/files/downloads/CCLE.RData
-## GDSC_2013  https://www.pmgenomics.ca/bhklab/sites/default/files/downloads/CGP_Nature2013.RData
-## GDSC                 https://www.pmgenomics.ca/bhklab/sites/default/files/downloads/GDSC.RData
-## GDSC1000         https://www.pmgenomics.ca/bhklab/sites/default/files/downloads/GDSC1000.RData
-## gCSI                 https://www.pmgenomics.ca/bhklab/sites/default/files/downloads/gCSI.RData
-## FIMM                 https://www.pmgenomics.ca/bhklab/sites/default/files/downloads/FIMM.RData
-## CTRPv2             https://www.pmgenomics.ca/bhklab/sites/default/files/downloads/CTRPv2.RData
-```
-
-#### Drug Perturbation Datasets
-
-Drug perturbation datasets refer to pharmacogenomic data where gene expression profiles are measured before and after short-term (e.g., 6h) drug treatment to identify genes that are up- and down-regulated due to the drug treatment. These datasets can be to classify drug (drug taxonomy), infer their mechanism of action, or find drugs with similar effects (drug repurposing).
-
-[Schematic view of drug perturbation datasets](Waldron_PublicData/Drug_perturbation.png)
 
 
-```r
-psets <- availablePSets()
-psets[psets[ , "Dataset.Type"] == "perturbation", ]
-```
 
-```
-##                       PSet.Name Dataset.Type Available.Molecular.Profiles
-## CMAP                       CMAP perturbation                          rna
-## L1000_compounds L1000_compounds perturbation                          rna
-## L1000_genetic     L1000_genetic perturbation                          rna
-##                             Date.Updated
-## CMAP            Mon Sep 21 02:38:45 2015
-## L1000_compounds Mon Jan 25 12:51:00 2016
-## L1000_genetic   Mon Jan 25 12:51:00 2016
-##                                                                                                  URL
-## CMAP                       https://www.pmgenomics.ca/bhklab/sites/default/files/downloads/CMAP.RData
-## L1000_compounds https://www.pmgenomics.ca/bhklab/sites/default/files/downloads/L1000_compounds.RData
-## L1000_genetic     https://www.pmgenomics.ca/bhklab/sites/default/files/downloads/L1000_genetic.RData
-```
-# Session Info
 
-This document was generated with the following R version and packages loaded:
 
-```r
-  sessionInfo()
-```
 
-```
-## R version 3.5.1 (2018-07-02)
-## Platform: x86_64-pc-linux-gnu (64-bit)
-## Running under: Ubuntu 16.04.5 LTS
-## 
-## Matrix products: default
-## BLAS: /usr/lib/atlas-base/atlas/libblas.so.3.0
-## LAPACK: /usr/lib/atlas-base/atlas/liblapack.so.3.0
-## 
-## locale:
-##  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
-##  [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
-##  [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
-##  [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
-##  [9] LC_ADDRESS=C               LC_TELEPHONE=C            
-## [11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
-## 
-## attached base packages:
-## [1] stats4    parallel  stats     graphics  grDevices utils     datasets 
-## [8] methods   base     
-## 
-## other attached packages:
-##  [1] PharmacoGx_1.11.0             HMP16SData_1.1.0             
-##  [3] curatedMetagenomicData_1.11.3 bindrcpp_0.2.2               
-##  [5] ExperimentHub_1.7.1           AnnotationHub_2.13.1         
-##  [7] dplyr_0.7.6                   recount_1.7.2                
-##  [9] curatedTCGAData_1.3.3         MultiAssayExperiment_1.7.15  
-## [11] TCGAbiolinks_2.9.2            GenomicDataCommons_1.5.4     
-## [13] magrittr_1.5                  ggplot2_3.0.0                
-## [15] SummarizedExperiment_1.11.6   DelayedArray_0.7.19          
-## [17] BiocParallel_1.15.7           matrixStats_0.53.1           
-## [19] GenomicRanges_1.33.9          GenomeInfoDb_1.17.1          
-## [21] IRanges_2.15.16               S4Vectors_0.19.19            
-## [23] GEOquery_2.49.0               Biobase_2.41.2               
-## [25] BiocGenerics_0.27.1          
-## 
-## loaded via a namespace (and not attached):
-##   [1] rappdirs_0.3.1                SnowballC_0.5.1              
-##   [3] rtracklayer_1.41.3            ggthemes_4.0.0               
-##   [5] R.methodsS3_1.7.1             pkgmaker_0.27                
-##   [7] tidyr_0.8.1                   bumphunter_1.23.0            
-##   [9] acepack_1.4.1                 bit64_0.9-7                  
-##  [11] knitr_1.20                    aroma.light_3.11.0           
-##  [13] R.utils_2.6.0                 data.table_1.11.4            
-##  [15] rpart_4.1-13                  hwriter_1.3.2                
-##  [17] RCurl_1.95-4.11               derfinder_1.15.0             
-##  [19] doParallel_1.0.11             GenomicFeatures_1.33.0       
-##  [21] RSQLite_2.1.1                 RANN_2.6                     
-##  [23] bit_1.1-14                    BiocStyle_2.9.3              
-##  [25] xml2_1.2.0                    httpuv_1.4.5                 
-##  [27] assertthat_0.2.0              xfun_0.3                     
-##  [29] hms_0.4.2                     evaluate_0.11                
-##  [31] promises_1.0.1                BiocInstaller_1.31.1         
-##  [33] fansi_0.2.3                   progress_1.2.0               
-##  [35] caTools_1.17.1                km.ci_0.5-2                  
-##  [37] igraph_1.2.1                  DBI_1.0.0                    
-##  [39] geneplotter_1.59.0            htmlwidgets_1.2              
-##  [41] EDASeq_2.15.3                 matlab_1.0.2                 
-##  [43] purrr_0.2.5                   selectr_0.4-1                
-##  [45] ggpubr_0.1.7                  backports_1.1.2              
-##  [47] bookdown_0.7.14               permute_0.9-4                
-##  [49] annotate_1.59.0               biomaRt_2.37.3               
-##  [51] withr_2.1.2                   BSgenome_1.49.2              
-##  [53] checkmate_1.8.5               vegan_2.5-2                  
-##  [55] GenomicAlignments_1.17.3      prettyunits_1.0.2            
-##  [57] cluster_2.0.7-1               ape_5.1                      
-##  [59] lazyeval_0.2.1                crayon_1.3.4                 
-##  [61] relations_0.6-8               genefilter_1.63.0            
-##  [63] slam_0.1-43                   edgeR_3.23.3                 
-##  [65] pkgconfig_2.0.1               labeling_0.3                 
-##  [67] nlme_3.1-137                  nnet_7.3-12                  
-##  [69] bindr_0.1.1                   rlang_0.2.1                  
-##  [71] downloader_0.4                registry_0.5                 
-##  [73] phyloseq_1.25.2               tcltk_3.5.1                  
-##  [75] rprojroot_1.3-2               rngtools_1.3.1               
-##  [77] Matrix_1.2-14                 KMsurv_0.1-5                 
-##  [79] Rhdf5lib_1.3.1                zoo_1.8-3                    
-##  [81] base64enc_0.1-3               GlobalOptions_0.1.0          
-##  [83] viridisLite_0.3.0             rjson_0.2.20                 
-##  [85] bitops_1.0-6                  R.oo_1.22.0                  
-##  [87] KernSmooth_2.23-15            ConsensusClusterPlus_1.45.0  
-##  [89] Biostrings_2.49.0             blob_1.1.1                   
-##  [91] doRNG_1.7.1                   shape_1.4.4                  
-##  [93] stringr_1.3.1                 qvalue_2.13.0                
-##  [95] ShortRead_1.39.0              NISTunits_1.0.1              
-##  [97] readr_1.1.1                   scales_0.5.0                 
-##  [99] memoise_1.1.0                 plyr_1.8.4                   
-## [101] gplots_3.0.1                  derfinderHelper_1.15.0       
-## [103] gdata_2.18.0                  bibtex_0.4.2                 
-## [105] zlibbioc_1.27.0               compiler_3.5.1               
-## [107] kableExtra_0.9.0              RColorBrewer_1.1-2           
-## [109] plotrix_3.7-2                 Rsamtools_1.33.2             
-## [111] cli_1.0.0                     ade4_1.7-11                  
-## [113] XVector_0.21.3                htmlTable_1.12               
-## [115] Formula_1.2-3                 MASS_7.3-50                  
-## [117] mgcv_1.8-24                   tidyselect_0.2.4             
-## [119] stringi_1.2.3                 yaml_2.1.19                  
-## [121] locfit_1.5-9.1                latticeExtra_0.6-28          
-## [123] ggrepel_0.8.0                 survMisc_0.5.5               
-## [125] grid_3.5.1                    VariantAnnotation_1.27.2     
-## [127] fastmatch_1.1-0               tools_3.5.1                  
-## [129] circlize_0.4.4                rstudioapi_0.7               
-## [131] foreach_1.4.4                 foreign_0.8-70               
-## [133] lsa_0.73.1                    gridExtra_2.3                
-## [135] magicaxis_2.0.3               digest_0.6.15                
-## [137] pracma_2.1.4                  shiny_1.1.0                  
-## [139] cmprsk_2.2-7                  Rcpp_0.12.17                 
-## [141] broom_0.5.0                   later_0.7.3                  
-## [143] httr_1.3.1                    survminer_0.4.2              
-## [145] AnnotationDbi_1.43.1          ComplexHeatmap_1.19.1        
-## [147] colorspace_1.3-2              rvest_0.3.2                  
-## [149] XML_3.98-1.12                 splines_3.5.1                
-## [151] sm_2.2-5.5                    multtest_2.37.0              
-## [153] mapproj_1.2.6                 xtable_1.8-2                 
-## [155] jsonlite_1.5                  GenomicFiles_1.17.2          
-## [157] marray_1.59.0                 R6_2.2.2                     
-## [159] sets_1.0-18                   celestial_1.4.1              
-## [161] Hmisc_4.1-1                   pillar_1.3.0                 
-## [163] htmltools_0.3.6               mime_0.5                     
-## [165] glue_1.3.0                    DESeq_1.33.0                 
-## [167] interactiveDisplayBase_1.19.0 codetools_0.2-15             
-## [169] fgsea_1.7.1                   maps_3.3.0                   
-## [171] utf8_1.1.4                    lattice_0.20-35              
-## [173] tibble_1.4.2                  sva_3.29.0                   
-## [175] curl_3.2                      rentrez_1.2.1                
-## [177] gtools_3.8.1                  survival_2.42-6              
-## [179] limma_3.37.3                  rmarkdown_1.10               
-## [181] biomformat_1.9.0              munsell_0.5.0                
-## [183] GetoptLong_0.1.7              rhdf5_2.25.4                 
-## [185] GenomeInfoDbData_1.1.0        piano_1.21.0                 
-## [187] iterators_1.0.10              reshape2_1.4.3               
-## [189] gtable_0.2.0
-```
 
-## Bibliography
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
