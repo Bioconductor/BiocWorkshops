@@ -3,10 +3,6 @@
 Authors:
     Nicholas Cooley^[University of Pittsburgh]
 Last Modified: 18 July, 2018
-    
-<!--
-  bookdown::render_book("", "bookdown::gitbook")
--->
 
 ## Overview
 
