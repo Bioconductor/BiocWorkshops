@@ -1,12 +1,10 @@
-
-
 ---
 bibliography: Waldron_PublicData/Waldron_PublicData.bib
 ---
 
 # 103: Public data resources and Bioconductor
 
-## Instructor name(s) and contact information
+## Instructor names and contact information
 
 * Levi Waldron^[City University of New York, New York, NY, USA]
 * Benjamin Haibe-Kain^[Princess Margaret Cancer Center, Toronto, Canada]
@@ -191,12 +189,15 @@ Examine two variables of interest, cancer type and tumor/normal status.
 
 ```r
 with(colData(se),table(`cancer.type.ch1`,`normal.ch1`))
-#>                normal.ch1
-#> cancer.type.ch1 no yes
-#>           BC    65  10
-#>           CRC   57  12
-#>           NSCLC 60   9
-#>           PCA   60   7
+```
+
+```
+##                normal.ch1
+## cancer.type.ch1 no yes
+##           BC    65  10
+##           CRC   57  12
+##           NSCLC 60   9
+##           PCA   60   7
 ```
 
 Filter gene expression by variance to find most informative genes.
@@ -217,13 +218,16 @@ mdsvals = as.data.frame(mdsvals)
 mdsvals$Type=factor(colData(se)[,'cancer.type.ch1'])
 mdsvals$Normal = factor(colData(se)[,'normal.ch1'])
 head(mdsvals)
-#>                   V1        V2 Type Normal
-#> GSM2772660  8.531331 -18.57115   BC     no
-#> GSM2772661  8.991591 -13.63764   BC     no
-#> GSM2772662 10.788973 -13.48403   BC     no
-#> GSM2772663  3.127105 -19.13529   BC     no
-#> GSM2772664 13.056599 -13.88711   BC     no
-#> GSM2772665  7.903717 -13.24731   BC     no
+```
+
+```
+##                   V1        V2 Type Normal
+## GSM2772660  8.531331 -18.57115   BC     no
+## GSM2772661  8.991591 -13.63764   BC     no
+## GSM2772662 10.788973 -13.48403   BC     no
+## GSM2772663  3.127105 -19.13529   BC     no
+## GSM2772664 13.056599 -13.88711   BC     no
+## GSM2772665  7.903717 -13.24731   BC     no
 ```
 
 And do the plot.
@@ -323,20 +327,23 @@ connectivity and functionality.
 
 ```r
 GenomicDataCommons::status()
-#> $commit
-#> [1] "e9e20d6f97f2bf6dd3b3261e36ead57c56a4c7cc"
-#> 
-#> $data_release
-#> [1] "Data Release 12.0 - June 13, 2018"
-#> 
-#> $status
-#> [1] "OK"
-#> 
-#> $tag
-#> [1] "1.14.1"
-#> 
-#> $version
-#> [1] 1
+```
+
+```
+## $commit
+## [1] "e9e20d6f97f2bf6dd3b3261e36ead57c56a4c7cc"
+## 
+## $data_release
+## [1] "Data Release 12.0 - June 13, 2018"
+## 
+## $status
+## [1] "OK"
+## 
+## $tag
+## [1] "1.14.1"
+## 
+## $version
+## [1] 1
 ```
 
 #### Find data
@@ -385,32 +392,44 @@ expands = c("diagnoses","annotations",
 projResults = projects() %>%
     results(size=10)
 str(projResults,list.len=5)
-#> List of 8
-#>  $ dbgap_accession_number: chr [1:10] "phs001179" "phs000470" NA NA ...
-#>  $ disease_type          :List of 10
-#>   ..$ FM-AD    : chr [1:23] "Germ Cell Neoplasms" "Acinar Cell Neoplasms" "Miscellaneous Tumors" "Thymic Epithelial Neoplasms" ...
-#>   ..$ TARGET-RT: chr "Rhabdoid Tumor"
-#>   ..$ TCGA-UCS : chr "Uterine Carcinosarcoma"
-#>   ..$ TCGA-LUSC: chr "Lung Squamous Cell Carcinoma"
-#>   ..$ TCGA-BRCA: chr "Breast Invasive Carcinoma"
-#>   .. [list output truncated]
-#>  $ released              : logi [1:10] TRUE TRUE TRUE TRUE TRUE TRUE ...
-#>  $ state                 : chr [1:10] "open" "open" "open" "open" ...
-#>  $ primary_site          :List of 10
-#>   ..$ FM-AD    : chr [1:42] "Kidney" "Testis" "Unknown" "Other and unspecified parts of biliary tract" ...
-#>   ..$ TARGET-RT: chr "Kidney"
-#>   ..$ TCGA-UCS : chr "Uterus"
-#>   ..$ TCGA-LUSC: chr "Lung"
-#>   ..$ TCGA-BRCA: chr "Breast"
-#>   .. [list output truncated]
-#>   [list output truncated]
-#>  - attr(*, "row.names")= int [1:10] 1 2 3 4 5 6 7 8 9 10
-#>  - attr(*, "class")= chr [1:3] "GDCprojectsResults" "GDCResults" "list"
+```
+
+```
+## List of 8
+##  $ dbgap_accession_number: chr [1:10] "phs001179" "phs000470" NA NA ...
+##  $ disease_type          :List of 10
+##   ..$ FM-AD    : chr [1:23] "Germ Cell Neoplasms" "Acinar Cell Neoplasms" "Miscellaneous Tumors" "Thymic Epithelial Neoplasms" ...
+##   ..$ TARGET-RT: chr "Rhabdoid Tumor"
+##   ..$ TCGA-UCS : chr "Uterine Carcinosarcoma"
+##   ..$ TCGA-LUSC: chr "Lung Squamous Cell Carcinoma"
+##   ..$ TCGA-BRCA: chr "Breast Invasive Carcinoma"
+##   .. [list output truncated]
+##  $ released              : logi [1:10] TRUE TRUE TRUE TRUE TRUE TRUE ...
+##  $ state                 : chr [1:10] "open" "open" "open" "open" ...
+##  $ primary_site          :List of 10
+##   ..$ FM-AD    : chr [1:42] "Kidney" "Testis" "Unknown" "Other and unspecified parts of biliary tract" ...
+##   ..$ TARGET-RT: chr "Kidney"
+##   ..$ TCGA-UCS : chr "Uterus"
+##   ..$ TCGA-LUSC: chr "Lung"
+##   ..$ TCGA-BRCA: chr "Breast"
+##   .. [list output truncated]
+##   [list output truncated]
+##  - attr(*, "row.names")= int [1:10] 1 2 3 4 5 6 7 8 9 10
+##  - attr(*, "class")= chr [1:3] "GDCprojectsResults" "GDCResults" "list"
+```
+
+```r
 names(projResults)
-#> [1] "dbgap_accession_number" "disease_type"          
-#> [3] "released"               "state"                 
-#> [5] "primary_site"           "project_id"            
-#> [7] "id"                     "name"
+```
+
+```
+## [1] "dbgap_accession_number" "disease_type"          
+## [3] "released"               "state"                 
+## [5] "primary_site"           "project_id"            
+## [7] "id"                     "name"
+```
+
+```r
 # or listviewer::jsonedit(clinResults)
 ```
 
@@ -547,13 +566,16 @@ contains no results.
 
 ```r
 str(pquery)
-#> List of 5
-#>  $ fields : chr [1:16] "awg_review" "dbgap_accession_number" "disease_type" "in_review" ...
-#>  $ filters: NULL
-#>  $ facets : NULL
-#>  $ legacy : logi FALSE
-#>  $ expand : NULL
-#>  - attr(*, "class")= chr [1:3] "gdc_projects" "GDCQuery" "list"
+```
+
+```
+## List of 5
+##  $ fields : chr [1:16] "awg_review" "dbgap_accession_number" "disease_type" "in_review" ...
+##  $ filters: NULL
+##  $ facets : NULL
+##  $ legacy : logi FALSE
+##  $ expand : NULL
+##  - attr(*, "class")= chr [1:3] "gdc_projects" "GDCQuery" "list"
 ```
 #### Retrieving results
 
@@ -573,7 +595,10 @@ pcount = count(pquery)
 # or
 pcount = pquery %>% count()
 pcount
-#> [1] 40
+```
+
+```
+## [1] 40
 ```
 
 The `results()` method will fetch actual results.
@@ -590,37 +615,40 @@ for taking a quick glimpse of the data.
 
 ```r
 str(presults)
-#> List of 8
-#>  $ dbgap_accession_number: chr [1:10] "phs001179" "phs000470" NA NA ...
-#>  $ disease_type          :List of 10
-#>   ..$ FM-AD    : chr [1:23] "Germ Cell Neoplasms" "Acinar Cell Neoplasms" "Miscellaneous Tumors" "Thymic Epithelial Neoplasms" ...
-#>   ..$ TARGET-RT: chr "Rhabdoid Tumor"
-#>   ..$ TCGA-UCS : chr "Uterine Carcinosarcoma"
-#>   ..$ TCGA-LUSC: chr "Lung Squamous Cell Carcinoma"
-#>   ..$ TCGA-BRCA: chr "Breast Invasive Carcinoma"
-#>   ..$ TCGA-SKCM: chr "Skin Cutaneous Melanoma"
-#>   ..$ TARGET-OS: chr "Osteosarcoma"
-#>   ..$ TCGA-THYM: chr "Thymoma"
-#>   ..$ TARGET-WT: chr "High-Risk Wilms Tumor"
-#>   ..$ TCGA-ESCA: chr "Esophageal Carcinoma"
-#>  $ released              : logi [1:10] TRUE TRUE TRUE TRUE TRUE TRUE ...
-#>  $ state                 : chr [1:10] "open" "open" "open" "open" ...
-#>  $ primary_site          :List of 10
-#>   ..$ FM-AD    : chr [1:42] "Kidney" "Testis" "Unknown" "Other and unspecified parts of biliary tract" ...
-#>   ..$ TARGET-RT: chr "Kidney"
-#>   ..$ TCGA-UCS : chr "Uterus"
-#>   ..$ TCGA-LUSC: chr "Lung"
-#>   ..$ TCGA-BRCA: chr "Breast"
-#>   ..$ TCGA-SKCM: chr "Skin"
-#>   ..$ TARGET-OS: chr "Bone"
-#>   ..$ TCGA-THYM: chr "Thymus"
-#>   ..$ TARGET-WT: chr "Kidney"
-#>   ..$ TCGA-ESCA: chr "Esophagus"
-#>  $ project_id            : chr [1:10] "FM-AD" "TARGET-RT" "TCGA-UCS" "TCGA-LUSC" ...
-#>  $ id                    : chr [1:10] "FM-AD" "TARGET-RT" "TCGA-UCS" "TCGA-LUSC" ...
-#>  $ name                  : chr [1:10] "Foundation Medicine Adult Cancer Clinical Dataset (FM-AD)" "Rhabdoid Tumor" "Uterine Carcinosarcoma" "Lung Squamous Cell Carcinoma" ...
-#>  - attr(*, "row.names")= int [1:10] 1 2 3 4 5 6 7 8 9 10
-#>  - attr(*, "class")= chr [1:3] "GDCprojectsResults" "GDCResults" "list"
+```
+
+```
+## List of 8
+##  $ dbgap_accession_number: chr [1:10] "phs001179" "phs000470" NA NA ...
+##  $ disease_type          :List of 10
+##   ..$ FM-AD    : chr [1:23] "Germ Cell Neoplasms" "Acinar Cell Neoplasms" "Miscellaneous Tumors" "Thymic Epithelial Neoplasms" ...
+##   ..$ TARGET-RT: chr "Rhabdoid Tumor"
+##   ..$ TCGA-UCS : chr "Uterine Carcinosarcoma"
+##   ..$ TCGA-LUSC: chr "Lung Squamous Cell Carcinoma"
+##   ..$ TCGA-BRCA: chr "Breast Invasive Carcinoma"
+##   ..$ TCGA-SKCM: chr "Skin Cutaneous Melanoma"
+##   ..$ TARGET-OS: chr "Osteosarcoma"
+##   ..$ TCGA-THYM: chr "Thymoma"
+##   ..$ TARGET-WT: chr "High-Risk Wilms Tumor"
+##   ..$ TCGA-ESCA: chr "Esophageal Carcinoma"
+##  $ released              : logi [1:10] TRUE TRUE TRUE TRUE TRUE TRUE ...
+##  $ state                 : chr [1:10] "open" "open" "open" "open" ...
+##  $ primary_site          :List of 10
+##   ..$ FM-AD    : chr [1:42] "Kidney" "Testis" "Unknown" "Other and unspecified parts of biliary tract" ...
+##   ..$ TARGET-RT: chr "Kidney"
+##   ..$ TCGA-UCS : chr "Uterus"
+##   ..$ TCGA-LUSC: chr "Lung"
+##   ..$ TCGA-BRCA: chr "Breast"
+##   ..$ TCGA-SKCM: chr "Skin"
+##   ..$ TARGET-OS: chr "Bone"
+##   ..$ TCGA-THYM: chr "Thymus"
+##   ..$ TARGET-WT: chr "Kidney"
+##   ..$ TCGA-ESCA: chr "Esophagus"
+##  $ project_id            : chr [1:10] "FM-AD" "TARGET-RT" "TCGA-UCS" "TCGA-LUSC" ...
+##  $ id                    : chr [1:10] "FM-AD" "TARGET-RT" "TCGA-UCS" "TCGA-LUSC" ...
+##  $ name                  : chr [1:10] "Foundation Medicine Adult Cancer Clinical Dataset (FM-AD)" "Rhabdoid Tumor" "Uterine Carcinosarcoma" "Lung Squamous Cell Carcinoma" ...
+##  - attr(*, "row.names")= int [1:10] 1 2 3 4 5 6 7 8 9 10
+##  - attr(*, "class")= chr [1:3] "GDCprojectsResults" "GDCResults" "list"
 ```
 
 A default of only 10 records are returned. We can use the `size` and `from`
@@ -634,13 +662,28 @@ size is probably warranted before calling `results_all()`
 
 ```r
 length(ids(presults))
-#> [1] 10
+```
+
+```
+## [1] 10
+```
+
+```r
 presults = pquery %>% results_all()
 length(ids(presults))
-#> [1] 40
+```
+
+```
+## [1] 40
+```
+
+```r
 # includes all records
 length(ids(presults)) == count(pquery)
-#> [1] TRUE
+```
+
+```
+## [1] TRUE
 ```
 
 Extracting subsets of
@@ -669,28 +712,43 @@ object.
 
 ```r
 default_fields('files')
-#>  [1] "access"                "acl"                  
-#>  [3] "batch_id"              "created_datetime"     
-#>  [5] "data_category"         "data_format"          
-#>  [7] "data_type"             "error_type"           
-#>  [9] "experimental_strategy" "file_autocomplete"    
-#> [11] "file_id"               "file_name"            
-#> [13] "file_size"             "file_state"           
-#> [15] "imaging_date"          "magnification"        
-#> [17] "md5sum"                "origin"               
-#> [19] "platform"              "read_pair_number"     
-#> [21] "revision"              "state"                
-#> [23] "state_comment"         "submitter_id"         
-#> [25] "tags"                  "type"                 
-#> [27] "updated_datetime"
+```
+
+```
+##  [1] "access"                "acl"                  
+##  [3] "batch_id"              "created_datetime"     
+##  [5] "data_category"         "data_format"          
+##  [7] "data_type"             "error_type"           
+##  [9] "experimental_strategy" "file_autocomplete"    
+## [11] "file_id"               "file_name"            
+## [13] "file_size"             "file_state"           
+## [15] "imaging_date"          "magnification"        
+## [17] "md5sum"                "origin"               
+## [19] "platform"              "read_pair_number"     
+## [21] "revision"              "state"                
+## [23] "state_comment"         "submitter_id"         
+## [25] "tags"                  "type"                 
+## [27] "updated_datetime"
+```
+
+```r
 # The number of fields available for files endpoint
 length(available_fields('files'))
-#> [1] 703
+```
+
+```
+## [1] 703
+```
+
+```r
 # The first few fields available for files endpoint
 head(available_fields('files'))
-#> [1] "access"                    "acl"                      
-#> [3] "analysis.analysis_id"      "analysis.analysis_type"   
-#> [5] "analysis.batch_id"         "analysis.created_datetime"
+```
+
+```
+## [1] "access"                    "acl"                      
+## [3] "analysis.analysis_id"      "analysis.analysis_type"   
+## [5] "analysis.batch_id"         "analysis.created_datetime"
 ```
 
 The fields to be returned by a query can be specified following a similar
@@ -704,25 +762,34 @@ the dplyr `select()` verb that limits from already-present fields. We
 # Default fields here
 qcases = cases()
 qcases$fields
-#>  [1] "aliquot_ids"              "analyte_ids"             
-#>  [3] "batch_id"                 "case_autocomplete"       
-#>  [5] "case_id"                  "created_datetime"        
-#>  [7] "days_to_index"            "days_to_lost_to_followup"
-#>  [9] "disease_type"             "index_date"              
-#> [11] "lost_to_followup"         "portion_ids"             
-#> [13] "primary_site"             "sample_ids"              
-#> [15] "slide_ids"                "state"                   
-#> [17] "submitter_aliquot_ids"    "submitter_analyte_ids"   
-#> [19] "submitter_id"             "submitter_portion_ids"   
-#> [21] "submitter_sample_ids"     "submitter_slide_ids"     
-#> [23] "updated_datetime"
+```
+
+```
+##  [1] "aliquot_ids"              "analyte_ids"             
+##  [3] "batch_id"                 "case_autocomplete"       
+##  [5] "case_id"                  "created_datetime"        
+##  [7] "days_to_index"            "days_to_lost_to_followup"
+##  [9] "disease_type"             "index_date"              
+## [11] "lost_to_followup"         "portion_ids"             
+## [13] "primary_site"             "sample_ids"              
+## [15] "slide_ids"                "state"                   
+## [17] "submitter_aliquot_ids"    "submitter_analyte_ids"   
+## [19] "submitter_id"             "submitter_portion_ids"   
+## [21] "submitter_sample_ids"     "submitter_slide_ids"     
+## [23] "updated_datetime"
+```
+
+```r
 # set up query to use ALL available fields
 # Note that checking of fields is done by select()
 qcases = cases() %>% GenomicDataCommons::select(available_fields('cases'))
 head(qcases$fields)
-#> [1] "case_id"                   "aliquot_ids"              
-#> [3] "analyte_ids"               "annotations.annotation_id"
-#> [5] "annotations.batch_id"      "annotations.case_id"
+```
+
+```
+## [1] "case_id"                   "aliquot_ids"              
+## [3] "analyte_ids"               "annotations.annotation_id"
+## [5] "annotations.batch_id"      "annotations.case_id"
 ```
 
 Finding fields of interest is such a common operation that the
@@ -747,19 +814,22 @@ tibbles).
 # total number of files of a specific type
 res = files() %>% facet(c('type','data_type')) %>% aggregations()
 res$type
-#>                            key doc_count
-#> 1      simple_somatic_mutation     64015
-#> 2   annotated_somatic_mutation     63580
-#> 3                aligned_reads     45985
-#> 4          copy_number_segment     44752
-#> 5              gene_expression     34713
-#> 6                  slide_image     30036
-#> 7       biospecimen_supplement     25151
-#> 8             mirna_expression     22976
-#> 9          clinical_supplement     12496
-#> 10      methylation_beta_value     12359
-#> 11 aggregated_somatic_mutation       186
-#> 12     masked_somatic_mutation       132
+```
+
+```
+##                            key doc_count
+## 1      simple_somatic_mutation     64015
+## 2   annotated_somatic_mutation     63580
+## 3                aligned_reads     45985
+## 4          copy_number_segment     44752
+## 5              gene_expression     34713
+## 6                  slide_image     30036
+## 7       biospecimen_supplement     25151
+## 8             mirna_expression     22976
+## 9          clinical_supplement     12496
+## 10      methylation_beta_value     12359
+## 11 aggregated_somatic_mutation       186
+## 12     masked_somatic_mutation       132
 ```
 
 Using `aggregations()` is an also easy way to learn the contents of individual
@@ -787,7 +857,10 @@ filter expression must begin with a "~".
 ```r
 qfiles = files()
 qfiles %>% count() # all files
-#> [1] 356381
+```
+
+```
+## [1] 356381
 ```
 To limit the file type, we can refer back to the
 [section on faceting](#facets-and-aggregation) to see the possible values for
@@ -799,11 +872,14 @@ the file field "type". For example, to filter file results to only
 qfiles = files() %>% filter(~ type == 'gene_expression')
 # here is what the filter looks like after translation
 str(get_filter(qfiles))
-#> List of 2
-#>  $ op     : 'scalar' chr "="
-#>  $ content:List of 2
-#>   ..$ field: chr "type"
-#>   ..$ value: chr "gene_expression"
+```
+
+```
+## List of 2
+##  $ op     : 'scalar' chr "="
+##  $ content:List of 2
+##   ..$ field: chr "type"
+##   ..$ value: chr "gene_expression"
 ```
 
 What if we want to create a filter based on the project ('TCGA-OVCA', for
@@ -813,31 +889,34 @@ The first is based on base R functionality and some intuition.
 
 ```r
 grep('pro',available_fields('files'),value=TRUE)
-#>  [1] "cases.diagnoses.progression_free_survival"               
-#>  [2] "cases.diagnoses.progression_free_survival_event"         
-#>  [3] "cases.diagnoses.progression_or_recurrence"               
-#>  [4] "cases.project.awg_review"                                
-#>  [5] "cases.project.dbgap_accession_number"                    
-#>  [6] "cases.project.disease_type"                              
-#>  [7] "cases.project.in_review"                                 
-#>  [8] "cases.project.intended_release_date"                     
-#>  [9] "cases.project.is_legacy"                                 
-#> [10] "cases.project.name"                                      
-#> [11] "cases.project.primary_site"                              
-#> [12] "cases.project.program.dbgap_accession_number"            
-#> [13] "cases.project.program.name"                              
-#> [14] "cases.project.program.program_id"                        
-#> [15] "cases.project.project_id"                                
-#> [16] "cases.project.releasable"                                
-#> [17] "cases.project.released"                                  
-#> [18] "cases.project.release_requested"                         
-#> [19] "cases.project.request_submission"                        
-#> [20] "cases.project.state"                                     
-#> [21] "cases.project.submission_enabled"                        
-#> [22] "cases.samples.days_to_sample_procurement"                
-#> [23] "cases.samples.method_of_sample_procurement"              
-#> [24] "cases.samples.portions.slides.number_proliferating_cells"
-#> [25] "cases.tissue_source_site.project"
+```
+
+```
+##  [1] "cases.diagnoses.progression_free_survival"               
+##  [2] "cases.diagnoses.progression_free_survival_event"         
+##  [3] "cases.diagnoses.progression_or_recurrence"               
+##  [4] "cases.project.awg_review"                                
+##  [5] "cases.project.dbgap_accession_number"                    
+##  [6] "cases.project.disease_type"                              
+##  [7] "cases.project.in_review"                                 
+##  [8] "cases.project.intended_release_date"                     
+##  [9] "cases.project.is_legacy"                                 
+## [10] "cases.project.name"                                      
+## [11] "cases.project.primary_site"                              
+## [12] "cases.project.program.dbgap_accession_number"            
+## [13] "cases.project.program.name"                              
+## [14] "cases.project.program.program_id"                        
+## [15] "cases.project.project_id"                                
+## [16] "cases.project.releasable"                                
+## [17] "cases.project.released"                                  
+## [18] "cases.project.release_requested"                         
+## [19] "cases.project.request_submission"                        
+## [20] "cases.project.state"                                     
+## [21] "cases.project.submission_enabled"                        
+## [22] "cases.samples.days_to_sample_procurement"                
+## [23] "cases.samples.method_of_sample_procurement"              
+## [24] "cases.samples.portions.slides.number_proliferating_cells"
+## [25] "cases.tissue_source_site.project"
 ```
 
 Interestingly, the project information is "nested" inside the case. We don't
@@ -848,48 +927,51 @@ know where because we need to construct the appropriate filter.
 
 ```r
 files() %>% facet('cases.project.project_id') %>% aggregations()
-#> $cases.project.project_id
-#>            key doc_count
-#> 1        FM-AD     36134
-#> 2    TCGA-BRCA     31511
-#> 3    TCGA-LUAD     17051
-#> 4    TCGA-UCEC     16130
-#> 5    TCGA-HNSC     15266
-#> 6      TCGA-OV     15057
-#> 7    TCGA-THCA     14420
-#> 8    TCGA-LUSC     15323
-#> 9     TCGA-LGG     14723
-#> 10   TCGA-KIRC     15082
-#> 11   TCGA-PRAD     14287
-#> 12   TCGA-COAD     14270
-#> 13    TCGA-GBM     11973
-#> 14   TCGA-SKCM     12724
-#> 15   TCGA-STAD     12845
-#> 16   TCGA-BLCA     11710
-#> 17   TCGA-LIHC     10814
-#> 18   TCGA-CESC      8593
-#> 19   TCGA-KIRP      8506
-#> 20   TCGA-SARC      7493
-#> 21   TCGA-PAAD      5306
-#> 22   TCGA-ESCA      5270
-#> 23   TCGA-PCPG      5032
-#> 24   TCGA-READ      4918
-#> 25   TCGA-TGCT      4217
-#> 26   TCGA-THYM      3444
-#> 27   TCGA-LAML      3960
-#> 28  TARGET-NBL      2795
-#> 29    TCGA-ACC      2546
-#> 30   TCGA-KICH      2324
-#> 31   TCGA-MESO      2330
-#> 32  TARGET-AML      2170
-#> 33    TCGA-UVM      2179
-#> 34    TCGA-UCS      1658
-#> 35   TARGET-WT      1406
-#> 36   TCGA-DLBC      1330
-#> 37   TCGA-CHOL      1348
-#> 38   TARGET-OS        47
-#> 39   TARGET-RT       174
-#> 40 TARGET-CCSK        15
+```
+
+```
+## $cases.project.project_id
+##            key doc_count
+## 1        FM-AD     36134
+## 2    TCGA-BRCA     31511
+## 3    TCGA-LUAD     17051
+## 4    TCGA-UCEC     16130
+## 5    TCGA-HNSC     15266
+## 6      TCGA-OV     15057
+## 7    TCGA-THCA     14420
+## 8    TCGA-LUSC     15323
+## 9     TCGA-LGG     14723
+## 10   TCGA-KIRC     15082
+## 11   TCGA-PRAD     14287
+## 12   TCGA-COAD     14270
+## 13    TCGA-GBM     11973
+## 14   TCGA-SKCM     12724
+## 15   TCGA-STAD     12845
+## 16   TCGA-BLCA     11710
+## 17   TCGA-LIHC     10814
+## 18   TCGA-CESC      8593
+## 19   TCGA-KIRP      8506
+## 20   TCGA-SARC      7493
+## 21   TCGA-PAAD      5306
+## 22   TCGA-ESCA      5270
+## 23   TCGA-PCPG      5032
+## 24   TCGA-READ      4918
+## 25   TCGA-TGCT      4217
+## 26   TCGA-THYM      3444
+## 27   TCGA-LAML      3960
+## 28  TARGET-NBL      2795
+## 29    TCGA-ACC      2546
+## 30   TCGA-KICH      2324
+## 31   TCGA-MESO      2330
+## 32  TARGET-AML      2170
+## 33    TCGA-UVM      2179
+## 34    TCGA-UCS      1658
+## 35   TARGET-WT      1406
+## 36   TCGA-DLBC      1330
+## 37   TCGA-CHOL      1348
+## 38   TARGET-OS        47
+## 39   TARGET-RT       174
+## 40 TARGET-CCSK        15
 ```
 
 We note that `cases.project.project_id` looks like it is a good fit. We also
@@ -902,21 +984,30 @@ filter and does not build on any previous filters*.
 qfiles = files() %>%
     filter( ~ cases.project.project_id == 'TCGA-OV' & type == 'gene_expression')
 str(get_filter(qfiles))
-#> List of 2
-#>  $ op     : 'scalar' chr "and"
-#>  $ content:List of 2
-#>   ..$ :List of 2
-#>   .. ..$ op     : 'scalar' chr "="
-#>   .. ..$ content:List of 2
-#>   .. .. ..$ field: chr "cases.project.project_id"
-#>   .. .. ..$ value: chr "TCGA-OV"
-#>   ..$ :List of 2
-#>   .. ..$ op     : 'scalar' chr "="
-#>   .. ..$ content:List of 2
-#>   .. .. ..$ field: chr "type"
-#>   .. .. ..$ value: chr "gene_expression"
+```
+
+```
+## List of 2
+##  $ op     : 'scalar' chr "and"
+##  $ content:List of 2
+##   ..$ :List of 2
+##   .. ..$ op     : 'scalar' chr "="
+##   .. ..$ content:List of 2
+##   .. .. ..$ field: chr "cases.project.project_id"
+##   .. .. ..$ value: chr "TCGA-OV"
+##   ..$ :List of 2
+##   .. ..$ op     : 'scalar' chr "="
+##   .. ..$ content:List of 2
+##   .. .. ..$ field: chr "type"
+##   .. .. ..$ value: chr "gene_expression"
+```
+
+```r
 qfiles %>% count()
-#> [1] 1137
+```
+
+```
+## [1] 1137
 ```
 
 Asking for a `count()` of results given these new filter criteria gives `r
@@ -927,15 +1018,18 @@ simple as asking for the manifest from the current query.
 ```r
 manifest_df = qfiles %>% manifest()
 head(manifest_df)
-#> # A tibble: 6 x 5
-#>   id                filename                  md5               size state
-#>   <chr>             <chr>                     <chr>            <int> <chr>
-#> 1 567ced20-00cf-46… b2552f6f-dd15-410f-a621-… 9af0d993c40aec… 258324 live 
-#> 2 05692746-1770-47… 701b8c71-6c05-4e5b-ac10-… 8e9816f4d9b871… 526537 live 
-#> 3 e2d47640-8565-43… b2552f6f-dd15-410f-a621-… e05190ed65c8a8… 543367 live 
-#> 4 bc6dab72-dc5a-4c… a1c4f19e-079e-47e7-8939-… 110d8cda0ccdf6… 253059 live 
-#> 5 0a176c20-f3f3-4b… 01eac123-1e21-440d-9495-… b40921f17128a9… 540592 live 
-#> 6 2ae73487-7acf-42… 12c8b289-b9d0-4697-b3a6-… 4d3c2b951d94f0… 549437 live
+```
+
+```
+## # A tibble: 6 x 5
+##   id                filename                  md5               size state
+##   <chr>             <chr>                     <chr>            <int> <chr>
+## 1 567ced20-00cf-46… b2552f6f-dd15-410f-a621-… 9af0d993c40aec… 258324 live 
+## 2 05692746-1770-47… 701b8c71-6c05-4e5b-ac10-… 8e9816f4d9b871… 526537 live 
+## 3 e2d47640-8565-43… b2552f6f-dd15-410f-a621-… e05190ed65c8a8… 543367 live 
+## 4 bc6dab72-dc5a-4c… a1c4f19e-079e-47e7-8939-… 110d8cda0ccdf6… 253059 live 
+## 5 0a176c20-f3f3-4b… 01eac123-1e21-440d-9495-… b40921f17128a9… 540592 live 
+## 6 2ae73487-7acf-42… 12c8b289-b9d0-4697-b3a6-… 4d3c2b951d94f0… 549437 live
 ```
 
 Note that we might still not be quite there. Looking at filenames, there are
@@ -950,7 +1044,10 @@ qfiles = files() %>% filter( ~ cases.project.project_id == 'TCGA-OV' &
                             analysis.workflow_type == 'HTSeq - Counts')
 manifest_df = qfiles %>% manifest()
 nrow(manifest_df)
-#> [1] 379
+```
+
+```
+## [1] 379
 ```
 
 The GDC Data Transfer Tool can be used (from R, `transfer()` or from the
@@ -1052,7 +1149,10 @@ BiocManager::install('seandavi/SRAdbV2')
 
 ```r
 library(SRAdbV2)
-#> Loading required package: R6
+```
+
+```
+## Loading required package: R6
 ```
 
 #### The Omicidx 
@@ -1100,18 +1200,21 @@ for result retrieval, then, is to get a `Scroller`.
 ```r
 s = z$scroll()
 s
-#> <Scroller>
-#>   Public:
-#>     chunk: function () 
-#>     clone: function (deep = FALSE) 
-#>     collate: function () 
-#>     has_next: function () 
-#>     initialize: function (search) 
-#>     .last: FALSE
-#>     progress: FALSE
-#>     scroll: 1m
-#>     scroll_id: NULL
-#>     search: Searcher, R6
+```
+
+```
+## <Scroller>
+##   Public:
+##     chunk: function () 
+##     clone: function (deep = FALSE) 
+##     collate: function () 
+##     has_next: function () 
+##     initialize: function (search) 
+##     .last: FALSE
+##     progress: FALSE
+##     scroll: 1m
+##     scroll_id: NULL
+##     search: Searcher, R6
 ```
 
 Methods such as `s$count` allow introspection into the available number of

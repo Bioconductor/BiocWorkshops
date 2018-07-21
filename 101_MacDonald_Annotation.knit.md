@@ -1220,7 +1220,7 @@ GRCh38TxDb
 ## # exon_nrow: 675836
 ## # cds_nrow: 270225
 ## # Db created by: GenomicFeatures package from Bioconductor
-## # Creation time: 2018-07-21 13:38:46 -0400 (Sat, 21 Jul 2018)
+## # Creation time: 2018-07-21 15:24:14 -0400 (Sat, 21 Jul 2018)
 ## # GenomicFeatures version at creation time: 1.33.0
 ## # RSQLite version at creation time: 2.1.1
 ## # DBSCHEMAVERSION: 1.2

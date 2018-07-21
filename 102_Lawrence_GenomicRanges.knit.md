@@ -1,6 +1,6 @@
 # 102: Solving common bioinformatic challenges using GenomicRanges
 
-## Instructor(s) name(s) and contact information
+## Instructor name and contact information
 
 * Michael Lawrence (michafla@gene.com)
 

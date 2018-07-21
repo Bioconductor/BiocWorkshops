@@ -385,6 +385,11 @@ We can use other, more complex, array-like objects as the *seed*, such as *Matri
 
 ```r
 library(Matrix)
+#> 
+#> Attaching package: 'Matrix'
+#> The following object is masked from 'package:S4Vectors':
+#> 
+#>     expand
 Mat <- Matrix(mat)
 da_Mat <- DelayedArray(seed = Mat)
 # NOTE: The type is "double" because of how the Matrix package stores the data.
@@ -964,15 +969,15 @@ x <- as.array(x_h5)
 # Delayed operations are fast compared to ordinary operations! 
 system.time(x_h5 + 100L) 
 #>    user  system elapsed 
-#>   0.004   0.000   0.004
+#>   0.004   0.000   0.005
 system.time(x + 100L) 
 #>    user  system elapsed 
-#>   2.708   2.360   5.071
+#>   2.632   1.828   4.465
 
 # Delayed operations can be chained
 system.time(t(x_h5[1, , 1:100] + 100L))
 #>    user  system elapsed 
-#>   0.016   0.000   0.015
+#>   0.020   0.000   0.017
 ```
 
 Rather than modifying the data stored in the HDF5 file, which can be costly for large datasets, we've recorded the 'idea' of these operations as a tree of *DelayedOp* objects.
@@ -1089,7 +1094,7 @@ system.time(
             refdim = dim(da_hdf5),
             spacings = c(1L, ncol(da_hdf5)))))
 #>    user  system elapsed 
-#>   0.128   1.480   1.892
+#>   0.112   1.648   2.032
 head(row_medians)
 #> [[1]]
 #> [1] 8
@@ -1116,7 +1121,7 @@ system.time(
             refdim = dim(da_hdf5),
             spacings = c(nrow(da_hdf5), 1L))))
 #>    user  system elapsed 
-#>   0.056   0.144   0.297
+#>   0.060   0.152   0.328
 head(col_medians)
 #> [[1]]
 #> [1] 10
@@ -1140,7 +1145,7 @@ system.time(
             block.shape = "first-dim-grows-first")))
 #> Processing block 1/1 ... OK
 #>    user  system elapsed 
-#>   0.020   0.000   0.019
+#>   0.020   0.000   0.021
 head(row_medians)
 #> [[1]]
 #>   [1]  8.0  8.5  8.5  9.0  9.0  9.0  9.5  9.5  9.5  9.5 10.0 10.0 10.0 10.0
@@ -1160,7 +1165,7 @@ system.time(
             block.shape = "last-dim-grows-first")))
 #> Processing block 1/1 ... OK
 #>    user  system elapsed 
-#>   0.016   0.000   0.017
+#>   0.020   0.000   0.018
 head(col_medians)
 #> [[1]]
 #> [1] 10 18
@@ -1230,7 +1235,7 @@ showtree(z_h5)
 #> 10000000x2 integer: HDF5Matrix object
 #> └─ 10000000x2 integer: [seed] HDF5ArraySeed object
 path(z_h5)
-#> [1] "/tmp/Rtmp8uBz8o/HDF5Array_dump/auto00001.h5"
+#> [1] "/tmp/RtmpjG2dY2/HDF5Array_dump/auto00001.h5"
 
 # NOTE: The show() method performs realization on the first few and last few 
 #       elements in order to preview the result
