@@ -2,13 +2,13 @@
 ---
 knit: "bookdown::render_book"
 title: "The Bioconductor 2018 Workshop Compilation"
-description: "This book is a central repository for all the workshops submitted to the Bioconductor 2018 Conference"
+description: "This book contains all the workshops presented at the Bioconductor 2018 Conference"
 site: bookdown::bookdown_site
 github-repo: Bioconductor/BiocWorkshops
 documentclass: book
 bibliography: [
   "201_Love_DESeq2.bib",
-  "220_Das_SingleCellRNASeq.bib",
+  "202_Das_SingleCellRNASeq.bib",
   "230_cyto_automation.bib",
   "Lee_Plyranges/plyranges.bib",
   "Waldron_PublicData/Waldron_PublicData.bib"
@@ -20,113 +20,42 @@ bibliography: [
 Author:
     Martin Morgan^[Roswell Park Comprehensive Cancer Center, Buffalo, NY].
     <br/>
-Last modified: 22 May, 2018.
+Last modified: 19 July, 2018.
 
-The most recently compiled version of the book is available at https://bioconductor.github.io/BiocWorkshops/.
+Welcome to Bioc2018. This year's conference includes a wide array of workshops for audiences ranging from beginner to advance users and developers. Workshop materials are available as a book in html, pdf, and eBook format at https://bioconductor.github.io/BiocWorkshops/. Workshops are organized by level and topic according to numbers, as described below. Every workshop starts with a syllabus that will help you to decide whether it matches your learning goals. 
 
-## For Everyone
+## The Workshops
 
-This book contains workshops used in _R_ / _Bioconductor_
+This book contains workshops for _R_ / _Bioconductor_
 training. The workshops are divided into 3 sections:
 
 - **Learn** (100-series chapters) contains material for beginning
-  users of _R_ and _Bioconductor_. The _Bioconductor_-related material
-  is relevant even for experienced _R_ users who are new to
-  _Bioconductor_.
+  users of _R_ and _Bioconductor_. However, even experienced _R_ and _Bioconductor_ 
+  users may find something new here. 
+    - 100: _R_ and _Bioconductor_ for everyone: an introduction
+    - 101: Introduction to Bioconductor annotation resources
+    - 102: Solving common bioinformatic challenges using GenomicRanges
+    - 103: Public data resources and Bioconductor
 
 - **Use** (200-series chapters) contains workshops emphasizing use of
-  _Bioconductor_ for common tasks, e.g., bulk RNA-seq differential
-  expression, ChIP-seq, single-cell analysis, gene set enrichment, and
-  annotation.
-
+  _Bioconductor_ for common tasks, e.g., RNA-seq differential
+  expression, single-cell analysis, gene set enrichment, multi'omics analysis, 
+  genome analysis, network analysis, and pharmacogenomics.
+    - 200: RNA-seq analysis is easy as 1-2-3 with limma, Glimma and edgeR
+    - 201: RNA-seq data analysis with DESeq2
+    - 202: Analysis of single-cell RNA-seq data: Dimensionality reduction, clustering, and lineage inference
+    - 210: Functional enrichment analysis of high-throughput omics data
+    - 220: Workflow for multi-omics analysis with MultiAssayExperiment
+    - 230: Cytoscape automation in R using Rcy3
+    - 240: Fluent genomic data analysis with plyranges
+    - 250: Working with genomic data in R with the DECIPHER package
+    - 260: Biomarker discovery from large pharmacogenomics datasets
+    
 - **Develop** (500-series chapters) contains workshops to help expert
   users hone their skills and contribute their domain-specific
-  knowledge to the _Bioconductor_ community.
+  knowledge to the _Bioconductor_ community. These workshops are presented
+  on "Developer Day". 
+    - 500: Effectively using the DelayedArray framework to support the analysis of large datasets
+    - 510: Maintaining your Bioconductor package
 
-## For Workshop Authors
-
-To contribute a new workshop, open a [BiocWorkshops issue][] asking to
-be added as a collaborator.
-
-### DESCRIPTION
-
-Update the DESCRIPTION file adding packages utilized in your workshop to
-the **Imports** field. Please be kind and don't remove anyone elses packages from
-the DESCRIPTION as this is a shared file for all workshops. Also don't add your packages
-to the **Depends** field.
-
-### Classifying your workshop
-
-Follow the numbering scheme above to classify your workshop by preceding your title with 
-"Bioconductor 1xx:", "Bioconductor 2xx:", or "Bioconductor 5xx:". Final workshop numbers will be 
-determined by an editor.
-
-### Bookdown
-
-Write your workshop as a stand-alone markdown document, using your workshop 
-syllabus already posted here as a starting point.  We are using [bookdown][] 
-('knit-then-merge' strategy) to compile the workshops and produce a book that will be 
-available through Continuous Integration at https://bioconductor.github.io/BiocWorkshops/.
-
-You do not need to build the complete book yourself, it is sufficient to ensure that your own
-workshop compiles successfully. You can 1) compile draft versions using a standard "knit" 
-procedure to compile your chapter, and 2) follow these bookdown procedures to see how your 
-chapter will look in the finished product. Install the [bookdown package][] package from CRAN, 
-as well as [pandoc][]. Render your chapter with the `preview=` option to `render_book()`, e.g.,
-
-```
-Rscript -e "bookdown::render_book(                             \
-    'xxx_Your_Workshop.Rmd', 'bookdown::gitbook', preview=TRUE \
-)"
-```
-
-As this is a shared space for all workshop contributors, in order to
-use the above command in the BiocWorkshops directory, the index has to
-be built at least once, which can be time consuming depending on how many
-workshops have already been submitted.
-
-```
-Rscript -e "bookdown::render_book(                             \
-    'index.Rmd', 'bookdown::gitbook')"
-```
-
-To avoid having to build all workshops but still be able to preview
-your individual workshop we recommend creating a soft link to your .Rmd file.
-We recommend having the file in the `BiocWorkshop/` and the soft link in
-any other directory on your system. By default, this will generate an
-html file in `_book/` wherever this command is run.
-
-```
-mkdir tmp
-cd tmp/
-ln -s ../xxx_Your_Workshop.Rmd
-Rscript -e "bookdown::render_book(                             \
-    'xxx_Your_Workshop.Rmd', 'bookdown::gitbook', preview=TRUE \
-)"
-```
-
-
-Push **only** your .Rmd file to the BiocWorkshop repository; the book will be
-rebuilt manually or automatically. Eventually the output will be
-available for end-users at https://bioconductor.github.io/BiocWorkshops .The
-master branch will not contain the built version of the book. Switching to the
-[gh-pages branch][] will show built output.  
-
-## Deadlines for Bioc2018
-
-Please be aware of the following deadlines for the [Bioconductor 2018 Conference][] in Toronto
-
-- **Fri June 29:** draft workshop materials submitted to this Bioconductor GitHub bookdown site
-
-- **Fri July 6:** feedback period completes
-
-- **Weds July 18:** workshops must pass checks without errors or warnings (All materials will be checked by Continuous Integration)
-
-- **Thurs / Fri July 26-27:** Bioc2018
-
-[BiocWorkshops issue]: https://github.com/Bioconductor/BiocWorkshops/issues
-[bookdown]: https://bookdown.org/yihui/bookdown/
-[bookdown package]: https://cran.r-project.org/package=bookdown
-[pandoc]: http://pandoc.org/
-[gh-pages branch]: https://github.com/Bioconductor/BiocWorkshops/tree/gh-pages
 [Bioconductor 2018 Conference]: https://bioc2018.bioconductor.org/

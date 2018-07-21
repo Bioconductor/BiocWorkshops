@@ -1,4 +1,5 @@
 
+
 # Fluent genomic data analysis with plyranges
 
 ## Instructor(s) name(s) and contact information
@@ -871,7 +872,7 @@ metadata <- ah %>%
   extract2(names(.))
 #> downloading 0 resources
 #> loading from cache 
-#>     '/home/mramos//.AnnotationHub/47270'
+#>     '/home/ubuntu//.AnnotationHub/47270'
 
 head(metadata)
 #>    EID    GROUP   COLOR          MNEMONIC
@@ -956,10 +957,10 @@ So we'll take the first two entries and download them as BigWigFiles:
 bw_files <- lapply(c("AH33454", "AH33455"), function(id) ah[[id]]) 
 #> downloading 0 resources
 #> loading from cache 
-#>     '/home/mramos//.AnnotationHub/38894'
+#>     '/home/ubuntu//.AnnotationHub/38894'
 #> downloading 0 resources
 #> loading from cache 
-#>     '/home/mramos//.AnnotationHub/38895'
+#>     '/home/ubuntu//.AnnotationHub/38895'
 names(bw_files) <- c("HK34ME1", "HK34ME3")
 ```
 

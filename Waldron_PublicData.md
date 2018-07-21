@@ -234,7 +234,7 @@ ggplot(mdsvals, aes(x=V1,y=V2,shape=Normal,color=Type)) +
     geom_point( alpha=0.6) + theme(text=element_text(size = 18))
 ```
 
-<img src="Waldron_PublicData_files/figure-html/mdsplot-1.png" width="672" style="display: block; margin: auto;" />
+<img src="Waldron_PublicData_files/figure-epub3/mdsplot-1.png" style="display: block; margin: auto;" />
 
 [R]: https://cran.r-project.org/
 [GEOquery]: https://bioconductor.org/packages/GEOquery
@@ -1217,7 +1217,7 @@ It is not an ExperimentHub package, so downloading and serializing is slightly m
 
 ```r
 download_study(project_info$project)
-#> 2018-07-18 18:43:21 downloading file rse_gene.Rdata to SRP009615
+#> 2018-07-19 22:16:57 downloading file rse_gene.Rdata to SRP009615
 ```
 followed by loading the data
 
@@ -1297,13 +1297,13 @@ esl <- curatedMetagenomicData(oral, dryrun = FALSE)
 #> see ?curatedMetagenomicData and browseVignettes('curatedMetagenomicData') for documentation
 #> downloading 0 resources
 #> loading from cache 
-#>     '/home/mramos//.ExperimentHub/1179'
+#>     '/home/ubuntu//.ExperimentHub/1179'
 #> Working on Castro-NallarE_2015.metaphlan_bugs_list.oralcavity
 #> snapshotDate(): 2018-07-17
 #> see ?curatedMetagenomicData and browseVignettes('curatedMetagenomicData') for documentation
 #> downloading 0 resources
 #> loading from cache 
-#>     '/home/mramos//.ExperimentHub/391'
+#>     '/home/ubuntu//.ExperimentHub/391'
 ```
 
 
@@ -1332,6 +1332,7 @@ See the documentation of *[phyloseq](http://bioconductor.org/packages/phyloseq)*
 
 ```r
 suppressPackageStartupMessages(library(HMP16SData))
+#> snapshotDate(): 2018-07-17
 ```
 
 *[HMP16SData](http://bioconductor.org/packages/HMP16SData)*[@Schiffer2018-qy] is a Bioconductor ExperimentData package of the Human Microbiome Project (HMP) 16S rRNA sequencing data. Taxonomic count data files are provided as downloaded from the HMP Data Analysis and Coordination Center from its QIIME pipeline. Processed data is provided as `SummarizedExperiment` class objects via *[ExperimentHub](http://bioconductor.org/packages/ExperimentHub)*. Like other ExperimentHub-based packages, a convenience function does downloading, automatic local caching, and serializing of a Bioconductor data class. This returns taxonomic counts from the V1-3 variable region of the 16S rRNA gene, along with the unrestricted participant data and phylogenetic tree. 
@@ -1342,7 +1343,7 @@ V13()
 #> see ?HMP16SData and browseVignettes('HMP16SData') for documentation
 #> downloading 0 resources
 #> loading from cache 
-#>     '/home/mramos//.ExperimentHub/1117'
+#>     '/home/ubuntu//.ExperimentHub/1117'
 #> class: SummarizedExperiment 
 #> dim: 43140 2898 
 #> metadata(2): experimentData phylogeneticTree

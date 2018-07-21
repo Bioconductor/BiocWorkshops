@@ -1,6 +1,5 @@
 
-
-# RNA-seq data analysis with DESeq2
+# 201: RNA-seq data analysis with DESeq2
 
 Authors:
     Michael I. Love^[UNC-Chapel Hill, NC, US],
@@ -524,7 +523,7 @@ counts do not dominate the boxplot:
 boxplot(log10(counts(dds)+1))
 ```
 
-<img src="201_Love_DESeq2_files/figure-html/unnamed-chunk-17-1.png" width="672" />
+<img src="201_Love_DESeq2_files/figure-html/unnamed-chunk-16-1.png" width="672" />
 
 The main function in *DESeq2* involves computation of *size factors*
 which normalize for differences in sequencing depth among samples. We
@@ -537,7 +536,7 @@ dds <- estimateSizeFactors(dds)
 boxplot(log10(counts(dds,normalized=TRUE)+1))
 ```
 
-<img src="201_Love_DESeq2_files/figure-html/unnamed-chunk-18-1.png" width="672" />
+<img src="201_Love_DESeq2_files/figure-html/unnamed-chunk-17-1.png" width="672" />
 
 ### Data transformation for EDA
 
@@ -588,7 +587,7 @@ variation in the data) separates the treated and untreated samples:
 plotPCA(vsd, "dex")
 ```
 
-<img src="201_Love_DESeq2_files/figure-html/unnamed-chunk-21-1.png" width="672" />
+<img src="201_Love_DESeq2_files/figure-html/unnamed-chunk-20-1.png" width="672" />
 
 With some additional *ggplot2* code, we can also indicate which
 samples belong to which cell line:
@@ -605,7 +604,7 @@ ggplot(pcaData, aes(x = PC1, y = PC2, color = dex, shape = cell)) +
   coord_fixed()
 ```
 
-<img src="201_Love_DESeq2_files/figure-html/unnamed-chunk-22-1.png" width="672" />
+<img src="201_Love_DESeq2_files/figure-html/unnamed-chunk-21-1.png" width="672" />
 
 Note that we do not recommend working with the transformed data for
 the primary differential expression analysis. Instead we will use the
@@ -645,28 +644,28 @@ head(res[order(res$pvalue),])
 #> DataFrame with 6 rows and 6 columns
 #>                         baseMean   log2FoldChange             lfcSE
 #>                        <numeric>        <numeric>         <numeric>
-#> ENSG00000152583 997.522193389904 4.57431721934494 0.183934560931089
-#> ENSG00000165995 495.289924523775 3.29060376160862 0.132397954572965
-#> ENSG00000120129 3409.85238036378 2.94725094348016 0.122471899817052
-#> ENSG00000101347  12707.320121355  3.7664043884955 0.156934450326662
-#> ENSG00000189221 2342.17328482568 3.35311264853444 0.142537730315705
-#> ENSG00000211445 12292.1234547129 3.72983474166181 0.167361554620974
+#> ENSG00000152583 997.522193389904 4.57431721934304 0.183934560913345
+#> ENSG00000165995 495.289924523775 3.29060376160918 0.132397954562143
+#> ENSG00000120129 3409.85238036378  2.9472509434796 0.122471899795457
+#> ENSG00000101347  12707.320121355  3.7664043884956 0.156934450302937
+#> ENSG00000189221 2342.17328482568 3.35311264853201 0.142537730294312
+#> ENSG00000211445 12292.1234547129 3.72983474166149 0.167361554596787
 #>                             stat                pvalue
 #>                        <numeric>             <numeric>
-#> ENSG00000152583 24.8692643524384 1.60060793892601e-136
-#> ENSG00000165995  24.853886695018 2.34741061794036e-136
-#> ENSG00000120129 24.0647115614501 5.85598005614604e-128
-#> ENSG00000101347 23.9998571419828 2.79035129961566e-127
-#> ENSG00000189221 23.5243864281245  2.2964743349727e-122
-#> ENSG00000211445 22.2860904352187 5.04142773173702e-110
+#> ENSG00000152583 24.8692643548272 1.60060784368496e-136
+#> ENSG00000165995 24.8538866970538 2.34741049897627e-136
+#> ENSG00000120129 24.0647115656888 5.85597945778505e-128
+#> ENSG00000101347 23.9998571456117 2.79035105617505e-127
+#> ENSG00000189221 23.5243864316382 2.29647414481068e-122
+#> ENSG00000211445 22.2860904384375 5.04142736936512e-110
 #>                                  padj
 #>                             <numeric>
-#> ENSG00000152583 2.03426604150712e-132
-#> ENSG00000165995 2.03426604150712e-132
-#> ENSG00000120129 3.38319487777077e-124
-#> ENSG00000101347 1.20905921812347e-123
-#> ENSG00000189221 7.96049863474937e-119
-#> ENSG00000211445 1.45630042410777e-106
+#> ENSG00000152583 2.03426593841284e-132
+#> ENSG00000165995 2.03426593841284e-132
+#> ENSG00000120129 3.38319453207768e-124
+#> ENSG00000101347 1.20905911264065e-123
+#> ENSG00000189221 7.96049797557172e-119
+#> ENSG00000211445  1.4563003194306e-106
 ```
 
 We can plot the counts for the top gene using `plotCounts`:
@@ -676,7 +675,7 @@ We can plot the counts for the top gene using `plotCounts`:
 plotCounts(dds, which.min(res$pvalue), "dex")
 ```
 
-<img src="201_Love_DESeq2_files/figure-html/unnamed-chunk-25-1.png" width="672" />
+<img src="201_Love_DESeq2_files/figure-html/unnamed-chunk-24-1.png" width="672" />
 
 We can examine all the log2 fold changes (LFC) due to dexamethasone
 treatment over the mean of counts using `plotMA`:
@@ -686,7 +685,7 @@ treatment over the mean of counts using `plotMA`:
 plotMA(res, ylim=c(-5,5))
 ```
 
-<img src="201_Love_DESeq2_files/figure-html/unnamed-chunk-26-1.png" width="672" />
+<img src="201_Love_DESeq2_files/figure-html/unnamed-chunk-25-1.png" width="672" />
 
 Note that there are many large LFC which are not significant (grey
 points) on the left side of the MA-plot above. These obtain a large
@@ -718,7 +717,7 @@ plotMA(res, ylim=c(-3,3), main="No shrinkage")
 plotMA(res2, ylim=c(-3,3), main="apeglm")
 ```
 
-<img src="201_Love_DESeq2_files/figure-html/unnamed-chunk-28-1.png" width="672" />
+<img src="201_Love_DESeq2_files/figure-html/unnamed-chunk-27-1.png" width="672" />
 
 ### Minimum effect size
 
@@ -759,7 +758,7 @@ plotMA(res.lfc, ylim=c(-5,5), main="No shrinkage, LFC test")
 plotMA(res.lfc2, ylim=c(-5,5), main="apeglm, LFC test", alpha=0.01)
 ```
 
-<img src="201_Love_DESeq2_files/figure-html/unnamed-chunk-30-1.png" width="672" />
+<img src="201_Love_DESeq2_files/figure-html/unnamed-chunk-29-1.png" width="672" />
 
 ## *AnnotationHub*
 
@@ -819,7 +818,7 @@ of the record:
 hs <- ah[["AH61777"]]
 #> downloading 0 resources
 #> loading from cache 
-#>     '/home/mramos//.AnnotationHub/68523'
+#>     '/home/ubuntu//.AnnotationHub/68523'
 hs
 #> OrgDb object:
 #> | DBSCHEMAVERSION: 2.1
@@ -889,28 +888,28 @@ head(res)
 #> DataFrame with 6 rows and 7 columns
 #>                         baseMean      log2FoldChange              lfcSE
 #>                        <numeric>           <numeric>          <numeric>
-#> ENSG00000000003  708.84032163709   -0.38188890052585  0.100800595908449
-#> ENSG00000000419 520.444343803335   0.206203578138288  0.111340654960802
-#> ENSG00000000457 237.237392013978  0.0373231179429298  0.140524882321204
-#> ENSG00000000460 57.9518862998956 -0.0907678445557818  0.276878121334175
-#> ENSG00000000971 5819.01711439455   0.425781621579506 0.0897314693828554
-#> ENSG00000001036 1282.59042750161  -0.241675199658759 0.0898743244338321
-#>                              stat               pvalue                padj
-#>                         <numeric>            <numeric>           <numeric>
-#> ENSG00000000003 -3.78855796519988 0.000151524241731238 0.00121584173966936
-#> ENSG00000000419  1.85200615364516   0.0640249392675146   0.184546856375281
-#> ENSG00000000457 0.265597930604338    0.790548879512378   0.903592643032674
-#> ENSG00000000460 -0.32782599115598    0.743043234238656   0.878207188857688
-#> ENSG00000000971  4.74506463014478 2.08439772491752e-06 2.5495258552061e-05
-#> ENSG00000001036 -2.68903495165281  0.00716589158352556  0.0334768821902062
-#>                      symbol
-#>                 <character>
-#> ENSG00000000003      TSPAN6
-#> ENSG00000000419        DPM1
-#> ENSG00000000457       SCYL3
-#> ENSG00000000460    C1orf112
-#> ENSG00000000971         CFH
-#> ENSG00000001036       FUCA2
+#> ENSG00000000003  708.84032163709  -0.381888900525941  0.100800595893129
+#> ENSG00000000419 520.444343803335   0.206203578138316   0.11134065494833
+#> ENSG00000000457 237.237392013978  0.0373231179429596  0.140524882318114
+#> ENSG00000000460 57.9518862998956 -0.0907678445512801  0.276878121357344
+#> ENSG00000000971 5819.01711439455   0.425781621579747  0.089731469359872
+#> ENSG00000001036 1282.59042750161  -0.241675199658791 0.0898743244142716
+#>                              stat               pvalue
+#>                         <numeric>            <numeric>
+#> ENSG00000000003 -3.78855796577658 0.000151524241379562
+#> ENSG00000000419  1.85200615385287   0.0640249392376881
+#> ENSG00000000457  0.26559793061039    0.790548879507716
+#> ENSG00000000460 -0.32782599111229    0.743043234271692
+#> ENSG00000000971  4.74506463136284 2.08439771237453e-06
+#> ENSG00000001036 -2.68903495223842   0.0071658915709543
+#>                                 padj      symbol
+#>                            <numeric> <character>
+#> ENSG00000000003  0.00121584173684748      TSPAN6
+#> ENSG00000000419    0.184546856289308        DPM1
+#> ENSG00000000457    0.903592643011972       SCYL3
+#> ENSG00000000460    0.878207188925546    C1orf112
+#> ENSG00000000971 2.54952583986418e-05         CFH
+#> ENSG00000001036   0.0334768821314771       FUCA2
 ```
 
 ## Building reports
@@ -932,7 +931,7 @@ rep <- HTMLReport(shortName="airway", title="Airway DGE",
                   basePath=tmp, reportDirectory="report")
 publish(res, rep, dds, n=20, make.plots=TRUE, factor=dds$dex)
 finish(rep)
-#> [1] "/tmp/RtmpQMhl3k/report/airway.html"
+#> [1] "/tmp/RtmpBov3oy/report/airway.html"
 ```
 
 This last line, un-evaluated would launch the report in a web browser:
@@ -1038,7 +1037,7 @@ plot(log10(rowMeans(assays(sim)[["TrueCounts"]])),
      rowMeans(assays(sim)[["Dropout"]]))
 ```
 
-<img src="201_Love_DESeq2_files/figure-html/unnamed-chunk-43-1.png" width="672" />
+<img src="201_Love_DESeq2_files/figure-html/unnamed-chunk-42-1.png" width="672" />
 
 We will store the true log2 fold change for comparison:
 
@@ -1059,7 +1058,7 @@ abline(h=gridlines, col=cols)
 text(300, gridlines, labels=gridlines, col=cols, pos=3)
 ```
 
-<img src="201_Love_DESeq2_files/figure-html/unnamed-chunk-45-1.png" width="672" />
+<img src="201_Love_DESeq2_files/figure-html/unnamed-chunk-44-1.png" width="672" />
 
 ### Model zeros with *zinbwave*
 
@@ -1073,7 +1072,7 @@ keep <- rowSums(counts(sim) >= 5) >= 25
 table(keep)
 #> keep
 #> FALSE  TRUE 
-#>  9025   975
+#>  9020   980
 zinb <- sim[keep,]
 zinb$condition <- factor(zinb$Group)
 ```
@@ -1136,7 +1135,7 @@ So here everything looks good.
 plotDispEsts(zdds)
 ```
 
-<img src="201_Love_DESeq2_files/figure-html/unnamed-chunk-50-1.png" width="672" />
+<img src="201_Love_DESeq2_files/figure-html/unnamed-chunk-49-1.png" width="672" />
 
 If the parametric trend fails to fit (there would be a warning in this
 case), one should check the dispersion plot as above. If it looks like
@@ -1155,7 +1154,7 @@ zdds2 <- estimateDispersionsFit(zdds[keepForDispTrend,])
 plotDispEsts(zdds2)
 ```
 
-<img src="201_Love_DESeq2_files/figure-html/unnamed-chunk-51-1.png" width="672" />
+<img src="201_Love_DESeq2_files/figure-html/unnamed-chunk-50-1.png" width="672" />
 
 One would then assign the dispersion function to the original dataset,
 re-estimate final dispersions, check `plotDispEsts`, and then either
@@ -1181,7 +1180,7 @@ with(mcols(zdds), plot(trueDisp, dispMAP, log="xy"))
 abline(0,1,col="red")
 ```
 
-<img src="201_Love_DESeq2_files/figure-html/unnamed-chunk-53-1.png" width="672" />
+<img src="201_Love_DESeq2_files/figure-html/unnamed-chunk-52-1.png" width="672" />
 
 Extract results table:
 
@@ -1191,7 +1190,7 @@ zres <- results(zdds, independentFiltering=FALSE)
 plot(mcols(zdds)$log2FC, zres$log2FoldChange, ylim=c(-4,4)); abline(0,1,col="red")
 ```
 
-<img src="201_Love_DESeq2_files/figure-html/unnamed-chunk-54-1.png" width="672" />
+<img src="201_Love_DESeq2_files/figure-html/unnamed-chunk-53-1.png" width="672" />
 
 Below we show that the "simple" LFC does not work - it over-estimates
 the true DE LFC because of the dropout zeros in the group with the
@@ -1215,11 +1214,11 @@ tab <- table(sig=zres$padj < .05, DE.status=mcols(zdds)$log2FC != 0)
 tab
 #>        DE.status
 #> sig     FALSE TRUE
-#>   FALSE   727   22
-#>   TRUE      8  218
+#>   FALSE   750   15
+#>   TRUE     11  204
 round(prop.table(tab, 1), 3)
 #>        DE.status
 #> sig     FALSE  TRUE
-#>   FALSE 0.971 0.029
-#>   TRUE  0.035 0.965
+#>   FALSE 0.980 0.020
+#>   TRUE  0.051 0.949
 ```

@@ -153,6 +153,7 @@ library(Mus.musculus)
 
 ```r
 dir.create("Law_RNAseq123")
+#> Warning in dir.create("Law_RNAseq123"): 'Law_RNAseq123' already exists
 setwd("Law_RNAseq123")
 
 url <- "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE63310&format=file"
@@ -416,7 +417,7 @@ legend("topright", samplenames, text.col=col, bty="n")
 ```
 
 <div class="figure">
-<img src="Law_RNAseq123_files/figure-html/filterplot1-1.png" alt="The density of log-CPM values for raw pre-filtered data (A) and post-filtered data (B) are shown for each sample. Dotted vertical lines mark the log-CPM of zero threshold (equivalent to a CPM value of 1) used in the filtering step." width="768" />
+<img src="Law_RNAseq123_files/figure-epub3/filterplot1-1.png" alt="The density of log-CPM values for raw pre-filtered data (A) and post-filtered data (B) are shown for each sample. Dotted vertical lines mark the log-CPM of zero threshold (equivalent to a CPM value of 1) used in the filtering step."  />
 <p class="caption">(\#fig:filterplot1)The density of log-CPM values for raw pre-filtered data (A) and post-filtered data (B) are shown for each sample. Dotted vertical lines mark the log-CPM of zero threshold (equivalent to a CPM value of 1) used in the filtering step.</p>
 </div>
 
@@ -463,7 +464,7 @@ title(main="B. Example: Normalised data",ylab="Log-cpm")
 ```
 
 <div class="figure">
-<img src="Law_RNAseq123_files/figure-html/plotmodifieddata-1.png" alt="Example data: Boxplots of log-CPM values showing expression distributions for unnormalised data (A) and normalised data (B) for each sample in the modified dataset where the counts in samples 1 and 2 have been scaled to 5% and 500% of their original values respectively." width="768" />
+<img src="Law_RNAseq123_files/figure-epub3/plotmodifieddata-1.png" alt="Example data: Boxplots of log-CPM values showing expression distributions for unnormalised data (A) and normalised data (B) for each sample in the modified dataset where the counts in samples 1 and 2 have been scaled to 5% and 500% of their original values respectively."  />
 <p class="caption">(\#fig:plotmodifieddata)Example data: Boxplots of log-CPM values showing expression distributions for unnormalised data (A) and normalised data (B) for each sample in the modified dataset where the counts in samples 1 and 2 have been scaled to 5% and 500% of their original values respectively.</p>
 </div>
 
@@ -498,7 +499,7 @@ title(main="B. Sequencing lanes")
 ```
 
 <div class="figure">
-<img src="Law_RNAseq123_files/figure-html/MDS1-1.png" alt="MDS plots of log-CPM values over dimensions 1 and 2 with samples coloured and labeled by sample groups (A) and over dimensions 3 and 4 with samples coloured and labeled by sequencing lane (B). Distances on the plot correspond to the leading fold-change, which is the average (root-mean-square) log2-fold-change for the 500 genes most divergent between each pair of samples by default." width="768" />
+<img src="Law_RNAseq123_files/figure-epub3/MDS1-1.png" alt="MDS plots of log-CPM values over dimensions 1 and 2 with samples coloured and labeled by sample groups (A) and over dimensions 3 and 4 with samples coloured and labeled by sequencing lane (B). Distances on the plot correspond to the leading fold-change, which is the average (root-mean-square) log2-fold-change for the 500 genes most divergent between each pair of samples by default."  />
 <p class="caption">(\#fig:MDS1)MDS plots of log-CPM values over dimensions 1 and 2 with samples coloured and labeled by sample groups (A) and over dimensions 3 and 4 with samples coloured and labeled by sequencing lane (B). Distances on the plot correspond to the leading fold-change, which is the average (root-mean-square) log2-fold-change for the 500 genes most divergent between each pair of samples by default.</p>
 </div>
 
@@ -688,7 +689,7 @@ efit <- eBayes(vfit)
 plotSA(efit, main="Final model: Mean−variance trend")
 ```
 
-<img src="Law_RNAseq123_files/figure-html/voom-1.png" width="768" />
+![](Law_RNAseq123_files/figure-epub3/voom-1.png)<!-- -->
 
 Note that the other data frames stored within the DGEList-object that contain gene- and sample-level information, are retained in the EList-object `v` created by `voom`. The `v$genes` data frame is equivalent to `x$genes`, `v$targets` is equivalent to `x$samples`, and the expression values stored in `v$E` is analogous to `x$counts`, albeit on a transformed scale. In addition to this, the `voom` EList-object has a matrix of precision weights `v$weights` and stores the design matrix in `v$design`.
 
@@ -739,7 +740,7 @@ vennDiagram(dt[,1:2], circle.col=c("turquoise", "salmon"))
 ```
 
 <div class="figure">
-<img src="Law_RNAseq123_files/figure-html/venn-1.png" alt="Venn diagram showing the number of genes DE in the comparison between basal versus LP only (left), basal versus ML only (right), and the number of genes that are DE in both comparisons (center). The number of genes that are not DE in either comparison are marked in the bottom-right." width="576" />
+<img src="Law_RNAseq123_files/figure-epub3/venn-1.png" alt="Venn diagram showing the number of genes DE in the comparison between basal versus LP only (left), basal versus ML only (right), and the number of genes that are DE in both comparisons (center). The number of genes that are not DE in either comparison are marked in the bottom-right."  />
 <p class="caption">(\#fig:venn)Venn diagram showing the number of genes DE in the comparison between basal versus LP only (left), basal versus ML only (right), and the number of genes that are DE in both comparisons (center). The number of genes that are not DE in either comparison are marked in the bottom-right.</p>
 </div>
 
@@ -830,6 +831,6 @@ heatmap.2(v$E[i,], scale="row",
 ```
 
 <div class="figure">
-<img src="Law_RNAseq123_files/figure-html/heatmap-1.png" alt="Heatmap of log-CPM values for top 100 genes DE in basal versus LP. Expression across each gene (or row) have been scaled so that mean expression is zero and standard deviation is one. Samples with relatively high expression of a given gene are marked in red and samples with relatively low expression are marked in blue. Lighter shades and white represent genes with intermediate expression levels. Samples and genes have been reordered by the method of hierarchical clustering. A dendrogram is shown for the sample clustering." width="672" />
+<img src="Law_RNAseq123_files/figure-epub3/heatmap-1.png" alt="Heatmap of log-CPM values for top 100 genes DE in basal versus LP. Expression across each gene (or row) have been scaled so that mean expression is zero and standard deviation is one. Samples with relatively high expression of a given gene are marked in red and samples with relatively low expression are marked in blue. Lighter shades and white represent genes with intermediate expression levels. Samples and genes have been reordered by the method of hierarchical clustering. A dendrogram is shown for the sample clustering."  />
 <p class="caption">(\#fig:heatmap)Heatmap of log-CPM values for top 100 genes DE in basal versus LP. Expression across each gene (or row) have been scaled so that mean expression is zero and standard deviation is one. Samples with relatively high expression of a given gene are marked in red and samples with relatively low expression are marked in blue. Lighter shades and white represent genes with intermediate expression levels. Samples and genes have been reordered by the method of hierarchical clustering. A dendrogram is shown for the sample clustering.</p>
 </div>

@@ -1110,7 +1110,7 @@ roadmap_hub <- query(ah, "EpigenomeRoadMap")
 metadata <- query(ah, "Metadata")[[1L]]
 #> downloading 0 resources
 #> loading from cache 
-#>     '/home/mramos//.AnnotationHub/47270'
+#>     '/home/ubuntu//.AnnotationHub/47270'
 head(metadata)
 #>    EID    GROUP   COLOR          MNEMONIC
 #> 1 E001      ESC #924965            ESC.I3
@@ -1185,12 +1185,13 @@ So we'll take the first two entries and download them as BigWigFiles:
 
 ```r
 bw_files <- lapply(methylation_files[1:2], `[[`, 1L)
+#> require("rtracklayer")
 #> downloading 0 resources
 #> loading from cache 
-#>     '/home/mramos//.AnnotationHub/38894'
+#>     '/home/ubuntu//.AnnotationHub/38894'
 #> downloading 0 resources
 #> loading from cache 
-#>     '/home/mramos//.AnnotationHub/38895'
+#>     '/home/ubuntu//.AnnotationHub/38895'
 ```
 
 We have our desired BigWig files so now we can we can start analyzing them.
@@ -1295,6 +1296,13 @@ was prepared):
 ```r
 library(tools)
 library(Rsamtools)
+#> Loading required package: Biostrings
+#> Loading required package: XVector
+#> 
+#> Attaching package: 'Biostrings'
+#> The following object is masked from 'package:base':
+#> 
+#>     strsplit
 bams <- list_files_with_exts(system.file("extdata", package = "airway"), "bam")
 names(bams) <- sub("_[^_]+$", "", basename(bams))
 library(Rsamtools)
@@ -1389,6 +1397,37 @@ To begin we read the BAM file into a *GAlignments* object using
 
 ```r
 library(GenomicAlignments)
+#> Loading required package: SummarizedExperiment
+#> Loading required package: Biobase
+#> Welcome to Bioconductor
+#> 
+#>     Vignettes contain introductory material; view with
+#>     'browseVignettes()'. To cite Bioconductor, see
+#>     'citation("Biobase")', and for packages 'citation("pkgname")'.
+#> 
+#> Attaching package: 'Biobase'
+#> The following object is masked from 'package:AnnotationHub':
+#> 
+#>     cache
+#> Loading required package: DelayedArray
+#> Loading required package: matrixStats
+#> 
+#> Attaching package: 'matrixStats'
+#> The following objects are masked from 'package:Biobase':
+#> 
+#>     anyMissing, rowMedians
+#> Loading required package: BiocParallel
+#> 
+#> Attaching package: 'DelayedArray'
+#> The following objects are masked from 'package:matrixStats':
+#> 
+#>     colMaxs, colMins, colRanges, rowMaxs, rowMins, rowRanges
+#> The following object is masked from 'package:Biostrings':
+#> 
+#>     type
+#> The following objects are masked from 'package:base':
+#> 
+#>     aperm, apply
 reads <- grglist(readGAlignments(first_bam))
 ```
 Finally, we can find the junction reads:

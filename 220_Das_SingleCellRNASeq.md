@@ -1,5 +1,10 @@
 
 
+
+
+
+
+
 # Analysis of single-cell RNA-seq data: Dimensionality reduction, clustering, and lineage inference
 
 Authors:
@@ -108,78 +113,13 @@ The following packages are needed.
 # Bioconductor
 library(BiocParallel)
 library(SingleCellExperiment)
-#> Loading required package: SummarizedExperiment
-#> Loading required package: GenomicRanges
-#> Loading required package: stats4
-#> Loading required package: BiocGenerics
-#> Loading required package: parallel
-#> 
-#> Attaching package: 'BiocGenerics'
-#> The following objects are masked from 'package:parallel':
-#> 
-#>     clusterApply, clusterApplyLB, clusterCall, clusterEvalQ,
-#>     clusterExport, clusterMap, parApply, parCapply, parLapply,
-#>     parLapplyLB, parRapply, parSapply, parSapplyLB
-#> The following objects are masked from 'package:stats':
-#> 
-#>     IQR, mad, sd, var, xtabs
-#> The following objects are masked from 'package:base':
-#> 
-#>     anyDuplicated, append, as.data.frame, basename, cbind,
-#>     colMeans, colnames, colSums, dirname, do.call, duplicated,
-#>     eval, evalq, Filter, Find, get, grep, grepl, intersect,
-#>     is.unsorted, lapply, lengths, Map, mapply, match, mget, order,
-#>     paste, pmax, pmax.int, pmin, pmin.int, Position, rank, rbind,
-#>     Reduce, rowMeans, rownames, rowSums, sapply, setdiff, sort,
-#>     table, tapply, union, unique, unsplit, which, which.max,
-#>     which.min
-#> Loading required package: S4Vectors
-#> 
-#> Attaching package: 'S4Vectors'
-#> The following object is masked from 'package:base':
-#> 
-#>     expand.grid
-#> Loading required package: IRanges
-#> Loading required package: GenomeInfoDb
-#> Loading required package: Biobase
-#> Welcome to Bioconductor
-#> 
-#>     Vignettes contain introductory material; view with
-#>     'browseVignettes()'. To cite Bioconductor, see
-#>     'citation("Biobase")', and for packages 'citation("pkgname")'.
-#> Loading required package: DelayedArray
-#> Loading required package: matrixStats
-#> 
-#> Attaching package: 'matrixStats'
-#> The following objects are masked from 'package:Biobase':
-#> 
-#>     anyMissing, rowMedians
-#> 
-#> Attaching package: 'DelayedArray'
-#> The following objects are masked from 'package:matrixStats':
-#> 
-#>     colMaxs, colMins, colRanges, rowMaxs, rowMins, rowRanges
-#> The following objects are masked from 'package:base':
-#> 
-#>     aperm, apply
 library(clusterExperiment)
 library(scone)
 library(zinbwave)
-#> 
-#> Attaching package: 'zinbwave'
-#> The following objects are masked from 'package:clusterExperiment':
-#> 
-#>     nFeatures, nSamples
 library(slingshot)
-#> Loading required package: princurve
-#> Warning in rgl.init(initValue, onlyNULL): RGL: unable to open X11 display
-#> Warning: 'rgl_init' failed, running with rgl.useNULL = TRUE
 
 # CRAN
 library(gam)
-#> Loading required package: splines
-#> Loading required package: foreach
-#> Loaded gam 1.15
 library(RColorBrewer)
 
 set.seed(20)
@@ -332,7 +272,7 @@ mfilt <- metric_sample_filter(counts(fletcher),
 ```
 
 <div class="figure">
-<img src="220_Das_SingleCellRNASeq_files/figure-html/scone-1.png" alt="SCONE: Filtering of low-quality cells." width="672" />
+<img src="220_Das_SingleCellRNASeq_files/figure-epub3/scone-1.png" alt="SCONE: Filtering of low-quality cells."  />
 <p class="caption">(\#fig:scone)SCONE: Filtering of low-quality cells.</p>
 </div>
 
@@ -458,7 +398,7 @@ legend(x = "topleft", legend = unique(names(col_clus)), cex = .5, fill = unique(
 ```
 
 <div class="figure">
-<img src="220_Das_SingleCellRNASeq_files/figure-html/mdsW-1.png" alt="ZINB-WaVE: MDS of the low-dimensional matrix W, where each point represents a cell and cells are color-coded by original published clustering." width="672" />
+<img src="220_Das_SingleCellRNASeq_files/figure-epub3/mdsW-1.png" alt="ZINB-WaVE: MDS of the low-dimensional matrix W, where each point represents a cell and cells are color-coded by original published clustering."  />
 <p class="caption">(\#fig:mdsW)ZINB-WaVE: MDS of the low-dimensional matrix W, where each point represents a cell and cells are color-coded by original published clustering.</p>
 </div>
 
@@ -539,7 +479,7 @@ plotClusters(clustered)
 ```
 
 <div class="figure">
-<img src="220_Das_SingleCellRNASeq_files/figure-html/examinemakeConsensus-1.png" alt="RSEC: Candidate clusterings found using the function RSEC from the clusterExperiment package." width="672" />
+<img src="220_Das_SingleCellRNASeq_files/figure-epub3/examinemakeConsensus-1.png" alt="RSEC: Candidate clusterings found using the function RSEC from the clusterExperiment package."  />
 <p class="caption">(\#fig:examinemakeConsensus)RSEC: Candidate clusterings found using the function RSEC from the clusterExperiment package.</p>
 </div>
 
@@ -551,7 +491,7 @@ plotCoClustering(clustered)
 ```
 
 <div class="figure">
-<img src="220_Das_SingleCellRNASeq_files/figure-html/plotcoclust-1.png" alt="RSEC: Heatmap of co-clustering matrix." width="672" />
+<img src="220_Das_SingleCellRNASeq_files/figure-epub3/plotcoclust-1.png" alt="RSEC: Heatmap of co-clustering matrix."  />
 <p class="caption">(\#fig:plotcoclust)RSEC: Heatmap of co-clustering matrix.</p>
 </div>
 
@@ -571,7 +511,7 @@ plotBarplot(clustered, legend = FALSE)
 ```
 
 <div class="figure">
-<img src="220_Das_SingleCellRNASeq_files/figure-html/barplotOurs-1.png" alt="RSEC: Barplot of number of cells per cluster for our workflow's RSEC clustering." width="672" />
+<img src="220_Das_SingleCellRNASeq_files/figure-epub3/barplotOurs-1.png" alt="RSEC: Barplot of number of cells per cluster for our workflow's RSEC clustering."  />
 <p class="caption">(\#fig:barplotOurs)RSEC: Barplot of number of cells per cluster for our workflow's RSEC clustering.</p>
 </div>
 
@@ -591,7 +531,7 @@ plotBarplot(clustered, whichClusters=c("makeConsensus", "publishedClusters"),
 ```
 
 <div class="figure">
-<img src="220_Das_SingleCellRNASeq_files/figure-html/addPublishedClusters-1.png" alt="RSEC: Barplot of number of cells per cluster, for our workflow's RSEC clustering, color-coded by original published clustering." width="672" />
+<img src="220_Das_SingleCellRNASeq_files/figure-epub3/addPublishedClusters-1.png" alt="RSEC: Barplot of number of cells per cluster, for our workflow's RSEC clustering, color-coded by original published clustering."  />
 <p class="caption">(\#fig:addPublishedClusters)RSEC: Barplot of number of cells per cluster, for our workflow's RSEC clustering, color-coded by original published clustering.</p>
 </div>
  
@@ -601,7 +541,7 @@ plotClustersTable(clustered, whichClusters=c("makeConsensus","publishedClusters"
 ```
 
 <div class="figure">
-<img src="220_Das_SingleCellRNASeq_files/figure-html/addPublishedClusters2-1.png" alt="RSEC: Confusion matrix of number of cells per cluster, for our workflow's RSEC clustering and the original published clustering." width="672" />
+<img src="220_Das_SingleCellRNASeq_files/figure-epub3/addPublishedClusters2-1.png" alt="RSEC: Confusion matrix of number of cells per cluster, for our workflow's RSEC clustering and the original published clustering."  />
 <p class="caption">(\#fig:addPublishedClusters2)RSEC: Confusion matrix of number of cells per cluster, for our workflow's RSEC clustering and the original published clustering.</p>
 </div>
 
@@ -623,7 +563,7 @@ plotHeatmap(clustered,
 ```
 
 <div class="figure">
-<img src="220_Das_SingleCellRNASeq_files/figure-html/heatmapsClusters-1.png" alt="RSEC: Heatmap of the normalized expression measures for the 1,000 most variable genes, where rows correspond to genes and columns to cells ordered by RSEC clusters." width="672" />
+<img src="220_Das_SingleCellRNASeq_files/figure-epub3/heatmapsClusters-1.png" alt="RSEC: Heatmap of the normalized expression measures for the 1,000 most variable genes, where rows correspond to genes and columns to cells ordered by RSEC clusters."  />
 <p class="caption">(\#fig:heatmapsClusters)RSEC: Heatmap of the normalized expression measures for the 1,000 most variable genes, where rows correspond to genes and columns to cells ordered by RSEC clusters.</p>
 </div>
 
@@ -638,7 +578,7 @@ plotReducedDims(clustered,whichCluster="primary",reducedDim="zinbwave",pch=20,
 ```
 
 <div class="figure">
-<img src="220_Das_SingleCellRNASeq_files/figure-html/mdsWce-1.png" alt="RSEC: MDS of the low-dimensional matrix W, where each point represents a cell and cells are color-coded by RSEC clustering." width="672" />
+<img src="220_Das_SingleCellRNASeq_files/figure-epub3/mdsWce-1.png" alt="RSEC: MDS of the low-dimensional matrix W, where each point represents a cell and cells are color-coded by RSEC clustering."  />
 <p class="caption">(\#fig:mdsWce)RSEC: MDS of the low-dimensional matrix W, where each point represents a cell and cells are color-coded by RSEC clustering.</p>
 </div>
 
@@ -701,7 +641,7 @@ pairs(lineages, type="lineages", col = colorCl)
 ```
 
 <div class="figure">
-<img src="220_Das_SingleCellRNASeq_files/figure-html/tree-1.png" alt="Slingshot: Cells color-coded by cluster in a 4-dimensional MDS space, with connecting lines between cluster centers representing the inferred global lineage structure." width="672" />
+<img src="220_Das_SingleCellRNASeq_files/figure-epub3/tree-1.png" alt="Slingshot: Cells color-coded by cluster in a 4-dimensional MDS space, with connecting lines between cluster centers representing the inferred global lineage structure."  />
 <p class="caption">(\#fig:tree)Slingshot: Cells color-coded by cluster in a 4-dimensional MDS space, with connecting lines between cluster centers representing the inferred global lineage structure.</p>
 </div>
 
@@ -713,7 +653,7 @@ pairs(lineages, type="curves", col = colorCl)
 ```
 
 <div class="figure">
-<img src="220_Das_SingleCellRNASeq_files/figure-html/curves-1.png" alt="Slingshot: Cells color-coded by cluster in a 4-dimensional MDS space, with smooth curves representing each inferred lineage." width="672" />
+<img src="220_Das_SingleCellRNASeq_files/figure-epub3/curves-1.png" alt="Slingshot: Cells color-coded by cluster in a 4-dimensional MDS space, with smooth curves representing each inferred lineage."  />
 <p class="caption">(\#fig:curves)Slingshot: Cells color-coded by cluster in a 4-dimensional MDS space, with smooth curves representing each inferred lineage.</p>
 </div>
 
@@ -731,9 +671,9 @@ lineages
 #> Lineage3: c1  c2  
 #> 
 #> curves: 3 
-#> Curve1: Length: 9.5238	Samples: 361.21
-#> Curve2: Length: 7.8221	Samples: 234.14
-#> Curve3: Length: 4.2828	Samples: 254.85
+#> Curve1: Length: 9.5231	Samples: 361.2
+#> Curve2: Length: 7.8221	Samples: 234.18
+#> Curve3: Length: 4.2829	Samples: 254.85
 ```
 
 As an alternative, we could have incorporated the MDS results into the `clustered` object and applied `slingshot` directly to it. Here, we need to specify that we want to use the MDS results, because `slingshot` would otherwise use the first element of the `reducedDims` list (in this case, the 10-dimensional `W` matrix from `zinbwave`).
@@ -832,29 +772,29 @@ colData(pseudoCe)
 #>                     CreER ERCC_reads slingClusters slingPseudotime_1
 #>                 <numeric>  <numeric>   <character>         <numeric>
 #> OEP01_N706_S501         1      10516            c1                NA
-#> OEP01_N701_S501      3022       9331            c1  1.17234765019331
-#> OEP01_N707_S507      2329       7386            c1  1.05857338852636
-#> OEP01_N705_S501       717       6387            c1  1.60463630065258
-#> OEP01_N702_S508         6       1218            c1  1.15934111346639
+#> OEP01_N701_S501      3022       9331            c1  1.17232018630599
+#> OEP01_N707_S507      2329       7386            c1  1.05858337635502
+#> OEP01_N705_S501       717       6387            c1  1.60460038373484
+#> OEP01_N702_S508         6       1218            c1  1.15931902137246
 #> ...                   ...        ...           ...               ...
 #> OEL23_N704_S510       659          0            c2                NA
 #> OEL23_N705_S502      1552          0            c2                NA
-#> OEL23_N706_S502         0          0            c3  8.14552572709918
-#> OEL23_N704_S503         0          0            c3  8.53595122837615
+#> OEL23_N706_S502         0          0            c3  8.14483789210462
+#> OEL23_N704_S503         0          0            c3  8.53526772020056
 #> OEL23_N703_S502      2222          0            c2                NA
 #>                 slingPseudotime_2 slingPseudotime_3
 #>                         <numeric>         <numeric>
-#> OEP01_N706_S501                NA 0.692789182245903
-#> OEP01_N701_S501  1.16364108574816  1.14696263207989
-#> OEP01_N707_S507   1.0611741023521  1.03755897807688
-#> OEP01_N705_S501  1.61033070603652   1.4465916227885
-#> OEP01_N702_S508   1.1674954947514   1.4206584204892
+#> OEP01_N706_S501                NA 0.692825280941334
+#> OEP01_N701_S501  1.16361887771517  1.14699301945242
+#> OEP01_N707_S507  1.06119548551213  1.03755770530282
+#> OEP01_N705_S501  1.61029031246951   1.4465796469003
+#> OEP01_N702_S508  1.16749413269368  1.42064174043725
 #> ...                           ...               ...
-#> OEL23_N704_S510                NA  2.01842841303396
-#> OEL23_N705_S502                NA  3.75230631265741
+#> OEL23_N704_S510                NA  2.01841650456369
+#> OEL23_N705_S502                NA  3.75228382608131
 #> OEL23_N706_S502                NA                NA
 #> OEL23_N704_S503                NA                NA
-#> OEL23_N703_S502                NA  2.74576551163381
+#> OEL23_N703_S502                NA  2.74575663220122
 ```
 
 The result of `slingshot` applied to a `ClusterExperiment` object is still of class `ClusterExperiment`. Note that we did not specify a set of cluster labels, implying that `slingshot` should use the default `primaryClusterNamed` vector.
@@ -897,7 +837,7 @@ plotHeatmap(pseudoCe1[topgenes,], clusterSamplesData = "orderSamplesValue", brea
 ```
 
 <div class="figure">
-<img src="220_Das_SingleCellRNASeq_files/figure-html/heatmapsignificant-1.png" alt="DE: Heatmap of the normalized expression measures for the 100 most significantly DE genes for the neuronal lineage, where rows correspond to genes and columns to cells ordered by pseudotime." width="672" />
+<img src="220_Das_SingleCellRNASeq_files/figure-epub3/heatmapsignificant-1.png" alt="DE: Heatmap of the normalized expression measures for the 100 most significantly DE genes for the neuronal lineage, where rows correspond to genes and columns to cells ordered by pseudotime."  />
 <p class="caption">(\#fig:heatmapsignificant)DE: Heatmap of the normalized expression measures for the 100 most significantly DE genes for the neuronal lineage, where rows correspond to genes and columns to cells ordered by pseudotime.</p>
 </div>
 

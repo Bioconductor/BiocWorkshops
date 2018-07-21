@@ -1,5 +1,6 @@
 
-# Effectively using the DelayedArray framework to support the analysis of large datasets
+
+# 500: Effectively using the DelayedArray framework to support the analysis of large datasets
 
 Authors:
 Peter Francis Hickey^[Department of Biostatistics, Johns Hopkins University],
@@ -244,7 +245,7 @@ The **DelayedArray** package defines the key classes, generics, and methods^[The
 
 The reverse dependencies of **DelayedArray** are shown below:
 
-<img src="500_Effectively_Using_the_DelayedArray_Framework_files/figure-html/unnamed-chunk-5-1.png" width="672" />
+<img src="500_Effectively_Using_the_DelayedArray_Framework_files/figure-html/unnamed-chunk-6-1.png" width="672" />
 
 The above figures includes packages that extend the DelayedArray framework in various ways, as well as those that simply use the DelayedArray framework to analyse specific types of 'omics data. We briefly discuss some of these:
 
@@ -378,9 +379,6 @@ da_mat
 #> [103,]   14   20
 #> [104,]   14   20
 #> [105,]   14   20
-str(da_mat)
-#> Formal class 'DelayedMatrix' [package "DelayedArray"] with 1 slot
-#>   ..@ seed: int [1:105, 1:2] 1 2 2 3 3 3 4 4 4 4 ...
 ```
 
 We can use other, more complex, array-like objects as the *seed*, such as *Matrix* objects from the **Matrix** package:
@@ -405,15 +403,6 @@ da_Mat
 #> [103,]   14   20
 #> [104,]   14   20
 #> [105,]   14   20
-str(da_Mat)
-#> Formal class 'DelayedMatrix' [package "DelayedArray"] with 1 slot
-#>   ..@ seed:Formal class 'dgeMatrix' [package "Matrix"] with 4 slots
-#>   .. .. ..@ x       : num [1:210] 1 2 2 3 3 3 4 4 4 4 ...
-#>   .. .. ..@ Dim     : int [1:2] 105 2
-#>   .. .. ..@ Dimnames:List of 2
-#>   .. .. .. ..$ : NULL
-#>   .. .. .. ..$ : NULL
-#>   .. .. ..@ factors : list()
 ```
 
 We can even use data frames as the *seed* of a two-dimensional *DelayedArray*.
@@ -437,11 +426,6 @@ da_df
 #> 103 14 20
 #> 104 14 20
 #> 105 14 20
-str(da_df)
-#> Formal class 'DelayedMatrix' [package "DelayedArray"] with 1 slot
-#>   ..@ seed:'data.frame':	105 obs. of  2 variables:
-#>   .. ..$ V1: int [1:105] 1 2 2 3 3 3 4 4 4 4 ...
-#>   .. ..$ V2: int [1:105] 15 15 15 15 15 15 15 15 15 15 ...
 
 library(tibble)
 tbl <- as_tibble(mat)
@@ -461,11 +445,6 @@ da_tbl
 #> 103 14 20
 #> 104 14 20
 #> 105 14 20
-str(da_tbl)
-#> Formal class 'DelayedMatrix' [package "DelayedArray"] with 1 slot
-#>   ..@ seed:Classes 'tbl_df', 'tbl' and 'data.frame':	105 obs. of  2 variables:
-#>   .. ..$ V1: int [1:105] 1 2 2 3 3 3 4 4 4 4 ...
-#>   .. ..$ V2: int [1:105] 15 15 15 15 15 15 15 15 15 15 ...
 
 DF <- as(mat, "DataFrame")
 da_DF <- DelayedArray(seed = DF)
@@ -484,17 +463,6 @@ da_DF
 #> [103,] 14 20
 #> [104,] 14 20
 #> [105,] 14 20
-str(da_DF)
-#> Formal class 'DelayedMatrix' [package "DelayedArray"] with 1 slot
-#>   ..@ seed:Formal class 'DataFrame' [package "S4Vectors"] with 6 slots
-#>   .. .. ..@ rownames       : NULL
-#>   .. .. ..@ nrows          : int 105
-#>   .. .. ..@ listData       :List of 2
-#>   .. .. .. ..$ V1: int [1:105] 1 2 2 3 3 3 4 4 4 4 ...
-#>   .. .. .. ..$ V2: int [1:105] 15 15 15 15 15 15 15 15 15 15 ...
-#>   .. .. ..@ elementType    : chr "ANY"
-#>   .. .. ..@ elementMetadata: NULL
-#>   .. .. ..@ metadata       : list()
 ```
 
 A package developer can also implement a novel in-memory seed.
@@ -521,18 +489,6 @@ da_Rle
 #> [103,]   14   20
 #> [104,]   14   20
 #> [105,]   14   20
-str(da_Rle)
-#> Formal class 'RleMatrix' [package "DelayedArray"] with 1 slot
-#>   ..@ seed:Formal class 'SolidRleArraySeed' [package "DelayedArray"] with 3 slots
-#>   .. .. ..@ rle     :Formal class 'Rle' [package "S4Vectors"] with 4 slots
-#>   .. .. .. .. ..@ values         : int [1:20] 1 2 3 4 5 6 7 8 9 10 ...
-#>   .. .. .. .. ..@ lengths        : int [1:20] 1 2 3 4 5 6 7 8 9 10 ...
-#>   .. .. .. .. ..@ elementMetadata: NULL
-#>   .. .. .. .. ..@ metadata       : list()
-#>   .. .. ..@ DIM     : int [1:2] 105 2
-#>   .. .. ..@ DIMNAMES:List of 2
-#>   .. .. .. ..$ : NULL
-#>   .. .. .. ..$ : NULL
 ```
 
 The *RleArray* examples illustrates some important concepts in the DelayedArray class hierarchy that warrants reiteration and expansion.
@@ -795,8 +751,8 @@ hdf5_file <- file.path(
 # NOTE: We can use rhdf5::h5ls() to take a look what is in the HDF5 file.
 #       This is very useful when working interactively!
 rhdf5::h5ls(hdf5_file)
-#>   group     name       otype  dclass  dim
-#> 0     / hdf5_mat H5I_DATASET INTEGER  x 2
+#>   group     name       otype  dclass     dim
+#> 0     / hdf5_mat H5I_DATASET INTEGER 105 x 2
 
 # We can create the HDF5Array by first creating a HDF5ArraySeed and then 
 # creating the HDF5Array.
@@ -833,14 +789,6 @@ da_hdf5
 #> [103,]   14   20
 #> [104,]   14   20
 #> [105,]   14   20
-str(da_hdf5)
-#> Formal class 'HDF5Matrix' [package "HDF5Array"] with 1 slot
-#>   ..@ seed:Formal class 'HDF5ArraySeed' [package "HDF5Array"] with 5 slots
-#>   .. .. ..@ filepath : chr "/home/mramos/Source/github/BiocWorkshops/500_Effectively_Using_the_DelayedArray_Framework/hdf5_mat.h5"
-#>   .. .. ..@ name     : chr "hdf5_mat"
-#>   .. .. ..@ dim      : int [1:2] 105 2
-#>   .. .. ..@ first_val: int 1
-#>   .. .. ..@ chunkdim : int [1:2] 105 2
 ```
 
 Other on-disk seeds are possible such as **fst**, **bigmemory**, **ff**, or **matter**.
@@ -854,10 +802,27 @@ The data remain on the server until requested.
 
 
 ```r
-# TODO: Test at home
 library(rhdf5client)
-# TODO: Use H5S_Array rather than HSDS_Matrix()
+#> 
+#> Attaching package: 'rhdf5client'
+#> The following object is masked from 'package:tidygraph':
+#> 
+#>     groups
 da_h5s <- HSDS_Matrix(URL_hsds(), "/home/stvjc/hdf5_mat.h5")
+da_h5s
+#> <105 x 2> H5S_Matrix object of type "double":
+#>        [,1] [,2]
+#>   [1,]    1   15
+#>   [2,]    2   15
+#>   [3,]    2   15
+#>   [4,]    3   15
+#>   [5,]    3   15
+#>    ...    .    .
+#> [101,]   14   20
+#> [102,]   14   20
+#> [103,]   14   20
+#> [104,]   14   20
+#> [105,]   14   20
 ```
 
 #### So what seed should I use?
@@ -1000,15 +965,15 @@ x <- as.array(x_h5)
 # Delayed operations are fast compared to ordinary operations! 
 system.time(x_h5 + 100L) 
 #>    user  system elapsed 
-#>   0.004   0.000   0.005
+#>   0.004   0.000   0.004
 system.time(x + 100L) 
 #>    user  system elapsed 
-#>   2.876   1.624   4.498
+#>   2.288   0.908   3.198
 
 # Delayed operations can be chained
 system.time(t(x_h5[1, , 1:100] + 100L))
 #>    user  system elapsed 
-#>    0.02    0.00    0.02
+#>   0.016   0.000   0.015
 ```
 
 Rather than modifying the data stored in the HDF5 file, which can be costly for large datasets, we've recorded the 'idea' of these operations as a tree of *DelayedOp* objects.
@@ -1125,7 +1090,7 @@ system.time(
             refdim = dim(da_hdf5),
             spacings = c(1L, ncol(da_hdf5)))))
 #>    user  system elapsed 
-#>   0.128   1.104   1.500
+#>   0.024   0.036   1.019
 head(row_medians)
 #> [[1]]
 #> [1] 8
@@ -1152,7 +1117,7 @@ system.time(
             refdim = dim(da_hdf5),
             spacings = c(nrow(da_hdf5), 1L))))
 #>    user  system elapsed 
-#>   0.064   0.092   0.233
+#>   0.044   0.032   0.144
 head(col_medians)
 #> [[1]]
 #> [1] 10
@@ -1176,7 +1141,7 @@ system.time(
             block.shape = "first-dim-grows-first")))
 #> Processing block 1/1 ... OK
 #>    user  system elapsed 
-#>   0.020   0.000   0.021
+#>   0.016   0.000   0.015
 head(row_medians)
 #> [[1]]
 #>   [1]  8.0  8.5  8.5  9.0  9.0  9.0  9.5  9.5  9.5  9.5 10.0 10.0 10.0 10.0
@@ -1196,7 +1161,7 @@ system.time(
             block.shape = "last-dim-grows-first")))
 #> Processing block 1/1 ... OK
 #>    user  system elapsed 
-#>   0.016   0.000   0.018
+#>   0.016   0.000   0.015
 head(col_medians)
 #> [[1]]
 #> [1] 10 18
@@ -1266,7 +1231,7 @@ showtree(z_h5)
 #> 10000000x2 integer: HDF5Matrix object
 #> └─ 10000000x2 integer: [seed] HDF5ArraySeed object
 path(z_h5)
-#> [1] "/tmp/RtmpZBH3LF/HDF5Array_dump/auto00001.h5"
+#> [1] "/tmp/Rtmp18NqSJ/HDF5Array_dump/auto00001.h5"
 
 # NOTE: The show() method performs realization on the first few and last few 
 #       elements in order to preview the result

@@ -1228,7 +1228,7 @@ question:
 upsetSamples(miniACC)
 ```
 
-<img src="Ramos_MultiAssayExperiment_files/figure-html/unnamed-chunk-48-1.png" width="672" />
+![](Ramos_MultiAssayExperiment_files/figure-epub3/unnamed-chunk-48-1.png)<!-- -->
 
 In this dataset only 43 samples have all 5 assays, 32 are missing reverse-phase
 protein (RPPAArray), 2 are missing Mutations, 1 is missing gistict, 12 have only
@@ -1272,7 +1272,7 @@ fit <- survfit(Surv(days_to_death, vital_status) ~ pathology_N_stage, data = col
 ggsurvplot(fit, data = colData(miniACCsurv), risk.table = TRUE)
 ```
 
-<img src="Ramos_MultiAssayExperiment_files/figure-html/unnamed-chunk-51-1.png" width="672" />
+![](Ramos_MultiAssayExperiment_files/figure-epub3/unnamed-chunk-51-1.png)<!-- -->
 
 ### Multivariate Cox regression including RNA-seq, copy number, and pathology
 
@@ -1394,13 +1394,13 @@ And finally, create the histograms:
 hist(diag(corres))
 ```
 
-<img src="Ramos_MultiAssayExperiment_files/figure-html/unnamed-chunk-60-1.png" width="672" />
+![](Ramos_MultiAssayExperiment_files/figure-epub3/unnamed-chunk-60-1.png)<!-- -->
 
 ```r
 hist(corres[upper.tri(corres)])
 ```
 
-<img src="Ramos_MultiAssayExperiment_files/figure-html/unnamed-chunk-60-2.png" width="672" />
+![](Ramos_MultiAssayExperiment_files/figure-epub3/unnamed-chunk-60-2.png)<!-- -->
 
 **Part 2**
 
@@ -1446,7 +1446,7 @@ boxplot(RNASeq2GeneNorm_EIF4E ~ gistict_EIF4E,
         ylab="RNA-seq counts")
 ```
 
-<img src="Ramos_MultiAssayExperiment_files/figure-html/unnamed-chunk-63-1.png" width="672" />
+![](Ramos_MultiAssayExperiment_files/figure-epub3/unnamed-chunk-63-1.png)<!-- -->
 
 <p style="text-align: right;"> [back to top](#overview-of-key-data-classes) </p>
 
@@ -1542,7 +1542,7 @@ mycors <- mycors[has.high.cor, has.high.cor]
 pheatmap::pheatmap(mycors)
 ```
 
-<img src="Ramos_MultiAssayExperiment_files/figure-html/unnamed-chunk-68-1.png" width="672" />
+![](Ramos_MultiAssayExperiment_files/figure-epub3/unnamed-chunk-68-1.png)<!-- -->
 
 The highest correlation present is between PC2 of the RNA-seq assay, and PC1 of
 the protein assay.
