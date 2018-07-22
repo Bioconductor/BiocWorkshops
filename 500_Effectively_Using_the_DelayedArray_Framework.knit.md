@@ -972,12 +972,12 @@ system.time(x_h5 + 100L)
 #>   0.004   0.000   0.005
 system.time(x + 100L) 
 #>    user  system elapsed 
-#>   2.520   1.888   4.407
+#>   2.500   1.456   3.953
 
 # Delayed operations can be chained
 system.time(t(x_h5[1, , 1:100] + 100L))
 #>    user  system elapsed 
-#>   0.020   0.000   0.017
+#>   0.016   0.000   0.017
 ```
 
 Rather than modifying the data stored in the HDF5 file, which can be costly for large datasets, we've recorded the 'idea' of these operations as a tree of *DelayedOp* objects.
@@ -1094,7 +1094,7 @@ system.time(
             refdim = dim(da_hdf5),
             spacings = c(1L, ncol(da_hdf5)))))
 #>    user  system elapsed 
-#>   0.156   1.420   1.938
+#>   0.116   1.396   1.804
 head(row_medians)
 #> [[1]]
 #> [1] 8
@@ -1121,7 +1121,7 @@ system.time(
             refdim = dim(da_hdf5),
             spacings = c(nrow(da_hdf5), 1L))))
 #>    user  system elapsed 
-#>   0.060   0.136   0.272
+#>   0.068   0.124   0.268
 head(col_medians)
 #> [[1]]
 #> [1] 10
@@ -1145,7 +1145,7 @@ system.time(
             block.shape = "first-dim-grows-first")))
 #> Processing block 1/1 ... OK
 #>    user  system elapsed 
-#>   0.016   0.004   0.019
+#>   0.016   0.000   0.018
 head(row_medians)
 #> [[1]]
 #>   [1]  8.0  8.5  8.5  9.0  9.0  9.0  9.5  9.5  9.5  9.5 10.0 10.0 10.0 10.0
@@ -1165,7 +1165,7 @@ system.time(
             block.shape = "last-dim-grows-first")))
 #> Processing block 1/1 ... OK
 #>    user  system elapsed 
-#>   0.020   0.000   0.017
+#>   0.012   0.004   0.017
 head(col_medians)
 #> [[1]]
 #> [1] 10 18
@@ -1235,7 +1235,7 @@ showtree(z_h5)
 #> 10000000x2 integer: HDF5Matrix object
 #> └─ 10000000x2 integer: [seed] HDF5ArraySeed object
 path(z_h5)
-#> [1] "/tmp/RtmpvXGvkF/HDF5Array_dump/auto00001.h5"
+#> [1] "/tmp/RtmpifduTv/HDF5Array_dump/auto00001.h5"
 
 # NOTE: The show() method performs realization on the first few and last few 
 #       elements in order to preview the result
