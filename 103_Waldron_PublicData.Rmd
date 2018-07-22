@@ -4,11 +4,11 @@ bibliography: Waldron_PublicData/Waldron_PublicData.bib
 
 # 103: Public data resources and Bioconductor
 
-## Instructor name(s) and contact information
+## Instructor names and contact information
 
-* Levi Waldron^[City University of New York, New York, NY, USA]
-* Benjamin Haibe-Kain^[Princess Margaret Cancer Center, Toronto, Canada]
-* Sean Davis^[Center for Cancer Research, National Cancer Institute, National Institutes of Health, Bethesda, MD, USA]
+* Levi Waldron <levi.waldron at sph.cuny.edu> (City University of New York, New York, NY, USA)
+* Benjamin Haibe-Kains <benjamin.haibe.kains at utoronto.ca> (Princess Margaret Cancer Center, Toronto, Canada)
+* Sean Davis <sdavis2 at mail.nih.gov> (Center for Cancer Research, National Cancer Institute, National Institutes of Health, Bethesda, MD, USA)
 
 ## Syllabus
 
@@ -145,7 +145,7 @@ GDS records several years ago. We mention them here for completeness only.
 Getting data from GEO is really quite easy.  There is only one command that is needed, `getGEO`.  This one function interprets its input to determine how to get the data from GEO and then parse the data into useful R data structures.
 
 
-```{r loadLibrary, message=FALSE}
+```{r loadLibrary20, message=FALSE}
 library(GEOquery)
 ```
 
@@ -758,6 +758,331 @@ fnames = gdcdata(manifest_df$id[3:10], access_method = 'client')
 
 ## Sequence Read Archive
 
+
+The SRAdbV2 package is currently available from [GitHub] and is under
+active development. Either the `r BiocStyle::CRANpkg("devtools")` package or the
+`r BiocStyle::CRANpkg("BiocManager")` package can be used for easy installation.
+
+```{r eval=FALSE}
+install.packages('BiocManager')
+BiocManager::install('seandavi/SRAdbV2')
+```
+
+[GitHub]: https://github.com/seandavi/SRAdbV2
+
+
+### Usage
+
+#### Loading the library
+
+```{r cache=FALSE}
+library(SRAdbV2)
+```
+
+#### The Omicidx 
+
+The entrypoint for using the SRAdbV2 system is the `Omicidx`, an [R6 class].
+To start, create a new instance of the class. 
+
+[R6 class]: https://cran.r-project.org/web/packages/R6/vignettes/Introduction.html
+
+```{r cache=FALSE}
+oidx = Omicidx$new()
+```
+
+Typing `oidx$` and then `TAB` will give possible completions. Note the "search" 
+completion. 
+
+#### Queries
+
+Once an instance of `Omicidx` is created (here we will call the instance `oidx`), 
+search capabilities are available via `oidx$search()`. The one interesting
+parameter is the `q` parameter. This parameter takes a string formatted as a Lucene query
+string. See below for [Query syntax]. 
+
+```{r cache=FALSE}
+query=paste(
+  paste0('sample_taxon_id:', 10116),
+  'AND experiment_library_strategy:"rna seq"',
+  'AND experiment_library_source:transcriptomic',
+  'AND experiment_platform:illumina')
+z = oidx$search(q=query,entity='full',size=100L)
+```
+
+The `entity` parameter is one of the SRA entity types available via the API. 
+The `size` parameter is the number of records that will be returned in each "chunk".
+
+#### Fetching results
+
+Because result sets can be large, we have a special method that allows us to 
+"scroll" through the results or to simply get them *en bloc*. The first step
+for result retrieval, then, is to get a `Scroller`. 
+
+```{r cache=FALSE}
+s = z$scroll()
+s
+```
+
+Methods such as `s$count` allow introspection into the available number of
+results, in this case, `r s$count` records.
+
+The `Scroller` provides two different approaches to accessing the resulting data.
+
+##### Collating entire result sets
+
+The first approach to getting results of a query back into R is the
+most convenient, but for large result sets, the entire dataset is
+loaded into memory and may take significant time if network
+connections are slow.
+
+
+```{r cache=FALSE}
+# for VERY large result sets, this may take
+# quite a bit of time and/or memory. An
+# alternative is to use s$chunk() to retrieve
+# one batch of records at a time and process
+# incrementally.
+res = s$collate(limit = 1000)
+head(res)
+```
+
+Note that the scroller now reports that it has fetched (`s$fetched`) `r s$fetched` records.
+
+To reuse a `Scroller`, we must reset it first.
+
+```{r cache=FALSE}
+s$reset()
+s
+```
+
+##### Yielding chunks
+
+The second approach is to iterate through results using the `yield`
+method. This approach allows the user to perform processing on chunks
+of data as they arrive in R.
+
+```{r cache=FALSE}
+j = 0
+## fetch only 500 records, but
+## `yield` will return NULL
+## after ALL records have been fetched
+while(s$fetched < 500) {
+    res = s$yield()
+    # do something interesting with `res` here if you like
+    j = j + 1
+    message(sprintf('total of %d fetched records, loop iteration # %d', s$fetched, j))
+}
+```
+
+The `Scroller` also has a `has_next()` method that will report `TRUE` if the 
+result set has not been fully fetched. Using the `reset()` method will move the 
+cursor back to the beginning of the result set.
+
+### Query syntax
+
+
+#### Terms
+
+A query is broken up into terms and operators. There are two types of terms: Single Terms and Phrases. A Single Term is a single word such as "test" or "hello". A Phrase is a group of words surrounded by double quotes such as "hello dolly". Multiple terms can be combined together with Boolean operators to form a more complex query (see below).
+
+#### Fields
+
+Queries support fielded data. When performing a search you can either specify a field, or use the default field. The field names and default field is implementation specific. You can search any field by typing the field name followed by a colon ":" and then the term you are looking for. As an example, let's assume a Lucene index contains two fields, title and abstract. If you want to find the document entitled "The Right Way" which contains the text "don't go this way" in the abstract, you can enter:
+
+```
+title:"The Right Way" AND abstract:go
+```
+
+or
+
+Note: The field is only valid for the term that it directly precedes, so the query
+
+```
+title:Do it right
+```
+
+will only find "Do" in the title field. It will find "it" and "right" in any other fields.
+
+#### Wildcard Searches
+
+Lucene supports single and multiple character wildcard searches within single terms (not within phrase queries). To perform a single character wildcard search use the "?" symbol. To perform a multiple character wildcard search use the "*" symbol. The single character wildcard search looks for terms that match that with the single character replaced. For example, to search for "text" or "test" you can use the search:
+
+```
+te?t
+```
+
+Multiple character wildcard searches looks for 0 or more characters. For example, to search for test, tests or tester, you can use the search:
+
+```
+test*
+```
+
+You can also use the wildcard searches in the middle of a term.
+
+```
+te*t
+```
+
+Note: You cannot use a * or ? symbol as the first character of a search.
+
+#### Fuzzy Searches
+
+Lucene supports fuzzy searches based on the Levenshtein Distance, or Edit Distance algorithm. To do a fuzzy search use the tilde, "~", symbol at the end of a Single word Term. For example to search for a term similar in spelling to "roam" use the fuzzy search:
+
+```
+roam~
+```
+
+
+This search will find terms like foam and roams.
+
+Starting with Lucene 1.9 an additional (optional) parameter can specify the required similarity. The value is between 0 and 1, with a value closer to 1 only terms with a higher similarity will be matched. For example:
+
+
+```
+roam~0.8
+```
+
+The default that is used if the parameter is not given is 0.5.
+
+#### Proximity Searches
+
+Lucene supports finding words are a within a specific distance away. To do a proximity search use the tilde, "~", symbol at the end of a Phrase. For example to search for a "apache" and "jakarta" within 10 words of each other in a document use the search:
+
+```
+"jakarta apache"~10
+```
+
+#### Range Searches
+
+Range Queries allow one to match documents whose field(s) values are between the lower and upper bound specified by the Range Query. Range Queries can be inclusive or exclusive of the upper and lower bounds. Sorting is done lexicographically.
+
+```
+mod_date:[20020101 TO 20030101]
+```
+
+This will find documents whose mod_date fields have values between 20020101 and 20030101, inclusive. Note that Range Queries are not reserved for date fields. You could also use range queries with non-date fields:
+
+```
+title:{Aida TO Carmen}
+```
+
+This will find all documents whose titles are between Aida and Carmen, but not including Aida and Carmen. Inclusive range queries are denoted by square brackets. Exclusive range queries are denoted by curly brackets.
+
+#### Boolean Operators
+
+Boolean operators allow terms to be combined through logic operators. Lucene supports AND, "+", OR, NOT and "-" as Boolean operators(Note: Boolean operators must be ALL CAPS).
+
+##### OR
+
+The OR operator is the default conjunction operator. This means that if there is no Boolean operator between two terms, the OR operator is used. The OR operator links two terms and finds a matching document if either of the terms exist in a document. This is equivalent to a union using sets. The symbol || can be used in place of the word OR.
+
+To search for documents that contain either "jakarta apache" or just "jakarta" use the query:
+
+```
+"jakarta apache" jakarta
+```
+
+or
+
+```
+"jakarta apache" OR jakarta
+```
+
+The AND operator matches documents where both terms exist anywhere in the text of a single document. This is equivalent to an intersection using sets. The symbol && can be used in place of the word AND. To search for documents that contain "jakarta apache" and "Apache Lucene" use the query:
+
+"jakarta apache" AND "Apache Lucene"
+
+
+##### +
+
+The "+" or required operator requires that the term after the "+" symbol exist somewhere in a the field of a single document. To search for documents that must contain "jakarta" and may contain "lucene" use the query:
+
+```
++jakarta lucene
+```
+
+##### NOT
+
+The NOT operator excludes documents that contain the term after NOT. This is equivalent to a difference using sets. The symbol ! can be used in place of the word NOT. To search for documents that contain "jakarta apache" but not "Apache Lucene" use the query:
+
+```
+"jakarta apache" NOT "Apache Lucene"
+```
+
+Note: The NOT operator cannot be used with just one term. For example, the following search will return no results:
+
+```
+NOT "jakarta apache"
+```
+
+##### -
+
+The "-" or prohibit operator excludes documents that contain the term after the "-" symbol. To search for documents that contain "jakarta apache" but not "Apache Lucene" use the query:
+
+```
+"jakarta apache" -"Apache Lucene"
+```
+
+#### Grouping
+
+Lucene supports using parentheses to group clauses to form sub queries. This can be very useful if you want to control the boolean logic for a query. To search for either "jakarta" or "apache" and "website" use the query:
+
+```
+(jakarta OR apache) AND website
+```
+
+This eliminates any confusion and makes sure you that website must exist and either term jakarta or apache may exist.
+
+Lucene supports using parentheses to group multiple clauses to a single field.
+
+To search for a title that contains both the word "return" and the phrase "pink panther" use the query:
+
+```
+title:(+return +"pink panther")
+```
+
+#### Escaping Special Characters
+Lucene supports escaping special characters that are part of the query syntax. The current list special characters are
+
+```
++ - && || ! ( ) { } [ ] ^ " ~ * ? : \
+```
+
+To escape these character use the \ before the character. For example to search for (1+1):2 use the query:
+
+```
+\(1\+1\)\:2
+```
+
+[Lucene query string]: https://lucene.apache.org/core/2_9_4/queryparsersyntax.html
+
+### Using the raw API without R/Bioconductor
+
+The SRAdbV2 is a client to a high-performance web-based API. As
+such, the web API is perfectly usable from either a simple test page, 
+accessible here:
+
+```{r eval=FALSE}
+sra_browse_API()
+```
+
+![The web-based API provides a useful interface for experiment
+with queries. It also returns URLs associated with the example
+queries, facilitating querying with other tools like `curl` or
+`wget`.](images/API.png)
+
+
+The API is described using the OpenAPI standard, also known as 
+[Swagger](https://swagger.io/). Tooling exists to quickly scaffold
+clients in any language (basically) based on the json available here:
+
+```{r}
+sra_get_swagger_json_url()
+```
+
+
+
 ## Accessing The Cancer Genome Atlas (TCGA)
 
 We summarize two approaches to accessing TCGA data:
@@ -996,7 +1321,7 @@ This can also be converted to `r BiocStyle::Biocpkg("phyloseq")` for ecological 
     
 ## Pharmacogenomics
 
-Pharmacogenomics holds great promise for the development of biomarkers of drug response and the design of new therapeutic options, which are key challenges in precision medicine. However, such data are scattered and lack standards for efficient access and analysis, consequently preventing the realization of the full potential of pharmacogenomics. To address these issues, we implemented `PharmacoGx`, an easy-to-use, open source package for integrative analysis of multiple pharmacogenomic datasets. ~PharmacoGx` provides a unified framework for downloading and analyzing large pharmacogenomic datasets which are extensively curated to ensure maximum overlap and consistency.
+Pharmacogenomics holds great promise for the development of biomarkers of drug response and the design of new therapeutic options, which are key challenges in precision medicine. However, such data are scattered and lack standards for efficient access and analysis, consequently preventing the realization of the full potential of pharmacogenomics. To address these issues, we implemented `r BiocStyle::Biocpkg("PharmacoGx")`, an easy-to-use, open source package for integrative analysis of multiple pharmacogenomic datasets. ~PharmacoGx` provides a unified framework for downloading and analyzing large pharmacogenomic datasets which are extensively curated to ensure maximum overlap and consistency.
 
 Examples of `PharmacoGx` usage in biomedical research can be found in the following publications:
 * [Smirnov et al. PharmacoGx: an R package for analysis of large pharmacogenomic datasets." Bioinformatics (2015): 1244-1246](https://academic.oup.com/bioinformatics/article/32/8/1244/1744214/PharmacoGx-an-R-package-for-analysis-of-large).
@@ -1010,7 +1335,7 @@ Examples of `PharmacoGx` usage in biomedical research can be found in the follow
 
 Let us first load the `PharmacoGx` library.
 
-```{r loadLibrary, message=FALSE}
+```{r loadLibrary10, message=FALSE}
 library(PharmacoGx)
 ```
 We can now access large-scale preclinical pharmacogenomic datasets that have been fully curated for ease of use.
@@ -1056,160 +1381,9 @@ psets[psets[ , "Dataset.Type"] == "perturbation", ]
 ```
 Large drug perturbation data have been generated within the Connectivity Map Project [CAMP](https://clue.io/cmap), with CMAPv2 and CMAPv3 available from `PharmacoGx`, published in [Lamb et al., The Connectivity Map: Using Gene-Expression Signatures to Connect Small Molecules, Genes, and Disease, Science (2006)](http://science.sciencemag.org/content/313/5795/1929) and [Subramanian et al., A Next Generation Connectivity Map: L1000 Platform and the First 1,000,000 Profiles, Cell (2017)](https://www.cell.com/cell/abstract/S0092-8674(17)31309-0), respectively.
  
-### Exploring a drug sensitivity dataset
+### Exploring drug sensitivity datasets
 
-
-```{r downloadGDSC, message=FALSE}
-GDSC <- PharmacoGx::downloadPSet("GDSC", saveDir=file.path(".", "Waldron_PublicData"))
-```
-
-```{r pie_chart, fig.cap="Tissue of origin of cell lines in CCLE study"}
-mycol <- c("#8dd3c7","#ffffb3","#bebada","#fb8072","#80b1d3","#fdb462",
-           "#b3de69","#fccde5","#d9d9d9","#bc80bd","#ccebc5","#ffed6f",
-           "#a6cee3","#1f78b4","#b2df8a","#33a02c","#fb9a99","#e31a1c",
-           "#fdbf6f","#ff7f00","#cab2d6","#6a3d9a","#ffff99","#b15928")
-pie(table(CCLE@cell[,"tissueid"]), 
-    col=mycol, 
-    main="Tissue types", 
-    radius=1, 
-    cex=0.8)
-```
-
-### Comparing drug sensitivity datasets
-
-Intersecting two independent pharmacogenomic datasets is challenging due to the lack of standard cell line and drug identifiers. Thanks to the curation process involved in the generation of PSets, it is now easy to extract the overlap at the level of drugs, cell lines, and molecular features.
-
-Let's use the GDSC and CCLE data.
-
-```{r downloadPSets, message=FALSE}
-GDSC <- PharmacoGx::downloadPSet("GDSC", saveDir=file.path(".", "Waldron_PublicData"))
-CCLE <- PharmacoGx::downloadPSet("CCLE", saveDir=file.path(".", "Waldron_PublicData"))
-```
-
-We can easily build PSets composed only of the overlapping cell lines, and drugs.
-
-```{r intersectPSets, message=FALSE}
-gdsc.ccle.common <- intersectPSet(pSets = list("CCLE"=CCLE, "GDSC"=GDSC), intersectOn = c("cell.lines", "drugs", "concentrations"))
-```
-
-And see how many drugs and cell lines have been profiled in both datasets.
-
-```{r intersectDrugs, message=FALSE}
-mycol <- RColorBrewer::brewer.pal(n=7, name="Set1")
-venn.plot <- VennDiagram::draw.pairwise.venn(area1 = nrow(CCLE@drug), area2 = nrow(GDSC@drug), cross.area = nrow(gdsc.ccle.common$CCLE@drug), fill = c(mycol[1], mycol[2]),lty = "blank",cex = 1.5,cat.cex = .8,cat.col = c("black", "black"))
-```
-```{r intersectCells, message=FALSE}
-venn.plot <- VennDiagram::draw.pairwise.venn(area1 = nrow(CCLE@cell), area2 = nrow(GDSC@cell), cross.area = nrow(gdsc.ccle.common$CCLE@cell), fill = c(mycol[1], mycol[2]),lty = "blank",cex = 1.5,cat.cex = 1,cat.col = c("black", "black"))
-```
-
-
-
-```{r intersectDRC, message=FALSE}
-## Three highlighted cases
-cases <- rbind(
-  c("HT-29", "PLX4720"),
-  c("COLO-320-HSR", "AZD6244"),
-  c("HT-1080", "PD-0332991"))
-
-gdsc.auc <- t(PharmacoGx::summarizeSensitivityProfiles(pSet=gdsc.ccle.common$GDSC, sensitivity.measure="auc_published", summary="median"))
-ccle.auc <- t(PharmacoGx::summarizeSensitivityProfiles(pSet=gdsc.ccle.common$CCLE, sensitivity.measure="auc_published", summary="median"))
-
-plot(x=gdsc.auc, y=ccle.auc, col=blues9[7], xlab="AUC (GDSC)", ylab="AUC (CCLE)", ylim=c(0, 1), xlim=c(0, 1))
-abline(coef=c(0, 1), col="lightgrey")
-points(x = gdsc.auc[cases[1,1], cases[1,2]], y= ccle.auc[cases[1,1], cases[1,2]], col = "red", pch=16)
-points(x = gdsc.auc[cases[2,1], cases[2,2]], y= ccle.auc[cases[2,1], cases[2,2]], col = "red", pch=16)
-points(x = gdsc.auc[cases[3,1], cases[3,2]], y= ccle.auc[cases[3,1], cases[3,2]], col = "red", pch=16)
-
-drugDoseResponseCurve(drug = cases[1,2], cellline = cases[1,1], pSets = gdsc.ccle.common)
-drugDoseResponseCurve(drug = cases[2,2], cellline = cases[2,1], pSets = gdsc.ccle.common)
-drugDoseResponseCurve(drug = cases[3,2], cellline = cases[3,1], pSets = gdsc.ccle.common)
-```
-## Pharmacological profiles}
-In pharmacogenomic studies Cells were also tested for their response to increasing concentrations of various compounds, and form this the IC50 and AUC were computed. These pharmacological profiles are available for all the psets in *PharmacoGx*.
-
-```{r ccle_auc, fig.cap="Cells response to drugs in CCLE"}
-library(ggplot2, verbose=FALSE)
-library(reshape2, verbose=FALSE)
-melted_data <- melt(CCLE.auc)
-NA_rows <- unique(which(is.na(melted_data), arr.ind=T)[,1])
-melted_data <- melted_data[-NA_rows,]
-ggplot(melted_data, aes(x=Var1,y=value)) +
-  geom_boxplot(fill="gray") +
-  theme(axis.text.x=element_text(angle=90,hjust=1)) +
-  xlab("Drugs") +
-  ylab("AAC")
-#hist(CCLE.auc["lapatinib",], xlab="Cells response to lapatinib(AAC)", 
-#     col="gray", main="")
-```
-
-#### Biomarker discovery
-
-The association between molecular features and response to a given drug is modelled using a linear regression model adjusted for tissue source: 
-$$Y = \beta_{0} + \beta_{i}G_i + \beta_{t}T + \beta_{b}B$$
-where $Y$ denotes the drug sensitivity variable, $G_i$, $T$ and $B$ denote the expression of gene $i$, the tissue source and the experimental batch respectively, and $\beta$s are the regression coefficients. The strength of gene-drug association is quantified by $\beta_i$, above and beyond the relationship between drug sensitivity and tissue source. The variables $Y$ and $G$ are scaled (standard deviation equals to 1) to estimate standardized coefficients from the linear model. Significance of the gene-drug association is estimated by the statistical significance of $\beta_i$ (two-sided t test). P-values are then corrected for multiple testing using the false discovery rate (FDR) approach.
-
-As an example of the reproducibility of biomarker discovery across pharmacogenomic studies, we can model the significance of the association between two drugs and their known biomarkers in CCLE and GDSC. We examine the association between drug *17-AAG* and gene *NQO1*, as well as drug *lapatinib* and gene *ERBB2*:
-
-```{r intersectDRC, message=FALSE}
-known.biomarker <- c("Drug"="lapatinib", "Gene"="ERBB2", "Type"="cnv")
-known.biomarker <- c(known.biomarker, "GDSC effect size"=NA, "GDSC pvalue"=NA, "CCLE effect size"=NA, "CCLE pvalue"=NA, "Reproducible"=NA)
-
-feature <- rownames(PharmacoGx::featureInfo(CCLE, known.biomarker["Type"]))[which(PharmacoGx::featureInfo(CCLE, known.biomarker["Type"])$Symbol == known.biomarker["Gene"])]
-known.biomarker[c("GDSC effect size", "GDSC pvalue")] <- drugSensitivitySig(pSet=GDSC, mDataType=known.biomarker["Type"], drugs=known.biomarker["Drug"], features=feature, sensitivity.measure="auc_published", molecular.summary.stat="median", sensitivity.summary.stat="median")[1, 1, c("estimate", "pvalue")]
-known.biomarker[c("CCLE effect size", "CCLE pvalue")] <- drugSensitivitySig(pSet=CCLE, mDataType=known.biomarker["Type"], drugs=known.biomarker["Drug"], features=feature, sensitivity.measure="auc_published", molecular.summary.stat="median", sensitivity.summary.stat="median")[1, 1, c("estimate", "pvalue")]
-known.biomarker["Reproducible"] <- ifelse(as.numeric(known.biomarker["CCLE pvalue"]) < 0.05 & as.numeric(known.biomarker["GDSC pvalue"]) <  .05 & sign(as.numeric(known.biomarker["CCLE effect size"])) == sign(as.numeric(known.biomarker["GDSC effect size"])), "YES", "NO")
-
-print(known.biomarker)
-```
-
-#### Drug repurposing
-
-```{r runCMAP, message=FALSE}
-## download and process the HDAC signature
-mydir <- "1132939s"
-downloader::download(paste("http://www.sciencemag.org/content/suppl/2006/09/29/313.5795.1929.DC1/", mydir, ".zip", sep=""), destfile=paste(mydir,".zip",sep=""))
-unzip(paste(mydir,".zip", sep=""))
-
-HDAC_up <- gdata::read.xls(paste(mydir, paste(mydir, "sigS1.xls", sep="_"),sep="/"), sheet=1, header=FALSE, as.is=TRUE)
-HDAC_down <- gdata::read.xls(paste(mydir, paste(mydir, "sigS1.xls", sep="_"),sep="/"), sheet=2, header=FALSE, as.is=TRUE)
-HDAC <- as.data.frame(matrix(NA, nrow=nrow(HDAC_down)+nrow(HDAC_up), ncol=2))
-annot <- AnnotationDbi::select(hgu133a.db, keys = c(HDAC_up[[1]], HDAC_down[[1]]), columns=c("ENSEMBL"), keytype="PROBEID")
-gene_up <- unique(annot[match(HDAC_up[[1]], annot[,1]),2])
-gene_down <- na.omit(unique(annot[match(HDAC_down[[1]], annot[,1]),2]))
-HDAC_genes <- as.data.frame(matrix(NA, nrow=length(gene_down)+length(gene_up), ncol=2))
-
-
-HDAC_genes[ , 2] <- c(rep(1, times=length(gene_up)), rep(-1, times=length(gene_down)))
-HDAC_genes[ , 1] <- c(gene_up, gene_down)
-rownames(HDAC_genes) <- HDAC_genes[ , 1]
-HDAC <- HDAC_genes[ , 2]
-names(HDAC) <- rownames(HDAC_genes)
-
-drug.perturbation <- PharmacoGx::downloadPertSig("CMAP")
-dimnames(drug.perturbation)[[1]] <- gsub("_at", "", dimnames(drug.perturbation)[[1]])
-
-message("Be aware that computing sensitivity will take some time...")
-cl <- parallel::makeCluster(2)
-res <- parApply(drug.perturbation[ , , c("tstat", "fdr")], 2, function(x, HDAC){ 
-	return(connectivityScore(x=x, y=HDAC, method="gsea", nperm=10))
-}, cl=cl, HDAC=HDAC)
-stopCluster(cl)
-rownames(res) <- c("Connectivity", "P Value")
-res <- t(res)
-
-
-res <- apply(drug.perturbation[ , , c("tstat", "fdr")], 2, function(x, HDAC){ 
-	return(connectivityScore(x=x, y=HDAC, method="gsea", nperm=100))
-}, HDAC=HDAC)
-rownames(res) <- c("Connectivity", "P Value")
-res <- t(res)
-
-
-HDAC_inhibitors <- c("vorinostat", "trichostatin A", "HC toxin", "valproic acid")
-res <- res[order(res[,1], decreasing=T), ]
-HDAC_ranks <- which(rownames(res) %in% HDAC_inhibitors)
-```
-
+The [Biomarker discovery from large pharmacogenomics datasets](https://bioconductor.github.io/BiocWorkshops/biomarker-discovery-from-large-pharmacogenomics-datasets.html) workshop demonstrates analyses of `r BiocStyle::Biocpkg("PharmacoGx")` data.
 
 ## Bibliography
 

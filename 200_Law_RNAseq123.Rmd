@@ -89,10 +89,12 @@ Count data for these samples can be downloaded from the Gene Expression Omnibus 
 
 
 ```{r setup2, eval=TRUE}
-library(limma)
-library(Glimma)
-library(edgeR)
-library(Mus.musculus)
+suppressPackageStartupMessages({
+  library(limma)
+  library(Glimma)
+  library(edgeR)
+  library(Mus.musculus)
+})
 ```
 
 ## Data packaging

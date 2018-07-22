@@ -49,6 +49,7 @@ Imports:
   HDF5Array,
   HMP16SData,
   hgu95av2.db,
+  hgu133a.db,
   Hmisc,
   Homo.sapiens,
   htmltools,
@@ -123,7 +124,7 @@ Remotes:
   seandavi/SRAdbV2,
   jmacdon/Bioc2018Anno,
   seandavi/BiocPkgTools,
-  npcooley/FindHomology (>= 0.0.0.9001),
+  npcooley/FindHomology,
   drisso/fletcher2017data,
   bhklab/mCI,
   bhklab/PharmacoGxML

@@ -3,10 +3,6 @@
 Authors:
     Nicholas Cooley^[University of Pittsburgh]
 Last Modified: 18 July, 2018
-    
-<!--
-  bookdown::render_book("", "bookdown::gitbook")
--->
 
 ## Overview
 
@@ -216,27 +212,27 @@ There are multiple ways to view objects of class `synteny`. It has default view 
 
 Plotting genomes 2 and 3, which are very syntenic, provides a good example of this. Grey uncolored space in the subject genome indicates a lack of syntenic blocks in that region. In some places, the ramp reverses, indicating an inversion, while in others, blocks are reordered from the default color bar, indicating possible rearrangements.
 
-```{r plot default}
+```{r plotdefault}
 plot(SyntenyObject[2:3, 2:3])
 ```
 
 Because visualizing large numbers of syntenic hits in genome sized sequences can be non-trivial, additional commands can be passed to plot in order to modify coloring schemes. `frequency` causes bars representing genomes to be colored by **how syntenic** that particular region (as determined by cumulative nucleotide position) of the genome is, indiscriminate of where that hit is in a corresponding genome. Once again genomes 2 and 3 in our set are good examples of this. They are highly syntenic, which this option shows well, but the rearrangements present are no longer shown.
 
-```{r plot frequency}
+```{r plotfrequency}
 plot(SyntenyObject[2:3, 2:3],
      "frequency")
 ```
 
 Because visualizing large numbers of syntenic hits in genome sized sequences can be non-trivial, additional commands can be passed to plot in order to modify coloring schemes. `neighbor` tries to provide each syntenic hit with a unique color, and additionally draws linear connections between them to facilitate better visualization. This can be a useful alternative to the default plotting, if many rearrangements are present in a way that you want to view.
 
-```{r plot neighbors}
+```{r plotneighbors}
 plot(SyntenyObject[2:3, 2:3],
      "neighbor")
 ```
 
 Plotting is a useful tool in analzying sequence data, however sometimes plots of genome sized sequence data can be a bit overwhelming. Plotting our entire database, 8 sequences, though good at representing the complexity present here in this workshop, can be daunting to make sense of quickly if you are unused to looking at figures of this type frequently.
 
-```{r plot neighbors 2}
+```{r plotneighbors2}
 plot(SyntenyObject,
      "neighbor")
 ```
