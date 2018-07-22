@@ -102,18 +102,18 @@ The following packages are needed.
 
 
 ```{r packages}
-# Bioconductor
-library(BiocParallel)
-library(SingleCellExperiment)
-library(clusterExperiment)
-library(scone)
-library(zinbwave)
-library(slingshot)
-
-# CRAN
-library(gam)
-library(RColorBrewer)
-
+suppressPackageStartupMessages({
+  # Bioconductor
+  library(BiocParallel)
+  library(SingleCellExperiment)
+  library(clusterExperiment)
+  library(scone)
+  library(zinbwave)
+  library(slingshot)
+  # CRAN
+  library(gam)
+  library(RColorBrewer)
+})
 set.seed(20)
 ```
 
@@ -138,7 +138,7 @@ fletcher
 
 Throughout the workshop, we use the class `SingleCellExperiment` to keep track of the counts and their associated metadata within a single object. 
 
-```{r sce_schema, echo=FALSE, out.width="90%", fig.cap="Schematic view of the SingleCellExperiment class."}
+```{r sceschema, echo=FALSE, out.width="90%", fig.cap="Schematic view of the SingleCellExperiment class."}
 knitr::include_graphics("202_Das_SingleCellRNASeq/SingleCellExperiment.png")
 ```
 
