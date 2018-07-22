@@ -400,3 +400,5 @@ There is plenty of infrastructure not covered in this short workshop,
 ## Acknowledgements
 
 The [Bioconductor core team](https://www.bioconductor.org/about/core-team/).
+
+# Bibliography
