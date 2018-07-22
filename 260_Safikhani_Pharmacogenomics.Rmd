@@ -89,12 +89,14 @@ intuitive interface and, in combination with unified curation, simplifies
 analyses between multiple datasets.
 
 
-Load *PharamacoGx* into your current workspace:
+Load `r BiocStyle::Biocpkg("PharmacoGx")` into your current workspace:
 ```{r loadlib, eval=TRUE, results='hide'}
-library(PharmacoGx, verbose=FALSE)
-library(mCI, verbose=FALSE)
-library(PharmacoGxML, verbose=FALSE)
-library(Biobase, verbose=FALSE)
+suppressPackageStartupMessages({
+  library(PharmacoGx, verbose=FALSE)
+  library(mCI, verbose=FALSE)
+  library(PharmacoGxML, verbose=FALSE)
+  library(Biobase, verbose=FALSE)
+})
 ```
 
 ### Downloading PharmacoSet objects
@@ -355,13 +357,14 @@ Some of the widely used multivariate machine learning methods such as elastic ne
 
 
 ```{r machine_learning, results='hide'} 
-library(mRMRe, verbose=FALSE)
-library(Biobase, verbose=FALSE)
-library(Hmisc, verbose=FALSE)
-library(glmnet, verbose=FALSE)
-library(caret, verbose=FALSE)
-library(randomForest, verbose=FALSE)
-
+suppressPackageStartupMessages({
+  library(mRMRe, verbose=FALSE)
+  library(Biobase, verbose=FALSE)
+  library(Hmisc, verbose=FALSE)
+  library(glmnet, verbose=FALSE)
+  library(caret, verbose=FALSE)
+  library(randomForest, verbose=FALSE)
+})
 ##Preparing trainig dataset
 train_expr <- t(exprs(summarizeMolecularProfiles(GDSC, mDataType="rna", fill.missing=FALSE, verbose=FALSE)))
 aac <- summarizeSensitivityProfiles(GDSC, sensitivity.measure="auc_recomputed", drug="lapatinib", fill.missing=FALSE, verbose=FALSE)
@@ -398,7 +401,7 @@ for(method in c("ridge", "lasso", "random_forest", "svm")){
 
 We show here how to use *PharmacoGx* for linking drug perturbation signatures inferred from CMAP to independent signatures of HDAC inhibitors published in Glaser et al. (2003). We therefore sought to reproduce the HDAC analysis in Lamb et al. (2006) using the latest version of CMAP that can be downloaded using downloadPSet. The connectivityScore function enables the computation of the connectivity scores between the 14-gene HDAC signature from (Glaser et al., 2003) and over 1000 CMAP drugs. This analysis results in the four HDAC inhibitors in CMAP being ranked at the top of the drug list (Fig. 2), therefore concurring with the original CMAP analysis (Lamb et al., 2006).
  
-```{r runCMAP, message=FALSE}
+```{r runCMAP, message=FALSE, warning=FALSE}
 ## download and process the HDAC signature
 mydir <- "1132939s"
 downloader::download(paste("http://www.sciencemag.org/content/suppl/2006/09/29/313.5795.1929.DC1/", mydir, ".zip", sep=""), destfile=paste(mydir,".zip",sep=""))
