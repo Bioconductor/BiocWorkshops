@@ -6,9 +6,9 @@ bibliography: Waldron_PublicData/Waldron_PublicData.bib
 
 ## Instructor names and contact information
 
-* Levi Waldron^[City University of New York, New York, NY, USA]
-* Benjamin Haibe-Kain^[Princess Margaret Cancer Center, Toronto, Canada]
-* Sean Davis^[Center for Cancer Research, National Cancer Institute, National Institutes of Health, Bethesda, MD, USA]
+* Levi Waldron <levi.waldron at sph.cuny.edu> (City University of New York, New York, NY, USA)
+* Benjamin Haibe-Kains <benjamin.haibe.kains at utoronto.ca> (Princess Margaret Cancer Center, Toronto, Canada)
+* Sean Davis <sdavis2 at mail.nih.gov> (Center for Cancer Research, National Cancer Institute, National Institutes of Health, Bethesda, MD, USA)
 
 ## Syllabus
 
@@ -1795,7 +1795,7 @@ download_study(project_info$project)
 ```
 
 ```
-## 2018-07-22 06:50:10 downloading file rse_gene.Rdata to SRP009615
+## 2018-07-22 14:58:56 downloading file rse_gene.Rdata to SRP009615
 ```
 followed by loading the data
 
@@ -1993,7 +1993,7 @@ This can also be converted to *[phyloseq](http://bioconductor.org/packages/phylo
     
 ## Pharmacogenomics
 
-Pharmacogenomics holds great promise for the development of biomarkers of drug response and the design of new therapeutic options, which are key challenges in precision medicine. However, such data are scattered and lack standards for efficient access and analysis, consequently preventing the realization of the full potential of pharmacogenomics. To address these issues, we implemented `PharmacoGx`, an easy-to-use, open source package for integrative analysis of multiple pharmacogenomic datasets. ~PharmacoGx` provides a unified framework for downloading and analyzing large pharmacogenomic datasets which are extensively curated to ensure maximum overlap and consistency.
+Pharmacogenomics holds great promise for the development of biomarkers of drug response and the design of new therapeutic options, which are key challenges in precision medicine. However, such data are scattered and lack standards for efficient access and analysis, consequently preventing the realization of the full potential of pharmacogenomics. To address these issues, we implemented *[PharmacoGx](http://bioconductor.org/packages/PharmacoGx)*, an easy-to-use, open source package for integrative analysis of multiple pharmacogenomic datasets. ~PharmacoGx` provides a unified framework for downloading and analyzing large pharmacogenomic datasets which are extensively curated to ensure maximum overlap and consistency.
 
 Examples of `PharmacoGx` usage in biomedical research can be found in the following publications:
 * [Smirnov et al. PharmacoGx: an R package for analysis of large pharmacogenomic datasets." Bioinformatics (2015): 1244-1246](https://academic.oup.com/bioinformatics/article/32/8/1244/1744214/PharmacoGx-an-R-package-for-analysis-of-large).
@@ -2145,33 +2145,9 @@ psets[psets[ , "Dataset.Type"] == "perturbation", ]
 ```
 Large drug perturbation data have been generated within the Connectivity Map Project [CAMP](https://clue.io/cmap), with CMAPv2 and CMAPv3 available from `PharmacoGx`, published in [Lamb et al., The Connectivity Map: Using Gene-Expression Signatures to Connect Small Molecules, Genes, and Disease, Science (2006)](http://science.sciencemag.org/content/313/5795/1929) and [Subramanian et al., A Next Generation Connectivity Map: L1000 Platform and the First 1,000,000 Profiles, Cell (2017)](https://www.cell.com/cell/abstract/S0092-8674(17)31309-0), respectively.
  
-### Exploring a drug sensitivity dataset
+### Exploring drug sensitivity datasets
 
-
-
-```r
-CCLE <- PharmacoGx::downloadPSet("CCLE", saveDir=file.path(".", "Waldron_PublicData"))
-```
-
-
-```r
-mycol <- c("#8dd3c7","#ffffb3","#bebada","#fb8072","#80b1d3","#fdb462",
-           "#b3de69","#fccde5","#d9d9d9","#bc80bd","#ccebc5","#ffed6f",
-           "#a6cee3","#1f78b4","#b2df8a","#33a02c","#fb9a99","#e31a1c",
-           "#fdbf6f","#ff7f00","#cab2d6","#6a3d9a","#ffff99","#b15928")
-pie(table(CCLE@cell[,"tissueid"]), 
-    col=mycol, 
-    main="Tissue types", 
-    radius=1, 
-    cex=0.8)
-```
-
-<div class="figure">
-<img src="103_Waldron_PublicData_files/figure-html/pie_chart-1.png" alt="Tissue of origin of cell lines in CCLE study" width="672" />
-<p class="caption">(\#fig:pie_chart)Tissue of origin of cell lines in CCLE study</p>
-</div>
-
-
+The [Biomarker discovery from large pharmacogenomics datasets](https://bioconductor.github.io/BiocWorkshops/biomarker-discovery-from-large-pharmacogenomics-datasets.html) workshop demonstrates analyses of *[PharmacoGx](http://bioconductor.org/packages/PharmacoGx)* data.
 
 ## Bibliography
 

@@ -103,18 +103,18 @@ The following packages are needed.
 
 
 ```r
-# Bioconductor
-library(BiocParallel)
-library(SingleCellExperiment)
-library(clusterExperiment)
-library(scone)
-library(zinbwave)
-library(slingshot)
-
-# CRAN
-library(gam)
-library(RColorBrewer)
-
+suppressPackageStartupMessages({
+  # Bioconductor
+  library(BiocParallel)
+  library(SingleCellExperiment)
+  library(clusterExperiment)
+  library(scone)
+  library(zinbwave)
+  library(slingshot)
+  # CRAN
+  library(gam)
+  library(RColorBrewer)
+})
 set.seed(20)
 ```
 
@@ -157,7 +157,7 @@ Throughout the workshop, we use the class `SingleCellExperiment` to keep track o
 
 <div class="figure">
 <img src="202_Das_SingleCellRNASeq/SingleCellExperiment.png" alt="Schematic view of the SingleCellExperiment class." width="90%" />
-<p class="caption">(\#fig:sce_schema)Schematic view of the SingleCellExperiment class.</p>
+<p class="caption">(\#fig:sceschema)Schematic view of the SingleCellExperiment class.</p>
 </div>
 
 The cell-level metadata contain quality control measures, sequencing batch ID, and cluster and lineage labels from the original publication [@Fletcher2017]. Cells with a cluster label of `-2` were not assigned to any cluster in the original publication.

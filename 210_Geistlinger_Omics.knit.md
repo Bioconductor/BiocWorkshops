@@ -40,7 +40,6 @@ Execution of example code and hands-on practice
 
 * [EnrichmentBrowser](http://bioconductor.org/packages/EnrichmentBrowser) 
 * [regioneR](http://bioconductor.org/packages/regioneR)
-
 * [airway](http://bioconductor.org/packages/airway)
 * [ALL](http://bioconductor.org/packages/ALL)
 * [hgu95av2.db](http://bioconductor.org/packages/hgu95av2.db)
@@ -59,7 +58,8 @@ Execution of example code and hands-on practice
 
 ## Goals and objectives
 
-Theory
+Theory:
+
 * Gene sets, pathways & regulatory networks
 * Resources
 * Gene set analysis vs. gene set enrichment analysis
@@ -67,6 +67,7 @@ Theory
 * Generations: ora, fcs & topology-based
 
 Practice:
+
 * Data types: microarray vs. RNA-seq
 * Differential expression analysis
 * Defining gene sets according to GO and KEGG
@@ -74,8 +75,6 @@ Practice:
 * Functional class scoring & permutation testing
 * Network-based enrichment analysis
 * Genomic region enrichment analysis
-
-## Workshop
 
 ## Where does it all come from?
 
@@ -1539,7 +1538,7 @@ pt
 ```
 ## $numOverlaps
 ## P-value: 0.0099009900990099
-## Z-score: 44.7112
+## Z-score: 41.8243
 ## Number of iterations: 100
 ## Alternative: greater
 ## Evaluation of the original region set: 719
@@ -1557,7 +1556,7 @@ summary(pt[[1]]$permuted)
 
 ```
 ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-##   135.0   160.0   168.0   167.8   175.0   198.0
+##   137.0   162.8   169.0   169.6   179.0   209.0
 ```
 
 The resulting permutation *p*-value indicates a significant enrichment. Out of
