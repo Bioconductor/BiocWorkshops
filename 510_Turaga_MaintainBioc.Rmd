@@ -316,7 +316,7 @@ Where can I find these badges?
 
 
 **NOTE:** After a push is made it can take up to 48 hours for it to
-appear on the build report and landing pages - ie. we do one pull,
+appear on the build report and landing pages - i.e. we do one pull,
 build, check, propagate in 24 hours - so if your commit was after the pull
 for the day it wont be until the following day
 
