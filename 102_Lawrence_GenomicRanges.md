@@ -1,7 +1,7 @@
 
 # 102: Solving common bioinformatic challenges using GenomicRanges
 
-## Instructor(s) name(s) and contact information
+## Instructor name and contact information
 
 * Michael Lawrence (michafla@gene.com)
 
@@ -1192,7 +1192,7 @@ roadmap_hub <- query(ah, "EpigenomeRoadMap")
 metadata <- query(ah, "Metadata")[[1L]]
 #> downloading 0 resources
 #> loading from cache 
-#>     '/home/ubuntu//.AnnotationHub/47270'
+#>     '/home/mramos//.AnnotationHub/47270'
 head(metadata)
 #>    EID    GROUP   COLOR          MNEMONIC
 #> 1 E001      ESC #924965            ESC.I3
@@ -1270,10 +1270,10 @@ bw_files <- lapply(methylation_files[1:2], `[[`, 1L)
 #> require("rtracklayer")
 #> downloading 0 resources
 #> loading from cache 
-#>     '/home/ubuntu//.AnnotationHub/38894'
+#>     '/home/mramos//.AnnotationHub/38894'
 #> downloading 0 resources
 #> loading from cache 
-#>     '/home/ubuntu//.AnnotationHub/38895'
+#>     '/home/mramos//.AnnotationHub/38895'
 ```
 
 We have our desired BigWig files so now we can we can start analyzing them.

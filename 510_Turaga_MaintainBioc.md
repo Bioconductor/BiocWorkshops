@@ -33,10 +33,11 @@ choose to, although it is not needed.
 ### Time outline: 50 mins short workshop
 
 * Introduction: 10 mins
-* Why maintain your package
-* Infrastructure used for maintenance
+    * Why maintain your package
+    * Infrastructure used for maintenance
 * Outline how to use infrastructure: 35 mins
 	* Build report
+	* Version numbering
 	* Landing page badges
 	* Download statistics
 	* RSS feeds
@@ -60,7 +61,7 @@ choose to, although it is not needed.
 
 ## Introduction
 
-Maintainer - Who should people contact if they have a problem with
+**Maintainer** - Who should people contact if they have a problem with
 this package? You must have someones name and email address here. You
 must make sure this is up to date and accurate.
 
@@ -88,7 +89,7 @@ Interchangeable terminology
 *Bioconductor maintainers* <-> *Bioconductor developers* <-> *Package developer* <-> *developer*
 
 
-## Why maintain your package
+### Why maintain your package
 
 1. Changes in underlying code (upstream dependencies of your package)
    might break your package.
@@ -111,7 +112,7 @@ Interchangeable terminology
    check on Bioconductor during release cycles. (Bioconductor is
    fairly serious about this)
 
-## Infrastructure used for maintenance
+### Infrastructure used for maintenance
 
 **Build machines** are dedicated towards building your package
 *daily*. As a maintainer it's useful to check your package build
@@ -184,12 +185,7 @@ RELEASE (3 for release)
 
   Command:
 
-	/home/biocbuild/bbs-3.7-bioc/R/bin/R CMD build --keep-empty-dirs --no-resave-data a4
-
-  Options:
-
-	--keep-empty-dirs     do not remove empty dirs
-	--no-resave-data=        don't re-save data files as compactly as possible
+	/home/biocbuild/bbs-3.7-bioc/R/bin/R CMD build a4
 
   http://bioconductor.org/checkResults/release/bioc-LATEST/a4/malbec2-buildsrc.html
 
@@ -199,11 +195,8 @@ RELEASE (3 for release)
 
   Command:
 
-	/home/biocbuild/bbs-3.7-bioc/R/bin/R CMD check --install=check:a4.install-out.txt --library=/home/biocbuild/bbs-3.7-bioc/R/library --no-vignettes --timings a4_1.28.0.tar.gz
+	/home/biocbuild/bbs-3.7-bioc/R/bin/R CMD check a4_1.28.0.tar.gz
 
-  Options:
-
-	R CMD check --help
 
   http://bioconductor.org/checkResults/release/bioc-LATEST/a4/malbec2-checksrc.html
 
@@ -211,20 +204,22 @@ RELEASE (3 for release)
 
 ##### BUILD BIN
 
-This makes the tar ball which is specific to the platform and propagates it to
-main repository.
+This makes the tar ball which is specific to the platform and
+propagates it to main repository.
 
-  Command:
-
-	rm -rf a4.buildbin-libdir && mkdir a4.buildbin-libdir && C:\Users\biocbuild\bbs-3.8-bioc\R\bin\R.exe CMD INSTALL --merge-multiarch --build --library=a4.buildbin-libdir a4_1.29.0.tar.gz
 
 ![a4 buildbin](Turaga_MaintainBioc/r-buildbin.png)
+
 ![Lights next to the build-bin](Turaga_MaintainBioc/package-propagation.png)
-The build machines display a status for each package. They indicate different things.
 
- *TIMEOUT* - INSTALL, BUILD, CHECK or BUILD BIN of package took more than 40 minutes
+The build machines display a status for each package. They indicate
+different things.
 
- *ERROR* - INSTALL, BUILD or BUILD BIN of package failed, or CHECK produced errors
+ *TIMEOUT* - INSTALL, BUILD, CHECK or BUILD BIN of package took more
+ than 40 minutes
+
+ *ERROR* - INSTALL, BUILD or BUILD BIN of package failed, or CHECK
+ produced errors
 
  *WARNINGS* - CHECK of package produced warnings
 
@@ -232,9 +227,58 @@ The build machines display a status for each package. They indicate different th
 
  *NotNeeded* - INSTALL of package was not needed (click on glyph to see why)
 
- *skipped* - CHECK or BUILD BIN of package was skipped because the BUILD step failed
+ *skipped* - CHECK or BUILD BIN of package was skipped because the
+ BUILD step failed
 
- *NA*- BUILD, CHECK or BUILD BIN result is not available because of an anomaly in the Build System
+ *NA*- BUILD, CHECK or BUILD BIN result is not available because of an
+ anomaly in the Build System
+
+
+**NOTE:** The build machines run these commands a little differently
+and the maintainers need not do it the same way.
+
+
+#### Exercise:
+
+Question:
+
+	Filter packages on the DEVEL build machines which have a WARNING on their
+	build report. List the top 5 packages from this filter.
+
+
+Question:
+
+	What is the timestamp on DEVEL build report of the package BiocParallel?
+
+
+### Version Numbering
+
+Version numbering is crucial to getting your package to build on the
+Bioconductor build machines. Every time you want to push a change,
+it's important that you make a version number update if you want to
+your package to propagate to your users. The package is not built
+unless there is a version number update.
+
+https://bioconductor.org/developers/how-to/version-numbering/ 
+
+
+#### Exercise:
+
+Question:
+
+	A very common developer question is, "I made a commit and pushed to my
+	package, but the new build was not triggered. Why wasn't the
+	build triggered?"
+	 
+	The immediate response is to check if they issued a version bump. How
+	would someone check this?
+
+Question:
+
+	What is the version number next to the RELEASE and devel versions
+	of your package? Do they align with Bioconductor policy as given
+	on https://bioconductor.org/developers/how-to/version-numbering/ ?
+
 
 
 ###	Landing page badges
@@ -271,6 +315,12 @@ Where can I find these badges?
 
 	bioconductor.org/packages/devel/BiocGenerics
 
+
+**NOTE:** After a push is made it can take up to 48 hours for it to
+appear on the build report and landing pages - i.e. we do one pull,
+build, check, propagate in 24 hours - so if your commit was after the pull
+for the day it wont be until the following day
+
 ###	Download statistics
 
 The number reported next to each package name is the download score,
@@ -286,6 +336,15 @@ Top 75 packages as of July 17th 3:15pm EST,
 BiocGenerics Download statistics,
 
 ![BiocGenerics Download Statistics](Turaga_MaintainBioc/BiocGenerics-download-stats.png)
+
+
+#### Exercise:
+
+Question:
+
+	Get the download statistics to the package you maintain or the package
+	you use the most. Next, get the month in 2017 with the most number of
+	downloads.
 
 
 ###	RSS feeds
@@ -308,6 +367,16 @@ of Bioconductor.
 http://bioconductor.org/developers/gitlog/
 
 ![Git log on Jul 16th 2018 at 10:30 AM EST](Turaga_MaintainBioc/gitlog.png)
+
+
+#### Exercise: 
+
+Question:
+	
+	Take a package of your choice and subscribe to the RSS feed. Use a
+	tool from the given link, or one of your own liking. (I use
+	"feedly" the chrome extension)
+
 
 ###	Support site, Bioc-devel mailing list
 
@@ -367,19 +436,21 @@ Example: https://github.com/Bioconductor/GenomicRanges/issues
 
 ## Round up of resources available
 
-A lot of material was covered for this workshop very briefly, highlighting
+Material covered in this workshop very briefly, highlighting
 
-1. Build machines, what commands the build machines run and what information
-is displayed on the build reports.
+1. Build machines, what commands the build machines run and what
+   information is displayed on the build reports.
 
-1. How to check the `HEALTH` of your package with badges on the landing pages.
+1. How to check the `HEALTH` of your package with badges on the
+   landing pages.
 
 1. Download statistics of packages.
 
-1. RSS feeds and subscribing to them, checking package development across
-bioconductor with GIT logs.
+1. RSS feeds and subscribing to them, checking package development
+   across bioconductor with GIT logs.
 
-1. Support sites, mailing lists and where to get specific support as a maintainer.
+1. Support sites, mailing lists and where to get specific support as a
+   maintainer.
 
 1. Github and social coding with issues.
 
@@ -401,3 +472,5 @@ There is plenty of infrastructure not covered in this short workshop,
 ## Acknowledgements
 
 The [Bioconductor core team](https://www.bioconductor.org/about/core-team/).
+
+# Bibliography

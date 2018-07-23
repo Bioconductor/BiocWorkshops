@@ -686,7 +686,7 @@ library(Organism.dplyr)
 # src = src_organism("TxDb.Hsapiens.UCSC.hg19.knownGene")
 src <- src_organism(dbpath = hg38light())
 src
-#> src:  sqlite 3.22.0 [/home/ubuntu/R/x86_64-pc-linux-gnu-library/3.5/Organism.dplyr/extdata/light.hg38.knownGene.sqlite]
+#> src:  sqlite 3.22.0 [/usr/local/lib/R/site-library/Organism.dplyr/extdata/light.hg38.knownGene.sqlite]
 #> tbls: id, id_accession, id_go, id_go_all, id_omim_pm, id_protein,
 #>   id_transcript, ranges_cds, ranges_exon, ranges_gene, ranges_tx
 ```
@@ -1082,7 +1082,7 @@ GRCh38TxDb
 #> # exon_nrow: 675836
 #> # cds_nrow: 270225
 #> # Db created by: GenomicFeatures package from Bioconductor
-#> # Creation time: 2018-07-20 12:50:41 +0000 (Fri, 20 Jul 2018)
+#> # Creation time: 2018-07-23 19:58:02 +0000 (Mon, 23 Jul 2018)
 #> # GenomicFeatures version at creation time: 1.33.0
 #> # RSQLite version at creation time: 2.1.1
 #> # DBSCHEMAVERSION: 1.2

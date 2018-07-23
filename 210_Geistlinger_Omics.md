@@ -41,7 +41,6 @@ Execution of example code and hands-on practice
 
 * [EnrichmentBrowser](http://bioconductor.org/packages/EnrichmentBrowser) 
 * [regioneR](http://bioconductor.org/packages/regioneR)
-
 * [airway](http://bioconductor.org/packages/airway)
 * [ALL](http://bioconductor.org/packages/ALL)
 * [hgu95av2.db](http://bioconductor.org/packages/hgu95av2.db)
@@ -60,7 +59,8 @@ Execution of example code and hands-on practice
 
 ## Goals and objectives
 
-Theory
+Theory:
+
 * Gene sets, pathways & regulatory networks
 * Resources
 * Gene set analysis vs. gene set enrichment analysis
@@ -68,6 +68,7 @@ Theory
 * Generations: ora, fcs & topology-based
 
 Practice:
+
 * Data types: microarray vs. RNA-seq
 * Differential expression analysis
 * Defining gene sets according to GO and KEGG
@@ -75,8 +76,6 @@ Practice:
 * Functional class scoring & permutation testing
 * Network-based enrichment analysis
 * Genomic region enrichment analysis
-
-## Workshop
 
 ## Where does it all come from?
 
@@ -500,17 +499,17 @@ rowData(allSE, use.names=TRUE)
 #> DataFrame with 9010 rows and 3 columns
 #>                        FC          ADJ.PVAL         limma.STAT
 #>                 <numeric>         <numeric>          <numeric>
-#> 5595   0.0429698599842595 0.899246817310772  0.734679177472014
-#> 7075   0.0320835027449622 0.949001013642673  0.454691082931797
-#> 1557  -0.0439401425131443 0.818330132411333  -1.06578261967549
-#> 643   -0.0277543539240436 0.929148567589569 -0.567394394416646
-#> 1843   -0.427302534257363 0.566034751753147  -1.75050227190017
+#> 5595   0.0429698599842595 0.899246817310775  0.734679177472013
+#> 7075   0.0320835027449625 0.949001013642671    0.4546910829318
+#> 1557  -0.0439401425131442 0.818330132411339  -1.06578261967549
+#> 643   -0.0277543539240438 0.929148567589577 -0.567394394416651
+#> 1843   -0.427302534257363 0.566034751753148  -1.75050227190017
 #> ...                   ...               ...                ...
-#> 6300  -0.0266517661642372 0.922828548631231 -0.608608859328052
-#> 7297   -0.124257678078831 0.804578494190689  -1.11279493778184
-#> 2246   0.0522428857778933  0.74802104471735   1.27408420746691
-#> 7850 -0.00908229596065259 0.991826450687169 -0.102406339091091
-#> 1593  -0.0074771382080198 0.989532971314229 -0.145650256847234
+#> 6300   -0.026651766164237 0.922828548631225 -0.608608859328046
+#> 7297   -0.124257678078831 0.804578494190681  -1.11279493778184
+#> 2246   0.0522428857778935 0.748021044717352   1.27408420746691
+#> 7850 -0.00908229596065303 0.991826450687159 -0.102406339091096
+#> 1593 -0.00747713820802068 0.989532971314233 -0.145650256847251
 ```
 
 Nominal *p*-values are already corrected for multiple testing (`ADJ.PVAL`)
@@ -536,30 +535,30 @@ rowData(airSE, use.names=TRUE)
 #> DataFrame with 12937 rows and 3 columns
 #>                                  FC            ADJ.PVAL
 #>                           <numeric>           <numeric>
-#> ENSG00000000003  -0.404945626610932 0.00213458295385677
-#> ENSG00000000419   0.182985434777531  0.0915691945173217
-#> ENSG00000000457  0.0143477674070905   0.922279475398735
-#> ENSG00000000460  -0.141173372957313   0.619013213521584
-#> ENSG00000000971   0.402240426474171 0.00403820532305421
+#> ENSG00000000003  -0.404945626610932 0.00213458295385943
+#> ENSG00000000419   0.182985434777532  0.0915691945172958
+#> ENSG00000000457  0.0143477674070903   0.922279475399443
+#> ENSG00000000460  -0.141173372957311   0.619013213521635
+#> ENSG00000000971   0.402240426474172 0.00403820532305827
 #> ...                             ...                 ...
-#> ENSG00000273270   -0.12979385333726   0.495892935815196
-#> ENSG00000273290   0.505580471641003 0.00639218387702814
-#> ENSG00000273311 0.00161557580855132   0.996356136959404
-#> ENSG00000273329  -0.222817127090519   0.388294594068834
-#> ENSG00000273344  0.0151704005097405   0.962777106053456
+#> ENSG00000273270  -0.129793853337261   0.495892935815041
+#> ENSG00000273290   0.505580471641003 0.00639218387702899
+#> ENSG00000273311 0.00161557580855148   0.996356136956657
+#> ENSG00000273329  -0.222817127090519   0.388294594068803
+#> ENSG00000273344  0.0151704005097403   0.962777106053257
 #>                           edgeR.STAT
 #>                            <numeric>
-#> ENSG00000000003     35.8743710016452
-#> ENSG00000000419     5.90960619951562
-#> ENSG00000000457   0.0233923316993606
-#> ENSG00000000460    0.492929955080683
-#> ENSG00000000971     27.8509962017613
+#> ENSG00000000003     35.8743710016552
+#> ENSG00000000419     5.90960619951737
+#> ENSG00000000457   0.0233923316990905
+#> ENSG00000000460    0.492929955080604
+#> ENSG00000000971     27.8509962017407
 #> ...                              ...
-#> ENSG00000273270    0.901598359265221
-#> ENSG00000273290     23.0905678847793
-#> ENSG00000273311 8.04821151395742e-05
-#> ENSG00000273329     1.42723325850574
-#> ENSG00000273344    0.005435032737617
+#> ENSG00000273270    0.901598359265205
+#> ENSG00000273290     23.0905678847871
+#> ENSG00000273311 8.04821152029429e-05
+#> ENSG00000273329     1.42723325850597
+#> ENSG00000273344  0.00543503273765429
 ```
 
 *Exercise:* Compare the number of differentially expressed genes as obtained on the `airSE` with `limma/voom`, `edgeR`, and `DESeq2`. 
@@ -1363,7 +1362,7 @@ pt <- overlapPermTest(cpg, prom, genome="hg19", ntimes=100, per.chromosome=TRUE,
 pt
 #> $numOverlaps
 #> P-value: 0.0099009900990099
-#> Z-score: 39.1332
+#> Z-score: 49.8813
 #> Number of iterations: 100
 #> Alternative: greater
 #> Evaluation of the original region set: 719
@@ -1378,7 +1377,7 @@ pt
 ```r
 summary(pt[[1]]$permuted)
 #>    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-#>   139.0   162.0   172.0   171.7   181.0   213.0
+#>     144     162     169     169     175     199
 ```
 
 The resulting permutation *p*-value indicates a significant enrichment. Out of

@@ -104,83 +104,22 @@ The following packages are needed.
 
 
 ```r
-# Bioconductor
-library(BiocParallel)
-library(SingleCellExperiment)
-#> Loading required package: SummarizedExperiment
-#> Loading required package: GenomicRanges
-#> Loading required package: stats4
-#> Loading required package: BiocGenerics
-#> Loading required package: parallel
-#> 
-#> Attaching package: 'BiocGenerics'
-#> The following objects are masked from 'package:parallel':
-#> 
-#>     clusterApply, clusterApplyLB, clusterCall, clusterEvalQ,
-#>     clusterExport, clusterMap, parApply, parCapply, parLapply,
-#>     parLapplyLB, parRapply, parSapply, parSapplyLB
-#> The following objects are masked from 'package:stats':
-#> 
-#>     IQR, mad, sd, var, xtabs
-#> The following objects are masked from 'package:base':
-#> 
-#>     anyDuplicated, append, as.data.frame, basename, cbind,
-#>     colMeans, colnames, colSums, dirname, do.call, duplicated,
-#>     eval, evalq, Filter, Find, get, grep, grepl, intersect,
-#>     is.unsorted, lapply, lengths, Map, mapply, match, mget, order,
-#>     paste, pmax, pmax.int, pmin, pmin.int, Position, rank, rbind,
-#>     Reduce, rowMeans, rownames, rowSums, sapply, setdiff, sort,
-#>     table, tapply, union, unique, unsplit, which, which.max,
-#>     which.min
-#> Loading required package: S4Vectors
-#> 
-#> Attaching package: 'S4Vectors'
-#> The following object is masked from 'package:base':
-#> 
-#>     expand.grid
-#> Loading required package: IRanges
-#> Loading required package: GenomeInfoDb
-#> Loading required package: Biobase
-#> Welcome to Bioconductor
-#> 
-#>     Vignettes contain introductory material; view with
-#>     'browseVignettes()'. To cite Bioconductor, see
-#>     'citation("Biobase")', and for packages 'citation("pkgname")'.
-#> Loading required package: DelayedArray
-#> Loading required package: matrixStats
-#> 
-#> Attaching package: 'matrixStats'
-#> The following objects are masked from 'package:Biobase':
-#> 
-#>     anyMissing, rowMedians
-#> 
-#> Attaching package: 'DelayedArray'
-#> The following objects are masked from 'package:matrixStats':
-#> 
-#>     colMaxs, colMins, colRanges, rowMaxs, rowMins, rowRanges
-#> The following objects are masked from 'package:base':
-#> 
-#>     aperm, apply
-library(clusterExperiment)
-library(scone)
-library(zinbwave)
-#> 
-#> Attaching package: 'zinbwave'
-#> The following objects are masked from 'package:clusterExperiment':
-#> 
-#>     nFeatures, nSamples
-library(slingshot)
-#> Loading required package: princurve
+suppressPackageStartupMessages({
+  # Bioconductor
+  library(BiocParallel)
+  library(SingleCellExperiment)
+  library(clusterExperiment)
+  library(scone)
+  library(zinbwave)
+  library(slingshot)
+  # CRAN
+  library(gam)
+  library(RColorBrewer)
+})
+#> Warning: replacing previous import 'SingleCellExperiment::weights' by
+#> 'stats::weights' when loading 'slingshot'
 #> Warning in rgl.init(initValue, onlyNULL): RGL: unable to open X11 display
 #> Warning: 'rgl_init' failed, running with rgl.useNULL = TRUE
-
-# CRAN
-library(gam)
-#> Loading required package: splines
-#> Loading required package: foreach
-#> Loaded gam 1.15
-library(RColorBrewer)
-
 set.seed(20)
 ```
 
@@ -220,7 +159,7 @@ Throughout the workshop, we use the class `SingleCellExperiment` to keep track o
 
 <div class="figure">
 <img src="202_Das_SingleCellRNASeq/SingleCellExperiment.png" alt="Schematic view of the SingleCellExperiment class." width="90%" />
-<p class="caption">(\#fig:sce_schema)Schematic view of the SingleCellExperiment class.</p>
+<p class="caption">(\#fig:sceschema)Schematic view of the SingleCellExperiment class.</p>
 </div>
 
 The cell-level metadata contain quality control measures, sequencing batch ID, and cluster and lineage labels from the original publication [@Fletcher2017]. Cells with a cluster label of `-2` were not assigned to any cluster in the original publication.
@@ -730,9 +669,9 @@ lineages
 #> Lineage3: c1  c2  
 #> 
 #> curves: 3 
-#> Curve1: Length: 9.5231	Samples: 361.2
-#> Curve2: Length: 7.8221	Samples: 234.18
-#> Curve3: Length: 4.2829	Samples: 254.85
+#> Curve1: Length: 9.5238	Samples: 361.21
+#> Curve2: Length: 7.8221	Samples: 234.14
+#> Curve3: Length: 4.2828	Samples: 254.85
 ```
 
 As an alternative, we could have incorporated the MDS results into the `clustered` object and applied `slingshot` directly to it. Here, we need to specify that we want to use the MDS results, because `slingshot` would otherwise use the first element of the `reducedDims` list (in this case, the 10-dimensional `W` matrix from `zinbwave`).
@@ -831,29 +770,29 @@ colData(pseudoCe)
 #>                     CreER ERCC_reads slingClusters slingPseudotime_1
 #>                 <numeric>  <numeric>   <character>         <numeric>
 #> OEP01_N706_S501         1      10516            c1                NA
-#> OEP01_N701_S501      3022       9331            c1  1.17232018630599
-#> OEP01_N707_S507      2329       7386            c1  1.05858337635502
-#> OEP01_N705_S501       717       6387            c1  1.60460038373484
-#> OEP01_N702_S508         6       1218            c1  1.15931902137246
+#> OEP01_N701_S501      3022       9331            c1  1.17234765019331
+#> OEP01_N707_S507      2329       7386            c1  1.05857338852636
+#> OEP01_N705_S501       717       6387            c1  1.60463630065258
+#> OEP01_N702_S508         6       1218            c1  1.15934111346639
 #> ...                   ...        ...           ...               ...
 #> OEL23_N704_S510       659          0            c2                NA
 #> OEL23_N705_S502      1552          0            c2                NA
-#> OEL23_N706_S502         0          0            c3  8.14483789210462
-#> OEL23_N704_S503         0          0            c3  8.53526772020056
+#> OEL23_N706_S502         0          0            c3  8.14552572709918
+#> OEL23_N704_S503         0          0            c3  8.53595122837615
 #> OEL23_N703_S502      2222          0            c2                NA
 #>                 slingPseudotime_2 slingPseudotime_3
 #>                         <numeric>         <numeric>
-#> OEP01_N706_S501                NA 0.692825280941334
-#> OEP01_N701_S501  1.16361887771517  1.14699301945242
-#> OEP01_N707_S507  1.06119548551213  1.03755770530282
-#> OEP01_N705_S501  1.61029031246951   1.4465796469003
-#> OEP01_N702_S508  1.16749413269368  1.42064174043725
+#> OEP01_N706_S501                NA 0.692789182245903
+#> OEP01_N701_S501  1.16364108574816  1.14696263207989
+#> OEP01_N707_S507   1.0611741023521  1.03755897807688
+#> OEP01_N705_S501  1.61033070603652   1.4465916227885
+#> OEP01_N702_S508   1.1674954947514   1.4206584204892
 #> ...                           ...               ...
-#> OEL23_N704_S510                NA  2.01841650456369
-#> OEL23_N705_S502                NA  3.75228382608131
+#> OEL23_N704_S510                NA  2.01842841303396
+#> OEL23_N705_S502                NA  3.75230631265741
 #> OEL23_N706_S502                NA                NA
 #> OEL23_N704_S503                NA                NA
-#> OEL23_N703_S502                NA  2.74575663220122
+#> OEL23_N703_S502                NA  2.74576551163381
 ```
 
 The result of `slingshot` applied to a `ClusterExperiment` object is still of class `ClusterExperiment`. Note that we did not specify a set of cluster labels, implying that `slingshot` should use the default `primaryClusterNamed` vector.
