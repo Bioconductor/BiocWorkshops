@@ -85,7 +85,7 @@ Archaea are relatively newly characterized as organisms. First classified in the
 
 <div class="figure" style="text-align: center">
 <img src="./Cooley_DECIPHER/GrandPrismatic.png" alt="Grand Prismatic Spring in Yellowstone National Park[^3]" width="75%" height="75%" />
-<p class="caption">(\#fig:Grand Prismatic)Grand Prismatic Spring in Yellowstone National Park[^3]</p>
+<p class="caption">(\#fig:GrandPrismatic)Grand Prismatic Spring in Yellowstone National Park[^3]</p>
 </div>
 
 The aforementioned unusual lipds[^4] are striking in their differences from those common in both Eukaryotes and Prokaryotes.
@@ -198,14 +198,14 @@ In DECIPHER this is accomplished using k-mer matching, runs of an exact match of
 
 <div class="figure" style="text-align: center">
 <img src="./Cooley_DECIPHER/SyntenyHits.png" alt="A syntenic hit in nucleotide space" width="100%" height="100%" />
-<p class="caption">(\#fig:Simple Synteny Example)A syntenic hit in nucleotide space</p>
+<p class="caption">(\#fig:SimpleSyntenyExample)A syntenic hit in nucleotide space</p>
 </div>
 
 We can visualize syntenic hits as above, with co-linear representations of genomes with some graphical links to signify the locations and lengths of syntenic hits. Or we can employ a dotplot, which utilizes the cumulative nucleotide positions of two genomes as the x and y axes in a generic plot.
 
 <div class="figure" style="text-align: center">
 <img src="./Cooley_DECIPHER/SyntenyBlocks.png" alt="A syntenic hit, and several hits being chained toegher into a syntenic block" width="100%" height="100%" />
-<p class="caption">(\#fig:Simple DotPlot)A syntenic hit, and several hits being chained toegher into a syntenic block</p>
+<p class="caption">(\#fig:SimpleDotPlot)A syntenic hit, and several hits being chained toegher into a syntenic block</p>
 </div>
 
 Syntenic Hits can be chained together, if they are close *enough*, to form larger syntenic blocks. The enough part, has to be measured in nucleotide distance between the hits in question, in both genomes. This also means that syntenic hits can be chained together with differing distances between them in each genome. Making syntenic blocks different lengths in corresponding genomes. Additionally, chaining of hits allows for utilizing smaller syntenic hits that may appear insignificant on their own, to be grouped in with other nearby hits to increase their significance.
@@ -221,7 +221,7 @@ SyntenyObject <- FindSynteny(dbFile = DBPath,
                              verbose = TRUE)
 #> ===========================================================================
 #> 
-#> Time difference of 53.73 secs
+#> Time difference of 58.81 secs
 ```
 
 There are multiple ways to view objects of class `synteny`. It has default view options for `plot()`. By default, colors are assigned as a ramp from the first nucleotide position, to the last nucleotide position of the *query* genome, or the first genome selected, and wherever syntenic hits are observed, the bar representing the *subject* genome is marked with the section of the color ramp indicating the syntenic hit in the *query*.
@@ -308,7 +308,7 @@ MatrixObject <- NucleotideOverlap(SyntenyObject = SyntenyObject,
                                   GeneCalls = GeneCalls,
                                   Verbose = TRUE)
 #> ===========================================================================
-#> Time difference of 1.028805 mins
+#> Time difference of 1.04628 mins
 ```
 
 The function `Catalog` takes in the output of `NucleotideOverlap` and returns a list of matrices. These matrices represent agglomerated sets of pairs. The idea being, if gene **A** in genome **1** was paired by nucleotide overlap to genes **B** and **C** in genomes **2** and **3** respectively by `NucleotideOverLap`, and additionally gene **B** in genome **2** was similarly paired with gene **C** in genome **3**. With the assumption that these linkages indicate homology, gene **A** is predicted to be homologous to genes **B** and **C**, and gene **B** is predicted to be homologous to gene **C**. 
@@ -326,7 +326,7 @@ The function `Catalog` takes in the output of `NucleotideOverlap` and returns a 
 Homologs <- Catalog(MatrixObject,
                     Verbose = TRUE)
 #> ===========================================================================
-#> Time difference of 1.883746 mins
+#> Time difference of 1.901221 mins
 ```
 
 We can visualize this object as a histogram of the size of these agglomerations, by the number of pairs included in each agglomerated group. Where **1** represents pairs of genes where neither gene is linked to any other gene, *from other genomes*. Where **28** *in this case* represents fully linked sets of pairs, where each gene in the set is predicted to be a homolog of *every other gene in the set*.
@@ -341,7 +341,7 @@ hist(sapply(Homologs,
      breaks = 27L)
 ```
 
-<img src="250_Cooley_DECIPHER_files/figure-html/find homology objects part 1-1.png" width="672" />
+<img src="250_Cooley_DECIPHER_files/figure-html/findhomologyobjectspart1-1.png" width="672" />
 
 We can collect these fully linked sets. For any `N` number of genomes, a set of genes where each genome contains a homolog, and those homologs in turn have agreeing homologs in every other genome, the number of rows of this matrix will be `N * (N-1) / 2`.
 
@@ -364,7 +364,7 @@ CoreGenome <- CoreAligner(Homologs[CoreSet],
                           GeneCalls = GeneCalls,
                           Verbose = TRUE)
 #> ===========================================================================
-#> Time difference of 33.04214 secs
+#> Time difference of 33.67113 secs
 CoreDist <- DistanceMatrix(myXStringSet = CoreGenome,
                            verbose = FALSE,
                            correction = "Jukes-Cantor")
@@ -376,7 +376,7 @@ CoreDend <- IdClusters(myDistMatrix = CoreDist,
                        type = "dendrogram")
 ```
 
-<img src="250_Cooley_DECIPHER_files/figure-html/align core genes-1.png" width="672" />
+<img src="250_Cooley_DECIPHER_files/figure-html/aligncoreenes-1.png" width="672" />
 
 We can now finally tidy up our workspace and unlink our temp file.
 
@@ -394,7 +394,7 @@ PanGenomeMatrix <- LogicalPan(HomologList = Homologs,
                               Verbose = TRUE,
                               Plot = FALSE)
 #> ===========================================================================
-#> Time difference of 1.029658 secs
+#> Time difference of 1.028313 secs
 ```
 
 We can visualize this matrix if we so choose.
@@ -424,7 +424,7 @@ PanDend <- IdClusters(myDistMatrix = PanGenome,
                       verbose = FALSE)
 ```
 
-<img src="250_Cooley_DECIPHER_files/figure-html/create dendrogram from pan genome-1.png" width="672" />
+<img src="250_Cooley_DECIPHER_files/figure-html/createdendrogramfrompangenome-1.png" width="672" />
 
 We can, additionally, create a simple tangleogram from these two phylogenetic trees. Allowing a comparison of the core, and pan genomes. The core is on the left, while the pan is on the right.
 
@@ -529,14 +529,3 @@ CoreAnnotations[, c(17L, 31L)]
 This concludes the workshop, as any analysis after this would require work in a wet lab. Hopefully this was a useful showcase for the power of using DECIPHER to analyze sets of genomic data. The package FindHomology is currently located on github, and is still under construction. Upon completion, it will be available on Bioconductor.
 
 Thank you for your time and attention! We hope you learned something, and if you come back to this at a later date and have any questions, concerns, or comments, feel free to [email me](npc19@pitt.edu), or you can [tweet](https://twitter.com/npcooley) at me.
-
-
-
-
-
-
-
-
-
-
-

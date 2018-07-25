@@ -1,4 +1,6 @@
 
+
+
 # 210: Functional enrichment analysis of high-throughput omics data
 
 ## Instructor names and contact information
@@ -369,11 +371,6 @@ as the average of the corresponding probe values.
 
 ```r
 allSE <- probe2gene(all.eset) 
-#> Loading required package: hgu95av2.db
-#> Loading required package: AnnotationDbi
-#> Loading required package: org.Hs.eg.db
-#> 
-#> 
 head(names(allSE))
 #> [1] "5595" "7075" "1557" "643"  "1843" "4319"
 ```
@@ -716,7 +713,6 @@ eaBrowse(ora.all)
 #> 
 #> Creating set view ...
 #> Creating kegg view ...
-#> Loading required package: pathview
 ```
 
 The resulting summary page includes for each significant gene set
@@ -1362,7 +1358,7 @@ pt <- overlapPermTest(cpg, prom, genome="hg19", ntimes=100, per.chromosome=TRUE,
 pt
 #> $numOverlaps
 #> P-value: 0.0099009900990099
-#> Z-score: 49.8813
+#> Z-score: 41.7911
 #> Number of iterations: 100
 #> Alternative: greater
 #> Evaluation of the original region set: 719
@@ -1377,7 +1373,7 @@ pt
 ```r
 summary(pt[[1]]$permuted)
 #>    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-#>     144     162     169     169     175     199
+#>   136.0   164.0   171.0   171.7   179.2   205.0
 ```
 
 The resulting permutation *p*-value indicates a significant enrichment. Out of

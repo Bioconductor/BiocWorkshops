@@ -866,11 +866,6 @@ all.eset &lt;-<span class="st"> </span>ALL[, sset]</code></pre></div>
 <span class="co">#&gt; 1003_s_at 5.903856 6.169024 5.860459 5.687997</span></code></pre></div>
 <p>As we often have more than one probe per gene, we compute gene expression values as the average of the corresponding probe values.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">allSE &lt;-<span class="st"> </span><span class="kw">probe2gene</span>(all.eset) 
-<span class="co">#&gt; Loading required package: hgu95av2.db</span>
-<span class="co">#&gt; Loading required package: AnnotationDbi</span>
-<span class="co">#&gt; Loading required package: org.Hs.eg.db</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; </span>
 <span class="kw">head</span>(<span class="kw">names</span>(allSE))
 <span class="co">#&gt; [1] &quot;5595&quot; &quot;7075&quot; &quot;1557&quot; &quot;643&quot;  &quot;1843&quot; &quot;4319&quot;</span></code></pre></div>
 <p>For RNA-seq data, we consider transcriptome profiles of four primary human airway smooth muscle cell lines in two conditions: control and treatment with dexamethasone <a href="https://doi.org/10.1371/journal.pone.0099625">Himes et al., 2014</a>.</p>
@@ -1063,8 +1058,7 @@ hsa.gs[<span class="dv">1</span><span class="op">:</span><span class="dv">2</spa
 <span class="co">#&gt; Creating gene report ...</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Creating set view ...</span>
-<span class="co">#&gt; Creating kegg view ...</span>
-<span class="co">#&gt; Loading required package: pathview</span></code></pre></div>
+<span class="co">#&gt; Creating kegg view ...</span></code></pre></div>
 <p>The resulting summary page includes for each significant gene set</p>
 <ul>
 <li>a gene report, which lists all genes of a set along with fold change and DE <span class="math inline">\(p\)</span>-value (click on links in column <code>NR.GENES</code>),</li>
@@ -1503,7 +1497,7 @@ prom &lt;-<span class="st"> </span>promoters[<span class="kw">seqnames</span>(pr
 pt
 <span class="co">#&gt; $numOverlaps</span>
 <span class="co">#&gt; P-value: 0.0099009900990099</span>
-<span class="co">#&gt; Z-score: 49.8813</span>
+<span class="co">#&gt; Z-score: 41.7911</span>
 <span class="co">#&gt; Number of iterations: 100</span>
 <span class="co">#&gt; Alternative: greater</span>
 <span class="co">#&gt; Evaluation of the original region set: 719</span>
@@ -1514,7 +1508,7 @@ pt
 <span class="co">#&gt; [1] &quot;permTestResultsList&quot;</span></code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(pt[[<span class="dv">1</span>]]<span class="op">$</span>permuted)
 <span class="co">#&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. </span>
-<span class="co">#&gt;     144     162     169     169     175     199</span></code></pre></div>
+<span class="co">#&gt;   136.0   164.0   171.0   171.7   179.2   205.0</span></code></pre></div>
 <p>The resulting permutation <em>p</em>-value indicates a significant enrichment. Out of the 2859 CpG islands, 719 overlap with at least one promoter. In contrast, when repeatedly drawing random regions matching the CpG islands in size and chromosomal distribution, the mean number of overlapping regions across permutations was 117.7 <span class="math inline">\(\pm\)</span> 11.8.</p>
 <p>Note #1: The function <code>regioneR::permTest</code> allows to incorporate user-defined functions for randomizing regions and evaluating additional measures of overlap such as total genomic size in bp.</p>
 <p>Note #2: The <a href="http://bioconductor.org/packages/LOLA">LOLA</a> package implements a genomic region ORA, which assesses genomic region overlap based on the hypergeometric distribution using a library of pre-defined functional region sets.</p>
@@ -1560,7 +1554,7 @@ gitbook.start({
 "link": null,
 "text": null
 },
-"download": ["BioC2018.pdf", "BioC2018.epub"],
+"download": ["BioC2018.epub"],
 "toc": {
 "collapse": "section"
 }
