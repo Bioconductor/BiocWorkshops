@@ -240,7 +240,7 @@ plot(SyntenyObject,
 
 The most useful way to visualize Synteny data *in my opinion* is through a dot plot, which can be accessed via the `pairs()`. Dot plots, as explained above, utilize each genome being compared, as an axis in a normal x-y scatter plot. Where a *dot* - really a **very** short line, representing a run of nucleotides or amino acids -  is shown, that x,y coordinate is a syntenic hit. Hits can also be chained together into blocks of syntenic hits.
 
-```{r small pairs plot}
+```{r smallpairsplot}
 pairs(SyntenyObject[2:3, 2:3], labels = GenomeIDs[2:3])
 ```
 
@@ -248,7 +248,7 @@ Syntenic hits are shown in the upper left, while syntenic blocks are shown in th
 
 Pairs plots are *my* personal favorite way to visualize syntenic information, but, they can become overwhelming as the number of genomes compared increases. They provide very clear depictions of rearrangements and inversions.
 
-```{r large pairs plot}
+```{r largepairsplot}
 pairs(SyntenyObject,
       labels = GenomeIDs)
 ```
@@ -369,7 +369,7 @@ PanDend <- IdClusters(myDistMatrix = PanGenome,
 
 We can, additionally, create a simple tangleogram from these two phylogenetic trees. Allowing a comparison of the core, and pan genomes. The core is on the left, while the pan is on the right.
 
-```{r simple tangleogram}
+```{r simpletangleogram}
 tf1 <- tempfile()
 tf2 <- tempfile()
 
