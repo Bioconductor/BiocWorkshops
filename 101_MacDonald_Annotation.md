@@ -101,7 +101,7 @@ to a Biologist.
 
 Map a known ID to other functional or positional information
 
-<img src="./MacDonald_Annotation/mapping.png" width="640" />
+<img src="./MacDonald_Annotation/mapping.png" width="1280" />
 
 
 ### Specific goal
@@ -673,16 +673,6 @@ head(genes(Homo.sapiens, columns = c("ENTREZID","ALIAS","UNIPROT")),4)
 
 ```r
 library(Organism.dplyr)
-#> Loading required package: dplyr
-#> 
-#> Attaching package: 'dplyr'
-#> The following objects are masked from 'package:stats':
-#> 
-#>     filter, lag
-#> The following objects are masked from 'package:base':
-#> 
-#>     intersect, setdiff, setequal, union
-#> Loading required package: AnnotationFilter
 
 # src = src_organism("TxDb.Hsapiens.UCSC.hg19.knownGene")
 src <- src_organism(dbpath = hg38light())
@@ -1083,7 +1073,7 @@ GRCh38TxDb
 #> # exon_nrow: 675836
 #> # cds_nrow: 270225
 #> # Db created by: GenomicFeatures package from Bioconductor
-#> # Creation time: 2018-07-25 16:38:54 +0000 (Wed, 25 Jul 2018)
+#> # Creation time: 2018-07-25 18:35:27 +0000 (Wed, 25 Jul 2018)
 #> # GenomicFeatures version at creation time: 1.33.0
 #> # RSQLite version at creation time: 2.1.1
 #> # DBSCHEMAVERSION: 1.2

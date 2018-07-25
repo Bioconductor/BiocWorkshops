@@ -237,10 +237,10 @@ external data, that is part of the *tximportData* package.
 library("tximportData")
 dir <- system.file("extdata", package="tximportData")
 list.files(dir)
-#>  [1] "cufflinks"               "derivedTxome"           
-#>  [3] "kallisto"                "kallisto_boot"          
-#>  [5] "rsem"                    "sailfish"               
-#>  [7] "salmon"                  "salmon_gibbs"           
+#>  [1] "cufflinks"               "kallisto"               
+#>  [3] "kallisto_boot"           "rsem"                   
+#>  [5] "sailfish"                "salmon"                 
+#>  [7] "salmon_dm"               "salmon_gibbs"           
 #>  [9] "samples_extended.txt"    "samples.txt"            
 #> [11] "tx2gene.csv"             "tx2gene.gencode.v27.csv"
 ```
@@ -519,7 +519,7 @@ counts do not dominate the boxplot:
 boxplot(log10(counts(dds)+1))
 ```
 
-<img src="201_Love_DESeq2_files/figure-html/unnamed-chunk-16-1.png" width="672" />
+![](201_Love_DESeq2_files/figure-epub3/unnamed-chunk-16-1.png)<!-- -->
 
 The main function in *DESeq2* involves computation of *size factors*
 which normalize for differences in sequencing depth among samples. We
@@ -532,7 +532,7 @@ dds <- estimateSizeFactors(dds)
 boxplot(log10(counts(dds,normalized=TRUE)+1))
 ```
 
-<img src="201_Love_DESeq2_files/figure-html/unnamed-chunk-17-1.png" width="672" />
+![](201_Love_DESeq2_files/figure-epub3/unnamed-chunk-17-1.png)<!-- -->
 
 ### Data transformation for EDA
 
@@ -583,7 +583,7 @@ variation in the data) separates the treated and untreated samples:
 plotPCA(vsd, "dex")
 ```
 
-<img src="201_Love_DESeq2_files/figure-html/unnamed-chunk-20-1.png" width="672" />
+![](201_Love_DESeq2_files/figure-epub3/unnamed-chunk-20-1.png)<!-- -->
 
 With some additional *ggplot2* code, we can also indicate which
 samples belong to which cell line:
@@ -600,7 +600,7 @@ ggplot(pcaData, aes(x = PC1, y = PC2, color = dex, shape = cell)) +
   coord_fixed()
 ```
 
-<img src="201_Love_DESeq2_files/figure-html/unnamed-chunk-21-1.png" width="672" />
+![](201_Love_DESeq2_files/figure-epub3/unnamed-chunk-21-1.png)<!-- -->
 
 Note that we do not recommend working with the transformed data for
 the primary differential expression analysis. Instead we will use the
@@ -671,7 +671,7 @@ We can plot the counts for the top gene using `plotCounts`:
 plotCounts(dds, which.min(res$pvalue), "dex")
 ```
 
-<img src="201_Love_DESeq2_files/figure-html/unnamed-chunk-24-1.png" width="672" />
+![](201_Love_DESeq2_files/figure-epub3/unnamed-chunk-24-1.png)<!-- -->
 
 We can examine all the log2 fold changes (LFC) due to dexamethasone
 treatment over the mean of counts using `plotMA`:
@@ -681,7 +681,7 @@ treatment over the mean of counts using `plotMA`:
 plotMA(res, ylim=c(-5,5))
 ```
 
-<img src="201_Love_DESeq2_files/figure-html/unnamed-chunk-25-1.png" width="672" />
+![](201_Love_DESeq2_files/figure-epub3/unnamed-chunk-25-1.png)<!-- -->
 
 Note that there are many large LFC which are not significant (grey
 points) on the left side of the MA-plot above. These obtain a large
@@ -713,7 +713,7 @@ plotMA(res, ylim=c(-3,3), main="No shrinkage")
 plotMA(res2, ylim=c(-3,3), main="apeglm")
 ```
 
-<img src="201_Love_DESeq2_files/figure-html/unnamed-chunk-27-1.png" width="672" />
+![](201_Love_DESeq2_files/figure-epub3/unnamed-chunk-27-1.png)<!-- -->
 
 ### Minimum effect size
 
@@ -754,7 +754,7 @@ plotMA(res.lfc, ylim=c(-5,5), main="No shrinkage, LFC test")
 plotMA(res.lfc2, ylim=c(-5,5), main="apeglm, LFC test", alpha=0.01)
 ```
 
-<img src="201_Love_DESeq2_files/figure-html/unnamed-chunk-29-1.png" width="672" />
+![](201_Love_DESeq2_files/figure-epub3/unnamed-chunk-29-1.png)<!-- -->
 
 ## *AnnotationHub*
 
@@ -927,7 +927,7 @@ rep <- HTMLReport(shortName="airway", title="Airway DGE",
                   basePath=tmp, reportDirectory="report")
 publish(res, rep, dds, n=20, make.plots=TRUE, factor=dds$dex)
 finish(rep)
-#> [1] "/tmp/RtmplxCgZ8/report/airway.html"
+#> [1] "/tmp/Rtmp7BUOgK/report/airway.html"
 ```
 
 This last line, un-evaluated would launch the report in a web browser:
@@ -1033,7 +1033,7 @@ plot(log10(rowMeans(assays(sim)[["TrueCounts"]])),
      rowMeans(assays(sim)[["Dropout"]]))
 ```
 
-<img src="201_Love_DESeq2_files/figure-html/unnamed-chunk-42-1.png" width="672" />
+![](201_Love_DESeq2_files/figure-epub3/unnamed-chunk-42-1.png)<!-- -->
 
 We will store the true log2 fold change for comparison:
 
@@ -1054,7 +1054,7 @@ abline(h=gridlines, col=cols)
 text(300, gridlines, labels=gridlines, col=cols, pos=3)
 ```
 
-<img src="201_Love_DESeq2_files/figure-html/unnamed-chunk-44-1.png" width="672" />
+![](201_Love_DESeq2_files/figure-epub3/unnamed-chunk-44-1.png)<!-- -->
 
 ### Model zeros with *zinbwave*
 
@@ -1131,7 +1131,7 @@ So here everything looks good.
 plotDispEsts(zdds)
 ```
 
-<img src="201_Love_DESeq2_files/figure-html/unnamed-chunk-49-1.png" width="672" />
+![](201_Love_DESeq2_files/figure-epub3/unnamed-chunk-49-1.png)<!-- -->
 
 If the parametric trend fails to fit (there would be a warning in this
 case), one should check the dispersion plot as above. If it looks like
@@ -1150,7 +1150,7 @@ zdds2 <- estimateDispersionsFit(zdds[keepForDispTrend,])
 plotDispEsts(zdds2)
 ```
 
-<img src="201_Love_DESeq2_files/figure-html/unnamed-chunk-50-1.png" width="672" />
+![](201_Love_DESeq2_files/figure-epub3/unnamed-chunk-50-1.png)<!-- -->
 
 One would then assign the dispersion function to the original dataset,
 re-estimate final dispersions, check `plotDispEsts`, and then either
@@ -1176,7 +1176,7 @@ with(mcols(zdds), plot(trueDisp, dispMAP, log="xy"))
 abline(0,1,col="red")
 ```
 
-<img src="201_Love_DESeq2_files/figure-html/unnamed-chunk-52-1.png" width="672" />
+![](201_Love_DESeq2_files/figure-epub3/unnamed-chunk-52-1.png)<!-- -->
 
 Extract results table:
 
@@ -1186,7 +1186,7 @@ zres <- results(zdds, independentFiltering=FALSE)
 plot(mcols(zdds)$log2FC, zres$log2FoldChange, ylim=c(-4,4)); abline(0,1,col="red")
 ```
 
-<img src="201_Love_DESeq2_files/figure-html/unnamed-chunk-53-1.png" width="672" />
+![](201_Love_DESeq2_files/figure-epub3/unnamed-chunk-53-1.png)<!-- -->
 
 Below we show that the "simple" LFC does not work - it over-estimates
 the true DE LFC because of the dropout zeros in the group with the
@@ -1200,7 +1200,7 @@ simple.lfc <- log2(rowMeans(ncts[,zdds$condition == "Group2"])/
 plot(mcols(zdds)$log2FC, simple.lfc, ylim=c(-4,4)); abline(0,1,col="red")
 ```
 
-<img src="201_Love_DESeq2_files/figure-html/trueLFCVsSimple-1.png" width="672" />
+![](201_Love_DESeq2_files/figure-epub3/trueLFCVsSimple-1.png)<!-- -->
 
 How well do we do in null hypothesis testing:
 

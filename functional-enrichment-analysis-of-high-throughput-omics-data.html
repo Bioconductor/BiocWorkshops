@@ -1497,7 +1497,7 @@ prom &lt;-<span class="st"> </span>promoters[<span class="kw">seqnames</span>(pr
 pt
 <span class="co">#&gt; $numOverlaps</span>
 <span class="co">#&gt; P-value: 0.0099009900990099</span>
-<span class="co">#&gt; Z-score: 41.7911</span>
+<span class="co">#&gt; Z-score: 43.4132</span>
 <span class="co">#&gt; Number of iterations: 100</span>
 <span class="co">#&gt; Alternative: greater</span>
 <span class="co">#&gt; Evaluation of the original region set: 719</span>
@@ -1508,7 +1508,7 @@ pt
 <span class="co">#&gt; [1] &quot;permTestResultsList&quot;</span></code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(pt[[<span class="dv">1</span>]]<span class="op">$</span>permuted)
 <span class="co">#&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. </span>
-<span class="co">#&gt;   136.0   164.0   171.0   171.7   179.2   205.0</span></code></pre></div>
+<span class="co">#&gt;   145.0   162.0   171.0   171.6   179.2   209.0</span></code></pre></div>
 <p>The resulting permutation <em>p</em>-value indicates a significant enrichment. Out of the 2859 CpG islands, 719 overlap with at least one promoter. In contrast, when repeatedly drawing random regions matching the CpG islands in size and chromosomal distribution, the mean number of overlapping regions across permutations was 117.7 <span class="math inline">\(\pm\)</span> 11.8.</p>
 <p>Note #1: The function <code>regioneR::permTest</code> allows to incorporate user-defined functions for randomizing regions and evaluating additional measures of overlap such as total genomic size in bp.</p>
 <p>Note #2: The <a href="http://bioconductor.org/packages/LOLA">LOLA</a> package implements a genomic region ORA, which assesses genomic region overlap based on the hypergeometric distribution using a library of pre-defined functional region sets.</p>

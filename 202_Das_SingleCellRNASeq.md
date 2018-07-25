@@ -271,7 +271,7 @@ mfilt <- metric_sample_filter(counts(fletcher),
 ```
 
 <div class="figure">
-<img src="202_Das_SingleCellRNASeq_files/figure-html/scone-1.png" alt="SCONE: Filtering of low-quality cells." width="672" />
+<img src="202_Das_SingleCellRNASeq_files/figure-epub3/scone-1.png" alt="SCONE: Filtering of low-quality cells."  />
 <p class="caption">(\#fig:scone)SCONE: Filtering of low-quality cells.</p>
 </div>
 
@@ -397,7 +397,7 @@ legend(x = "topleft", legend = unique(names(col_clus)), cex = .5, fill = unique(
 ```
 
 <div class="figure">
-<img src="202_Das_SingleCellRNASeq_files/figure-html/mdsW-1.png" alt="ZINB-WaVE: MDS of the low-dimensional matrix W, where each point represents a cell and cells are color-coded by original published clustering." width="672" />
+<img src="202_Das_SingleCellRNASeq_files/figure-epub3/mdsW-1.png" alt="ZINB-WaVE: MDS of the low-dimensional matrix W, where each point represents a cell and cells are color-coded by original published clustering."  />
 <p class="caption">(\#fig:mdsW)ZINB-WaVE: MDS of the low-dimensional matrix W, where each point represents a cell and cells are color-coded by original published clustering.</p>
 </div>
 
@@ -478,7 +478,7 @@ plotClusters(clustered)
 ```
 
 <div class="figure">
-<img src="202_Das_SingleCellRNASeq_files/figure-html/examinemakeConsensus-1.png" alt="RSEC: Candidate clusterings found using the function RSEC from the clusterExperiment package." width="672" />
+<img src="202_Das_SingleCellRNASeq_files/figure-epub3/examinemakeConsensus-1.png" alt="RSEC: Candidate clusterings found using the function RSEC from the clusterExperiment package."  />
 <p class="caption">(\#fig:examinemakeConsensus)RSEC: Candidate clusterings found using the function RSEC from the clusterExperiment package.</p>
 </div>
 
@@ -490,7 +490,7 @@ plotCoClustering(clustered)
 ```
 
 <div class="figure">
-<img src="202_Das_SingleCellRNASeq_files/figure-html/plotcoclust-1.png" alt="RSEC: Heatmap of co-clustering matrix." width="672" />
+<img src="202_Das_SingleCellRNASeq_files/figure-epub3/plotcoclust-1.png" alt="RSEC: Heatmap of co-clustering matrix."  />
 <p class="caption">(\#fig:plotcoclust)RSEC: Heatmap of co-clustering matrix.</p>
 </div>
 
@@ -510,7 +510,7 @@ plotBarplot(clustered, legend = FALSE)
 ```
 
 <div class="figure">
-<img src="202_Das_SingleCellRNASeq_files/figure-html/barplotOurs-1.png" alt="RSEC: Barplot of number of cells per cluster for our workflow's RSEC clustering." width="672" />
+<img src="202_Das_SingleCellRNASeq_files/figure-epub3/barplotOurs-1.png" alt="RSEC: Barplot of number of cells per cluster for our workflow's RSEC clustering."  />
 <p class="caption">(\#fig:barplotOurs)RSEC: Barplot of number of cells per cluster for our workflow's RSEC clustering.</p>
 </div>
 
@@ -530,7 +530,7 @@ plotBarplot(clustered, whichClusters=c("makeConsensus", "publishedClusters"),
 ```
 
 <div class="figure">
-<img src="202_Das_SingleCellRNASeq_files/figure-html/addPublishedClusters-1.png" alt="RSEC: Barplot of number of cells per cluster, for our workflow's RSEC clustering, color-coded by original published clustering." width="672" />
+<img src="202_Das_SingleCellRNASeq_files/figure-epub3/addPublishedClusters-1.png" alt="RSEC: Barplot of number of cells per cluster, for our workflow's RSEC clustering, color-coded by original published clustering."  />
 <p class="caption">(\#fig:addPublishedClusters)RSEC: Barplot of number of cells per cluster, for our workflow's RSEC clustering, color-coded by original published clustering.</p>
 </div>
  
@@ -540,7 +540,7 @@ plotClustersTable(clustered, whichClusters=c("makeConsensus","publishedClusters"
 ```
 
 <div class="figure">
-<img src="202_Das_SingleCellRNASeq_files/figure-html/addPublishedClusters2-1.png" alt="RSEC: Confusion matrix of number of cells per cluster, for our workflow's RSEC clustering and the original published clustering." width="672" />
+<img src="202_Das_SingleCellRNASeq_files/figure-epub3/addPublishedClusters2-1.png" alt="RSEC: Confusion matrix of number of cells per cluster, for our workflow's RSEC clustering and the original published clustering."  />
 <p class="caption">(\#fig:addPublishedClusters2)RSEC: Confusion matrix of number of cells per cluster, for our workflow's RSEC clustering and the original published clustering.</p>
 </div>
 
@@ -562,7 +562,7 @@ plotHeatmap(clustered,
 ```
 
 <div class="figure">
-<img src="202_Das_SingleCellRNASeq_files/figure-html/heatmapsClusters-1.png" alt="RSEC: Heatmap of the normalized expression measures for the 1,000 most variable genes, where rows correspond to genes and columns to cells ordered by RSEC clusters." width="672" />
+<img src="202_Das_SingleCellRNASeq_files/figure-epub3/heatmapsClusters-1.png" alt="RSEC: Heatmap of the normalized expression measures for the 1,000 most variable genes, where rows correspond to genes and columns to cells ordered by RSEC clusters."  />
 <p class="caption">(\#fig:heatmapsClusters)RSEC: Heatmap of the normalized expression measures for the 1,000 most variable genes, where rows correspond to genes and columns to cells ordered by RSEC clusters.</p>
 </div>
 
@@ -577,7 +577,7 @@ plotReducedDims(clustered,whichCluster="primary",reducedDim="zinbwave",pch=20,
 ```
 
 <div class="figure">
-<img src="202_Das_SingleCellRNASeq_files/figure-html/mdsWce-1.png" alt="RSEC: MDS of the low-dimensional matrix W, where each point represents a cell and cells are color-coded by RSEC clustering." width="672" />
+<img src="202_Das_SingleCellRNASeq_files/figure-epub3/mdsWce-1.png" alt="RSEC: MDS of the low-dimensional matrix W, where each point represents a cell and cells are color-coded by RSEC clustering."  />
 <p class="caption">(\#fig:mdsWce)RSEC: MDS of the low-dimensional matrix W, where each point represents a cell and cells are color-coded by RSEC clustering.</p>
 </div>
 
@@ -640,7 +640,7 @@ pairs(lineages, type="lineages", col = colorCl)
 ```
 
 <div class="figure">
-<img src="202_Das_SingleCellRNASeq_files/figure-html/tree-1.png" alt="Slingshot: Cells color-coded by cluster in a 4-dimensional MDS space, with connecting lines between cluster centers representing the inferred global lineage structure." width="672" />
+<img src="202_Das_SingleCellRNASeq_files/figure-epub3/tree-1.png" alt="Slingshot: Cells color-coded by cluster in a 4-dimensional MDS space, with connecting lines between cluster centers representing the inferred global lineage structure."  />
 <p class="caption">(\#fig:tree)Slingshot: Cells color-coded by cluster in a 4-dimensional MDS space, with connecting lines between cluster centers representing the inferred global lineage structure.</p>
 </div>
 
@@ -652,7 +652,7 @@ pairs(lineages, type="curves", col = colorCl)
 ```
 
 <div class="figure">
-<img src="202_Das_SingleCellRNASeq_files/figure-html/curves-1.png" alt="Slingshot: Cells color-coded by cluster in a 4-dimensional MDS space, with smooth curves representing each inferred lineage." width="672" />
+<img src="202_Das_SingleCellRNASeq_files/figure-epub3/curves-1.png" alt="Slingshot: Cells color-coded by cluster in a 4-dimensional MDS space, with smooth curves representing each inferred lineage."  />
 <p class="caption">(\#fig:curves)Slingshot: Cells color-coded by cluster in a 4-dimensional MDS space, with smooth curves representing each inferred lineage.</p>
 </div>
 
@@ -836,7 +836,7 @@ plotHeatmap(pseudoCe1[topgenes,], clusterSamplesData = "orderSamplesValue", brea
 ```
 
 <div class="figure">
-<img src="202_Das_SingleCellRNASeq_files/figure-html/heatmapsignificant-1.png" alt="DE: Heatmap of the normalized expression measures for the 100 most significantly DE genes for the neuronal lineage, where rows correspond to genes and columns to cells ordered by pseudotime." width="672" />
+<img src="202_Das_SingleCellRNASeq_files/figure-epub3/heatmapsignificant-1.png" alt="DE: Heatmap of the normalized expression measures for the 100 most significantly DE genes for the neuronal lineage, where rows correspond to genes and columns to cells ordered by pseudotime."  />
 <p class="caption">(\#fig:heatmapsignificant)DE: Heatmap of the normalized expression measures for the 100 most significantly DE genes for the neuronal lineage, where rows correspond to genes and columns to cells ordered by pseudotime.</p>
 </div>
 

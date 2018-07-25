@@ -141,7 +141,7 @@ FindHomology contains a simple parser function for GFF files that allows us to g
 GeneCalls <- FindHomology::GFFParser(GFFAddress = GeneCallAdds,
                                      Verbose = TRUE)
 #> ===========================================================================
-#> Time difference of 7.574508 secs
+#> Time difference of 7.219969 secs
 ```
 
 If you choose to mimic this work on your own, there are a few ways to get gene calls(the gene boundaries, and strandedness), and annotations, such as Prodigal[^7] (for gene calls) and Prokka[^8] (for annotations). Using the NCBI annotations is simple and conducive for this workshop. However if you are working on sequence data that you have generated or collected yourself, NCBI annotations will not be available. Additionally, a Gene Caller within the DECIPHER package is currently under construction.
@@ -221,7 +221,7 @@ SyntenyObject <- FindSynteny(dbFile = DBPath,
                              verbose = TRUE)
 #> ===========================================================================
 #> 
-#> Time difference of 58.81 secs
+#> Time difference of 57.35 secs
 ```
 
 There are multiple ways to view objects of class `synteny`. It has default view options for `plot()`. By default, colors are assigned as a ramp from the first nucleotide position, to the last nucleotide position of the *query* genome, or the first genome selected, and wherever syntenic hits are observed, the bar representing the *subject* genome is marked with the section of the color ramp indicating the syntenic hit in the *query*.
@@ -233,7 +233,7 @@ Plotting genomes 2 and 3, which are very syntenic, provides a good example of th
 plot(SyntenyObject[2:3, 2:3])
 ```
 
-<img src="250_Cooley_DECIPHER_files/figure-html/plotdefault-1.png" width="672" />
+![](250_Cooley_DECIPHER_files/figure-epub3/plotdefault-1.png)<!-- -->
 
 Because visualizing large numbers of syntenic hits in genome sized sequences can be non-trivial, additional commands can be passed to plot in order to modify coloring schemes. `frequency` causes bars representing genomes to be colored by **how syntenic** that particular region (as determined by cumulative nucleotide position) of the genome is, indiscriminate of where that hit is in a corresponding genome. Once again genomes 2 and 3 in our set are good examples of this. They are highly syntenic, which this option shows well, but the rearrangements present are no longer shown.
 
@@ -243,7 +243,7 @@ plot(SyntenyObject[2:3, 2:3],
      "frequency")
 ```
 
-<img src="250_Cooley_DECIPHER_files/figure-html/plotfrequency-1.png" width="672" />
+![](250_Cooley_DECIPHER_files/figure-epub3/plotfrequency-1.png)<!-- -->
 
 Because visualizing large numbers of syntenic hits in genome sized sequences can be non-trivial, additional commands can be passed to plot in order to modify coloring schemes. `neighbor` tries to provide each syntenic hit with a unique color, and additionally draws linear connections between them to facilitate better visualization. This can be a useful alternative to the default plotting, if many rearrangements are present in a way that you want to view.
 
@@ -253,7 +253,7 @@ plot(SyntenyObject[2:3, 2:3],
      "neighbor")
 ```
 
-<img src="250_Cooley_DECIPHER_files/figure-html/plotneighbors-1.png" width="672" />
+![](250_Cooley_DECIPHER_files/figure-epub3/plotneighbors-1.png)<!-- -->
 
 Plotting is a useful tool in analzying sequence data, however sometimes plots of genome sized sequence data can be a bit overwhelming. Plotting our entire database, 8 sequences, though good at representing the complexity present here in this workshop, can be daunting to make sense of quickly if you are unused to looking at figures of this type frequently.
 
@@ -263,7 +263,7 @@ plot(SyntenyObject,
      "neighbor")
 ```
 
-<img src="250_Cooley_DECIPHER_files/figure-html/plotneighbors2-1.png" width="672" />
+![](250_Cooley_DECIPHER_files/figure-epub3/plotneighbors2-1.png)<!-- -->
 
 
 The most useful way to visualize Synteny data *in my opinion* is through a dot plot, which can be accessed via the `pairs()`. Dot plots, as explained above, utilize each genome being compared, as an axis in a normal x-y scatter plot. Where a *dot* - really a **very** short line, representing a run of nucleotides or amino acids -  is shown, that x,y coordinate is a syntenic hit. Hits can also be chained together into blocks of syntenic hits.
@@ -273,7 +273,7 @@ The most useful way to visualize Synteny data *in my opinion* is through a dot p
 pairs(SyntenyObject[2:3, 2:3], labels = GenomeIDs[2:3])
 ```
 
-<img src="250_Cooley_DECIPHER_files/figure-html/smallpairsplot-1.png" width="672" />
+![](250_Cooley_DECIPHER_files/figure-epub3/smallpairsplot-1.png)<!-- -->
 
 Syntenic hits are shown in the upper left, while syntenic blocks are shown in the bottom left. In the upper triangle,hits in black are co-linear, while hits in red are inverted. In the bottom triangle, blocks are colored by score.
 
@@ -285,7 +285,7 @@ pairs(SyntenyObject,
       labels = GenomeIDs)
 ```
 
-<img src="250_Cooley_DECIPHER_files/figure-html/largepairsplot-1.png" width="672" />
+![](250_Cooley_DECIPHER_files/figure-epub3/largepairsplot-1.png)<!-- -->
 
 #### Predict homology between genes that are linked by syntenic hits
 
@@ -308,7 +308,7 @@ MatrixObject <- NucleotideOverlap(SyntenyObject = SyntenyObject,
                                   GeneCalls = GeneCalls,
                                   Verbose = TRUE)
 #> ===========================================================================
-#> Time difference of 1.04628 mins
+#> Time difference of 1.024507 mins
 ```
 
 The function `Catalog` takes in the output of `NucleotideOverlap` and returns a list of matrices. These matrices represent agglomerated sets of pairs. The idea being, if gene **A** in genome **1** was paired by nucleotide overlap to genes **B** and **C** in genomes **2** and **3** respectively by `NucleotideOverLap`, and additionally gene **B** in genome **2** was similarly paired with gene **C** in genome **3**. With the assumption that these linkages indicate homology, gene **A** is predicted to be homologous to genes **B** and **C**, and gene **B** is predicted to be homologous to gene **C**. 
@@ -326,7 +326,7 @@ The function `Catalog` takes in the output of `NucleotideOverlap` and returns a 
 Homologs <- Catalog(MatrixObject,
                     Verbose = TRUE)
 #> ===========================================================================
-#> Time difference of 1.901221 mins
+#> Time difference of 1.882568 mins
 ```
 
 We can visualize this object as a histogram of the size of these agglomerations, by the number of pairs included in each agglomerated group. Where **1** represents pairs of genes where neither gene is linked to any other gene, *from other genomes*. Where **28** *in this case* represents fully linked sets of pairs, where each gene in the set is predicted to be a homolog of *every other gene in the set*.
@@ -341,7 +341,7 @@ hist(sapply(Homologs,
      breaks = 27L)
 ```
 
-<img src="250_Cooley_DECIPHER_files/figure-html/findhomologyobjectspart1-1.png" width="672" />
+![](250_Cooley_DECIPHER_files/figure-epub3/findhomologyobjectspart1-1.png)<!-- -->
 
 We can collect these fully linked sets. For any `N` number of genomes, a set of genes where each genome contains a homolog, and those homologs in turn have agreeing homologs in every other genome, the number of rows of this matrix will be `N * (N-1) / 2`.
 
@@ -364,7 +364,7 @@ CoreGenome <- CoreAligner(Homologs[CoreSet],
                           GeneCalls = GeneCalls,
                           Verbose = TRUE)
 #> ===========================================================================
-#> Time difference of 33.67113 secs
+#> Time difference of 33.63152 secs
 CoreDist <- DistanceMatrix(myXStringSet = CoreGenome,
                            verbose = FALSE,
                            correction = "Jukes-Cantor")
@@ -376,7 +376,7 @@ CoreDend <- IdClusters(myDistMatrix = CoreDist,
                        type = "dendrogram")
 ```
 
-<img src="250_Cooley_DECIPHER_files/figure-html/aligncoreenes-1.png" width="672" />
+![](250_Cooley_DECIPHER_files/figure-epub3/aligncoreenes-1.png)<!-- -->
 
 We can now finally tidy up our workspace and unlink our temp file.
 
@@ -394,7 +394,7 @@ PanGenomeMatrix <- LogicalPan(HomologList = Homologs,
                               Verbose = TRUE,
                               Plot = FALSE)
 #> ===========================================================================
-#> Time difference of 1.028313 secs
+#> Time difference of 1.065081 secs
 ```
 
 We can visualize this matrix if we so choose.
@@ -405,7 +405,7 @@ image(t(PanGenomeMatrix), col = c("white", "blue"),
       main = "Presence Absence")
 ```
 
-<img src="250_Cooley_DECIPHER_files/figure-html/unnamed-chunk-3-1.png" width="672" />
+![](250_Cooley_DECIPHER_files/figure-epub3/unnamed-chunk-3-1.png)<!-- -->
 
 PanGenomeMatrix represents every homolog set, and every singleton gene in our genomes.
 
@@ -424,7 +424,7 @@ PanDend <- IdClusters(myDistMatrix = PanGenome,
                       verbose = FALSE)
 ```
 
-<img src="250_Cooley_DECIPHER_files/figure-html/createdendrogramfrompangenome-1.png" width="672" />
+![](250_Cooley_DECIPHER_files/figure-epub3/createdendrogramfrompangenome-1.png)<!-- -->
 
 We can, additionally, create a simple tangleogram from these two phylogenetic trees. Allowing a comparison of the core, and pan genomes. The core is on the left, while the pan is on the right.
 
@@ -451,7 +451,7 @@ P.Ord <- unlist(PanDend)
 segments(-0.10, seq_along(C.Ord), -0.01, match(C.Ord, P.Ord), xpd = NA, col = "blue")
 ```
 
-<img src="250_Cooley_DECIPHER_files/figure-html/simpletangleogram-1.png" width="672" />
+![](250_Cooley_DECIPHER_files/figure-epub3/simpletangleogram-1.png)<!-- -->
 
 ```r
 par(p)

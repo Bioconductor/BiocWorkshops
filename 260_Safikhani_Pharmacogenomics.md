@@ -99,6 +99,7 @@ suppressPackageStartupMessages({
   library(PharmacoGxML, verbose=FALSE)
   library(Biobase, verbose=FALSE)
 })
+#> Warning in fun(libname, pkgname): couldn't connect to display ":0"
 ```
 
 ### Downloading PharmacoSet objects
@@ -127,7 +128,7 @@ pie(table(CCLE@cell[,"tissueid"]),
 ```
 
 <div class="figure">
-<img src="260_Safikhani_Pharmacogenomics_files/figure-html/pie_chart-1.png" alt="Tissue of origin of cell lines in CCLE study" width="672" />
+<img src="260_Safikhani_Pharmacogenomics_files/figure-epub3/pie_chart-1.png" alt="Tissue of origin of cell lines in CCLE study"  />
 <p class="caption">(\#fig:pie_chart)Tissue of origin of cell lines in CCLE study</p>
 </div>
 
@@ -161,7 +162,7 @@ drugDoseResponseCurve(drug="lapatinib", cellline=cells[3],
 ```
 
 <div class="figure">
-<img src="260_Safikhani_Pharmacogenomics_files/figure-html/curves-1.png" alt="Cells response to lapatinib in CCLE" width="672" />
+<img src="260_Safikhani_Pharmacogenomics_files/figure-epub3/curves-1.png" alt="Cells response to lapatinib in CCLE"  />
 <p class="caption">(\#fig:curves)Cells response to lapatinib in CCLE</p>
 </div>
 
@@ -183,7 +184,7 @@ ggplot(melted_data, aes(x=Var1,y=value)) +
 ```
 
 <div class="figure">
-<img src="260_Safikhani_Pharmacogenomics_files/figure-html/ccle_auc-1.png" alt="Cells response to drugs in CCLE" width="672" />
+<img src="260_Safikhani_Pharmacogenomics_files/figure-epub3/ccle_auc-1.png" alt="Cells response to drugs in CCLE"  />
 <p class="caption">(\#fig:ccle_auc)Cells response to drugs in CCLE</p>
 </div>
 
@@ -228,7 +229,7 @@ for (i in 1:nrow(cases)) {
 ```
 
 <div class="figure">
-<img src="260_Safikhani_Pharmacogenomics_files/figure-html/Replication_curves-1.png" alt="Consistency of drug response curves across studies" width="672" />
+<img src="260_Safikhani_Pharmacogenomics_files/figure-epub3/Replication_curves-1.png" alt="Consistency of drug response curves across studies"  />
 <p class="caption">(\#fig:Replication_curves)Consistency of drug response curves across studies</p>
 </div>
 
@@ -292,7 +293,7 @@ legend("topright",
 ```
 
 <div class="figure">
-<img src="260_Safikhani_Pharmacogenomics_files/figure-html/sensitivity_scatter_plots-1.png" alt="Concordance of AAC values" width="960" />
+<img src="260_Safikhani_Pharmacogenomics_files/figure-epub3/sensitivity_scatter_plots-1.png" alt="Concordance of AAC values"  />
 <p class="caption">(\#fig:sensitivity_scatter_plots)Concordance of AAC values</p>
 </div>
 
@@ -313,7 +314,7 @@ text(mp, par("usr")[3], labels=as.vector(rbind(drugs, rep("", 15))), srt=45, adj
 abline(h=.7, lty=2)
 ```
 
-<img src="260_Safikhani_Pharmacogenomics_files/figure-html/mci-1.png" width="672" />
+![](260_Safikhani_Pharmacogenomics_files/figure-epub3/mci-1.png)<!-- -->
 
 ### Known Biomarkers 
 The association between molecular features and response to a given drug is modelled using a linear regression model adjusted for tissue source: 
@@ -393,7 +394,7 @@ boxplot(GDSC.aac["PD-0325901", GDSC_cells]~ GDSC_mut[GDSC_cells, "BRAF"], col="g
         cex.main=1, xlab="mutation", ylab="drug sensitivity")
 ```
 
-<img src="260_Safikhani_Pharmacogenomics_files/figure-html/biomarker_discovery-1.png" width="672" />
+![](260_Safikhani_Pharmacogenomics_files/figure-epub3/biomarker_discovery-1.png)<!-- -->
 
 ## Machine Learning and Biomarker Discovery
 Some of the widely used multivariate machine learning methods such as elastic net, Random Forest (RF) and Support Vector Machine (SVM) have been already implemented in the MLWorkshop. It optimizes hyperparameters of these methods in the training phase. To assess the performance of the predictive models, it implements *m* number of sampling with *n-fold* cross validations (CV). The performance will then be assessed by multiple metrics including pearson correlation coefficient, concordance index and modified concordance index. 
@@ -441,7 +442,7 @@ for(method in c("ridge", "lasso", "random_forest", "svm")){
 }
 ```
 
-<img src="260_Safikhani_Pharmacogenomics_files/figure-html/machine_learning-1.png" width="672" /><img src="260_Safikhani_Pharmacogenomics_files/figure-html/machine_learning-2.png" width="672" /><img src="260_Safikhani_Pharmacogenomics_files/figure-html/machine_learning-3.png" width="672" /><img src="260_Safikhani_Pharmacogenomics_files/figure-html/machine_learning-4.png" width="672" />
+![](260_Safikhani_Pharmacogenomics_files/figure-epub3/machine_learning-1.png)<!-- -->![](260_Safikhani_Pharmacogenomics_files/figure-epub3/machine_learning-2.png)<!-- -->![](260_Safikhani_Pharmacogenomics_files/figure-epub3/machine_learning-3.png)<!-- -->![](260_Safikhani_Pharmacogenomics_files/figure-epub3/machine_learning-4.png)<!-- -->
 
 ### Bonus: Using the Connectivity Map for drug repurposing
 
@@ -549,31 +550,31 @@ This document was generated with the following R version and packages loaded:
 #>  [34] gtable_0.2.0        ipred_0.9-6         kernlab_0.9-26     
 #>  [37] ddalpha_1.3.4       DEoptimR_1.0-8      maps_3.3.0         
 #>  [40] abind_1.4-5         scales_0.5.0        DBI_1.0.0          
-#>  [43] relations_0.6-8     Rcpp_0.12.17        plotrix_3.7-2      
+#>  [43] relations_0.6-8     Rcpp_0.12.18        plotrix_3.7-2      
 #>  [46] htmlTable_1.12      magic_1.5-8         foreign_0.8-71     
 #>  [49] bit_1.1-14          mapproj_1.2.6       lava_1.6.2         
 #>  [52] prodlim_2018.04.18  htmlwidgets_1.2     fgsea_1.7.1        
 #>  [55] gplots_3.0.1        RColorBrewer_1.1-2  acepack_1.4.1      
 #>  [58] pkgconfig_2.0.1     nnet_7.3-12         tidyselect_0.2.4   
-#>  [61] rlang_0.2.1         munsell_0.5.0       tools_3.5.0        
-#>  [64] downloader_0.4      RSQLite_2.1.1       pls_2.6-0          
-#>  [67] broom_0.5.0         evaluate_0.11       geometry_0.3-6     
-#>  [70] stringr_1.3.1       yaml_2.1.19         ModelMetrics_1.1.0 
-#>  [73] knitr_1.20          bit64_0.9-7         robustbase_0.93-1.1
-#>  [76] caTools_1.17.1.1    purrr_0.2.5         RANN_2.6           
-#>  [79] bindrcpp_0.2.2      nlme_3.1-137        slam_0.1-43        
-#>  [82] RcppRoll_0.3.0      pracma_2.1.4        BiocStyle_2.9.3    
-#>  [85] compiler_3.5.0      rstudioapi_0.7      marray_1.59.0      
-#>  [88] tibble_1.4.2        stringi_1.2.4       pillar_1.3.0       
-#>  [91] magicaxis_2.0.3     data.table_1.11.4   bitops_1.0-6       
-#>  [94] R6_2.2.2            latticeExtra_0.6-28 bookdown_0.7       
-#>  [97] KernSmooth_2.23-15  gridExtra_2.3       lsa_0.73.1         
-#> [100] codetools_0.2-15    MASS_7.3-50         gtools_3.8.1       
-#> [103] assertthat_0.2.0    CVST_0.2-2          rprojroot_1.3-2    
-#> [106] withr_2.1.2         grid_3.5.0          rpart_4.1-13       
-#> [109] timeDate_3043.102   tidyr_0.8.1         class_7.3-14       
-#> [112] rmarkdown_1.10      sets_1.0-18         lubridate_1.7.4    
-#> [115] base64enc_0.1-3
+#>  [61] labeling_0.3        rlang_0.2.1         munsell_0.5.0      
+#>  [64] tools_3.5.0         downloader_0.4      RSQLite_2.1.1      
+#>  [67] pls_2.6-0           broom_0.5.0         evaluate_0.11      
+#>  [70] geometry_0.3-6      stringr_1.3.1       yaml_2.1.19        
+#>  [73] ModelMetrics_1.1.0  knitr_1.20          bit64_0.9-7        
+#>  [76] robustbase_0.93-1.1 caTools_1.17.1.1    purrr_0.2.5        
+#>  [79] RANN_2.6            bindrcpp_0.2.2      nlme_3.1-137       
+#>  [82] slam_0.1-43         RcppRoll_0.3.0      pracma_2.1.4       
+#>  [85] BiocStyle_2.9.3     compiler_3.5.0      rstudioapi_0.7     
+#>  [88] marray_1.59.0       tibble_1.4.2        stringi_1.2.4      
+#>  [91] highr_0.7           pillar_1.3.0        magicaxis_2.0.3    
+#>  [94] data.table_1.11.4   bitops_1.0-6        R6_2.2.2           
+#>  [97] latticeExtra_0.6-28 bookdown_0.7        KernSmooth_2.23-15 
+#> [100] gridExtra_2.3       lsa_0.73.1          codetools_0.2-15   
+#> [103] MASS_7.3-50         gtools_3.8.1        assertthat_0.2.0   
+#> [106] CVST_0.2-2          rprojroot_1.3-2     withr_2.1.2        
+#> [109] grid_3.5.0          rpart_4.1-13        timeDate_3043.102  
+#> [112] tidyr_0.8.1         class_7.3-14        rmarkdown_1.10     
+#> [115] sets_1.0-18         lubridate_1.7.4     base64enc_0.1-3
 ```
 
 

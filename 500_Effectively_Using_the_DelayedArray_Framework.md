@@ -245,7 +245,7 @@ The **DelayedArray** package defines the key classes, generics, and methods^[The
 
 The reverse dependencies of **DelayedArray** are shown below:
 
-<img src="500_Effectively_Using_the_DelayedArray_Framework_files/figure-html/unnamed-chunk-6-1.png" width="672" />
+![](500_Effectively_Using_the_DelayedArray_Framework_files/figure-epub3/unnamed-chunk-6-1.png)<!-- -->
 
 The above figures includes packages that extend the DelayedArray framework in various ways, as well as those that simply use the DelayedArray framework to analyse specific types of 'omics data. We briefly discuss some of these:
 
@@ -965,10 +965,10 @@ x <- as.array(x_h5)
 # Delayed operations are fast compared to ordinary operations! 
 system.time(x_h5 + 100L) 
 #>    user  system elapsed 
-#>   0.008   0.000   0.005
+#>   0.004   0.000   0.005
 system.time(x + 100L) 
 #>    user  system elapsed 
-#>   2.672   1.356   4.026
+#>   2.584   1.476   4.059
 
 # Delayed operations can be chained
 system.time(t(x_h5[1, , 1:100] + 100L))
@@ -1090,7 +1090,7 @@ system.time(
             refdim = dim(da_hdf5),
             spacings = c(1L, ncol(da_hdf5)))))
 #>    user  system elapsed 
-#>   0.128   1.308   1.737
+#>   0.128   1.668   2.354
 head(row_medians)
 #> [[1]]
 #> [1] 8
@@ -1117,7 +1117,7 @@ system.time(
             refdim = dim(da_hdf5),
             spacings = c(nrow(da_hdf5), 1L))))
 #>    user  system elapsed 
-#>   0.056   0.136   0.274
+#>   0.068   0.152   0.306
 head(col_medians)
 #> [[1]]
 #> [1] 10
@@ -1141,7 +1141,7 @@ system.time(
             block.shape = "first-dim-grows-first")))
 #> Processing block 1/1 ... OK
 #>    user  system elapsed 
-#>    0.02    0.00    0.02
+#>   0.016   0.004   0.020
 head(row_medians)
 #> [[1]]
 #>   [1]  8.0  8.5  8.5  9.0  9.0  9.0  9.5  9.5  9.5  9.5 10.0 10.0 10.0 10.0
@@ -1161,7 +1161,7 @@ system.time(
             block.shape = "last-dim-grows-first")))
 #> Processing block 1/1 ... OK
 #>    user  system elapsed 
-#>   0.020   0.000   0.018
+#>   0.016   0.000   0.018
 head(col_medians)
 #> [[1]]
 #> [1] 10 18
@@ -1231,7 +1231,7 @@ showtree(z_h5)
 #> 10000000x2 integer: HDF5Matrix object
 #> └─ 10000000x2 integer: [seed] HDF5ArraySeed object
 path(z_h5)
-#> [1] "/tmp/Rtmpz7ViC6/HDF5Array_dump/auto00001.h5"
+#> [1] "/tmp/RtmpiT1x1U/HDF5Array_dump/auto00001.h5"
 
 # NOTE: The show() method performs realization on the first few and last few 
 #       elements in order to preview the result
