@@ -45,6 +45,15 @@
 
 
 
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-122837239-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-122837239-1');
+</script>
 
 
 <style type="text/css">
@@ -890,12 +899,12 @@ SyntenyObject &lt;-<span class="st"> </span><span class="kw">FindSynteny</span>(
 <p><img src="250_Cooley_DECIPHER_files/figure-html/plotneighbors2-1.png" width="672" /></p>
 <p>The most useful way to visualize Synteny data <em>in my opinion</em> is through a dot plot, which can be accessed via the <code>pairs()</code>. Dot plots, as explained above, utilize each genome being compared, as an axis in a normal x-y scatter plot. Where a <em>dot</em> - really a <strong>very</strong> short line, representing a run of nucleotides or amino acids - is shown, that x,y coordinate is a syntenic hit. Hits can also be chained together into blocks of syntenic hits.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">pairs</span>(SyntenyObject[<span class="dv">2</span><span class="op">:</span><span class="dv">3</span>, <span class="dv">2</span><span class="op">:</span><span class="dv">3</span>], <span class="dt">labels =</span> GenomeIDs[<span class="dv">2</span><span class="op">:</span><span class="dv">3</span>])</code></pre></div>
-<p><img src="250_Cooley_DECIPHER_files/figure-html/small%20pairs%20plot-1.png" width="672" /></p>
+<p><img src="250_Cooley_DECIPHER_files/figure-html/smallpairsplot-1.png" width="672" /></p>
 <p>Syntenic hits are shown in the upper left, while syntenic blocks are shown in the bottom left. In the upper triangle,hits in black are co-linear, while hits in red are inverted. In the bottom triangle, blocks are colored by score.</p>
 <p>Pairs plots are <em>my</em> personal favorite way to visualize syntenic information, but, they can become overwhelming as the number of genomes compared increases. They provide very clear depictions of rearrangements and inversions.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">pairs</span>(SyntenyObject,
       <span class="dt">labels =</span> GenomeIDs)</code></pre></div>
-<p><img src="250_Cooley_DECIPHER_files/figure-html/large%20pairs%20plot-1.png" width="672" /></p>
+<p><img src="250_Cooley_DECIPHER_files/figure-html/largepairsplot-1.png" width="672" /></p>
 </div>
 <div id="predict-homology-between-genes-that-are-linked-by-syntenic-hits" class="section level4">
 <h4><span class="header-section-number">13.2.2.8</span> Predict homology between genes that are linked by syntenic hits</h4>
@@ -1045,7 +1054,7 @@ p &lt;-<span class="st"> </span><span class="kw">par</span>(<span class="dt">mar
 C.Ord &lt;-<span class="st"> </span><span class="kw">unlist</span>(CoreDend)
 P.Ord &lt;-<span class="st"> </span><span class="kw">unlist</span>(PanDend)
 <span class="kw">segments</span>(<span class="op">-</span><span class="fl">0.10</span>, <span class="kw">seq_along</span>(C.Ord), <span class="op">-</span><span class="fl">0.01</span>, <span class="kw">match</span>(C.Ord, P.Ord), <span class="dt">xpd =</span> <span class="ot">NA</span>, <span class="dt">col =</span> <span class="st">&quot;blue&quot;</span>)</code></pre></div>
-<p><img src="250_Cooley_DECIPHER_files/figure-html/simple%20tangleogram-1.png" width="672" /></p>
+<p><img src="250_Cooley_DECIPHER_files/figure-html/simpletangleogram-1.png" width="672" /></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span>(p)</code></pre></div>
 <p>The proposition at the beginning of this workshop was that a specific set of genes, that may not normally be included in a core genome, could be included in the core genome, for this set of Archaea. Specifically, genes involved in some of the unusual chemistry that Archaea do with their lipids. If we wanted to really prove this, a significant amount of lab work would also be required. However we can collect the annotations for all of the sets of homologs that have been predicted, and see how much these annotations agree, and if any of these annotations provide evidence for our proposition.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">CoreGenes &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dt">data =</span> <span class="ot">NA_integer_</span>,

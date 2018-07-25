@@ -1625,6 +1625,9 @@ available. The `RangedSummarizedExperiment` objects can be used for differential
 expression analysis. These are also accessible through a web interface [^14].
 
 
+```
+#> No methods found in package 'IRanges' for request: 'subset' when loading 'derfinder'
+```
 
 *[recount](http://bioconductor.org/packages/recount)* provides a search function:
 

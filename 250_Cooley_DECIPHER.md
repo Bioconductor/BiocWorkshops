@@ -273,7 +273,7 @@ The most useful way to visualize Synteny data *in my opinion* is through a dot p
 pairs(SyntenyObject[2:3, 2:3], labels = GenomeIDs[2:3])
 ```
 
-<img src="250_Cooley_DECIPHER_files/figure-html/small pairs plot-1.png" width="672" />
+<img src="250_Cooley_DECIPHER_files/figure-html/smallpairsplot-1.png" width="672" />
 
 Syntenic hits are shown in the upper left, while syntenic blocks are shown in the bottom left. In the upper triangle,hits in black are co-linear, while hits in red are inverted. In the bottom triangle, blocks are colored by score.
 
@@ -285,7 +285,7 @@ pairs(SyntenyObject,
       labels = GenomeIDs)
 ```
 
-<img src="250_Cooley_DECIPHER_files/figure-html/large pairs plot-1.png" width="672" />
+<img src="250_Cooley_DECIPHER_files/figure-html/largepairsplot-1.png" width="672" />
 
 #### Predict homology between genes that are linked by syntenic hits
 
@@ -451,7 +451,7 @@ P.Ord <- unlist(PanDend)
 segments(-0.10, seq_along(C.Ord), -0.01, match(C.Ord, P.Ord), xpd = NA, col = "blue")
 ```
 
-<img src="250_Cooley_DECIPHER_files/figure-html/simple tangleogram-1.png" width="672" />
+<img src="250_Cooley_DECIPHER_files/figure-html/simpletangleogram-1.png" width="672" />
 
 ```r
 par(p)
