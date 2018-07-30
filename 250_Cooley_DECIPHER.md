@@ -84,8 +84,8 @@ Archaea are relatively newly characterized as organisms. First classified in the
 [^2]: [(1) Woese, C. R.; Fox, G. E. Proc. Natl. Acad. Sci. 1977, 74 (11), 5088–5090.](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC432104/)
 
 <div class="figure" style="text-align: center">
-<img src="./Cooley_DECIPHER/GrandPrismatic.png" alt="Grand Prismatic Spring in Yellowstone National Park[^3]" width="75%" height="75%" />
-<p class="caption">(\#fig:GrandPrismatic)Grand Prismatic Spring in Yellowstone National Park[^3]</p>
+<img src="./Cooley_DECIPHER/GrandPrismatic.png" alt="Grand Prismatic Spring in Yellowstone National Park (3)" width="75%" height="75%" />
+<p class="caption">(\#fig:GrandPrismatic)Grand Prismatic Spring in Yellowstone National Park (3)</p>
 </div>
 
 The aforementioned unusual lipds[^4] are striking in their differences from those common in both Eukaryotes and Prokaryotes.

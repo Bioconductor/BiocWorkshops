@@ -1,5 +1,4 @@
 
-
 # 101: Introduction to Bioconductor annotation resources
 
 ## Instructors
@@ -1073,7 +1072,7 @@ GRCh38TxDb
 #> # exon_nrow: 675836
 #> # cds_nrow: 270225
 #> # Db created by: GenomicFeatures package from Bioconductor
-#> # Creation time: 2018-07-25 18:35:27 +0000 (Wed, 25 Jul 2018)
+#> # Creation time: 2018-07-30 05:52:25 +0000 (Mon, 30 Jul 2018)
 #> # GenomicFeatures version at creation time: 1.33.0
 #> # RSQLite version at creation time: 2.1.1
 #> # DBSCHEMAVERSION: 1.2

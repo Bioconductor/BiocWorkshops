@@ -639,7 +639,7 @@ v
 vfit <- lmFit(v, design)
 vfit <- contrasts.fit(vfit, contrasts=contr.matrix)
 efit <- eBayes(vfit)
-plotSA(efit, main="Final model: Mean−variance trend")
+plotSA(efit, main="Final model: Mean-variance trend")
 ```
 
 ![](200_Law_RNAseq123_files/figure-epub3/voom-1.png)<!-- -->

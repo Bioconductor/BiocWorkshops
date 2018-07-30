@@ -1202,7 +1202,7 @@ v
 vfit &lt;-<span class="st"> </span><span class="kw">lmFit</span>(v, design)
 vfit &lt;-<span class="st"> </span><span class="kw">contrasts.fit</span>(vfit, <span class="dt">contrasts=</span>contr.matrix)
 efit &lt;-<span class="st"> </span><span class="kw">eBayes</span>(vfit)
-<span class="kw">plotSA</span>(efit, <span class="dt">main=</span><span class="st">&quot;Final model: Mean−variance trend&quot;</span>)</code></pre></div>
+<span class="kw">plotSA</span>(efit, <span class="dt">main=</span><span class="st">&quot;Final model: Mean-variance trend&quot;</span>)</code></pre></div>
 <p><img src="200_Law_RNAseq123_files/figure-html/voom-1.png" width="768" /></p>
 <p>Note that the other data frames stored within the DGEList-object that contain gene- and sample-level information, are retained in the EList-object <code>v</code> created by <code>voom</code>. The <code>v$genes</code> data frame is equivalent to <code>x$genes</code>, <code>v$targets</code> is equivalent to <code>x$samples</code>, and the expression values stored in <code>v$E</code> is analogous to <code>x$counts</code>, albeit on a transformed scale. In addition to this, the <code>voom</code> EList-object has a matrix of precision weights <code>v$weights</code> and stores the design matrix in <code>v$design</code>.</p>
 </div>

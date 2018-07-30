@@ -1615,10 +1615,7 @@ s
 <h3><span class="header-section-number">5.7.3</span> Using the raw API without R/Bioconductor</h3>
 <p>The SRAdbV2 is a client to a high-performance web-based API. As such, the web API is perfectly usable from either a simple test page, accessible here:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sra_browse_API</span>()</code></pre></div>
-<div class="figure">
-<img src="images/API.png" alt="The web-based API provides a useful interface for experiment with queries. It also returns URLs associated with the example queries, facilitating querying with other tools like curl or wget." />
-<p class="caption">The web-based API provides a useful interface for experiment with queries. It also returns URLs associated with the example queries, facilitating querying with other tools like <code>curl</code> or <code>wget</code>.</p>
-</div>
+<p>The web-based API provides a useful interface for experiment with queries. It also returns URLs associated with the example queries, facilitating querying with other tools like <code>curl</code> or <code>wget</code></p>
 <p>The API is described using the OpenAPI standard, also known as <a href="https://swagger.io/">Swagger</a>. Tooling exists to quickly scaffold clients in any language (basically) based on the json available here:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sra_get_swagger_json_url</span>()
 <span class="co">#&gt; [1] &quot;https://api-omicidx.cancerdatasci.org/sra/1.0/swagger.json&quot;</span></code></pre></div>

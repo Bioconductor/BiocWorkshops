@@ -128,8 +128,8 @@ pie(table(CCLE@cell[,"tissueid"]),
 ```
 
 <div class="figure">
-<img src="260_Safikhani_Pharmacogenomics_files/figure-epub3/pie_chart-1.png" alt="Tissue of origin of cell lines in CCLE study"  />
-<p class="caption">(\#fig:pie_chart)Tissue of origin of cell lines in CCLE study</p>
+<img src="260_Safikhani_Pharmacogenomics_files/figure-epub3/piechart-1.png" alt="Tissue of origin of cell lines in CCLE study"  />
+<p class="caption">(\#fig:piechart)Tissue of origin of cell lines in CCLE study</p>
 </div>
 
 ### Plotting Drug-Dose Response Data
@@ -184,8 +184,8 @@ ggplot(melted_data, aes(x=Var1,y=value)) +
 ```
 
 <div class="figure">
-<img src="260_Safikhani_Pharmacogenomics_files/figure-epub3/ccle_auc-1.png" alt="Cells response to drugs in CCLE"  />
-<p class="caption">(\#fig:ccle_auc)Cells response to drugs in CCLE</p>
+<img src="260_Safikhani_Pharmacogenomics_files/figure-epub3/ccleauc-1.png" alt="Cells response to drugs in CCLE"  />
+<p class="caption">(\#fig:ccleauc)Cells response to drugs in CCLE</p>
 </div>
 
 ```r
@@ -218,7 +218,7 @@ cases <- rbind(
   c("HT-1080", "PD-0332991"))
 
 par(mfrow=c(2, 2))
-for (i in 1:nrow(cases)) {
+for (i in seq_len(nrow(cases))) {
   drugDoseResponseCurve(pSets=common, 
                         drug=cases[i,2], 
                         cellline=cases[i,1], 
@@ -229,8 +229,8 @@ for (i in 1:nrow(cases)) {
 ```
 
 <div class="figure">
-<img src="260_Safikhani_Pharmacogenomics_files/figure-epub3/Replication_curves-1.png" alt="Consistency of drug response curves across studies"  />
-<p class="caption">(\#fig:Replication_curves)Consistency of drug response curves across studies</p>
+<img src="260_Safikhani_Pharmacogenomics_files/figure-epub3/Replicationcurves-1.png" alt="Consistency of drug response curves across studies"  />
+<p class="caption">(\#fig:Replicationcurves)Consistency of drug response curves across studies</p>
 </div>
 
 ### Consistency of pharmacological profiles
@@ -293,8 +293,8 @@ legend("topright",
 ```
 
 <div class="figure">
-<img src="260_Safikhani_Pharmacogenomics_files/figure-epub3/sensitivity_scatter_plots-1.png" alt="Concordance of AAC values"  />
-<p class="caption">(\#fig:sensitivity_scatter_plots)Concordance of AAC values</p>
+<img src="260_Safikhani_Pharmacogenomics_files/figure-epub3/sensitivityscatterplots-1.png" alt="Concordance of AAC values"  />
+<p class="caption">(\#fig:sensitivityscatterplots)Concordance of AAC values</p>
 </div>
 
 ### consistency assessment improved by Modified Concordance Index

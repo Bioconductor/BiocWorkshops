@@ -101,7 +101,7 @@ experiments.
 ### `(Ranged)SummarizedExperiment`
 
 <div class="figure">
-<img src="Ramos_MultiAssayExperiment/SummarizedExperiment.svg" alt="A matrix-like container where rows represent features of interest and columns represent samples. The objects contain one or more assays, each represented by a matrix-like object of numeric or other mode."  />
+<img src="100_Morgan_RBiocForAll/SummarizedExperiment.png" alt="A matrix-like container where rows represent features of interest and columns represent samples. The objects contain one or more assays, each represented by a matrix-like object of numeric or other mode." width="705" />
 <p class="caption">(\#fig:unnamed-chunk-4)A matrix-like container where rows represent features of interest and columns represent samples. The objects contain one or more assays, each represented by a matrix-like object of numeric or other mode.</p>
 </div>
 

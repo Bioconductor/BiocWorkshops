@@ -789,7 +789,7 @@ exportImage(correlation_network_png_file_name, type = "png")
 
 <div class="figure">
 <img src="/home/mramos/Source/github/BiocWorkshops/230_Isserlin_RCy3_intro/images/correlation_network.png" alt="Example correlation network created using aMatReader" width="889" />
-<p class="caption">(\#fig:correlation_network2)Example correlation network created using aMatReader</p>
+<p class="caption">(\#fig:correlationNetwork2)Example correlation network created using aMatReader</p>
 </div>
 
 cluster the Network
@@ -916,7 +916,7 @@ exportImage(cluster1em_png_file_name, type = "png")
 
 <div class="figure">
 <img src="/home/mramos/Source/github/BiocWorkshops/230_Isserlin_RCy3_intro/images/cluster1em.png" alt="Example Enrichment Map created when running an enrichment analysis using g:Profiler with the genes that are part of cluster 1" width="889" />
-<p class="caption">(\#fig:cluster1em_fig)Example Enrichment Map created when running an enrichment analysis using g:Profiler with the genes that are part of cluster 1</p>
+<p class="caption">(\#fig:cluster1emfig)Example Enrichment Map created when running an enrichment analysis using g:Profiler with the genes that are part of cluster 1</p>
 </div>
 
 Annotate the Enrichment map to get the general themes that are found in the enrichment results of cluster 1
@@ -954,14 +954,14 @@ exportImage(cluster1em_annot_png_file_name, type = "png")
 
 <div class="figure">
 <img src="/home/mramos/Source/github/BiocWorkshops/230_Isserlin_RCy3_intro/images/cluster1em_annot.png" alt="Example Annotated Enrichment Map created when running an enrichment analysis using g:Profiler with the genes that are part of cluster 1" width="678" />
-<p class="caption">(\#fig:cluster1em_annot_fig)Example Annotated Enrichment Map created when running an enrichment analysis using g:Profiler with the genes that are part of cluster 1</p>
+<p class="caption">(\#fig:cluster1emannotfig)Example Annotated Enrichment Map created when running an enrichment analysis using g:Profiler with the genes that are part of cluster 1</p>
 </div>
 
 Dense networks small or large never look like network figures we so often see in journals.  A lot of manual tweaking, reorganization and optimization is involved in getting that perfect figure ready network.  The above network is what the network starts as.  The below figure is what it can look like after a few minutes of manual reorganiazation.  (individual clusters were selected from the auto annotate panel and separated from other clusters)
 
 <div class="figure">
 <img src="/home/mramos/Source/github/BiocWorkshops/230_Isserlin_RCy3_intro/images/cluster1em_annot_man.png" alt="Example Annotated Enrichment Map created when running an enrichment analysis using g:Profiler with the genes that are part of cluster 1 after manual adjusting to generate a cleaner figure" width="658" />
-<p class="caption">(\#fig:cluster1em_annot_man_fig)Example Annotated Enrichment Map created when running an enrichment analysis using g:Profiler with the genes that are part of cluster 1 after manual adjusting to generate a cleaner figure</p>
+<p class="caption">(\#fig:cluster1emannotmanfig)Example Annotated Enrichment Map created when running an enrichment analysis using g:Profiler with the genes that are part of cluster 1 after manual adjusting to generate a cleaner figure</p>
 </div>
 
 ## Use Case 3 - Functional Enrichment of Omics set.
@@ -1175,7 +1175,7 @@ exportImage(mesenem_png_file_name, type = "png")
 
 <div class="figure">
 <img src="/home/mramos/Source/github/BiocWorkshops/230_Isserlin_RCy3_intro/images/mesenem.png" alt="Example Enrichment Map created when running an enrichment analysis using EnrichmentBrowser ORA with the genes differential in Mesenchymal OV" width="678" />
-<p class="caption">(\#fig:mesenem_fig)Example Enrichment Map created when running an enrichment analysis using EnrichmentBrowser ORA with the genes differential in Mesenchymal OV</p>
+<p class="caption">(\#fig:mesenemfig)Example Enrichment Map created when running an enrichment analysis using EnrichmentBrowser ORA with the genes differential in Mesenchymal OV</p>
 </div>
 
 Annotate the Enrichment map to get the general themes that are found in the enrichment results.  Often for very busy networks annotating the networks doesn't help to reduce the complexity but instead adds to it.  To get rid of some of the pathway redundancy and density in the network create a summary of the underlying network. The summary network collapses each cluster to a summary node.  Each summary node is annotated with a word tag (the top 3 words associated with the nodes of the cluster) that is computed using the Wordcloud app.
@@ -1233,6 +1233,6 @@ exportImage(mesenem_summary_png_file_name, type = "png")
 
 <div class="figure">
 <img src="/home/mramos/Source/github/BiocWorkshops/230_Isserlin_RCy3_intro/images/mesenem_summary_network.png" alt="Example Annotated Enrichment Map created when running an enrichment analysis using EnrichmentBrowser ORA with the genes that differential in mesenchymal OV" width="678" />
-<p class="caption">(\#fig:cmesenem_annot_fig)Example Annotated Enrichment Map created when running an enrichment analysis using EnrichmentBrowser ORA with the genes that differential in mesenchymal OV</p>
+<p class="caption">(\#fig:cmesenemannotfig)Example Annotated Enrichment Map created when running an enrichment analysis using EnrichmentBrowser ORA with the genes that differential in mesenchymal OV</p>
 </div>
 

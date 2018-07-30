@@ -82,7 +82,7 @@ Students will be expected to be able to follow and reason about example R code.
 Data from a high-throughput biological assay, such as single-cell RNA-sequencing (scRNA-seq), will often be summarised as a matrix of counts, where rows correspond to features and columns to samples^[Higher-dimensional arrays may be appropriate for some types of assays.].
 Within **Bioconductor**, the *SummarizedExperiment* class is the recommended container for such data, offering a rich interface that tightly links assay measurements to data on the features and the samples.
 
-![The _SummarizedExperiment_ class is used to store rectangular arrays of experimental results (_assays_). Although each _assay_ is here drawn as a matrix, higher-dimensional arrays are also supported.](https://docs.google.com/feeds/download/drawings/Export?id=1kiC8Qlo1mhSnLDqkGiRNPSo6GWn3C2duBszCFbJCB-g&exportFormat=svg)
+![The _SummarizedExperiment_ class is used to store rectangular arrays of experimental results (_assays_). Although each _assay_ is here drawn as a matrix, higher-dimensional arrays are also supported.](100_Morgan_RBiocForAll/SummarizedExperiment.png)
 
 Traditionally, the assay data are stored in-memory as an ordinary *array* object^[In R, a *matrix* is just a 2-dimensional *array*]. 
 Storing the data in-memory becomes a real pain with the ever-growing size of 'omics datasets; it is now not uncommon to collect $10,000-100,000,000$ measurements on $100 - 1,000,000$ samples, which would occupy $10-1,000$ gigabytes (GB) if stored in-memory as ordinary R arrays!

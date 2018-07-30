@@ -1435,11 +1435,10 @@ accessible here:
 sra_browse_API()
 ```
 
-![The web-based API provides a useful interface for experiment
+The web-based API provides a useful interface for experiment
 with queries. It also returns URLs associated with the example
 queries, facilitating querying with other tools like `curl` or
-`wget`.](images/API.png)
-
+`wget`
 
 The API is described using the OpenAPI standard, also known as 
 [Swagger](https://swagger.io/). Tooling exists to quickly scaffold
