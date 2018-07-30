@@ -16,10 +16,13 @@ bibliography: [
 
 # Introduction
 
-Author:
+Editors:
+    Levi Waldron^[City University of New York, New York, NY]
+    Sean Davis^[Center for Cancer Research, National Cancer Institute, National Institutes of Health, Bethesda, MD]
+    Marcel Ramos^[City University of New York and Roswell Park Comprehensive Cancer Center, NY]
     Martin Morgan^[Roswell Park Comprehensive Cancer Center, Buffalo, NY].
     <br/>
-Last modified: 19 July, 2018.
+Last modified: 30 July, 2018.
 
 Welcome to Bioc2018. This year's conference includes a wide array of workshops for audiences ranging from beginner to advance users and developers. Workshop materials are available as a book in html, pdf, and eBook format at https://bioconductor.github.io/BiocWorkshops/. Workshops are organized by level and topic according to numbers, as described below. Every workshop starts with a syllabus that will help you to decide whether it matches your learning goals. 
 
