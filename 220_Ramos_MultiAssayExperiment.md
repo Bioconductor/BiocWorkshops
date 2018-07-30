@@ -460,7 +460,7 @@ qreduceSummarizedExperiment(ragexp, query=query, simplify=weightedmean)
 ## API cheat sheet
 
 <div class="figure">
-<img src="Ramos_MultiAssayExperiment/MultiAssayExperiment_cheatsheet.svg" alt="The MultiAssayExperiment API for construction, access, subsetting, management, and reshaping to formats for application of R/Bioconductor graphics and analysis packages." width="\maxwidth" />
+<img src="Ramos_MultiAssayExperiment/MultiAssayExperiment_cheatsheet.png" alt="The MultiAssayExperiment API for construction, access, subsetting, management, and reshaping to formats for application of R/Bioconductor graphics and analysis packages." width="\maxwidth" />
 <p class="caption">(\#fig:cheatsheet)The MultiAssayExperiment API for construction, access, subsetting, management, and reshaping to formats for application of R/Bioconductor graphics and analysis packages.</p>
 </div>
 

@@ -672,6 +672,16 @@ head(genes(Homo.sapiens, columns = c("ENTREZID","ALIAS","UNIPROT")),4)
 
 ```r
 library(Organism.dplyr)
+#> Loading required package: dplyr
+#> 
+#> Attaching package: 'dplyr'
+#> The following objects are masked from 'package:stats':
+#> 
+#>     filter, lag
+#> The following objects are masked from 'package:base':
+#> 
+#>     intersect, setdiff, setequal, union
+#> Loading required package: AnnotationFilter
 
 # src = src_organism("TxDb.Hsapiens.UCSC.hg19.knownGene")
 src <- src_organism(dbpath = hg38light())
