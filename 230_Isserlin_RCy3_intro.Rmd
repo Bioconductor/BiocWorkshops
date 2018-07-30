@@ -711,7 +711,7 @@ if(file.exists(correlation_network_png_file_name)){
 exportImage(correlation_network_png_file_name, type = "png")
 ```
 
-```{r correlation_network2, echo=FALSE, fig.cap="Example correlation network created using aMatReader"}
+```{r correlationNetwork2, echo=FALSE, fig.cap="Example correlation network created using aMatReader"}
 knitr::include_graphics(correlation_network_png_file_name)
 ```
 
@@ -834,7 +834,7 @@ if(file.exists(cluster1em_png_file_name)){
 exportImage(cluster1em_png_file_name, type = "png")
 ```
 
-```{r cluster1em_fig, echo=FALSE, fig.cap="Example Enrichment Map created when running an enrichment analysis using g:Profiler with the genes that are part of cluster 1"}
+```{r cluster1emfig, echo=FALSE, fig.cap="Example Enrichment Map created when running an enrichment analysis using g:Profiler with the genes that are part of cluster 1"}
 knitr::include_graphics(cluster1em_png_file_name)
 ```
 
@@ -854,7 +854,7 @@ Annotate the Enrichment map to get the general themes that are found in the enri
 
 Export image of resulting Annotated Enrichment map.
 
-```{r cluster1em_annot, include=TRUE}
+```{r cluster1emannot, include=TRUE}
 cluster1em_annot_png_file_name <- file.path(getwd(),"230_Isserlin_RCy3_intro", "images","cluster1em_annot.png")
 
 ```
@@ -869,13 +869,13 @@ if(file.exists(cluster1em_annot_png_file_name)){
 exportImage(cluster1em_annot_png_file_name, type = "png")
 ```
 
-```{r cluster1em_annot_fig, echo=FALSE, fig.cap="Example Annotated Enrichment Map created when running an enrichment analysis using g:Profiler with the genes that are part of cluster 1"}
+```{r cluster1emannotfig, echo=FALSE, fig.cap="Example Annotated Enrichment Map created when running an enrichment analysis using g:Profiler with the genes that are part of cluster 1"}
 knitr::include_graphics(cluster1em_annot_png_file_name)
 ```
 
 Dense networks small or large never look like network figures we so often see in journals.  A lot of manual tweaking, reorganization and optimization is involved in getting that perfect figure ready network.  The above network is what the network starts as.  The below figure is what it can look like after a few minutes of manual reorganiazation.  (individual clusters were selected from the auto annotate panel and separated from other clusters)
 
-```{r cluster1em_annot_man_fig, echo=FALSE, fig.cap="Example Annotated Enrichment Map created when running an enrichment analysis using g:Profiler with the genes that are part of cluster 1 after manual adjusting to generate a cleaner figure"}
+```{r cluster1emannotmanfig, echo=FALSE, fig.cap="Example Annotated Enrichment Map created when running an enrichment analysis using g:Profiler with the genes that are part of cluster 1 after manual adjusting to generate a cleaner figure"}
 cluster1em_annot_man_png_file_name <- file.path(getwd(),"230_Isserlin_RCy3_intro", "images","cluster1em_annot_man.png")
 knitr::include_graphics(cluster1em_annot_man_png_file_name)
 ```
@@ -1053,7 +1053,7 @@ if(file.exists(mesenem_png_file_name)){
 exportImage(mesenem_png_file_name, type = "png")
 ```
 
-```{r mesenem_fig, echo=FALSE, fig.cap="Example Enrichment Map created when running an enrichment analysis using EnrichmentBrowser ORA with the genes differential in Mesenchymal OV"}
+```{r mesenemfig, echo=FALSE, fig.cap="Example Enrichment Map created when running an enrichment analysis using EnrichmentBrowser ORA with the genes differential in Mesenchymal OV"}
 knitr::include_graphics(mesenem_png_file_name)
 ```
 
@@ -1108,7 +1108,7 @@ if(file.exists(mesenem_summary_png_file_name)){
 exportImage(mesenem_summary_png_file_name, type = "png")
 ```
 
-```{r cmesenem_annot_fig, echo=FALSE, fig.cap="Example Annotated Enrichment Map created when running an enrichment analysis using EnrichmentBrowser ORA with the genes that differential in mesenchymal OV"}
+```{r cmesenemannotfig, echo=FALSE, fig.cap="Example Annotated Enrichment Map created when running an enrichment analysis using EnrichmentBrowser ORA with the genes that differential in mesenchymal OV"}
 knitr::include_graphics(mesenem_summary_png_file_name)
 ```
 

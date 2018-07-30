@@ -82,7 +82,7 @@ Archaea are relatively newly characterized as organisms. First classified in the
 
 [^2]: [(1) Woese, C. R.; Fox, G. E. Proc. Natl. Acad. Sci. 1977, 74 (11), 5088–5090.](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC432104/)
 
-```{r GrandPrismatic, echo = FALSE, fig.cap = "Grand Prismatic Spring in Yellowstone National Park[^3]", out.height = "75%", out.width = "75%", fig.align = "center"}
+```{r GrandPrismatic, echo = FALSE, fig.cap = "Grand Prismatic Spring in Yellowstone National Park (3)", out.height = "75%", out.width = "75%", fig.align = "center"}
 knitr::include_graphics("./Cooley_DECIPHER/GrandPrismatic.png")
 ```
 

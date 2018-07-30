@@ -110,7 +110,7 @@ We have made the PharmacoSet objects of the curated datasets available for downl
 ## Reproducibility
 *PharmacoGx* can be used to process pharmacogenomic datasets. First we want to check the heterogenity of cell lines in one of the available psets, CCLE.
 
-```{r pie_chart, fig.cap="Tissue of origin of cell lines in CCLE study"}
+```{r piechart, fig.cap="Tissue of origin of cell lines in CCLE study"}
 mycol <- c("#8dd3c7","#ffffb3","#bebada","#fb8072","#80b1d3","#fdb462",
            "#b3de69","#fccde5","#d9d9d9","#bc80bd","#ccebc5","#ffed6f",
            "#a6cee3","#1f78b4","#b2df8a","#33a02c","#fb9a99","#e31a1c",
@@ -153,7 +153,7 @@ drugDoseResponseCurve(drug="lapatinib", cellline=cells[3],
 ### Pharmacological profiles
 In pharmacogenomic studies, cancer cell lines were also tested for their response to increasing concentrations of various compounds, and form this the IC50 and AAC were computed. These pharmacological profiles are available for all the psets in *PharmacoGx*.
 
-```{r ccle_auc, fig.cap="Cells response to drugs in CCLE"}
+```{r ccleauc, fig.cap="Cells response to drugs in CCLE"}
 library(ggplot2, verbose=FALSE)
 library(reshape2, verbose=FALSE)
 melted_data <- melt(CCLE.auc)
@@ -177,7 +177,7 @@ To begin, you would load the datasets from disk or download them using the *down
 
 We want to investigate the consistency of the data between the two datasets. The common intersection between the datasets can then be found using *intersectPSet*. We create a summary of the gene expression and drug sensitivity measures for both datasets, so we are left with one gene expression profile and one sensitivity profile per cell line within each dataset. We can then compare the gene expression and sensitivity measures between the datasets using a standard correlation coefficient. 
 
-```{r Replication_curves, fig.cap="Consistency of drug response curves across studies", results='hide'}
+```{r Replicationcurves, fig.cap="Consistency of drug response curves across studies", results='hide'}
 common <- intersectPSet(pSets = list("CCLE"=CCLE, "GDSC"=GDSC), 
                         intersectOn = c("cell.lines", "drugs"), 
                         strictIntersect = TRUE)
@@ -191,7 +191,7 @@ cases <- rbind(
   c("HT-1080", "PD-0332991"))
 
 par(mfrow=c(2, 2))
-for (i in 1:nrow(cases)) {
+for (i in seq_len(nrow(cases))) {
   drugDoseResponseCurve(pSets=common, 
                         drug=cases[i,2], 
                         cellline=cases[i,1], 
@@ -202,7 +202,7 @@ for (i in 1:nrow(cases)) {
 ```
 
 ### Consistency of pharmacological profiles
-```{r sensitivity_scatter_plots, fig.height=5, fig.width=10, fig.cap="Concordance of AAC values"}
+```{r sensitivityscatterplots, fig.height=5, fig.width=10, fig.cap="Concordance of AAC values"}
   
   ##AAC scatter plot 
 GDSC.aac <- summarizeSensitivityProfiles(
