@@ -14,6 +14,8 @@ bookdown::gitbook:
       facebook: no
       twitter: yes
 #  css: BiocStyle.css
-# bookdown::pdf_book:
-#  latex_engine: "pdflatex"
+bookdown::pdf_book:
+  latex_engine: pdflatex
+  includes:
+    in_header: preamble.tex
 bookdown::epub_book: default
