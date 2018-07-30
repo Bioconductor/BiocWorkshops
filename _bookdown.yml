@@ -15,7 +15,7 @@ rmd_files: [
   "103_Waldron_PublicData.Rmd",
   "200_Law_RNAseq123.Rmd",
   "201_Love_DESeq2.Rmd",
-  "202_Das_SingleCellRNASeq.Rmd", # missing refs Peer2017 Pierson2015 Tseng2005
+  "202_Das_SingleCellRNASeq.Rmd",
   "210_Geistlinger_Omics.Rmd",
   "220_Ramos_MultiAssayExperiment.Rmd",
   "230_Isserlin_RCy3_intro.Rmd",
