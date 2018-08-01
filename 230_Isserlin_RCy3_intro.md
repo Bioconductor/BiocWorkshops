@@ -157,7 +157,7 @@ library(RCy3)
  * **Cytoscape** - Download and install [Cytoscape 3.6.1.](cytoscape.org/download.php) or higher.  Java 9 in not supported.  Please make sure that Java 8 is installed.
    * Install additional cytoscape apps that will be used in this workshop.  If using cytoscape 3.6.1 or older the apps need to manually installed through the [app manager](http://manual.cytoscape.org/en/latest/App_Manager.html#installing-apps) in Cytoscape or through your [web browser](https://apps.cytoscape.org/help/getstarted_app_install).  (click on the method to see detailed instructions)
      * [Functional Enrichment Collection](http://apps.cytoscape.org/apps/functionalenrichmentcollection) -a collection of apps to retrieve networks and pathways, integrate and explore the data, perform functional enrichment analysis, and interpret and display your results.
-     * [EnrichmentMap Pipeline Collection](http://apps.cytoscape.org/apps/enrichmentmappipelinecollection) - a collection of apps including EnrichmentMap, AutoAnnotate, WordCloud and clusterMaker2 used to visualize and analysis enrichment results.
+     * [EnrichmentMap Pipeline Collection](http://apps.cytoscape.org/apps/enrichmentmappipelinecollection) - a collection of apps including EnrichmentMap[@enrichmentmap], AutoAnnotate[@autoannotate], WordCloud[@wordcloud] and clusterMaker2[@clustermaker] used to visualize and analysis enrichment results.
 
 If you are using Cytoscape 3.7 or higher (Cytoscape 3.7 will be released in August 2018) then apps can be installed directly from R.
 
