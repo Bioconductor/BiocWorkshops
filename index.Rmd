@@ -25,7 +25,12 @@ Editors:
     <br/>
 Last modified: 30 July, 2018.
 
-Welcome to Bioc2018. This year's conference includes a wide array of workshops for audiences ranging from beginner to advance users and developers. Workshop materials are available as a book in html, pdf, and eBook format at https://bioconductor.github.io/BiocWorkshops/. Workshops are organized by level and topic according to numbers, as described below. Every workshop starts with a syllabus that will help you to decide whether it matches your learning goals. 
+Welcome to Bioc2018. This year's conference includes a wide array of workshops
+for audiences ranging from beginner to advance users and developers. Workshop
+materials are available as a book in html, pdf, and eBook format at
+https://bioconductor.github.io/BiocWorkshops/. Workshops are organized by level
+and topic according to numbers, as described below. Every workshop starts with a
+syllabus that will help you to decide whether it matches your learning goals.
 
 ## The Workshops
 
@@ -79,7 +84,8 @@ Bioconductor >= 3.8 (which is the development version before October
 should then install all needed dependencies, at least for Linux:
 
 ```
-install.packages("BiocManager")
+if (!require("BiocManager"))
+    install.packages("BiocManager")
 BiocManager::install("Bioconductor/BiocWorkshops")
 ```
 
