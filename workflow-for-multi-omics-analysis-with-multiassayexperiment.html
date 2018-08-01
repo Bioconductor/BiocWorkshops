@@ -111,6 +111,11 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="divider"></li>
 <li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
 <li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#the-workshops"><i class="fa fa-check"></i><b>1.1</b> The Workshops</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#how-to-use-these-workshops"><i class="fa fa-check"></i><b>1.2</b> How to use these workshops</a><ul>
+<li class="chapter" data-level="1.2.1" data-path="index.html"><a href="index.html#install-on-your-own-computer"><i class="fa fa-check"></i><b>1.2.1</b> Install on your own computer</a></li>
+<li class="chapter" data-level="1.2.2" data-path="index.html"><a href="index.html#use-the-exact-same-ami-as-the-workshop"><i class="fa fa-check"></i><b>1.2.2</b> Use the exact same AMI as the workshop</a></li>
+<li class="chapter" data-level="1.2.3" data-path="index.html"><a href="index.html#make-your-own-docker-image-and-ami"><i class="fa fa-check"></i><b>1.2.3</b> Make your own Docker image and AMI</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="2" data-path="r-and-bioconductor-for-everyone-an-introduction.html"><a href="r-and-bioconductor-for-everyone-an-introduction.html"><i class="fa fa-check"></i><b>2</b> 100: <em>R</em> and <em>Bioconductor</em> for everyone: an introduction</a><ul>
 <li class="chapter" data-level="2.1" data-path="r-and-bioconductor-for-everyone-an-introduction.html"><a href="r-and-bioconductor-for-everyone-an-introduction.html#overview"><i class="fa fa-check"></i><b>2.1</b> Overview</a><ul>
@@ -666,9 +671,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div id="instructor-names-and-contact-information-2" class="section level2">
 <h2><span class="header-section-number">10.1</span> Instructor names and contact information</h2>
 <ul>
-<li>Marcel Ramos<a href="#fn15" class="footnoteRef" id="fnref15"><sup>15</sup></a><a href="#fn16" class="footnoteRef" id="fnref16"><sup>16</sup></a> (<a href="mailto:marcel.ramos@roswellpark.org">marcel.ramos@roswellpark.org</a>)</li>
-<li>Ludwig Geistlinger<a href="#fn17" class="footnoteRef" id="fnref17"><sup>17</sup></a></li>
-<li>Levi Waldron<a href="#fn18" class="footnoteRef" id="fnref18"><sup>18</sup></a></li>
+<li>Marcel Ramos<a href="#fn19" class="footnoteRef" id="fnref19"><sup>19</sup></a><a href="#fn20" class="footnoteRef" id="fnref20"><sup>20</sup></a> (<a href="mailto:marcel.ramos@roswellpark.org">marcel.ramos@roswellpark.org</a>)</li>
+<li>Ludwig Geistlinger<a href="#fn21" class="footnoteRef" id="fnref21"><sup>21</sup></a></li>
+<li>Levi Waldron<a href="#fn22" class="footnoteRef" id="fnref22"><sup>22</sup></a></li>
 </ul>
 </div>
 <div id="workshop-description-5" class="section level2">
@@ -949,7 +954,7 @@ ragexp2 &lt;-<span class="st"> </span><span class="kw">RaggedExperiment</span>(g
 </div>
 <div id="disjoinassay" class="section level4">
 <h4><span class="header-section-number">10.5.2.3</span> disjoinAssay</h4>
-<p>This function is similar to <code>compactAssay</code> except the rows are <em>disjoint</em><a href="#fn19" class="footnoteRef" id="fnref19"><sup>19</sup></a> ranges. Elements of the matrix are summarized by applying the <code>simplifyDisjoin</code> functional argument to assay values of overlapping ranges.</p>
+<p>This function is similar to <code>compactAssay</code> except the rows are <em>disjoint</em><a href="#fn23" class="footnoteRef" id="fnref23"><sup>23</sup></a> ranges. Elements of the matrix are summarized by applying the <code>simplifyDisjoin</code> functional argument to assay values of overlapping ranges.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">disjoinAssay</span>(ragexp, <span class="dt">simplifyDisjoin =</span> mean)
 <span class="co">#&gt;              sample1 sample2</span>
 <span class="co">#&gt; chr1:8-10:+        4      NA</span>
@@ -1871,12 +1876,12 @@ withRSE &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv"
 </div>
 <div class="footnotes">
 <hr />
-<ol start="15">
-<li id="fn15"><p>City University of New York, New York, NY, USA<a href="workflow-for-multi-omics-analysis-with-multiassayexperiment.html#fnref15">↩</a></p></li>
-<li id="fn16"><p>Roswell Park Comprehensive Cancer Center, Buffalo, NY<a href="workflow-for-multi-omics-analysis-with-multiassayexperiment.html#fnref16">↩</a></p></li>
-<li id="fn17"><p>City University of New York, New York, NY, USA<a href="workflow-for-multi-omics-analysis-with-multiassayexperiment.html#fnref17">↩</a></p></li>
-<li id="fn18"><p>City University of New York, New York, NY, USA<a href="workflow-for-multi-omics-analysis-with-multiassayexperiment.html#fnref18">↩</a></p></li>
-<li id="fn19"><p>A <em>disjoint</em> set of ranges has no overlap between any ranges of the set.<a href="workflow-for-multi-omics-analysis-with-multiassayexperiment.html#fnref19">↩</a></p></li>
+<ol start="19">
+<li id="fn19"><p>City University of New York, New York, NY, USA<a href="workflow-for-multi-omics-analysis-with-multiassayexperiment.html#fnref19">↩</a></p></li>
+<li id="fn20"><p>Roswell Park Comprehensive Cancer Center, Buffalo, NY<a href="workflow-for-multi-omics-analysis-with-multiassayexperiment.html#fnref20">↩</a></p></li>
+<li id="fn21"><p>City University of New York, New York, NY, USA<a href="workflow-for-multi-omics-analysis-with-multiassayexperiment.html#fnref21">↩</a></p></li>
+<li id="fn22"><p>City University of New York, New York, NY, USA<a href="workflow-for-multi-omics-analysis-with-multiassayexperiment.html#fnref22">↩</a></p></li>
+<li id="fn23"><p>A <em>disjoint</em> set of ranges has no overlap between any ranges of the set.<a href="workflow-for-multi-omics-analysis-with-multiassayexperiment.html#fnref23">↩</a></p></li>
 </ol>
 </div>
             </section>

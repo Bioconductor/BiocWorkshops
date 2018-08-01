@@ -1455,6 +1455,7 @@ sra_get_swagger_json_url()
 ## Accessing The Cancer Genome Atlas (TCGA)
 
 We summarize two approaches to accessing TCGA data:
+
 1. *[TCGAbiolinks](http://bioconductor.org/packages/TCGAbiolinks)*:
     a. data access through *[GenomicDataCommons](http://bioconductor.org/packages/GenomicDataCommons)*
     b. provides data both from the legacy Firehose pipeline used by the TCGA
@@ -1653,6 +1654,7 @@ load(file.path(project_info$project, 'rse_gene.Rdata'))
 ## curated*Data packages for standardized cancer transcriptomes
 
 There are focused databases of cancer microarray data for several cancer types, which can be useful for researchers of those cancer types or for methodological development:
+
 * *[curatedOvarianData](http://bioconductor.org/packages/curatedOvarianData)*[@Ganzfried2013-mc]: Clinically Annotated Data for the Ovarian Cancer Transcriptome (data available with additional options through the *[MetaGxOvarian](http://bioconductor.org/packages/MetaGxOvarian)* package).
 * *[curatedBladderData](http://bioconductor.org/packages/curatedBladderData)*: Clinically Annotated Data for the Bladder Cancer Transcriptome
 * *[curatedCRCData](http://bioconductor.org/packages/curatedCRCData)*: Clinically Annotated Data for the Colorectal Cancer Transcriptome
@@ -1662,6 +1664,7 @@ These provide data from the Gene Expression Omnibus and other sources, but use a
 ## Microbiome data
 
 Bioconductor provides curated resources of microbiome data.  Most microbiome data are generated either by targeted amplicon sequencing (usually of variable regions of the 16S ribosomal RNA gene) or by metagenomic shotgun sequencing (MGX). These two approaches are analyzed by different sequence analysis tools, but downstream statistical and ecological analysis can involve any of the following types of data:
+
 * taxonomic abundance at different levels of the taxonomic hierarchy
 * phylogenetic distances and the phylogenetic tree of life
 * metabolic potential of the microbiome
@@ -1783,6 +1786,7 @@ This can also be converted to *[phyloseq](http://bioconductor.org/packages/phylo
 Pharmacogenomics holds great promise for the development of biomarkers of drug response and the design of new therapeutic options, which are key challenges in precision medicine. However, such data are scattered and lack standards for efficient access and analysis, consequently preventing the realization of the full potential of pharmacogenomics. To address these issues, we implemented *[PharmacoGx](http://bioconductor.org/packages/PharmacoGx)*, an easy-to-use, open source package for integrative analysis of multiple pharmacogenomic datasets. ~PharmacoGx` provides a unified framework for downloading and analyzing large pharmacogenomic datasets which are extensively curated to ensure maximum overlap and consistency.
 
 Examples of `PharmacoGx` usage in biomedical research can be found in the following publications:
+
 * [Smirnov et al. PharmacoGx: an R package for analysis of large pharmacogenomic datasets." Bioinformatics (2015): 1244-1246](https://academic.oup.com/bioinformatics/article/32/8/1244/1744214/PharmacoGx-an-R-package-for-analysis-of-large).
 * [Safikhani et al., Assessment of pharmacogenomic agreement, F1000 Research (2017)](https://f1000research.com/articles/5-825/v1)
 * [Safikhani et al., Revisiting inconsistency in large pharmacogenomic studies, F1000 Research (2017)](https://f1000research.com/articles/5-2333/v3)

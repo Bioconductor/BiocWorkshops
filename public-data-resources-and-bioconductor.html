@@ -111,6 +111,11 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="divider"></li>
 <li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
 <li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#the-workshops"><i class="fa fa-check"></i><b>1.1</b> The Workshops</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#how-to-use-these-workshops"><i class="fa fa-check"></i><b>1.2</b> How to use these workshops</a><ul>
+<li class="chapter" data-level="1.2.1" data-path="index.html"><a href="index.html#install-on-your-own-computer"><i class="fa fa-check"></i><b>1.2.1</b> Install on your own computer</a></li>
+<li class="chapter" data-level="1.2.2" data-path="index.html"><a href="index.html#use-the-exact-same-ami-as-the-workshop"><i class="fa fa-check"></i><b>1.2.2</b> Use the exact same AMI as the workshop</a></li>
+<li class="chapter" data-level="1.2.3" data-path="index.html"><a href="index.html#make-your-own-docker-image-and-ami"><i class="fa fa-check"></i><b>1.2.3</b> Make your own Docker image and AMI</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="2" data-path="r-and-bioconductor-for-everyone-an-introduction.html"><a href="r-and-bioconductor-for-everyone-an-introduction.html"><i class="fa fa-check"></i><b>2</b> 100: <em>R</em> and <em>Bioconductor</em> for everyone: an introduction</a><ul>
 <li class="chapter" data-level="2.1" data-path="r-and-bioconductor-for-everyone-an-introduction.html"><a href="r-and-bioconductor-for-everyone-an-introduction.html#overview"><i class="fa fa-check"></i><b>2.1</b> Overview</a><ul>
@@ -976,7 +981,7 @@ projResults =<span class="st"> </span><span class="kw">projects</span>() <span c
 <li>A set of verbs that when applied, adjust filtering, field selection, and faceting (fields for aggregation) and result in a new query object (an endomorphism)</li>
 <li>A set of verbs that take a query and return results from the GDC</li>
 </ol>
-<p>In addition, there are exhiliary functions for asking the GDC API for information about available and default fields, slicing BAM files, and downloading actual data files. Here is an overview of functionality<a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a>.</p>
+<p>In addition, there are exhiliary functions for asking the GDC API for information about available and default fields, slicing BAM files, and downloading actual data files. Here is an overview of functionality<a href="#fn7" class="footnoteRef" id="fnref7"><sup>7</sup></a>.</p>
 <ul>
 <li>Creating a query
 <ul>
@@ -1623,10 +1628,24 @@ s
 </div>
 <div id="accessing-the-cancer-genome-atlas-tcga" class="section level2">
 <h2><span class="header-section-number">5.8</span> Accessing The Cancer Genome Atlas (TCGA)</h2>
-<p>We summarize two approaches to accessing TCGA data: 1. <em><a href="http://bioconductor.org/packages/TCGAbiolinks">TCGAbiolinks</a></em>: a. data access through <em><a href="http://bioconductor.org/packages/GenomicDataCommons">GenomicDataCommons</a></em> b. provides data both from the legacy Firehose pipeline used by the TCGA publications (alignments based on hg18 and hg19 builds<a href="#fn4" class="footnoteRef" id="fnref4"><sup>4</sup></a>), and the GDC harmonized GRCh38 pipeline<a href="#fn5" class="footnoteRef" id="fnref5"><sup>5</sup></a>. c. downloads files from the Genomic Data Commons, and provides conversion to <code>(Ranged)SummarizedExperiment</code> where possible 2. <em><a href="http://bioconductor.org/packages/curatedTCGAData">curatedTCGAData</a></em>: a. data access through <em><a href="http://bioconductor.org/packages/ExperimentHub">ExperimentHub</a></em> b. provides data from the legacy Firehose pipeline<a href="#fn6" class="footnoteRef" id="fnref6"><sup>6</sup></a> c. provides individual assays as <code>(Ranged)SummarizedExperiment</code> and <code>RaggedExperiment</code>, integrates multiple assays within and across cancer types using <code>MultiAssayExperiment</code></p>
+<p>We summarize two approaches to accessing TCGA data:</p>
+<ol style="list-style-type: decimal">
+<li><em><a href="http://bioconductor.org/packages/TCGAbiolinks">TCGAbiolinks</a></em>:
+<ol style="list-style-type: lower-alpha">
+<li>data access through <em><a href="http://bioconductor.org/packages/GenomicDataCommons">GenomicDataCommons</a></em></li>
+<li>provides data both from the legacy Firehose pipeline used by the TCGA publications (alignments based on hg18 and hg19 builds<a href="#fn8" class="footnoteRef" id="fnref8"><sup>8</sup></a>), and the GDC harmonized GRCh38 pipeline<a href="#fn9" class="footnoteRef" id="fnref9"><sup>9</sup></a>.</li>
+<li>downloads files from the Genomic Data Commons, and provides conversion to <code>(Ranged)SummarizedExperiment</code> where possible</li>
+</ol></li>
+<li><em><a href="http://bioconductor.org/packages/curatedTCGAData">curatedTCGAData</a></em>:
+<ol style="list-style-type: lower-alpha">
+<li>data access through <em><a href="http://bioconductor.org/packages/ExperimentHub">ExperimentHub</a></em></li>
+<li>provides data from the legacy Firehose pipeline<a href="#fn10" class="footnoteRef" id="fnref10"><sup>10</sup></a></li>
+<li>provides individual assays as <code>(Ranged)SummarizedExperiment</code> and <code>RaggedExperiment</code>, integrates multiple assays within and across cancer types using <code>MultiAssayExperiment</code></li>
+</ol></li>
+</ol>
 <div id="tcgabiolinks" class="section level3">
 <h3><span class="header-section-number">5.8.1</span> TCGAbiolinks</h3>
-<p>We demonstrate here generating a <code>RangedSummarizedExperiment</code> for RNA-seq data from adrenocortical carcinoma (ACC). For additional information and options, see the TCGAbiolinks vignettes<a href="#fn7" class="footnoteRef" id="fnref7"><sup>7</sup></a>.</p>
+<p>We demonstrate here generating a <code>RangedSummarizedExperiment</code> for RNA-seq data from adrenocortical carcinoma (ACC). For additional information and options, see the TCGAbiolinks vignettes<a href="#fn11" class="footnoteRef" id="fnref11"><sup>11</sup></a>.</p>
 <p>Load packages:</p>
 <p>Search for matching data:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(TCGAbiolinks)
@@ -1721,7 +1740,7 @@ ACCmae
 </div>
 <div id="recount-reproducible-rna-seq-analysis-using-recount2" class="section level2">
 <h2><span class="header-section-number">5.9</span> recount: Reproducible RNA-seq Analysis Using recount2</h2>
-<p>The <em><a href="http://bioconductor.org/packages/recount">recount</a></em><span class="citation">(Collado-Torres et al. 2017)</span> package provides uniformly processed <code>RangedSummarizedExperiment</code> objects at the gene, exon, or exon-exon junctions level, the raw counts, the phenotype metadata used, the urls to sample coverage bigWig files and mean coverage bigWig file, for every study available. The <code>RangedSummarizedExperiment</code> objects can be used for differential expression analysis. These are also accessible through a web interface.<a href="#fn8" class="footnoteRef" id="fnref8"><sup>8</sup></a></p>
+<p>The <em><a href="http://bioconductor.org/packages/recount">recount</a></em><span class="citation">(Collado-Torres et al. 2017)</span> package provides uniformly processed <code>RangedSummarizedExperiment</code> objects at the gene, exon, or exon-exon junctions level, the raw counts, the phenotype metadata used, the urls to sample coverage bigWig files and mean coverage bigWig file, for every study available. The <code>RangedSummarizedExperiment</code> objects can be used for differential expression analysis. These are also accessible through a web interface.<a href="#fn12" class="footnoteRef" id="fnref12"><sup>12</sup></a></p>
 <pre><code>#&gt; No methods found in package &#39;IRanges&#39; for request: &#39;subset&#39; when loading &#39;derfinder&#39;</code></pre>
 <p><em><a href="http://bioconductor.org/packages/recount">recount</a></em> provides a search function:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(recount)
@@ -1734,12 +1753,23 @@ project_info &lt;-<span class="st"> </span><span class="kw">abstract_search</spa
 </div>
 <div id="curateddata-packages-for-standardized-cancer-transcriptomes" class="section level2">
 <h2><span class="header-section-number">5.10</span> curated*Data packages for standardized cancer transcriptomes</h2>
-<p>There are focused databases of cancer microarray data for several cancer types, which can be useful for researchers of those cancer types or for methodological development: * <em><a href="http://bioconductor.org/packages/curatedOvarianData">curatedOvarianData</a></em><span class="citation">(Ganzfried et al. 2013)</span>: Clinically Annotated Data for the Ovarian Cancer Transcriptome (data available with additional options through the <em><a href="http://bioconductor.org/packages/MetaGxOvarian">MetaGxOvarian</a></em> package). * <em><a href="http://bioconductor.org/packages/curatedBladderData">curatedBladderData</a></em>: Clinically Annotated Data for the Bladder Cancer Transcriptome * <em><a href="http://bioconductor.org/packages/curatedCRCData">curatedCRCData</a></em>: Clinically Annotated Data for the Colorectal Cancer Transcriptome</p>
+<p>There are focused databases of cancer microarray data for several cancer types, which can be useful for researchers of those cancer types or for methodological development:</p>
+<ul>
+<li><em><a href="http://bioconductor.org/packages/curatedOvarianData">curatedOvarianData</a></em><span class="citation">(Ganzfried et al. 2013)</span>: Clinically Annotated Data for the Ovarian Cancer Transcriptome (data available with additional options through the <em><a href="http://bioconductor.org/packages/MetaGxOvarian">MetaGxOvarian</a></em> package).</li>
+<li><em><a href="http://bioconductor.org/packages/curatedBladderData">curatedBladderData</a></em>: Clinically Annotated Data for the Bladder Cancer Transcriptome</li>
+<li><em><a href="http://bioconductor.org/packages/curatedCRCData">curatedCRCData</a></em>: Clinically Annotated Data for the Colorectal Cancer Transcriptome</li>
+</ul>
 <p>These provide data from the Gene Expression Omnibus and other sources, but use a formally vocabulary for clinicopathological data and use a common pipeline for preprocessing of microarray data (for Affymetrix, other for other platforms the processed data are provided as processed by original study authors), merging probesets, and mapping to gene symbols. The pipeline is described by <span class="citation">Ganzfried et al. (2013)</span>.</p>
 </div>
 <div id="microbiome-data" class="section level2">
 <h2><span class="header-section-number">5.11</span> Microbiome data</h2>
-<p>Bioconductor provides curated resources of microbiome data. Most microbiome data are generated either by targeted amplicon sequencing (usually of variable regions of the 16S ribosomal RNA gene) or by metagenomic shotgun sequencing (MGX). These two approaches are analyzed by different sequence analysis tools, but downstream statistical and ecological analysis can involve any of the following types of data: * taxonomic abundance at different levels of the taxonomic hierarchy * phylogenetic distances and the phylogenetic tree of life * metabolic potential of the microbiome * abundance of microbial genes and gene families</p>
+<p>Bioconductor provides curated resources of microbiome data. Most microbiome data are generated either by targeted amplicon sequencing (usually of variable regions of the 16S ribosomal RNA gene) or by metagenomic shotgun sequencing (MGX). These two approaches are analyzed by different sequence analysis tools, but downstream statistical and ecological analysis can involve any of the following types of data:</p>
+<ul>
+<li>taxonomic abundance at different levels of the taxonomic hierarchy</li>
+<li>phylogenetic distances and the phylogenetic tree of life</li>
+<li>metabolic potential of the microbiome</li>
+<li>abundance of microbial genes and gene families</li>
+</ul>
 <p>A review of types and properties of microbiome data is provided by <span class="citation">(Morgan and Huttenhower 2012)</span>.</p>
 <div id="curatedmetagenomicdata-curated-and-processed-metagenomic-data-through-experimenthub" class="section level3">
 <h3><span class="header-section-number">5.11.1</span> curatedMetagenomicData: Curated and processed metagenomic data through ExperimentHub</h3>
@@ -1820,7 +1850,15 @@ esl &lt;-<span class="st"> </span><span class="kw">curatedMetagenomicData</span>
 <div id="pharmacogenomics" class="section level2">
 <h2><span class="header-section-number">5.12</span> Pharmacogenomics</h2>
 <p>Pharmacogenomics holds great promise for the development of biomarkers of drug response and the design of new therapeutic options, which are key challenges in precision medicine. However, such data are scattered and lack standards for efficient access and analysis, consequently preventing the realization of the full potential of pharmacogenomics. To address these issues, we implemented <em><a href="http://bioconductor.org/packages/PharmacoGx">PharmacoGx</a></em>, an easy-to-use, open source package for integrative analysis of multiple pharmacogenomic datasets. ~PharmacoGx` provides a unified framework for downloading and analyzing large pharmacogenomic datasets which are extensively curated to ensure maximum overlap and consistency.</p>
-<p>Examples of <code>PharmacoGx</code> usage in biomedical research can be found in the following publications: * <a href="https://academic.oup.com/bioinformatics/article/32/8/1244/1744214/PharmacoGx-an-R-package-for-analysis-of-large">Smirnov et al. PharmacoGx: an R package for analysis of large pharmacogenomic datasets.&quot; Bioinformatics (2015): 1244-1246</a>. * <a href="https://f1000research.com/articles/5-825/v1">Safikhani et al., Assessment of pharmacogenomic agreement, F1000 Research (2017)</a> * <a href="https://f1000research.com/articles/5-2333/v3">Safikhani et al., Revisiting inconsistency in large pharmacogenomic studies, F1000 Research (2017)</a> * <a href="https://doi.org/10.1093/jamia/ocx062">Yao et al., Tissue specificity of in vitro drug sensitivity, JAMIA (2017)</a> * <a href="https://www.nature.com/articles/s41467-017-01153-8">Safikhani et al., Gene isoforms as expression-based biomarkers predictive of drug response in vitro, Nature Communications (2017)</a> * <a href="http://cancerres.aacrjournals.org/content/77/11/3057.long">El-Hachem et al., Integrative Cancer Pharmacogenomics to Infer Large-Scale Drug Taxonomy, Cancer Research (2017)</a></p>
+<p>Examples of <code>PharmacoGx</code> usage in biomedical research can be found in the following publications:</p>
+<ul>
+<li><a href="https://academic.oup.com/bioinformatics/article/32/8/1244/1744214/PharmacoGx-an-R-package-for-analysis-of-large">Smirnov et al. PharmacoGx: an R package for analysis of large pharmacogenomic datasets.&quot; Bioinformatics (2015): 1244-1246</a>.</li>
+<li><a href="https://f1000research.com/articles/5-825/v1">Safikhani et al., Assessment of pharmacogenomic agreement, F1000 Research (2017)</a></li>
+<li><a href="https://f1000research.com/articles/5-2333/v3">Safikhani et al., Revisiting inconsistency in large pharmacogenomic studies, F1000 Research (2017)</a></li>
+<li><a href="https://doi.org/10.1093/jamia/ocx062">Yao et al., Tissue specificity of in vitro drug sensitivity, JAMIA (2017)</a></li>
+<li><a href="https://www.nature.com/articles/s41467-017-01153-8">Safikhani et al., Gene isoforms as expression-based biomarkers predictive of drug response in vitro, Nature Communications (2017)</a></li>
+<li><a href="http://cancerres.aacrjournals.org/content/77/11/3057.long">El-Hachem et al., Integrative Cancer Pharmacogenomics to Infer Large-Scale Drug Taxonomy, Cancer Research (2017)</a></li>
+</ul>
 <div id="getting-started" class="section level3">
 <h3><span class="header-section-number">5.12.1</span> Getting started</h3>
 <p>Let us first load the <code>PharmacoGx</code> library.</p>
@@ -1939,13 +1977,13 @@ psets[psets[ , <span class="st">&quot;Dataset.Type&quot;</span>] <span class="op
 </div>
 <div class="footnotes">
 <hr />
-<ol start="3">
-<li id="fn3"><p>See individual function and methods documentation for specific details.<a href="public-data-resources-and-bioconductor.html#fnref3">↩</a></p></li>
-<li id="fn4"><p><a href="https://confluence.broadinstitute.org/display/GDAC/FAQ#FAQ-Q%C2%A0Whatreferencegenomebuildareyouusing">https://confluence.broadinstitute.org/display/GDAC/FAQ#FAQ-Q%C2%A0Whatreferencegenomebuildareyouusing</a><a href="public-data-resources-and-bioconductor.html#fnref4">↩</a></p></li>
-<li id="fn5"><p><a href="https://gdc.cancer.gov/about-data/data-harmonization-and-generation/genomic-data-harmonization-0" class="uri">https://gdc.cancer.gov/about-data/data-harmonization-and-generation/genomic-data-harmonization-0</a><a href="public-data-resources-and-bioconductor.html#fnref5">↩</a></p></li>
-<li id="fn6"><p><a href="https://confluence.broadinstitute.org/display/GDAC/FAQ#FAQ-Q%C2%A0Whatreferencegenomebuildareyouusing">https://confluence.broadinstitute.org/display/GDAC/FAQ#FAQ-Q%C2%A0Whatreferencegenomebuildareyouusing</a><a href="public-data-resources-and-bioconductor.html#fnref6">↩</a></p></li>
-<li id="fn7"><p><a href="https://bioconductor.org/packages/release/bioc/vignettes/TCGAbiolinks/inst/doc/download_prepare.html" class="uri">https://bioconductor.org/packages/release/bioc/vignettes/TCGAbiolinks/inst/doc/download_prepare.html</a><a href="public-data-resources-and-bioconductor.html#fnref7">↩</a></p></li>
-<li id="fn8"><p><a href="https://jhubiostatistics.shinyapps.io/recount/" class="uri">https://jhubiostatistics.shinyapps.io/recount/</a><a href="public-data-resources-and-bioconductor.html#fnref8">↩</a></p></li>
+<ol start="7">
+<li id="fn7"><p>See individual function and methods documentation for specific details.<a href="public-data-resources-and-bioconductor.html#fnref7">↩</a></p></li>
+<li id="fn8"><p><a href="https://confluence.broadinstitute.org/display/GDAC/FAQ#FAQ-Q%C2%A0Whatreferencegenomebuildareyouusing">https://confluence.broadinstitute.org/display/GDAC/FAQ#FAQ-Q%C2%A0Whatreferencegenomebuildareyouusing</a><a href="public-data-resources-and-bioconductor.html#fnref8">↩</a></p></li>
+<li id="fn9"><p><a href="https://gdc.cancer.gov/about-data/data-harmonization-and-generation/genomic-data-harmonization-0" class="uri">https://gdc.cancer.gov/about-data/data-harmonization-and-generation/genomic-data-harmonization-0</a><a href="public-data-resources-and-bioconductor.html#fnref9">↩</a></p></li>
+<li id="fn10"><p><a href="https://confluence.broadinstitute.org/display/GDAC/FAQ#FAQ-Q%C2%A0Whatreferencegenomebuildareyouusing">https://confluence.broadinstitute.org/display/GDAC/FAQ#FAQ-Q%C2%A0Whatreferencegenomebuildareyouusing</a><a href="public-data-resources-and-bioconductor.html#fnref10">↩</a></p></li>
+<li id="fn11"><p><a href="https://bioconductor.org/packages/release/bioc/vignettes/TCGAbiolinks/inst/doc/download_prepare.html" class="uri">https://bioconductor.org/packages/release/bioc/vignettes/TCGAbiolinks/inst/doc/download_prepare.html</a><a href="public-data-resources-and-bioconductor.html#fnref11">↩</a></p></li>
+<li id="fn12"><p><a href="https://jhubiostatistics.shinyapps.io/recount/" class="uri">https://jhubiostatistics.shinyapps.io/recount/</a><a href="public-data-resources-and-bioconductor.html#fnref12">↩</a></p></li>
 </ol>
 </div>
             </section>
