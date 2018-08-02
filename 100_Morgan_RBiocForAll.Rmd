@@ -437,6 +437,7 @@ Packages available in _Bioconductor_ are summarized at [https://bioconductor.org
 - 'Workflow' packages that summarize common work flows, e.g., [simpleSingleCell][] for single-cell RNA-seq expression analysis.
 
 [airway]: https://bioconductor.org/packages/airway
+[DESeq2]: https://bioconductor.org/packages/DESeq2
 [curatedTCGAData]: https://bioconductor.org/packages/curatedTCGAData
 [simpleSingleCell]: https://bioconductor.org/packages/simpleSingleCell
 
@@ -447,7 +448,7 @@ Like CRAN packages, _Bioconductor_ packages need to be installed only once per _
 _Bioconductor_ packages are installed slightly differently from CRAN packages. The first step is to install the [BiocManager][] package from CRAN.
 
 ```{r, eval = FALSE}
-if (!"BiocManager" %in% rownames(intalled.packages()))
+if (!requireNamespace("BiocManager", quietly = TRUE))
     install.packages("BiocManager", repos="https://cran.r-project.org")
 ```
 
@@ -694,7 +695,7 @@ library("SummarizedExperiment")
 Use the `SummarizedExperiment()` function to coordinate the assay and column data; this function uses row and column names to make sure the correct assay columns are desribed by the correct column data rows.
 
 ```{r}
-se <- SummarizedExperiment(assay = counts, colData = colData)
+se <- SummarizedExperiment(assay = list(count=counts), colData = colData)
 se
 ```
 
