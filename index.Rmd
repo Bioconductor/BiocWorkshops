@@ -20,8 +20,8 @@ Editors:
     Levi Waldron^[City University of New York, New York, NY]
     Sean Davis^[Center for Cancer Research, National Cancer Institute, National Institutes of Health, Bethesda, MD]
     Marcel Ramos^[City University of New York and Roswell Park Comprehensive Cancer Center, NY]
-    Lori Shepherd^[Roswell Park Comprehensive Cancer Center, Buffalo, NY].
-    Martin Morgan^[Roswell Park Comprehensive Cancer Center, Buffalo, NY].
+    Lori Shepherd^[Roswell Park Comprehensive Cancer Center, Buffalo, NY]
+    Martin Morgan^[Roswell Park Comprehensive Cancer Center, Buffalo, NY]
     <br/>
 Last modified: 30 July, 2018.
 
