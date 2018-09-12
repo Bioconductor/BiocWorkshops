@@ -8,6 +8,8 @@ suppressPackageStartupMessages({
 	library(gProfileR)
 	library(RCurl)
 })
+library(knitr)
+opts_chunk$set(out.width="100%")
 ```
 
 ##Overview

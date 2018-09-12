@@ -1,5 +1,10 @@
 # 220: Workflow for multi-omics analysis with MultiAssayExperiment
 
+```{r include=FALSE}
+library(knitr)
+opts_chunk$set(out.width="100%")
+```
+
 ## Instructor names and contact information
 
 * Marcel Ramos^[City University of New York, New York, NY, USA] ^[Roswell Park Comprehensive Cancer Center, Buffalo, NY] (<marcel.ramos@roswellpark.org>)
