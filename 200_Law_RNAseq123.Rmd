@@ -89,10 +89,12 @@ Count data for these samples can be downloaded from the Gene Expression Omnibus 
 
 
 ```{r setup2, eval=TRUE}
-library(limma)
-library(Glimma)
-library(edgeR)
-library(Mus.musculus)
+suppressPackageStartupMessages({
+  library(limma)
+  library(Glimma)
+  library(edgeR)
+  library(Mus.musculus)
+})
 ```
 
 ## Data packaging
@@ -364,7 +366,7 @@ v
 vfit <- lmFit(v, design)
 vfit <- contrasts.fit(vfit, contrasts=contr.matrix)
 efit <- eBayes(vfit)
-plotSA(efit, main="Final model: Mean−variance trend")
+plotSA(efit, main="Final model: Mean-variance trend")
 ```
 
 Note that the other data frames stored within the DGEList-object that contain gene- and sample-level information, are retained in the EList-object `v` created by `voom`. The `v$genes` data frame is equivalent to `x$genes`, `v$targets` is equivalent to `x$samples`, and the expression values stored in `v$E` is analogous to `x$counts`, albeit on a transformed scale. In addition to this, the `voom` EList-object has a matrix of precision weights `v$weights` and stores the design matrix in `v$design`.

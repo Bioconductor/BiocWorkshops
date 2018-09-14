@@ -12,13 +12,14 @@ Last modified: 28 June, 2018.
 
 This workshop will be presented as a lab session (brief introduction followed by hands-on coding)
 that instructs participants in a Bioconductor workflow for the analysis of single-cell RNA-sequencing data, in three parts:
+
 1. dimensionality reduction that accounts for zero inflation, over-dispersion, and batch effects
 2. cell clustering that employs a resampling-based approach resulting in robust and stable clusters
 3. lineage trajectory analysis that uncovers continuous, branching developmental processes
 
 We will provide worked examples for lab sessions, and a set of stand-alone notes in this repository.
 
-Note to organizers: A previous version of this workshop was well-attended at BioC 2017,
+Note: A previous version of this workshop was well-attended at BioC 2017,
 but the tools presented have been significantly updated for
 interoperability (most notably, through the use of the `SingleCellExperiment` class), and we have been receiving many requests to provide an
 updated workflow. We plan to incorporate feedback from this workshop into a revised version of our F1000 Workflow.
@@ -102,18 +103,18 @@ The following packages are needed.
 
 
 ```{r packages}
-# Bioconductor
-library(BiocParallel)
-library(SingleCellExperiment)
-library(clusterExperiment)
-library(scone)
-library(zinbwave)
-library(slingshot)
-
-# CRAN
-library(gam)
-library(RColorBrewer)
-
+suppressPackageStartupMessages({
+  # Bioconductor
+  library(BiocParallel)
+  library(SingleCellExperiment)
+  library(clusterExperiment)
+  library(scone)
+  library(zinbwave)
+  library(slingshot)
+  # CRAN
+  library(gam)
+  library(RColorBrewer)
+})
 set.seed(20)
 ```
 
@@ -138,7 +139,7 @@ fletcher
 
 Throughout the workshop, we use the class `SingleCellExperiment` to keep track of the counts and their associated metadata within a single object. 
 
-```{r sce_schema, echo=FALSE, out.width="90%", fig.cap="Schematic view of the SingleCellExperiment class."}
+```{r sceschema, echo=FALSE, out.width="90%", fig.cap="Schematic view of the SingleCellExperiment class."}
 knitr::include_graphics("202_Das_SingleCellRNASeq/SingleCellExperiment.png")
 ```
 

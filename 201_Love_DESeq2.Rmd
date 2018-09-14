@@ -6,10 +6,6 @@ Authors:
     Wolfgang Huber^[EMBL Heidelberg, Germany]
 Last modified: 25 June, 2018.
 
-<!-- 
-  bookdown::render_book("201_Love_DESeq2.Rmd", "bookdown::gitbook") 
--->
-
 ## Overview
 
 ### Description

@@ -3,10 +3,6 @@
 Authors:
     Nicholas Cooley^[University of Pittsburgh]
 Last Modified: 18 July, 2018
-    
-<!--
-  bookdown::render_book("", "bookdown::gitbook")
--->
 
 ## Overview
 
@@ -86,7 +82,7 @@ Archaea are relatively newly characterized as organisms. First classified in the
 
 [^2]: [(1) Woese, C. R.; Fox, G. E. Proc. Natl. Acad. Sci. 1977, 74 (11), 5088–5090.](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC432104/)
 
-```{r Grand Prismatic, echo = FALSE, fig.cap = "Grand Prismatic Spring in Yellowstone National Park[^3]", out.height = "75%", out.width = "75%", fig.align = "center"}
+```{r GrandPrismatic, echo = FALSE, fig.cap = "Grand Prismatic Spring in Yellowstone National Park (3)", out.height = "75%", out.width = "75%", fig.align = "center"}
 knitr::include_graphics("./Cooley_DECIPHER/GrandPrismatic.png")
 ```
 
@@ -125,7 +121,7 @@ The first step in this process is selecting the genomes we want to work with. Th
 
 For the purposes of this workshop, we will be using a set of preselected genomes that will be accessed via ftp addresses. These are loaded with the FindHomology Package and can be accessed easily.
 
-```{r package data}
+```{r packagedata}
 data("GeneCallAdds")
 data("GenomeAdds")
 data("GenomeIDs")
@@ -163,7 +159,7 @@ In your own work, it can be inadvisable to use `tempfile()` to specify the locat
 
 We can access our databases through either a database connection, or simply a filepath to the database. In this code chunk below, we will use a database connection.
 
-```{r decipher part 1}
+```{r decipherpart1}
 
 DBPath <- tempfile()
 
@@ -190,13 +186,13 @@ Comparison of genomes will be accomplished with Synteny. Generically when region
 
 In DECIPHER this is accomplished using k-mer matching, runs of an exact match of length k are identified and recorded as a syntenic hit.
 
-```{r Simple Synteny Example, echo = FALSE, fig.cap = "A syntenic hit in nucleotide space", out.height = "100%", out.width = "100%", fig.align = "center"}
+```{r SimpleSyntenyExample, echo = FALSE, fig.cap = "A syntenic hit in nucleotide space", out.height = "100%", out.width = "100%", fig.align = "center"}
 knitr::include_graphics("./Cooley_DECIPHER/SyntenyHits.png")
 ```
 
 We can visualize syntenic hits as above, with co-linear representations of genomes with some graphical links to signify the locations and lengths of syntenic hits. Or we can employ a dotplot, which utilizes the cumulative nucleotide positions of two genomes as the x and y axes in a generic plot.
 
-```{r Simple DotPlot, echo = FALSE, fig.cap = "A syntenic hit, and several hits being chained toegher into a syntenic block", out.height = "100%", out.width = "100%", fig.align = "center"}
+```{r SimpleDotPlot, echo = FALSE, fig.cap = "A syntenic hit, and several hits being chained toegher into a syntenic block", out.height = "100%", out.width = "100%", fig.align = "center"}
 knitr::include_graphics("./Cooley_DECIPHER/SyntenyBlocks.png")
 ```
 
@@ -206,7 +202,7 @@ DECIPHER's `FindSynteny` function allows users to control the degree to which hi
 
 In this workflow, we will be determining Synteny between genomes before we consider the gene calls we have already collected. Which stands in contrast to how many current synteny finding programs work. In the code below `FindSyntey()` will perform pairways analysis of every set of genomes provided to it. 
 
-```{r decipher part 2}
+```{r decipherpart2}
 # Here we will use a file path instead of a dbconnection
 SyntenyObject <- FindSynteny(dbFile = DBPath,
                              verbose = TRUE)
@@ -216,27 +212,27 @@ There are multiple ways to view objects of class `synteny`. It has default view 
 
 Plotting genomes 2 and 3, which are very syntenic, provides a good example of this. Grey uncolored space in the subject genome indicates a lack of syntenic blocks in that region. In some places, the ramp reverses, indicating an inversion, while in others, blocks are reordered from the default color bar, indicating possible rearrangements.
 
-```{r plot default}
+```{r plotdefault}
 plot(SyntenyObject[2:3, 2:3])
 ```
 
 Because visualizing large numbers of syntenic hits in genome sized sequences can be non-trivial, additional commands can be passed to plot in order to modify coloring schemes. `frequency` causes bars representing genomes to be colored by **how syntenic** that particular region (as determined by cumulative nucleotide position) of the genome is, indiscriminate of where that hit is in a corresponding genome. Once again genomes 2 and 3 in our set are good examples of this. They are highly syntenic, which this option shows well, but the rearrangements present are no longer shown.
 
-```{r plot frequency}
+```{r plotfrequency}
 plot(SyntenyObject[2:3, 2:3],
      "frequency")
 ```
 
 Because visualizing large numbers of syntenic hits in genome sized sequences can be non-trivial, additional commands can be passed to plot in order to modify coloring schemes. `neighbor` tries to provide each syntenic hit with a unique color, and additionally draws linear connections between them to facilitate better visualization. This can be a useful alternative to the default plotting, if many rearrangements are present in a way that you want to view.
 
-```{r plot neighbors}
+```{r plotneighbors}
 plot(SyntenyObject[2:3, 2:3],
      "neighbor")
 ```
 
 Plotting is a useful tool in analzying sequence data, however sometimes plots of genome sized sequence data can be a bit overwhelming. Plotting our entire database, 8 sequences, though good at representing the complexity present here in this workshop, can be daunting to make sense of quickly if you are unused to looking at figures of this type frequently.
 
-```{r plot neighbors 2}
+```{r plotneighbors2}
 plot(SyntenyObject,
      "neighbor")
 ```
@@ -244,7 +240,7 @@ plot(SyntenyObject,
 
 The most useful way to visualize Synteny data *in my opinion* is through a dot plot, which can be accessed via the `pairs()`. Dot plots, as explained above, utilize each genome being compared, as an axis in a normal x-y scatter plot. Where a *dot* - really a **very** short line, representing a run of nucleotides or amino acids -  is shown, that x,y coordinate is a syntenic hit. Hits can also be chained together into blocks of syntenic hits.
 
-```{r small pairs plot}
+```{r smallpairsplot}
 pairs(SyntenyObject[2:3, 2:3], labels = GenomeIDs[2:3])
 ```
 
@@ -252,7 +248,7 @@ Syntenic hits are shown in the upper left, while syntenic blocks are shown in th
 
 Pairs plots are *my* personal favorite way to visualize syntenic information, but, they can become overwhelming as the number of genomes compared increases. They provide very clear depictions of rearrangements and inversions.
 
-```{r large pairs plot}
+```{r largepairsplot}
 pairs(SyntenyObject,
       labels = GenomeIDs)
 ```
@@ -272,7 +268,7 @@ This is a fun object to scroll through, but is often very long, representing tho
 
 The reason we name this "MatrixObject" below is because the shape and dimensions of our data are dependent upon our synteny object. As in, if our Synteny object was built from 5 genomes, that object is a 5 x 5 matrix. NucleotideOverlap accesses the upper triangle of that object to build a 5 x 5 matrix where each position is built from data in the analogous position from the Synteny object. `MatrixObject[[1]][1, 2]` below was created from `SyntenyObject[[1]][1, 2]` and so on and so forth.
 
-```{r find homology part 1}
+```{r findhomologypart1}
 MatrixObject <- NucleotideOverlap(SyntenyObject = SyntenyObject,
                                   GeneCalls = GeneCalls,
                                   Verbose = TRUE)
@@ -288,14 +284,14 @@ The function `Catalog` takes in the output of `NucleotideOverlap` and returns a 
 
 `Catalog` will return every agglomerated set of pairs, of every size possible for the given set of genomes. From a matrix with a single row, indicating a pair of genes that are predicted to have no other homologs anywhere else in the set of genomes, to a large matrix indicating that homologs are located in every genome, and are all predicted to be homologous to each other.
 
-```{r find homology part 2}
+```{r findhomologypart2}
 Homologs <- Catalog(MatrixObject,
                     Verbose = TRUE)
 ```
 
 We can visualize this object as a histogram of the size of these agglomerations, by the number of pairs included in each agglomerated group. Where **1** represents pairs of genes where neither gene is linked to any other gene, *from other genomes*. Where **28** *in this case* represents fully linked sets of pairs, where each gene in the set is predicted to be a homolog of *every other gene in the set*.
 
-```{r find homology objects part 1}
+```{r findhomologyobjectspart1}
 hist(sapply(Homologs,
             function(x) nrow(x)),
      main = "Size of Agglomerations",
@@ -308,7 +304,7 @@ We can collect these fully linked sets. For any `N` number of genomes, a set of 
 
 You could additionally query this list for any other presence absence pattern that you may be interested in, especially if it can be easily linked to the number of rows in each matrix.
 
-```{r determine core sets}
+```{r determinecoresets}
 MaxRows <- max(sapply(Homologs,
                       function(x) nrow(x)))
 CoreSet <- which(sapply(Homologs,
@@ -317,7 +313,7 @@ CoreSet <- which(sapply(Homologs,
 
 The second to last function in FindHomology, `CoreAligner`, collects the genes in these sets, from their respective genomes, aligns the respective sets, and then concatonates the alignments. Creating a concatonated core genome for this set of genomes. This function relies on a few DECIPHER functions internally, and utilizes DECIPHER's database functionality to perform that collection of genes. Additionally, we can use a few more DECIPHER functions to create a distance matrix from our concatonated core genome, and create a phylogenetic tree from that concatonated core.
 
-```{r align core genes}
+```{r aligncoreenes}
 CoreGenome <- CoreAligner(Homologs[CoreSet],
                           PATH = DBPath,
                           GeneCalls = GeneCalls,
@@ -335,13 +331,13 @@ CoreDend <- IdClusters(myDistMatrix = CoreDist,
 
 We can now finally tidy up our workspace and unlink our temp file.
 
-```{r tidy up our workspace, echo = TRUE}
+```{r tidyupourworkspace, echo = TRUE}
 unlink(DBPath)
 ```
 
 We are also interested in the pan genome, and FindHomolog's `LogicalPan` function allows us to utilize the Homologs object, and the list of GeneCall dataframes, to create a presence absence matrix of the pan genome.
 
-```{r build pan genome}
+```{r buildpangenome}
 PanGenomeMatrix <- LogicalPan(HomologList = Homologs,
                               GeneCalls = GeneCalls,
                               Verbose = TRUE,
@@ -361,7 +357,7 @@ This matrix is constructed from the object `Homologs` which is a list of matrice
 
 And we can create a dendrogram from this matrix.
 
-```{r create dendrogram from pan genome}
+```{r createdendrogramfrompangenome}
 PanGenome <- dist(PanGenomeMatrix,
                   method = "binary")
 PanDend <- IdClusters(myDistMatrix = PanGenome,
@@ -373,7 +369,7 @@ PanDend <- IdClusters(myDistMatrix = PanGenome,
 
 We can, additionally, create a simple tangleogram from these two phylogenetic trees. Allowing a comparison of the core, and pan genomes. The core is on the left, while the pan is on the right.
 
-```{r simple tangleogram}
+```{r simpletangleogram}
 tf1 <- tempfile()
 tf2 <- tempfile()
 
@@ -398,7 +394,7 @@ par(p)
 
 The proposition at the beginning of this workshop was that a specific set of genes, that may not normally be included in a core genome, could be included in the core genome, for this set of Archaea. Specifically, genes involved in some of the unusual chemistry that Archaea do with their lipids. If we wanted to really prove this, a significant amount of lab work would also be required. However we can collect the annotations for all of the sets of homologs that have been predicted, and see how much these annotations agree, and if any of these annotations provide evidence for our proposition.
 
-```{r collect annotations}
+```{r collectannotations}
 CoreGenes <- matrix(data = NA_integer_,
                         ncol = length(GeneCalls),
                         nrow = length(CoreSet))
@@ -419,33 +415,22 @@ CoreAnnotations <- data.frame(CoreAnnotations,
 
 The annotations for each core set can now be viewed. Some provide near-universal agreement, while others indicate genes of similar family and function, but potentially not an exact match.
 
-```{r view annotations}
+```{r viewannotations}
 CoreAnnotations[, c(1L, 3L)]
 ```
 
 There are 60 of these! 
 
-```{r more annotations}
+```{r moreannotations}
 CoreAnnotations[, 2L]
 ```
 
 Now, a little insider baseball is that the unique chemistry we're interested in is often the chemistry of radicals, especially in biological systems, where the process is tightly controlled by enzymes. A quick perusal of all the sets of annotations provides two sets that support our original hypothesis.
 
-```{r potential hits of interest}
+```{r potentialhitsofinterest}
 CoreAnnotations[, c(17L, 31L)]
 ```
 
 This concludes the workshop, as any analysis after this would require work in a wet lab. Hopefully this was a useful showcase for the power of using DECIPHER to analyze sets of genomic data. The package FindHomology is currently located on github, and is still under construction. Upon completion, it will be available on Bioconductor.
 
 Thank you for your time and attention! We hope you learned something, and if you come back to this at a later date and have any questions, concerns, or comments, feel free to [email me](npc19@pitt.edu), or you can [tweet](https://twitter.com/npcooley) at me.
-
-
-
-
-
-
-
-
-
-
-

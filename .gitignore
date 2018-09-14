@@ -15,12 +15,11 @@ tmp-pdfcrop-*
 figures
 packrat/lib*/
 .DS_Store
-
 *.normalized_results
 *.err
 *.log
-
 MANIFEST.txt
-
 Homo_sapiens_genes__GRCh37_p13_.rda
 Safikhani_Pharmacogenomics/PSets.csv
+GSE32894
+SRP009615

@@ -8,11 +8,13 @@ suppressPackageStartupMessages({
 	library(gProfileR)
 	library(RCurl)
 })
+library(knitr)
+opts_chunk$set(out.width="100%")
 ```
 
 ##Overview
 
-### Instructor(s) name(s) and contact information
+### Instructor names and contact information
 
 * Ruth Isserlin - ruth dot isserlin (at) utoronto (dot) ca
 * Brendan Innes - brendan (dot) innes (at) mail (dot) utoronto (dot) ca
@@ -162,7 +164,7 @@ library(RCy3)
  * **Cytoscape** - Download and install [Cytoscape 3.6.1.](cytoscape.org/download.php) or higher.  Java 9 in not supported.  Please make sure that Java 8 is installed.
    * Install additional cytoscape apps that will be used in this workshop.  If using cytoscape 3.6.1 or older the apps need to manually installed through the [app manager](http://manual.cytoscape.org/en/latest/App_Manager.html#installing-apps) in Cytoscape or through your [web browser](https://apps.cytoscape.org/help/getstarted_app_install).  (click on the method to see detailed instructions)
      * [Functional Enrichment Collection](http://apps.cytoscape.org/apps/functionalenrichmentcollection) -a collection of apps to retrieve networks and pathways, integrate and explore the data, perform functional enrichment analysis, and interpret and display your results.
-     * [EnrichmentMap Pipeline Collection](http://apps.cytoscape.org/apps/enrichmentmappipelinecollection) - a collection of apps including EnrichmentMap, AutoAnnotate, WordCloud and clusterMaker2 used to visualize and analysis enrichment results.
+     * [EnrichmentMap Pipeline Collection](http://apps.cytoscape.org/apps/enrichmentmappipelinecollection) - a collection of apps including EnrichmentMap[@enrichmentmap], AutoAnnotate[@autoannotate], WordCloud[@wordcloud] and clusterMaker2[@clustermaker] used to visualize and analysis enrichment results.
 
 If you are using Cytoscape 3.7 or higher (Cytoscape 3.7 will be released in August 2018) then apps can be installed directly from R.
 ```{r installapps, eval=evalcytoscape}
@@ -711,7 +713,7 @@ if(file.exists(correlation_network_png_file_name)){
 exportImage(correlation_network_png_file_name, type = "png")
 ```
 
-```{r correlation_network2, echo=FALSE, fig.cap="Example correlation network created using aMatReader"}
+```{r correlationNetwork2, echo=FALSE, fig.cap="Example correlation network created using aMatReader"}
 knitr::include_graphics(correlation_network_png_file_name)
 ```
 
@@ -834,7 +836,7 @@ if(file.exists(cluster1em_png_file_name)){
 exportImage(cluster1em_png_file_name, type = "png")
 ```
 
-```{r cluster1em_fig, echo=FALSE, fig.cap="Example Enrichment Map created when running an enrichment analysis using g:Profiler with the genes that are part of cluster 1"}
+```{r cluster1emfig, echo=FALSE, fig.cap="Example Enrichment Map created when running an enrichment analysis using g:Profiler with the genes that are part of cluster 1"}
 knitr::include_graphics(cluster1em_png_file_name)
 ```
 
@@ -854,7 +856,7 @@ Annotate the Enrichment map to get the general themes that are found in the enri
 
 Export image of resulting Annotated Enrichment map.
 
-```{r cluster1em_annot, include=TRUE}
+```{r cluster1emannot, include=TRUE}
 cluster1em_annot_png_file_name <- file.path(getwd(),"230_Isserlin_RCy3_intro", "images","cluster1em_annot.png")
 
 ```
@@ -869,13 +871,13 @@ if(file.exists(cluster1em_annot_png_file_name)){
 exportImage(cluster1em_annot_png_file_name, type = "png")
 ```
 
-```{r cluster1em_annot_fig, echo=FALSE, fig.cap="Example Annotated Enrichment Map created when running an enrichment analysis using g:Profiler with the genes that are part of cluster 1"}
+```{r cluster1emannotfig, echo=FALSE, fig.cap="Example Annotated Enrichment Map created when running an enrichment analysis using g:Profiler with the genes that are part of cluster 1"}
 knitr::include_graphics(cluster1em_annot_png_file_name)
 ```
 
 Dense networks small or large never look like network figures we so often see in journals.  A lot of manual tweaking, reorganization and optimization is involved in getting that perfect figure ready network.  The above network is what the network starts as.  The below figure is what it can look like after a few minutes of manual reorganiazation.  (individual clusters were selected from the auto annotate panel and separated from other clusters)
 
-```{r cluster1em_annot_man_fig, echo=FALSE, fig.cap="Example Annotated Enrichment Map created when running an enrichment analysis using g:Profiler with the genes that are part of cluster 1 after manual adjusting to generate a cleaner figure"}
+```{r cluster1emannotmanfig, echo=FALSE, fig.cap="Example Annotated Enrichment Map created when running an enrichment analysis using g:Profiler with the genes that are part of cluster 1 after manual adjusting to generate a cleaner figure"}
 cluster1em_annot_man_png_file_name <- file.path(getwd(),"230_Isserlin_RCy3_intro", "images","cluster1em_annot_man.png")
 knitr::include_graphics(cluster1em_annot_man_png_file_name)
 ```
@@ -1053,7 +1055,7 @@ if(file.exists(mesenem_png_file_name)){
 exportImage(mesenem_png_file_name, type = "png")
 ```
 
-```{r mesenem_fig, echo=FALSE, fig.cap="Example Enrichment Map created when running an enrichment analysis using EnrichmentBrowser ORA with the genes differential in Mesenchymal OV"}
+```{r mesenemfig, echo=FALSE, fig.cap="Example Enrichment Map created when running an enrichment analysis using EnrichmentBrowser ORA with the genes differential in Mesenchymal OV"}
 knitr::include_graphics(mesenem_png_file_name)
 ```
 
@@ -1108,7 +1110,7 @@ if(file.exists(mesenem_summary_png_file_name)){
 exportImage(mesenem_summary_png_file_name, type = "png")
 ```
 
-```{r cmesenem_annot_fig, echo=FALSE, fig.cap="Example Annotated Enrichment Map created when running an enrichment analysis using EnrichmentBrowser ORA with the genes that differential in mesenchymal OV"}
+```{r cmesenemannotfig, echo=FALSE, fig.cap="Example Annotated Enrichment Map created when running an enrichment analysis using EnrichmentBrowser ORA with the genes that differential in mesenchymal OV"}
 knitr::include_graphics(mesenem_summary_png_file_name)
 ```
 
