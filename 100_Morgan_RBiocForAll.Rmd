@@ -2,9 +2,9 @@
 
 Authors:
     Martin Morgan^[Roswell Park Comprehensive Cancer Center, Buffalo, NY],
-    Lori Shepherd.
+    Lori Shepherd, Nitesh Turaga.
     <br/>
-Last modified: 17 July 2018
+Last modified: 14 September 2018
 
 ## Overview
 
@@ -49,8 +49,6 @@ carefully through short examples of _R_ and _Bioconductor_ code.
 [SummarizedExperiment]: https://bioconductor.org/packages/SummarizedExperiment
 
 ### Time outline
-
-An example for a 45-minute workshop:
 
 | Activity                         | Time |
 |:---------------------------------|:-----|
