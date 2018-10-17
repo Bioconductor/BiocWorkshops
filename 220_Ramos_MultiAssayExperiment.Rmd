@@ -1,4 +1,9 @@
-# Workflow for Multi-omics Analysis with MultiAssayExperiment
+# 220: Workflow for multi-omics analysis with MultiAssayExperiment
+
+```{r include=FALSE}
+library(knitr)
+opts_chunk$set(out.width="100%")
+```
 
 ## Instructor names and contact information
 
@@ -16,8 +21,6 @@ operations for representation of copy number and mutation and variant
 data that are represented by different genomic ranges for each specimen.
 
 ### Pre-requisites
-
-List any workshop prerequisites, for example:
 
 * Basic knowledge of R syntax
 * Familiarity with the GRanges and SummarizedExperiment classes
@@ -120,7 +123,7 @@ experiments.
 ### `(Ranged)SummarizedExperiment`
 
 ```{r, echo = FALSE, fig.cap = "A matrix-like container where rows represent features of interest and columns represent samples. The objects contain one or more assays, each represented by a matrix-like object of numeric or other mode."}
-knitr::include_graphics("Ramos_MultiAssayExperiment/SummarizedExperiment.svg")
+knitr::include_graphics("100_Morgan_RBiocForAll/SummarizedExperiment.png")
 ```
 
 `SummarizedExperiment` is the most important Bioconductor class for matrix-like 
@@ -361,7 +364,7 @@ qreduceSummarizedExperiment(ragexp, query=query, simplify=weightedmean)
 ## API cheat sheet
 
 ```{r cheatsheet, echo = FALSE, fig.cap = "The MultiAssayExperiment API for construction, access, subsetting, management, and reshaping to formats for application of R/Bioconductor graphics and analysis packages.", out.width="\\maxwidth"}
-knitr::include_graphics("MultiAssayExperiment_cheatsheet.png")
+knitr::include_graphics("Ramos_MultiAssayExperiment/MultiAssayExperiment_cheatsheet.png")
 ```
 
 

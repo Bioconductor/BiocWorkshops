@@ -7,6 +7,8 @@ github-repo: Bioconductor/BiocWorkshops
 documentclass: book
 ---
 
+<a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+
 The most up-to-date error messages and `.md` files from builds of individual workshops are [here](https://github.com/Bioconductor/BiocWorkshops/tree/individual_builds).
 
 # Introduction

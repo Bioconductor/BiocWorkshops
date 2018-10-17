@@ -1,14 +1,10 @@
-# RNA-seq data analysis with DESeq2
+# 201: RNA-seq data analysis with DESeq2
 
 Authors:
     Michael I. Love^[UNC-Chapel Hill, NC, US],
     Simon Anders^[ZMBH Heidelberg, Germany],
     Wolfgang Huber^[EMBL Heidelberg, Germany]
 Last modified: 25 June, 2018.
-
-<!-- 
-  bookdown::render_book("201_Love_DESeq2.Rmd", "bookdown::gitbook") 
--->
 
 ## Overview
 

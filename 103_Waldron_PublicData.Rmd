@@ -2,13 +2,13 @@
 bibliography: Waldron_PublicData/Waldron_PublicData.bib
 ---
 
-# Public Data Resources and Bioconductor
+# 103: Public data resources and Bioconductor
 
-## Instructor name(s) and contact information
+## Instructor names and contact information
 
-* Levi Waldron^[City University of New York, New York, NY, USA]
-* Benjamin Haibe-Kain^[Princess Margaret Cancer Center, Toronto, Canada]
-* Sean Davis^[Center for Cancer Research, National Cancer Institute, National Institutes of Health, Bethesda, MD, USA]
+* Levi Waldron <levi.waldron at sph.cuny.edu> (City University of New York, New York, NY, USA)
+* Benjamin Haibe-Kains <benjamin.haibe.kains at utoronto.ca> (Princess Margaret Cancer Center, Toronto, Canada)
+* Sean Davis <sdavis2 at mail.nih.gov> (Center for Cancer Research, National Cancer Institute, National Institutes of Health, Bethesda, MD, USA)
 
 ## Syllabus
 
@@ -145,7 +145,7 @@ GDS records several years ago. We mention them here for completeness only.
 Getting data from GEO is really quite easy.  There is only one command that is needed, `getGEO`.  This one function interprets its input to determine how to get the data from GEO and then parse the data into useful R data structures.
 
 
-```{r loadLibrary, message=FALSE}
+```{r loadLibrary20, message=FALSE}
 library(GEOquery)
 ```
 
@@ -758,9 +758,334 @@ fnames = gdcdata(manifest_df$id[3:10], access_method = 'client')
 
 ## Sequence Read Archive
 
+
+The SRAdbV2 package is currently available from [GitHub] and is under
+active development. Either the `r BiocStyle::CRANpkg("devtools")` package or the
+`r BiocStyle::CRANpkg("BiocManager")` package can be used for easy installation.
+
+```{r eval=FALSE}
+install.packages('BiocManager')
+BiocManager::install('seandavi/SRAdbV2')
+```
+
+[GitHub]: https://github.com/seandavi/SRAdbV2
+
+
+### Usage
+
+#### Loading the library
+
+```{r cache=FALSE}
+library(SRAdbV2)
+```
+
+#### The Omicidx 
+
+The entrypoint for using the SRAdbV2 system is the `Omicidx`, an [R6 class].
+To start, create a new instance of the class. 
+
+[R6 class]: https://cran.r-project.org/web/packages/R6/vignettes/Introduction.html
+
+```{r cache=FALSE}
+oidx = Omicidx$new()
+```
+
+Typing `oidx$` and then `TAB` will give possible completions. Note the "search" 
+completion. 
+
+#### Queries
+
+Once an instance of `Omicidx` is created (here we will call the instance `oidx`), 
+search capabilities are available via `oidx$search()`. The one interesting
+parameter is the `q` parameter. This parameter takes a string formatted as a Lucene query
+string. See below for [Query syntax]. 
+
+```{r cache=FALSE}
+query=paste(
+  paste0('sample_taxon_id:', 10116),
+  'AND experiment_library_strategy:"rna seq"',
+  'AND experiment_library_source:transcriptomic',
+  'AND experiment_platform:illumina')
+z = oidx$search(q=query,entity='full',size=100L)
+```
+
+The `entity` parameter is one of the SRA entity types available via the API. 
+The `size` parameter is the number of records that will be returned in each "chunk".
+
+#### Fetching results
+
+Because result sets can be large, we have a special method that allows us to 
+"scroll" through the results or to simply get them *en bloc*. The first step
+for result retrieval, then, is to get a `Scroller`. 
+
+```{r cache=FALSE}
+s = z$scroll()
+s
+```
+
+Methods such as `s$count` allow introspection into the available number of
+results, in this case, `r s$count` records.
+
+The `Scroller` provides two different approaches to accessing the resulting data.
+
+##### Collating entire result sets
+
+The first approach to getting results of a query back into R is the
+most convenient, but for large result sets, the entire dataset is
+loaded into memory and may take significant time if network
+connections are slow.
+
+
+```{r cache=FALSE}
+# for VERY large result sets, this may take
+# quite a bit of time and/or memory. An
+# alternative is to use s$chunk() to retrieve
+# one batch of records at a time and process
+# incrementally.
+res = s$collate(limit = 1000)
+head(res)
+```
+
+Note that the scroller now reports that it has fetched (`s$fetched`) `r s$fetched` records.
+
+To reuse a `Scroller`, we must reset it first.
+
+```{r cache=FALSE}
+s$reset()
+s
+```
+
+##### Yielding chunks
+
+The second approach is to iterate through results using the `yield`
+method. This approach allows the user to perform processing on chunks
+of data as they arrive in R.
+
+```{r cache=FALSE}
+j = 0
+## fetch only 500 records, but
+## `yield` will return NULL
+## after ALL records have been fetched
+while(s$fetched < 500) {
+    res = s$yield()
+    # do something interesting with `res` here if you like
+    j = j + 1
+    message(sprintf('total of %d fetched records, loop iteration # %d', s$fetched, j))
+}
+```
+
+The `Scroller` also has a `has_next()` method that will report `TRUE` if the 
+result set has not been fully fetched. Using the `reset()` method will move the 
+cursor back to the beginning of the result set.
+
+### Query syntax
+
+
+#### Terms
+
+A query is broken up into terms and operators. There are two types of terms: Single Terms and Phrases. A Single Term is a single word such as "test" or "hello". A Phrase is a group of words surrounded by double quotes such as "hello dolly". Multiple terms can be combined together with Boolean operators to form a more complex query (see below).
+
+#### Fields
+
+Queries support fielded data. When performing a search you can either specify a field, or use the default field. The field names and default field is implementation specific. You can search any field by typing the field name followed by a colon ":" and then the term you are looking for. As an example, let's assume a Lucene index contains two fields, title and abstract. If you want to find the document entitled "The Right Way" which contains the text "don't go this way" in the abstract, you can enter:
+
+```
+title:"The Right Way" AND abstract:go
+```
+
+or
+
+Note: The field is only valid for the term that it directly precedes, so the query
+
+```
+title:Do it right
+```
+
+will only find "Do" in the title field. It will find "it" and "right" in any other fields.
+
+#### Wildcard Searches
+
+Lucene supports single and multiple character wildcard searches within single terms (not within phrase queries). To perform a single character wildcard search use the "?" symbol. To perform a multiple character wildcard search use the "*" symbol. The single character wildcard search looks for terms that match that with the single character replaced. For example, to search for "text" or "test" you can use the search:
+
+```
+te?t
+```
+
+Multiple character wildcard searches looks for 0 or more characters. For example, to search for test, tests or tester, you can use the search:
+
+```
+test*
+```
+
+You can also use the wildcard searches in the middle of a term.
+
+```
+te*t
+```
+
+Note: You cannot use a * or ? symbol as the first character of a search.
+
+#### Fuzzy Searches
+
+Lucene supports fuzzy searches based on the Levenshtein Distance, or Edit Distance algorithm. To do a fuzzy search use the tilde, "~", symbol at the end of a Single word Term. For example to search for a term similar in spelling to "roam" use the fuzzy search:
+
+```
+roam~
+```
+
+
+This search will find terms like foam and roams.
+
+Starting with Lucene 1.9 an additional (optional) parameter can specify the required similarity. The value is between 0 and 1, with a value closer to 1 only terms with a higher similarity will be matched. For example:
+
+
+```
+roam~0.8
+```
+
+The default that is used if the parameter is not given is 0.5.
+
+#### Proximity Searches
+
+Lucene supports finding words are a within a specific distance away. To do a proximity search use the tilde, "~", symbol at the end of a Phrase. For example to search for a "apache" and "jakarta" within 10 words of each other in a document use the search:
+
+```
+"jakarta apache"~10
+```
+
+#### Range Searches
+
+Range Queries allow one to match documents whose field(s) values are between the lower and upper bound specified by the Range Query. Range Queries can be inclusive or exclusive of the upper and lower bounds. Sorting is done lexicographically.
+
+```
+mod_date:[20020101 TO 20030101]
+```
+
+This will find documents whose mod_date fields have values between 20020101 and 20030101, inclusive. Note that Range Queries are not reserved for date fields. You could also use range queries with non-date fields:
+
+```
+title:{Aida TO Carmen}
+```
+
+This will find all documents whose titles are between Aida and Carmen, but not including Aida and Carmen. Inclusive range queries are denoted by square brackets. Exclusive range queries are denoted by curly brackets.
+
+#### Boolean Operators
+
+Boolean operators allow terms to be combined through logic operators. Lucene supports AND, "+", OR, NOT and "-" as Boolean operators(Note: Boolean operators must be ALL CAPS).
+
+##### OR
+
+The OR operator is the default conjunction operator. This means that if there is no Boolean operator between two terms, the OR operator is used. The OR operator links two terms and finds a matching document if either of the terms exist in a document. This is equivalent to a union using sets. The symbol || can be used in place of the word OR.
+
+To search for documents that contain either "jakarta apache" or just "jakarta" use the query:
+
+```
+"jakarta apache" jakarta
+```
+
+or
+
+```
+"jakarta apache" OR jakarta
+```
+
+The AND operator matches documents where both terms exist anywhere in the text of a single document. This is equivalent to an intersection using sets. The symbol && can be used in place of the word AND. To search for documents that contain "jakarta apache" and "Apache Lucene" use the query:
+
+"jakarta apache" AND "Apache Lucene"
+
+
+##### +
+
+The "+" or required operator requires that the term after the "+" symbol exist somewhere in a the field of a single document. To search for documents that must contain "jakarta" and may contain "lucene" use the query:
+
+```
++jakarta lucene
+```
+
+##### NOT
+
+The NOT operator excludes documents that contain the term after NOT. This is equivalent to a difference using sets. The symbol ! can be used in place of the word NOT. To search for documents that contain "jakarta apache" but not "Apache Lucene" use the query:
+
+```
+"jakarta apache" NOT "Apache Lucene"
+```
+
+Note: The NOT operator cannot be used with just one term. For example, the following search will return no results:
+
+```
+NOT "jakarta apache"
+```
+
+##### -
+
+The "-" or prohibit operator excludes documents that contain the term after the "-" symbol. To search for documents that contain "jakarta apache" but not "Apache Lucene" use the query:
+
+```
+"jakarta apache" -"Apache Lucene"
+```
+
+#### Grouping
+
+Lucene supports using parentheses to group clauses to form sub queries. This can be very useful if you want to control the boolean logic for a query. To search for either "jakarta" or "apache" and "website" use the query:
+
+```
+(jakarta OR apache) AND website
+```
+
+This eliminates any confusion and makes sure you that website must exist and either term jakarta or apache may exist.
+
+Lucene supports using parentheses to group multiple clauses to a single field.
+
+To search for a title that contains both the word "return" and the phrase "pink panther" use the query:
+
+```
+title:(+return +"pink panther")
+```
+
+#### Escaping Special Characters
+Lucene supports escaping special characters that are part of the query syntax. The current list special characters are
+
+```
++ - && || ! ( ) { } [ ] ^ " ~ * ? : \
+```
+
+To escape these character use the \ before the character. For example to search for (1+1):2 use the query:
+
+```
+\(1\+1\)\:2
+```
+
+[Lucene query string]: https://lucene.apache.org/core/2_9_4/queryparsersyntax.html
+
+### Using the raw API without R/Bioconductor
+
+The SRAdbV2 is a client to a high-performance web-based API. As
+such, the web API is perfectly usable from either a simple test page, 
+accessible here:
+
+```{r eval=FALSE}
+sra_browse_API()
+```
+
+The web-based API provides a useful interface for experiment
+with queries. It also returns URLs associated with the example
+queries, facilitating querying with other tools like `curl` or
+`wget`
+
+The API is described using the OpenAPI standard, also known as 
+[Swagger](https://swagger.io/). Tooling exists to quickly scaffold
+clients in any language (basically) based on the json available here:
+
+```{r}
+sra_get_swagger_json_url()
+```
+
+
+
 ## Accessing The Cancer Genome Atlas (TCGA)
 
 We summarize two approaches to accessing TCGA data:
+
 1. `r BiocStyle::Biocpkg("TCGAbiolinks")`:
     a. data access through `r BiocStyle::Biocpkg("GenomicDataCommons")`
     b. provides data both from the legacy Firehose pipeline used by the TCGA
@@ -907,6 +1232,7 @@ load(file.path(project_info$project, 'rse_gene.Rdata'))
 ## curated*Data packages for standardized cancer transcriptomes
 
 There are focused databases of cancer microarray data for several cancer types, which can be useful for researchers of those cancer types or for methodological development:
+
 * `r BiocStyle::Biocpkg("curatedOvarianData")`[@Ganzfried2013-mc]: Clinically Annotated Data for the Ovarian Cancer Transcriptome (data available with additional options through the `r BiocStyle::Biocpkg("MetaGxOvarian")` package).
 * `r BiocStyle::Biocpkg("curatedBladderData")`: Clinically Annotated Data for the Bladder Cancer Transcriptome
 * `r BiocStyle::Biocpkg("curatedCRCData")`: Clinically Annotated Data for the Colorectal Cancer Transcriptome
@@ -916,6 +1242,7 @@ These provide data from the Gene Expression Omnibus and other sources, but use a
 ## Microbiome data
 
 Bioconductor provides curated resources of microbiome data.  Most microbiome data are generated either by targeted amplicon sequencing (usually of variable regions of the 16S ribosomal RNA gene) or by metagenomic shotgun sequencing (MGX). These two approaches are analyzed by different sequence analysis tools, but downstream statistical and ecological analysis can involve any of the following types of data:
+
 * taxonomic abundance at different levels of the taxonomic hierarchy
 * phylogenetic distances and the phylogenetic tree of life
 * metabolic potential of the microbiome
@@ -996,32 +1323,41 @@ This can also be converted to `r BiocStyle::Biocpkg("phyloseq")` for ecological 
     
 ## Pharmacogenomics
 
-Pharmacogenomics holds great promise for the development of biomarkers of drug response and the design of new therapeutic options, which are key challenges in precision medicine. However, such data are scattered and lack standards for efficient access and analysis, consequently preventing the realization of the full potential of pharmacogenomics. To address these issues, we implemented PharmacoGx, an easy-to-use, open source package for integrative analysis of multiple pharmacogenomic datasets. We  demonstrate here the utility of our package in comparing large drug sensitivity datasets, such as the Genomics of Drug Sensitivity in Cancer [GDSC](https://www.cancerrxgene.org/) and the Cancer Cell Line Encyclopedia [CCLE](https://portals.broadinstitute.org/ccle), or use large drug perturbation data from the Connectivity Map [CAMP](https://clue.io/cmap)for drug repurposing.
+Pharmacogenomics holds great promise for the development of biomarkers of drug response and the design of new therapeutic options, which are key challenges in precision medicine. However, such data are scattered and lack standards for efficient access and analysis, consequently preventing the realization of the full potential of pharmacogenomics. To address these issues, we implemented `r BiocStyle::Biocpkg("PharmacoGx")`, an easy-to-use, open source package for integrative analysis of multiple pharmacogenomic datasets. ~PharmacoGx` provides a unified framework for downloading and analyzing large pharmacogenomic datasets which are extensively curated to ensure maximum overlap and consistency.
 
-These case studies were published in Smirnov, Petr, et al. [PharmacoGx: an R package for analysis of large pharmacogenomic datasets." Bioinformatics 32.8 (2015): 1244-1246](https://academic.oup.com/bioinformatics/article/32/8/1244/1744214/PharmacoGx-an-R-package-for-analysis-of-large).
+Examples of `PharmacoGx` usage in biomedical research can be found in the following publications:
+
+* [Smirnov et al. PharmacoGx: an R package for analysis of large pharmacogenomic datasets." Bioinformatics (2015): 1244-1246](https://academic.oup.com/bioinformatics/article/32/8/1244/1744214/PharmacoGx-an-R-package-for-analysis-of-large).
+* [Safikhani et al., Assessment of pharmacogenomic agreement, F1000 Research (2017)](https://f1000research.com/articles/5-825/v1)
+* [Safikhani et al., Revisiting inconsistency in large pharmacogenomic studies, F1000 Research (2017)](https://f1000research.com/articles/5-2333/v3)
+* [Yao et al., Tissue specificity of in vitro drug sensitivity, JAMIA (2017)](https://doi.org/10.1093/jamia/ocx062)
+* [Safikhani et al., Gene isoforms as expression-based biomarkers predictive of drug response in vitro, Nature Communications (2017)](https://www.nature.com/articles/s41467-017-01153-8)
+* [El-Hachem et al., Integrative Cancer Pharmacogenomics to Infer Large-Scale Drug Taxonomy, Cancer Research (2017)](http://cancerres.aacrjournals.org/content/77/11/3057.long)
 
 ### Getting started 
 
-Let us first load the `PharmacoGx`library.
+Let us first load the `PharmacoGx` library.
 
-```{r loadPharmaco, message=FALSE, results="hide"}
+```{r loadLibrary10, message=FALSE}
 library(PharmacoGx)
 ```
-
 We can now access large-scale preclinical pharmacogenomic datasets that have been fully curated for ease of use.
 
 ### Overview of PharmacoGx datasets (PharmacoSets)
 
 To efficiently store and analyze large pharmacogenomic datasets, we developed the `PharmacoSet` class (also referred to as `PSet`), which acts as a data container storing pharmacological and molecular data along with experimental metadata (detailed structure provided in Supplementary materials). This class enables efficient implementation of curated annotations for cell lines, drug compounds and molecular features, which facilitates comparisons between different datasets stored as `PharmacoSet` objects.
 
+We have made the PharmacoSet objects of the curated datasets available for download using functions provided in the package. A table of available PharmacoSet objects can be obtained by using the *availablePSets* function. Any of the PharmacoSets in the table can then be downloaded by calling *downloadPSet*, which saves the datasets into a directory of the users choice, and returns the data into the R session. 
+
 [Structure of the PharmacoSet class](Waldron_PublicData/PharmacoSet_structure.png)
 
-To get a list of all the available `PharmacoSets` in PharmacoGx, we can use the àvailablePSets` function, which returns a table providing key information for each dataset.
+To get a list of all the available `PharmacoSets` in PharmacoGx, we can use the availablePSets` function, which returns a table providing key information for each dataset.
 
 ```{r availablePSets, message=FALSE}
-availablePSets()
+availablePSets(saveDir=file.path(".", "Waldron_PublicData"))
 ```
 There are currently 11 datasets available in PharmacoGx, including 8 sensitivity datasets and 3 perturbation datasets (see below).
+
 
 #### Drug Sensitivity Datasets
 
@@ -1030,9 +1366,11 @@ Drug sensitivity datasets refer to pharmacogenomic data where cancer cells are m
 [Schematic view of the drug sensitivity datasets.](Waldron_PublicData/Drug_sensitivity.png)
 
 ```{r availableSensitivityPSets, message=FALSE}
-psets <- availablePSets()
+psets <- availablePSets(saveDir=file.path(".", "Waldron_PublicData"))
 psets[psets[ , "Dataset.Type"] == "sensitivity", ]
 ```
+Notably, the Genomics of Drug Sensitivity in Cancer [GDSC](https://www.cancerrxgene.org/) and the Cancer Cell Line Encyclopedia [CCLE](https://portals.broadinstitute.org/ccle) are large drug sensitivity datasets published in seminal studies in Nature, [Garnett et al., https://www.nature.com/articles/nature11005, Nature (2012)](https://www.nature.com/articles/nature11005) and [Barretina et al., The Cancer Cell Line Encyclopedia enables predictive modelling of anticancer drug sensitivity, Nature (2012)](https://www.nature.com/articles/nature11003), respectively.
+
 
 #### Drug Perturbation Datasets
 
@@ -1041,9 +1379,14 @@ Drug perturbation datasets refer to pharmacogenomic data where gene expression p
 [Schematic view of drug perturbation datasets](Waldron_PublicData/Drug_perturbation.png)
 
 ```{r availablePerturbationPSets, message=FALSE}
-psets <- availablePSets()
+psets <- availablePSets(saveDir=file.path(".", "Waldron_PublicData"))
 psets[psets[ , "Dataset.Type"] == "perturbation", ]
 ```
+Large drug perturbation data have been generated within the Connectivity Map Project [CAMP](https://clue.io/cmap), with CMAPv2 and CMAPv3 available from `PharmacoGx`, published in [Lamb et al., The Connectivity Map: Using Gene-Expression Signatures to Connect Small Molecules, Genes, and Disease, Science (2006)](http://science.sciencemag.org/content/313/5795/1929) and [Subramanian et al., A Next Generation Connectivity Map: L1000 Platform and the First 1,000,000 Profiles, Cell (2017)](https://www.cell.com/cell/abstract/S0092-8674(17)31309-0), respectively.
+ 
+### Exploring drug sensitivity datasets
 
+The [Biomarker discovery from large pharmacogenomics datasets](https://bioconductor.github.io/BiocWorkshops/biomarker-discovery-from-large-pharmacogenomics-datasets.html) workshop demonstrates analyses of `r BiocStyle::Biocpkg("PharmacoGx")` data.
 
 ## Bibliography
+
