@@ -3,7 +3,7 @@ output:
   pdf_document: default
   html_document: default
 ---
-# 301: Interactive visualization of `SummarizedExperiment` objects
+# 3xx: Interactive visualization of `SummarizedExperiment` objects
 
 Authors:
     Kevin Rue-Albrecht^[Kennedy Institute of Rheumatology, University of Oxford,
