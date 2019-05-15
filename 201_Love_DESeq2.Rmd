@@ -1,0 +1,872 @@
+# 201: RNA-seq data analysis with DESeq2
+
+Authors:
+    Michael I. Love^[UNC-Chapel Hill, NC, US],
+    Simon Anders^[ZMBH Heidelberg, Germany],
+    Wolfgang Huber^[EMBL Heidelberg, Germany]
+Last modified: 25 June, 2018.
+
+## Overview
+
+### Description
+
+In this workshop, we will give a quick overview of the most useful
+functions in the DESeq2 package, and a basic RNA-seq analysis. We will
+cover: how to quantify transcript expression from FASTQ files using
+Salmon, import quantification from Salmon with tximport and tximeta,
+generate plots for quality control and exploratory data analysis EDA
+(also using MultiQC), perform differential expression (DE) (also using
+apeglm), overlap with other experimental data (using AnnotationHub),
+and build reports (using ReportingTools and Glimma). We will give a
+short example of integration of DESeq2 with the zinbwave package for
+single-cell RNA-seq differential expression. The workshop is designed
+to be a lab with plenty of time for questions throughout the lab. 
+
+### Pre-requisites
+
+* Basic knowledge of R syntax
+
+Non-essential background reading:
+
+* DESeq2 paper: <https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4302049/>
+* tximport paper: <https://f1000research.com/articles/4-1521/v2>
+* apeglm paper: <https://www.biorxiv.org/content/early/2018/04/17/303255>
+
+### Participation
+
+Students will participate by following along an Rmarkdown document,
+and asking questions throughout the workshop.
+
+### _R_ / _Bioconductor_ packages used
+
+* DESeq2
+* tximport
+* apeglm
+* AnnotationHub
+* ReportingTools
+* Glimma
+* splatter
+* zinbwave
+
+### Time outline
+
+| Activity                      | Time |
+|:------------------------------|:-----|
+| Overview of packages          | 20m  |
+| Quantification and import     | 20m  |
+| EDA and DE                    | 20m  |
+| Downstream analysis & reports | 20m  |
+| ZINB-WaVE integration         | 20m  |
+| Additional questions          | 20m  |
+
+### Workshop goals and objectives
+
+Learning goals
+
+* Visually assess quality of RNA-seq data 
+* Perform basic differential analysis of RNA-seq data 
+* Compare RNA-seq results with other experimental data
+
+Learning objectives
+
+* Quantify transcript expression from FASTQ files
+* Import quantification into R/Bioconductor
+* Perform quality control and exploratory data analysis
+* Perform differential expression
+* Overlap with other experimental data
+* Build dynamic reports
+* Integrate DESeq2 and zinbwave for single-cell RNA-seq data
+
+## Preparing data for *DESeq2*
+
+### Experimental data
+
+The data used in this workflow is stored in the *airway* package that
+summarizes an RNA-seq experiment wherein airway smooth muscle cells
+were treated with dexamethasone, a synthetic glucocorticoid steroid
+with anti-inflammatory effects [@Himes2014RNASeq]. Glucocorticoids
+are used, for example, by people with asthma to reduce inflammation of
+the airways. In the experiment, four primary human airway smooth
+muscle cell lines were treated with 1 micromolar dexamethasone for 18
+hours. For each of the four cell lines, we have a treated and an
+untreated sample. For more description of the experiment see the
+[PubMed entry 24926665](http://www.ncbi.nlm.nih.gov/pubmed/24926665)
+and for raw data see the
+[GEO entry GSE52778](http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE52778).
+
+We will show how to import RNA-seq quantification data using an
+alternative dataset (the *tximportData* package which is used in the
+*tximport* vignette). Afterward we will load counts for the *airway*
+dataset, which were counted using *summarizeOverlaps* from the
+*GenomicAlignments* package. As described below, we recommend the
+*tximport* pipeline for producing count matrices, but we do not yet
+have a Bioconductor package containing the necessary quantification
+files for the *airway* dataset.
+
+### Modeling count data
+
+As input, the count-based statistical methods, such as *DESeq2*
+[@Love2014Moderated], *edgeR* [@Robinson2009EdgeR], *limma* with the
+voom method [@Law2014Voom], *DSS* [@Wu2013New], *EBSeq*
+[@Leng2013EBSeq] and *baySeq* [@Hardcastle2010BaySeq], expect input
+data as obtained, e.g., from RNA-seq or another high-throughput
+sequencing experiment, in the form of a matrix of counts.  The value
+in the *i*-th row and the *j*-th column of the matrix tells how many
+reads (or fragments, for paired-end RNA-seq) have been assigned to
+gene *i* in sample *j*. Analogously, for other types of assays, the
+rows of the matrix might correspond e.g., to binding regions (with
+ChIP-Seq), species of bacteria (with metagenomic datasets), or peptide
+sequences (with quantitative mass spectrometry).
+
+The values in the matrix should be counts of sequencing
+reads/fragments. This is important for the statistical models used by
+*DESeq2* and *edgeR* to hold, as only counts allow assessing the
+measurement precision correctly. It is important to not provide counts
+that were pre-normalized for sequencing depth (also called library
+size), as the statistical model is most powerful when applied to
+un-normalized counts and is designed to account for library size
+differences internally.
+
+### Transcript abundances
+
+In this workflow, we will show how to use transcript abundances as
+quantified by the [Salmon](https://combine-lab.github.io/salmon/)
+[@Patro2017Salmon] software package. *Salmon* and other methods, such
+as [Sailfish](http://www.cs.cmu.edu/~ckingsf/software/sailfish/)
+[@Patro2014Sailfish],
+[kallisto](https://pachterlab.github.io/kallisto/) [@Bray2016Near],
+or [RSEM](http://deweylab.github.io/RSEM/) [@Li2011RSEM], estimate the
+relative abundances of all (known, annotated) transcripts without
+aligning reads. Because estimating the abundance of the transcripts
+involves an inference step, the counts are *estimated*. Most methods
+either use a statistical framework called Estimation-Maximization or
+Bayesian techniques to estimate the abundances and counts.  Following
+quantification, we will use the *tximport* [@Soneson2015Differential]
+package for assembling estimated count and offset matrices for use
+with Bioconductor differential gene expression packages.
+
+The advantages of using the transcript abundance quantifiers in
+conjunction with *tximport* to produce gene-level count matrices and
+normalizing offsets, are: 
+
+1. this approach corrects for any potential changes in gene length
+across samples (e.g. from differential isoform usage)
+[@Trapnell2013Differential] 
+2. some of these methods are substantially faster and require less
+memory and less disk usage compared to alignment-based methods 
+3. it is possible to avoid discarding those fragments that can align
+to multiple genes with homologous sequence [@Robert2015Errors]. 
+
+Note that transcript abundance quantifiers skip the generation of
+large files which store read alignments (SAM or BAM files), instead
+producing smaller files which store estimated abundances, counts and
+effective lengths per transcript. For more details, see the manuscript
+describing this approach [@Soneson2015Differential] and the *tximport*
+package vignette for software details.
+
+A full tutorial on how to use the *Salmon* software for quantifying
+transcript abundance can be
+found [here](https://combine-lab.github.io/salmon/getting_started/).
+
+### *Salmon* quantification
+
+We begin by providing *Salmon* with the sequence of all of the
+reference transcripts, which we will call the *reference
+transcriptome*. We recommend to use the GENCODE human
+transcripts, which can be downloaded from the
+[GENCODE website](https://www.gencodegenes.org/). 
+On the command line, creating the transcriptome index looks like:
+
+```
+salmon index -i gencode.v99_salmon_0.10.0 -t gencode.v99.transcripts.fa.gz
+```
+
+The `0.10.0` refers to the version of *Salmon* that was used, and is
+useful to put into the index name.
+
+To quantify an individual sample, `sample_01`, the following command
+can be used:
+
+```
+salmon quant -i gencode.v99_salmon_0.10.0 -p 6 --libType A \
+  --gcBias --biasSpeedSamp 5 \
+  -1 sample_01_1.fastq.gz -2 sample_01_2.fastq.gz \
+  -o sample_01
+```
+
+In simple English, this command says to "quantify a sample using this
+transcriptome index, with 6 threads, using automatic 
+[library type](http://salmon.readthedocs.io/en/latest/library_type.html) detection,
+using GC bias correction (the bias speed part is now longer
+needed with current versions of *Salmon*), here are the first and second
+read, and use this output directory." The output directory will be
+created if it doesn't exist, though if earlier parts of the path do
+not exist, it will give an error. A single sample of human RNA-seq
+usually takes ~5 minutes with the GC bias correction.
+
+Rather than writing the above command on the command line multiple
+times for each sample, it is possible to loop over files using a
+bash loop, or more advanced workflow management
+systems such as Snakemake [@Koster2012Snakemake] or Nextflow
+[@Di2017Nextflow].
+
+## Importing into R with *tximport*
+
+### Specifying file locations
+
+Following quantification, we can use *tximport* to import the data
+into R and perform statistical analysis using Bioconductor packages.
+Normally, we would simply point *tximport* to the `quant.sf` files on
+our machine. However, because we are distributing these files as part
+of an R package, we have to do some extra steps, to figure out where
+the R package, and so the files, are located on *your* machine.
+
+We will show how to import *Salmon* quantification files using the
+data in the *tximportData* package. The quantified samples are six
+samples from the [GEUVADIS Project](http://www.geuvadis.org/web/geuvadis) [@Lappalainen].
+The output directories from the above *Salmon* quantification calls has been
+stored in the `extdata` directory of the *tximportData* package.
+The R function *system.file* can be used to find out where on your
+computer the files from a package have been installed. Here we ask for
+the full path to the `extdata` directory, where R packages store
+external data, that is part of the *tximportData* package.
+
+```{r}
+library("tximportData")
+dir <- system.file("extdata", package="tximportData")
+list.files(dir)
+```
+
+The *Salmon* quantification directories are in the `salmon` directory. 
+
+```{r}
+list.files(file.path(dir,"salmon"))
+```
+
+The identifiers used here are the *ERR* identifiers from the 
+[European Nucleotide Archive](https://www.ebi.ac.uk/ena). 
+We need to create a named vector pointing to the quantification
+files. We will create a vector of filenames first by reading in a
+table that contains the sample IDs, and then combining this with `dir`
+and `"quant.sf.gz"`. (We gzipped the quantification files to make the
+data package smaller, this is not a problem for R functions that we
+use to import the files.)
+
+```{r}
+samples <- read.table(file.path(dir,"samples.txt"), header=TRUE)
+samples
+files <- file.path(dir, "salmon", samples$run, "quant.sf.gz")
+names(files) <- paste0("sample",1:6)
+all(file.exists(files))
+```
+
+### Mapping transcripts to genes
+
+Transcripts need to be associated with gene IDs for gene-level
+summarization. We therefore will construct a *data.frame* called
+`tx2gene` with two columns: 1) transcript ID and 2) gene ID. The
+column names do not matter but this column order must be used. The
+transcript ID must be the same one used in the abundance files. This
+can most easily be accomplished by downloading the GTF file at the
+same time that the transcriptome FASTA is downloaded, and generating
+`tx2gene` from the GTF file using Bioconductor's *TxDb*
+infrastructure.
+
+Generating a *TxDb* from a GTF file can be easily accomplished with
+the *makeTxDbFromGFF* function. This step requires a few minutes of
+waiting, and a large file. We therefore skip this step, but show the
+code that is used to create the `tx2gene` table, assuming the correct
+*TxDb* object has been created.
+
+Creating the `tx2gene` *data.frame* can be accomplished by calling the
+*select* function from the *AnnotationDbi* package on a *TxDb* object.
+The following code could be used to construct such a table:
+
+```{r}
+library("TxDb.Hsapiens.UCSC.hg38.knownGene")
+txdb <- TxDb.Hsapiens.UCSC.hg38.knownGene
+k <- keys(txdb, keytype="TXNAME")
+tx2gene <- select(txdb, k, "GENEID", "TXNAME")
+```
+
+In this case, we've used the Gencode v27 CHR transcripts to build our
+*Salmon* index, and we used `makeTxDbFromGFF` and code similar to the chunk
+above to build the `tx2gene` table. We then read in a pre-constructed
+`tx2gene` table:
+
+```{r}
+library("readr")
+tx2gene <- read_csv(file.path(dir, "tx2gene.gencode.v27.csv"))
+head(tx2gene)
+```
+
+### *tximport* command
+
+Finally the following line of code imports *Salmon* transcript
+quantifications into R, collapsing to the gene level using the
+information in `tx2gene`.
+
+```{r}
+library("tximport")
+library("jsonlite")
+library("readr")
+txi <- tximport(files, type="salmon", tx2gene=tx2gene)
+```
+
+The `txi` object is simply a list of matrices (and one character
+vector):
+
+```{r}
+names(txi)
+txi$counts[1:3,1:3]
+txi$length[1:3,1:3]
+txi$abundance[1:3,1:3]
+txi$countsFromAbundance
+```
+
+If we were continuing with the GEUVADIS samples, we would then create
+a *DESeqDataSet* with the following line of code. Because there are no
+differences among the samples (same population and same sequencing
+batch), we specify a *design formula* of ~1, meaning we can only fit
+an intercept term -- so we cannot perform differential expression
+analysis with these samples.
+
+```{r}
+library("DESeq2")
+dds <- DESeqDataSetFromTximport(txi, samples, ~1)
+dds$center
+dds$pop
+```
+
+## Exploratory data analysis
+
+### Simple EDA
+
+We will now switch over to the *airway* experiment, counts of which
+are already prepared in a *SummarizedExperiment* object. In this case,
+the object that we load is the output of the *summarizeOverlaps*
+function in the *GenomicAlignments* package, and the exact code used
+to produce this object can be seen by typing `vignette("airway")` into
+the R session, to pull up the *airway* software vignette. There are
+multiple ways to produce a count table and import it into *DESeq2*,
+and these are summarized in this section of the
+[RNA-seq gene-level workflow](https://bioconductor.org/packages/release/workflows/vignettes/rnaseqGene/inst/doc/rnaseqGene.html#deseq2-import-functions).
+
+```{r}
+library("airway")
+data("airway")
+```
+
+We want to specify that `untrt` is the reference level for the dex
+variable: 
+
+```{r}
+airway$dex <- relevel(airway$dex, "untrt")
+airway$dex
+```
+
+We can quickly check the millions of fragments that uniquely aligned
+to the genes (the second argument of *round* tells how many decimal
+points to keep).
+
+```{r}
+round( colSums(assay(airway)) / 1e6, 1 )
+```
+
+We can inspect the information about the samples, by pulling out the
+`colData` slot of the *SummarizedExperiment*:
+
+```{r}
+colData(airway)
+table(airway$cell)
+table(airway$dex)
+```
+
+If we had not already loaded *DESeq2*, we would do this, and then
+create a *DESeqDataSet*. We want to control for the cell line, while
+testing for differences across dexamethasone treatment, so we use a
+design of `~ cell + dex`:
+
+```{r}
+library("DESeq2")
+dds <- DESeqDataSet(airway, design = ~ cell + dex)
+```
+
+We will perform a minimal filtering to reduce the size of the
+dataset. We do not need to retain genes if they do not have a count of
+5 or more for 4 or more samples as these genes will have no
+statistical power to detect differences, and no information to compute
+distances between samples.
+
+```{r}
+keep <- rowSums(counts(dds) >= 5) >= 4
+table(keep)
+dds <- dds[keep,]
+```
+
+Some very basic exploratory analysis is to examine a boxplot of the
+counts for each sample. We will take the logarithm so that large
+counts do not dominate the boxplot:
+
+```{r}
+boxplot(log10(counts(dds)+1))
+```
+
+The main function in *DESeq2* involves computation of *size factors*
+which normalize for differences in sequencing depth among samples. We
+can also compute these size factors manually, so that the *normalized
+counts* are available for plotting:
+
+```{r}
+dds <- estimateSizeFactors(dds)
+boxplot(log10(counts(dds,normalized=TRUE)+1))
+```
+
+### Data transformation for EDA
+
+Taking the logarithm of counts plus a pseudocount of 1 is a common
+transformation, but it tends to inflate the sampling variance of low
+counts such that it is even larger than biological variation across
+groups of samples. In *DESeq2* we therefore provide transformations
+which produce log-scale data such that the systematic trends have been
+removed. Our recommended transformation is the variance-stabilizing
+transformation, or VST, and it can be called with the *vst* function:
+
+```{r}
+vsd <- vst(dds)
+class(vsd)
+```
+
+This function does not return a *DESeqDataSet*, because it does not
+return counts, but instead continuous values (on the log2 scale).
+We can access the transformed data with *assay*:
+
+```{r}
+assay(vsd)[1:3,1:3]
+```
+
+### Principal components plot
+
+The VST data is appropriate for calculating distances between samples
+or for performing PCA. More information about PCA and distance
+calculation can be found in the
+[RNA-seq gene-level workflow](https://bioconductor.org/packages/release/workflows/vignettes/rnaseqGene/inst/doc/rnaseqGene.html#deseq2-import-functions).
+In short, PCA plots allow us to visualize the most dominant axes of
+variation in our data, which is useful for both quality control, and
+to get a sense of how large the inter-sample differences are across
+and within conditions. Here we see that PC1 (the primary axis of
+variation in the data) separates the treated and untreated samples:
+
+```{r}
+plotPCA(vsd, "dex")
+```
+
+With some additional *ggplot2* code, we can also indicate which
+samples belong to which cell line:
+
+```{r}
+library("ggplot2")
+pcaData <- plotPCA(vsd, intgroup = c( "dex", "cell"), returnData = TRUE)
+percentVar <- round(100 * attr(pcaData, "percentVar"))
+ggplot(pcaData, aes(x = PC1, y = PC2, color = dex, shape = cell)) +
+  geom_point(size =3) +
+  xlab(paste0("PC1: ", percentVar[1], "% variance")) +
+  ylab(paste0("PC2: ", percentVar[2], "% variance")) +
+  coord_fixed()
+```
+
+Note that we do not recommend working with the transformed data for
+the primary differential expression analysis. Instead we will use the
+original counts and a *generalized linear model* (GLM) which takes
+into account the expected variance from either low or high counts.
+For statistical details, please refer to the *DESeq2* methods paper
+[@Love2014Moderated].
+
+## Differential expression analysis
+
+### Standard DE steps
+
+Differential expression analysis in *DESeq2* is performed by calling
+the following two functions:
+
+```{r}
+dds <- DESeq(dds)
+res <- results(dds)
+```
+
+The results table `res` contains the results for each gene (in the
+same order as in the *DESeqDataSet*). If we want to see the top genes,
+we can order it like so:
+
+```{r}
+head(res[order(res$pvalue),])
+```
+
+We can plot the counts for the top gene using `plotCounts`:
+
+```{r}
+plotCounts(dds, which.min(res$pvalue), "dex")
+```
+
+We can examine all the log2 fold changes (LFC) due to dexamethasone
+treatment over the mean of counts using `plotMA`:
+
+```{r}
+plotMA(res, ylim=c(-5,5))
+```
+
+Note that there are many large LFC which are not significant (grey
+points) on the left side of the MA-plot above. These obtain a large
+LFC because of the imprecision of log counts. For more informative
+visualization and more accurate ranking of genes by effect size (the
+log fold change may sometimes be referred to as an *effect size*), we
+recommend to use *DESeq2*'s functionality for shrinking LFCs. Our most
+recent methodological development is the *apeglm* shrinkage estimator,
+which is available in *DESeq2*'s *lfcShrink* function:
+
+```{r}
+library("apeglm")
+resultsNames(dds)
+res2 <- lfcShrink(dds, coef="dex_trt_vs_untrt", type="apeglm")
+```
+
+```{r}
+par(mfrow=c(1,2))
+plotMA(res, ylim=c(-3,3), main="No shrinkage")
+plotMA(res2, ylim=c(-3,3), main="apeglm")
+```
+
+### Minimum effect size
+
+If we don't want to report as significant genes with small LFC, we can
+specify a minimum *biologically meaningful* effect size, by choosing
+an LFC and testing against this. We can either perform such a
+threshold test using the unshrunken LFCs or the LFCs provided by
+*lfcShrink* using the *apeglm* method:
+
+```{r}
+res.lfc <- results(dds, lfcThreshold=1)
+res.lfc2 <- lfcShrink(dds, coef="dex_trt_vs_untrt", type="apeglm",
+                      lfcThreshold=1)
+```
+
+Note that *testing* against an LFC threshold is not equivalent to
+testing against a null hypothesis of 0 and then filtering on LFC
+values. We prefer the former, as discussed in @Love2014Moderated and
+@Zhu2018. 
+
+The *apeglm* method provides s-values [@Stephens2016] when
+`svalue=TRUE` or when we supply a minimum effect size as above. These
+are analogous to q-values or adjusted p-values, in that the genes with
+s-values less than $\alpha$ should have an aggregate rate of false
+sign or being smaller in absolute value than our given LFC threshold,
+which is bounded by $\alpha$.
+
+```{r}
+par(mfrow=c(1,2))
+plotMA(res.lfc, ylim=c(-5,5), main="No shrinkage, LFC test")
+plotMA(res.lfc2, ylim=c(-5,5), main="apeglm, LFC test", alpha=0.01)
+```
+
+## *AnnotationHub*
+
+### Querying *AnnotationHub*
+
+We will use the *AnnotationHub* package to attach additional
+information to the results table. *AnnotationHub* provides an
+easy-to-use interface to more than 40,000 annotation records. A
+record may be peaks from a ChIP-seq experiment from ENCODE, the
+sequence of the human genome, a *TxDb* containing information about
+transcripts and genes, or an *OrgDb* containing general information
+about biological identifiers for a particular organism.
+
+```{r}
+library("AnnotationHub")
+ah <- AnnotationHub()
+```
+
+The following code chunk, un-evaluated here, launches a browser for
+navigating all the records available through *AnnotationHub*.
+
+```{r eval=FALSE}
+display(ah)
+```
+
+We can also query using keywords with the *query* function:
+
+```{r}
+query(ah, c("OrgDb","Homo sapiens"))
+```
+
+To pull down a particular record we use double brackets and the *name*
+of the record:
+
+```{r}
+hs <- ah[["AH61777"]]
+hs
+```
+
+### Mapping IDs
+
+The *rownames* of the results table are Ensembl IDs, and most of these
+are entries in *OrgDb* (although thousands are not).
+
+```{r}
+columns(hs)
+table(rownames(res) %in% keys(hs, "ENSEMBL"))
+```
+
+We can use the *mapIds* function to add gene symbols, using `ENSEMBL`
+as the keytype, and requesting the column `SYMBOL`. 
+
+```{r}
+res$symbol <- mapIds(hs, rownames(res), column="SYMBOL", keytype="ENSEMBL")
+head(res)
+```
+
+## Building reports
+
+### *ReportingTools*
+
+There are many packages for building interactive reports from
+Bioconductor. Two of these are *ReportingTools* and *Glimma*, which
+both provide HTML reports that allow for collaborators to examine the
+top genes (or whatever features of interest) from a genomic analysis.
+
+The code for compiling a *ReportingTools* report is:
+
+```{r}
+library("ReportingTools")
+tmp <- tempdir() # you would instead use a meaningful path here
+rep <- HTMLReport(shortName="airway", title="Airway DGE",
+                  basePath=tmp, reportDirectory="report")
+publish(res, rep, dds, n=20, make.plots=TRUE, factor=dds$dex)
+finish(rep)
+```
+
+This last line, un-evaluated would launch the report in a web browser:
+
+```{r eval=FALSE}
+browseURL(file.path(tmp,"report","airway.html"))
+```
+
+### *Glimma*
+
+Another package which can generate interactive reports is
+*Glimma*. The *glMDPlot* constructs an interactive MA-plot where
+hovering over a gene in the MA-plot on the left side will display the
+counts for the samples on the right hand side. Clicking will bring up
+the gene's information in a tooltip and in a list at the bottom of the
+screen. Hovering on a sample on the right hand side will give the
+sample ID in a tooltip.
+
+```{r}
+library("Glimma")
+status <- as.numeric(res$padj < .1)
+anno <- data.frame(GeneID=rownames(res), symbol=res$symbol)
+glMDPlot(res2, status=status, counts=counts(dds,normalized=TRUE),
+         groups=dds$dex, transform=FALSE,
+         samples=colnames(dds), anno=anno,
+         path=tmp, folder="glimma", launch=FALSE)
+```
+
+This last line would launch the report in a web browser:
+
+```{r eval=FALSE}
+browseURL(file.path(tmp,"glimma","MD-Plot.html"))
+```
+
+## Integration with *ZINB-WaVE*
+
+### Simulate with *splatter*
+
+In this last section, we show that *DESeq2* can be integrated with
+another Bioconductor package *zinbwave* [@Risso2018] in order to model
+and account for additional zeros (more than expected by the Negative
+Binomial model). This can be useful for single cell RNA-seq
+experiments.
+
+Here we use the *splatter* package to simulate single-cell RNA-seq
+data [@Zappia2017]. We then use the methods defined in
+@VandenBergePerraudeau to combine *zinbwave* observation weights with
+*DESeq2* modeling of negative binomial counts.
+
+From @VandenBergePerraudeau:
+
+> It is important to note that while methods such as ZINB-WaVE and
+> ZINGER can successfully identify excess zeros, they cannot, however,
+> readily discriminate between their underlying causes, i.e., between
+> technical (e.g., dropout) and biological (e.g., bursting) zeros. 
+
+The above note implies that the zero-inflation weighting approach
+outlined below can be used when the interesting signal is not in the
+zero component. That is, if you wanted to find biological differences
+in transcriptional bursting across groups of cells, the below approach
+would not help you find these differences. It instead helps to uncover
+differences in counts besides the zero component (whether those zeros
+be biological or technical). 
+
+### Simulate single-cell count data with *splatter*
+
+The following chunks of code create a *splatter* simulation:
+
+```{r}
+library("splatter")
+params <- newSplatParams()
+params <- setParam(params, "de.facLoc", 1) 
+params <- setParam(params, "de.facScale", .25)
+params <- setParam(params, "dropout.type", "experiment")
+params <- setParam(params, "dropout.mid", 3)
+```
+
+```{r}
+set.seed(1)
+sim <- splatSimulate(params, group.prob=c(.5,.5), method="groups")
+```
+
+We can plot the amount of dropouts over the true counts:
+
+```{r}
+plot(log10(rowMeans(assays(sim)[["TrueCounts"]])),
+     rowMeans(assays(sim)[["Dropout"]]))
+```
+
+We will store the true log2 fold change for comparison:
+
+```{r}
+rowData(sim)$log2FC <- with(rowData(sim), log2(DEFacGroup2/DEFacGroup1))
+```
+
+The true dispersion for the Negative Binomial component, over the mean:
+
+```{r}
+rowData(sim)$trueDisp <- rowMeans(assays(sim)[["BCV"]])^2
+gridlines <- c(1e-2,1e-1,1); cols <- c("blue","red","darkgreen")
+with(rowData(sim)[rowData(sim)$GeneMean> 1,],
+     plot(GeneMean, trueDisp, log="xy", xlim=c(1,300), ylim=c(.01,5)))
+abline(h=gridlines, col=cols)
+text(300, gridlines, labels=gridlines, col=cols, pos=3)
+```
+
+### Model zeros with *zinbwave*
+
+The following code subsets the dataset and creates a `condition`
+variable that we will use to test for differential expression:
+
+```{r}
+library(zinbwave)
+keep <- rowSums(counts(sim) >= 5) >= 25
+table(keep)
+zinb <- sim[keep,]
+zinb$condition <- factor(zinb$Group)
+```
+
+We need to re-arrange the assays in the `zinb` object such that
+`"counts"` is the first assay:
+
+```{r}
+nms <- c("counts", setdiff(assayNames(zinb), "counts"))
+assays(zinb) <- assays(zinb)[nms]
+```
+
+Finally we fit the *ZINB-WaVE* model. See `?zinbwave` and the
+*zinbwave* vignette for more details, including options on
+parallelization. It runs in less than a minute on this simulated
+dataset (with not so many cells).
+
+```{r}
+zinb <- zinbwave(zinb, K=0, BPPARAM=SerialParam(), epsilon=1e12)
+```
+
+### Model non-zeros with *DESeq2*
+
+Now we import the `zinb` object using *DESeqDataSet* (which works
+because the *SingleCellExperiment* object builds on top of the
+*SummarizedExperiment*). All of the simulation information comes along
+in the metadata columns of the object.
+
+@VandenBergePerraudeau and others have shown the LRT may perform
+better for null hypothesis testing, so we use the LRT. In order to use
+the Wald test, it is recommended to set `useT=TRUE`.
+
+```{r}
+zdds <- DESeqDataSet(zinb, design=~condition)
+zdds <- DESeq(zdds, test="LRT", reduced=~1,
+              sfType="poscounts", minmu=1e-6, minRep=Inf)
+```
+
+### Plot dispersion estimates
+
+It is recommended to plot the dispersion estimates for *DESeq2* on
+single-cell data. As discussed in the *DESeq2* paper, it becomes
+difficult to accurately estimate the dispersion when the counts are
+very small, because the Poisson component of the variance is
+dominant. Therefore we see some very low dispersion estimates here,
+although the trend is still accurately capturing the upper proportion.
+So here everything looks good.
+
+```{r}
+plotDispEsts(zdds)
+```
+
+If the parametric trend fails to fit (there would be a warning in this
+case), one should check the dispersion plot as above. If it looks like
+the dispersion fit is being thrown off by the low count genes with low
+dispersion estimates at the bottom of the plot, there is a relatively
+easy solution: one can filter out more of the low count genes only for
+the dispersion estimation step, so that the trend still captures the upper
+portion. This is pretty easy to do in *DESeq2*, to filter genes solely
+for the dispersion trend estimation, but to use a larger set for the
+rest of the analysis. An example of how this can be done:
+
+```{r}
+keepForDispTrend <- rowSums(counts(zdds) >= 10) >= 25
+zdds2 <- estimateDispersionsFit(zdds[keepForDispTrend,])
+plotDispEsts(zdds2)
+```
+
+One would then assign the dispersion function to the original dataset,
+re-estimate final dispersions, check `plotDispEsts`, and then either
+re-run the Wald or LRT function:
+
+```{r}
+dispersionFunction(zdds) <- dispersionFunction(zdds2)
+zdds <- estimateDispersionsMAP(zdds)
+zdds <- nbinomLRT(zdds, reduced=~1, minmu=1e-6)
+```
+
+### Evaluation against truth
+
+Compare dispersion on the non-zero-component counts to the true value
+used for simulation. 
+
+```{r}
+with(mcols(zdds), plot(trueDisp, dispMAP, log="xy"))
+abline(0,1,col="red")
+```
+
+Extract results table:
+
+```{r}
+zres <- results(zdds, independentFiltering=FALSE)
+plot(mcols(zdds)$log2FC, zres$log2FoldChange, ylim=c(-4,4)); abline(0,1,col="red")
+```
+
+Below we show that the "simple" LFC does not work - it over-estimates
+the true DE LFC because of the dropout zeros in the group with the
+smaller mean. It also has a lot of noise for the null genes.
+
+```{r trueLFCVsSimple}
+ncts <- counts(zdds, normalized=TRUE)
+simple.lfc <- log2(rowMeans(ncts[,zdds$condition == "Group2"])/
+                   rowMeans(ncts[,zdds$condition == "Group1"]))
+plot(mcols(zdds)$log2FC, simple.lfc, ylim=c(-4,4)); abline(0,1,col="red")
+```
+
+How well do we do in null hypothesis testing:
+
+```{r}
+tab <- table(sig=zres$padj < .05, DE.status=mcols(zdds)$log2FC != 0)
+tab
+round(prop.table(tab, 1), 3)
+```
